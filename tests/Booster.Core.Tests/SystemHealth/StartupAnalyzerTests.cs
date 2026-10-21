@@ -101,7 +101,7 @@ public class StartupAnalyzerTests
         Assert.Equal(
             [
                 (AdviceId.HeavyStartupItems, AdviceModule.Startup, FindingSeverity.Info, SafetyLevel.L2Confirmed, "Spotify, Teams.lnk"),
-                (AdviceId.HeavyMachineStartupItems, AdviceModule.Startup, FindingSeverity.Info, SafetyLevel.L3ManualOnly, "Steam, Audio"),
+                (AdviceId.HeavyMachineStartupItems, AdviceModule.Startup, FindingSeverity.Info, SafetyLevel.L2Confirmed, "Steam, Audio"),
             ],
             StartupAnalyzer.Advise(assessed).Select(a => (a.Id, a.Module, a.Severity, a.Level, Assert.Single(a.Arguments))));
     }
@@ -120,4 +120,54 @@ public class StartupAnalyzerTests
 
         Assert.Empty(StartupAnalyzer.Advise(assessed));
     }
+
+    [Theory]
+    [InlineData(StartupLocation.UserRun)]
+    [InlineData(StartupLocation.UserFolder)]
+    public void Any_enabled_user_item_can_be_disabled_whatever_its_weight(StartupLocation location)
+    {
+        Assert.Equal(StartupDisableAvailability.Available, Availability(Item("Light", location, privateBytes: Mb), isElevated: false));
+        Assert.Equal(StartupDisableAvailability.Available, Availability(Item("Discord", location, privateBytes: null), isElevated: false));
+        Assert.Equal(StartupDisableAvailability.Available, Availability(Item("Spotify", location), isElevated: false));
+    }
+
+    [Theory]
+    [InlineData(StartupLocation.MachineRun)]
+    [InlineData(StartupLocation.MachineRun32)]
+    [InlineData(StartupLocation.CommonFolder)]
+    public void Machine_item_needs_elevated_booster(StartupLocation location)
+    {
+        Assert.Equal(StartupDisableAvailability.NeedsAdmin, Availability(Item("Steam", location), isElevated: false));
+        Assert.Equal(StartupDisableAvailability.Available, Availability(Item("Steam", location), isElevated: true));
+    }
+
+    [Theory]
+    [InlineData(StartupLocation.UserRunOnce)]
+    [InlineData(StartupLocation.MachineRunOnce)]
+    public void Run_once_item_cannot_be_disabled(StartupLocation location)
+    {
+        Assert.Equal(StartupDisableAvailability.RunOnce, Availability(Item("Setup", location), isElevated: true));
+    }
+
+    [Fact]
+    public void Disabled_and_unknown_state_items_cannot_be_disabled()
+    {
+        Assert.Equal(StartupDisableAvailability.AlreadyDisabled,
+            Availability(Item("Spotify", state: StartupState.Disabled), isElevated: true));
+        Assert.Equal(StartupDisableAvailability.StateUnknown, Availability(Item("Spotify", state: StartupState.Unknown), isElevated: true));
+    }
+
+    [Fact]
+    public void Protection_and_anti_cheat_are_never_offered()
+    {
+        Assert.Equal(StartupDisableAvailability.Protected, Availability(Item("SecurityHealth", StartupLocation.MachineRun), isElevated: true));
+        Assert.Equal(StartupDisableAvailability.Protected, Availability(Item("FACEIT", privateBytes: Mb), isElevated: true));
+        // Exe неизвестен (вердикт Unknown), но команда говорит о защите: проверка защиты от вердикта не зависит.
+        var unknownExe = new StartupItem(new StartupEntry("Tray", StartupLocation.UserRun, @"""C:\Program Files\Kaspersky Lab\avpui.exe"" -tray",
+            null, StartupState.Enabled), null);
+        Assert.Equal(StartupDisableAvailability.Protected, Availability(unknownExe, isElevated: true));
+    }
+
+    private static StartupDisableAvailability Availability(StartupItem item, bool isElevated) =>
+        StartupAnalyzer.DisableAvailability(item.Entry, Catalog, isElevated);
 }

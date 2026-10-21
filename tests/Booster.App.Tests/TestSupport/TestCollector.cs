@@ -11,14 +11,14 @@ using Microsoft.Extensions.Time.Testing;
 namespace Booster.App.Tests.TestSupport;
 
 /// <summary>
-/// Настоящий сборщик снимка на фейках: оборудование из <see cref="SnapshotFactory"/>, драйверов и датчиков нет, права
-/// администратора. Подкачку, журнал стабильности, автозагрузку и игровые настройки тест может подменить.
+/// Настоящий сборщик снимка на фейках: оборудование из <see cref="SnapshotFactory"/>, драйверов и датчиков нет, по умолчанию права
+/// администратора. Подкачку, журнал стабильности, автозагрузку, игровые настройки и права тест может подменить.
 /// </summary>
 internal static class TestCollector
 {
     public static SnapshotCollector Create(FakeTimeProvider time, FakeConfiguration config, IProfileRepository profiles,
         IPagefileSource? pagefile = null, IStabilityEventSource? stability = null, IStartupSource? startup = null,
-        IGamingSettingsSource? gaming = null)
+        IGamingSettingsSource? gaming = null, bool elevated = true)
     {
         var runner = new SectionRunner(time, NullLogger<SectionRunner>.Instance);
         var system = new SystemDiagnosticsCollector(new FakeMemoryStatusSource(), pagefile ?? new FakePagefileSource(),
@@ -26,7 +26,7 @@ internal static class TestCollector
             new FakeNetworkAdapters(), startup ?? new FakeStartupSource(), gaming ?? new FakeGamingSettingsSource(), new FakeHagsSource(),
             new FakeProcessProvider(), runner, config, time);
         return new SnapshotCollector(new FakeHardware(), new NoDrivers(), new FakeFrameCaptureProvider(time), new NoSensors(), system,
-            profiles, new Elevated(), new CapabilityRegistry(), runner, config, time, NullLogger<SnapshotCollector>.Instance);
+            profiles, new Privileges(elevated), new CapabilityRegistry(), runner, config, time, NullLogger<SnapshotCollector>.Instance);
     }
 
     private sealed class FakeHardware : IHardwareProvider
@@ -47,8 +47,8 @@ internal static class TestCollector
         public Task<SensorSnapshot> ReadAsync(CancellationToken ct) => throw new NotSupportedException();
     }
 
-    private sealed class Elevated : IPrivilegeInfo
+    private sealed class Privileges(bool elevated) : IPrivilegeInfo
     {
-        public PrivilegeState GetCurrent() => new(IsElevated: true, IsPerformanceLogUser: false);
+        public PrivilegeState GetCurrent() => new(IsElevated: elevated, IsPerformanceLogUser: false);
     }
 }

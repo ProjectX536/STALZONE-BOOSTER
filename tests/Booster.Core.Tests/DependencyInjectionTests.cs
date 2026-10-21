@@ -84,6 +84,7 @@ public class DependencyInjectionTests
             .AddSingleton<IHagsSource>(new FakeHagsSource())
             .AddSingleton<IBenchmarkStore>(new FakeBenchmarkStore())
             .AddSingleton<IUserRegistry>(new FakeUserRegistry())
+            .AddSingleton<IMachineRegistry>(new FakeUserRegistry())
             .AddSingleton<IPingSource, FakePing>()
             .AddSingleton<IWprRunner, FakeWprRunner>()
             .AddSingleton<IStateFileStore, InMemoryStateFileStore>()
@@ -112,7 +113,8 @@ public class DependencyInjectionTests
         Assert.Same(provider.GetRequiredService<GamingProfileManager>(), provider.GetRequiredService<GamingProfileManager>());
         Assert.Same(provider.GetRequiredService<StartupRecovery>(), provider.GetRequiredService<StartupRecovery>());
         Assert.Same(provider.GetRequiredService<GameSessionCoordinator>(), provider.GetRequiredService<GameSessionCoordinator>());
-        Assert.Equal([ActionIds.PowerPlan, ActionIds.GamePriority, ActionIds.StartupItem, ActionIds.RegistryTweak], provider.GetServices<IActionRestorer>().Select(r => r.ActionId));
+        Assert.Equal([ActionIds.PowerPlan, ActionIds.GamePriority, ActionIds.StartupItem, ActionIds.MachineStartupItem,
+                ActionIds.RegistryTweak], provider.GetServices<IActionRestorer>().Select(r => r.ActionId));
         Assert.IsType<SensorProvider>(provider.GetRequiredService<ISensorProvider>());
         Assert.Same(provider.GetRequiredService<ISensorProvider>(), provider.GetRequiredService<ISensorProvider>());
         Assert.Same(provider.GetRequiredService<SensorRecorder>(), provider.GetRequiredService<SensorRecorder>());
@@ -133,12 +135,13 @@ public class DependencyInjectionTests
             .AddSingleton<IProcessProvider, FakeProcessProvider>()
             .AddSingleton<IBoosterConfiguration>(new FakeConfiguration())
             .AddSingleton<IUserRegistry>(new FakeUserRegistry())
+            .AddSingleton<IMachineRegistry>(new FakeUserRegistry())
             .AddBoosterCore()
             .AddBoosterCore();
 
         using var provider = services.BuildServiceProvider();
 
-        Assert.Equal(4, provider.GetServices<IActionRestorer>().Count());
+        Assert.Equal(5, provider.GetServices<IActionRestorer>().Count());
     }
 
     [Fact]

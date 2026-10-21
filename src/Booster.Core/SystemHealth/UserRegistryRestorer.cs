@@ -1,13 +1,15 @@
 using Booster.Core.Abstractions;
 using Booster.Core.Recovery;
+using Booster.Core.Resources;
 
 namespace Booster.Core.SystemHealth;
 
 /// <summary>
-/// Возврат значения HKCU по снимку <see cref="UserRegistrySnapshot"/>. Ключ и имя проверяются до любого обращения к реестру:
-/// журнал — файл на диске, и подменённый снимок не должен превратить восстановление в запись произвольного значения.
+/// Возврат значения реестра (HKCU или HKLM — какой раздел передан) по снимку <see cref="UserRegistrySnapshot"/>. Ключ и имя
+/// проверяются до любого обращения к реестру: журнал — файл на диске, и подменённый снимок не должен превратить восстановление в
+/// запись произвольного значения.
 /// </summary>
-public abstract class UserRegistryRestorer(IUserRegistry registry) : IActionRestorer
+public abstract class UserRegistryRestorer(IRegistryValues registry) : IActionRestorer
 {
     public abstract string ActionId { get; }
 
@@ -44,10 +46,19 @@ public abstract class UserRegistryRestorer(IUserRegistry registry) : IActionRest
         ct.ThrowIfCancellationRequested();
 
         var (original, _) = ReadChecked(snapshot);
-        if (original.Value is null)
-            registry.Delete(original.SubKey, original.ValueName);
-        else
-            registry.Write(original.SubKey, original.ValueName, original.Value);
+        try
+        {
+            if (original.Value is null)
+                registry.Delete(original.SubKey, original.ValueName);
+            else
+                registry.Write(original.SubKey, original.ValueName, original.Value);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            // Чаще всего это HKLM в Booster без прав администратора: текст системы ничего не говорит о том, как вернуть изменение.
+            throw new UnauthorizedAccessException(ReportStrings.Restore_RegistryAccessDenied, ex);
+        }
+
         return Task.CompletedTask;
     }
 

@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using Booster.Core.Abstractions;
 using Booster.Core.Drivers;
 using Microsoft.Extensions.Logging;
 
@@ -19,8 +20,9 @@ public interface ISettingsOpener
 /// <summary>
 /// Открывает ссылки и папки во внешних программах. Ссылка открывается, только если её разрешает
 /// <see cref="OfficialSourceResolver.IsAllowed"/>: из окна Booster наружу ведут лишь официальные источники.
+/// Booster с правами администратора передаёт ссылку Проводнику: иначе браузер унаследовал бы права администратора.
 /// </summary>
-public sealed partial class LinkOpener(OfficialSourceResolver sources, ILogger<LinkOpener> logger) : ISettingsOpener
+public sealed partial class LinkOpener(OfficialSourceResolver sources, IPrivilegeInfo privileges, ILogger<LinkOpener> logger) : ISettingsOpener
 {
     private const string SettingsScheme = "ms-settings:";
 
@@ -35,7 +37,7 @@ public sealed partial class LinkOpener(OfficialSourceResolver sources, ILogger<L
             return false;
         }
 
-        return Start(new ProcessStartInfo(uri.AbsoluteUri) { UseShellExecute = true }, uri.AbsoluteUri);
+        return Start(ShellStartInfo(uri.AbsoluteUri, privileges.GetCurrent().IsElevated), uri.AbsoluteUri);
     }
 
     public bool TryOpenSettings(string page)
@@ -46,8 +48,19 @@ public sealed partial class LinkOpener(OfficialSourceResolver sources, ILogger<L
             return false;
         }
 
-        return Start(new ProcessStartInfo(uri) { UseShellExecute = true }, uri);
+        return Start(ShellStartInfo(uri, privileges.GetCurrent().IsElevated), uri);
     }
+
+    /// <summary>
+    /// Без прав администратора — ShellExecute. С ними — explorer.exe с адресом: новый процесс Проводника передаёт адрес уже
+    /// запущенной оболочке пользователя, и браузер или «Параметры» стартуют без прав администратора. Адрес из списка разрешённых
+    /// кавычек не содержит.
+    /// </summary>
+    internal static ProcessStartInfo ShellStartInfo(string target, bool elevated) => elevated
+        ? new ProcessStartInfo(ExplorerPath, $"\"{target}\"") { UseShellExecute = false }
+        : new ProcessStartInfo(target) { UseShellExecute = true };
+
+    private static string ExplorerPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "explorer.exe");
 
     /// <summary>Адрес ms-settings для страницы из списка; иначе null. Имя сравнивается точно, без обрезки пробелов.</summary>
     internal static string? TryBuildSettingsUri(string? page) =>
@@ -57,10 +70,8 @@ public sealed partial class LinkOpener(OfficialSourceResolver sources, ILogger<L
     public bool RevealFile(string path)
     {
         ArgumentException.ThrowIfNullOrEmpty(path);
-        var explorer = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "explorer.exe");
-
         // Кавычка в пути Windows недопустима, поэтому путь заключается в кавычки без экранирования.
-        return Start(new ProcessStartInfo(explorer, $"/select,\"{Path.GetFullPath(path)}\"") { UseShellExecute = false }, path);
+        return Start(new ProcessStartInfo(ExplorerPath, $"/select,\"{Path.GetFullPath(path)}\"") { UseShellExecute = false }, path);
     }
 
     private bool Start(ProcessStartInfo info, string target)

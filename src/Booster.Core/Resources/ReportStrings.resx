@@ -720,6 +720,9 @@
   <data name="Restore_StillNotOriginal" xml:space="preserve">
     <value>после возврата значение не стало исходным</value>
   </data>
+  <data name="Restore_RegistryAccessDenied" xml:space="preserve">
+    <value>нет прав на запись в реестр: изменение для всех пользователей возвращается только из Booster, запущенного с правами администратора</value>
+  </data>
   <data name="Verify_ChangedAgain" xml:space="preserve">
     <value>при повторной проверке значение снова отличается от исходного</value>
   </data>
@@ -832,6 +835,9 @@
   <data name="Action_StartupItem" xml:space="preserve">
     <value>Элемент автозагрузки</value>
   </data>
+  <data name="Action_MachineStartupItem" xml:space="preserve">
+    <value>Элемент автозагрузки для всех пользователей</value>
+  </data>
   <data name="StartupItemSummaryFormat" xml:space="preserve">
     <value>{0}: отключить автозапуск (со следующего входа в Windows)</value>
     <comment>{0} — имя элемента автозагрузки.</comment>
@@ -842,8 +848,8 @@
   <data name="Skip_StartupItemStateUnknown" xml:space="preserve">
     <value>состояние автозапуска не удалось прочитать: менять его вслепую нельзя</value>
   </data>
-  <data name="Skip_StartupItemNotUser" xml:space="preserve">
-    <value>Booster отключает только автозагрузку текущего пользователя; этот элемент общий для всех пользователей или однократный</value>
+  <data name="Skip_StartupItemRunOnce" xml:space="preserve">
+    <value>однократный запуск (RunOnce): Windows сама удалит его после выполнения, отключать нечего</value>
   </data>
   <data name="Action_RegistryTweak_GameMode" xml:space="preserve">
     <value>Игровой режим Windows</value>
@@ -2030,14 +2036,14 @@
     <value>Тяжёлые программы в автозагрузке для всех пользователей</value>
   </data>
   <data name="AdviceText_HeavyMachineStartupItems" xml:space="preserve">
-    <value>Запускаются при входе любого пользователя и сейчас занимают заметный объём памяти: {0}. Отключение требует прав администратора, поэтому Booster его не выполняет.</value>
+    <value>Запускаются при входе любого пользователя и сейчас занимают заметный объём памяти: {0}. Если они не нужны постоянно, их автозапуск можно отключить; на FPS это может и не повлиять.</value>
     <comment>{0} — имена элементов автозагрузки через запятую.</comment>
   </data>
   <data name="AdviceAction_HeavyMachineStartupItems" xml:space="preserve">
-    <value>Если программа не нужна постоянно, отключите её на вкладке «Автозагрузка» диспетчера задач или в её собственных настройках. Драйверы, панели устройств, защиту и античит не трогайте.</value>
+    <value>Выберите элемент на экране «Система» и подтвердите отключение: кнопка доступна, когда Booster запущен с правами администратора. Booster запишет то же, что переключатель в диспетчере задач; уже запущенная программа не закрывается. Драйверы и панели устройств лучше не трогать.</value>
   </data>
   <data name="AdviceRisk_HeavyMachineStartupItems" xml:space="preserve">
-    <value>Это только рекомендация. Отключённая программа не запустится сама ни у одного пользователя; изменение возвращается тем же переключателем.</value>
+    <value>Отключённая программа не запустится сама ни у одного пользователя. Изменение возвращается кнопкой на экране «Журнал» (тоже с правами администратора) или переключателем в диспетчере задач.</value>
   </data>
   <data name="AdviceId_OverlaysRunning" xml:space="preserve">
     <value>Программы с внутриигровым оверлеем</value>
@@ -2509,13 +2515,13 @@
     <value>Неизвестно</value>
   </data>
   <data name="StartupVerdict_Candidate" xml:space="preserve">
-    <value>Можно отключить с подтверждением</value>
+    <value>Тяжёлый — можно отключить</value>
   </data>
   <data name="StartupVerdict_NeedsAdmin" xml:space="preserve">
-    <value>Тяжёлый, нужны права администратора — только рекомендация</value>
+    <value>Тяжёлый, для всех пользователей — нужны права администратора</value>
   </data>
   <data name="StartupVerdict_Protected" xml:space="preserve">
-    <value>Защита или античит — не предлагается</value>
+    <value>Защита или античит — не отключается</value>
   </data>
   <data name="StartupVerdict_Light" xml:space="preserve">
     <value>Лёгкий</value>
@@ -2528,6 +2534,24 @@
   </data>
   <data name="StartupVerdict_Unknown" xml:space="preserve">
     <value>Нельзя оценить надёжно</value>
+  </data>
+  <data name="StartupDisableAvailability_Available" xml:space="preserve">
+    <value>Можно отключить</value>
+  </data>
+  <data name="StartupDisableAvailability_AlreadyDisabled" xml:space="preserve">
+    <value>Автозапуск уже отключён</value>
+  </data>
+  <data name="StartupDisableAvailability_RunOnce" xml:space="preserve">
+    <value>Однократный запуск (RunOnce): Windows сама удалит его после выполнения</value>
+  </data>
+  <data name="StartupDisableAvailability_StateUnknown" xml:space="preserve">
+    <value>Состояние не прочиталось: менять его вслепую нельзя</value>
+  </data>
+  <data name="StartupDisableAvailability_Protected" xml:space="preserve">
+    <value>Защита или античит: Booster такие элементы не отключает</value>
+  </data>
+  <data name="StartupDisableAvailability_NeedsAdmin" xml:space="preserve">
+    <value>Элемент для всех пользователей: отключить можно, только если Booster запущен с правами администратора</value>
   </data>
   <data name="GamingGameMode" xml:space="preserve">
     <value>Игровой режим (Game Mode)</value>

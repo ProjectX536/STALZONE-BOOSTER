@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:res="clr-namespace:Booster.App.Resources"
+             xmlns:controls="clr-namespace:Booster.App.Views.Controls"
              xmlns:views="clr-namespace:Booster.App.Views"
              xmlns:reports="clr-namespace:Booster.Core.Reports;assembly=Booster.Core"
              xmlns:coreres="clr-namespace:Booster.Core.Resources;assembly=Booster.Core">
@@ -55,7 +56,7 @@
 
         <TextBlock FontWeight="SemiBold" Text="{x:Static res:Strings.SystemTopIoTitle}" Margin="0,4,0,0" />
         <DataGrid ItemsSource="{Binding TopIo}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column"
-                  CanUserSortColumns="False" CanUserReorderColumns="False" GridLinesVisibility="Horizontal"
+                  controls:TableSorting.IsEnabled="True" CanUserReorderColumns="False" GridLinesVisibility="Horizontal"
                   HorizontalAlignment="Left" Margin="0,4,0,12">
           <DataGrid.Columns>
             <DataGridTextColumn Header="{x:Static res:Strings.ColumnProcess}" Binding="{Binding Process}" />
@@ -68,7 +69,7 @@
 
         <TextBlock FontWeight="SemiBold" Text="{x:Static res:Strings.SystemTopHardFaultsTitle}" />
         <DataGrid ItemsSource="{Binding TopHardFaults}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column"
-                  CanUserSortColumns="False" CanUserReorderColumns="False" GridLinesVisibility="Horizontal"
+                  controls:TableSorting.IsEnabled="True" CanUserReorderColumns="False" GridLinesVisibility="Horizontal"
                   HorizontalAlignment="Left" Margin="0,4,0,16">
           <DataGrid.Columns>
             <DataGridTextColumn Header="{x:Static res:Strings.ColumnProcess}" Binding="{Binding Process}" />
@@ -103,7 +104,7 @@
         <TextBlock Style="{StaticResource Hint}" Text="{x:Static res:Strings.SystemStartupActionsHint}" />
         <TextBlock Style="{StaticResource EmptyHint}" Tag="{Binding StartupRows}" Text="{x:Static res:Strings.SystemStartupActionsEmpty}" />
         <DataGrid ItemsSource="{Binding StartupRows}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column"
-                  CanUserSortColumns="False" CanUserReorderColumns="False" GridLinesVisibility="Horizontal"
+                  controls:TableSorting.IsEnabled="True" CanUserReorderColumns="False" GridLinesVisibility="Horizontal"
                   HorizontalAlignment="Left" Margin="0,4,0,12">
           <DataGrid.Columns>
             <DataGridTextColumn Header="{x:Static coreres:ReportStrings.ColumnStartupItem}" Binding="{Binding Name}" />
@@ -116,6 +117,7 @@
                 <DataTemplate>
                   <Button Style="{StaticResource ToolbarButton}" Content="{x:Static res:Strings.DisableStartupItem}"
                           IsEnabled="{Binding CanDisable}" CommandParameter="{Binding}"
+                          ToolTip="{Binding DisableHint}" ToolTipService.ShowOnDisabled="True"
                           Command="{Binding DataContext.RequestDisableStartupCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
                 </DataTemplate>
               </DataGridTemplateColumn.CellTemplate>
@@ -126,7 +128,7 @@
         <TextBlock FontWeight="SemiBold" Text="{x:Static res:Strings.SystemTweakActionsTitle}" />
         <TextBlock Style="{StaticResource EmptyHint}" Tag="{Binding TweakRows}" Text="{x:Static res:Strings.SystemTweakActionsEmpty}" />
         <DataGrid ItemsSource="{Binding TweakRows}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column"
-                  CanUserSortColumns="False" CanUserReorderColumns="False" GridLinesVisibility="Horizontal"
+                  controls:TableSorting.IsEnabled="True" CanUserReorderColumns="False" GridLinesVisibility="Horizontal"
                   HorizontalAlignment="Left" Margin="0,4,0,8">
           <DataGrid.Columns>
             <DataGridTextColumn Header="{x:Static coreres:ReportStrings.ColumnTweak}" Binding="{Binding Name}" />

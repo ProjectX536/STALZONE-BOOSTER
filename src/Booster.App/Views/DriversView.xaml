@@ -27,7 +27,7 @@
 
     <DataGrid ItemsSource="{Binding Rows}" controls:ReportDataGrid.Headers="{Binding Headers}"
               AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False"
-              CanUserSortColumns="False" CanUserReorderColumns="False" HeadersVisibility="Column"
+              controls:TableSorting.IsEnabled="True" CanUserReorderColumns="False" HeadersVisibility="Column"
               GridLinesVisibility="All" HorizontalGridLinesBrush="{StaticResource GridLineBrush}"
               VerticalGridLinesBrush="{StaticResource GridLineBrush}" Background="Transparent"
               SelectionMode="Extended" SelectionUnit="FullRow" EnableRowVirtualization="True"

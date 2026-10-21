@@ -31,6 +31,9 @@ internal static class WpfHost
         }
     }
 
+    /// <summary>Выполняет код на потоке WPF и возвращает результат.</summary>
+    public static T Invoke<T>(Func<T> action) => UiDispatcher.Value.Invoke(action);
+
     private static Dispatcher Start()
     {
         using var ready = new ManualResetEventSlim();

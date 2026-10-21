@@ -26,6 +26,7 @@ public static class PlatformDependencyInjection
         services.TryAddSingleton<IFileProbe, FileProbe>();
         services.TryAddSingleton<IRegistryReader, RegistryReader>();
         services.TryAddSingleton<IUserRegistry, UserRegistry>();
+        services.TryAddSingleton<IMachineRegistry, MachineRegistry>();
         services.TryAddSingleton<IStartupFolders, StartupFolders>();
         services.TryAddSingleton<IStartupSource, StartupSource>();
         services.TryAddSingleton<IGamingSettingsSource, GamingSettingsSource>();

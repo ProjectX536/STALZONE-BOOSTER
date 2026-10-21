@@ -44,6 +44,7 @@ public sealed class DependencyInjectionTests : IDisposable
         Assert.IsType<ManagementCimClient>(provider.GetRequiredService<ICimClient>());
         Assert.IsType<RegistryReader>(provider.GetRequiredService<IRegistryReader>());
         Assert.IsType<UserRegistry>(provider.GetRequiredService<IUserRegistry>());
+        Assert.IsType<MachineRegistry>(provider.GetRequiredService<IMachineRegistry>());
         Assert.IsType<StartupSource>(provider.GetRequiredService<IStartupSource>());
         Assert.IsType<GamingSettingsSource>(provider.GetRequiredService<IGamingSettingsSource>());
         Assert.IsType<HagsSource>(provider.GetRequiredService<IHagsSource>());

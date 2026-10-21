@@ -22,8 +22,10 @@ namespace Booster.App.ViewModels;
 public sealed record ActivityRow(string Process, int ProcessId, string Read, string Write, string HardFaults);
 
 /// <summary>Элемент автозагрузки на панели изменений.</summary>
-/// <param name="CanDisable">Вердикт Candidate: элемент HKCU можно отключить с подтверждением.</param>
-public sealed record StartupRow(StartupEntry Entry, string Name, string Location, string State, string Memory, string Verdict, bool CanDisable)
+/// <param name="CanDisable">Отключение доступно (<see cref="StartupDisableAvailability.Available"/>): подтверждение всё равно нужно.</param>
+/// <param name="DisableHint">Почему кнопка выключена; null, когда отключить можно.</param>
+public sealed record StartupRow(StartupEntry Entry, string Name, string Location, string State, string Memory, string Verdict, bool CanDisable,
+    string? DisableHint)
 {
     public override string ToString() => Name;
 }
@@ -60,6 +62,7 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
     private readonly NetworkTester _network;
     private readonly MaintenanceRunner _maintenance;
     private readonly IUserRegistry _registry;
+    private readonly IMachineRegistry _machineRegistry;
     private readonly GameSessionCoordinator _coordinator;
     private readonly IGameExecutablePicker _picker;
     private readonly ISettingsOpener _settings;
@@ -76,7 +79,8 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
     private int _request;
 
     public SystemViewModel(SessionReport report, DiagnosticsSession session, IProcessResourceSource processes, ISystemPressureSource pressure,
-        NetworkTester network, MaintenanceRunner maintenance, IUserRegistry registry, GameSessionCoordinator coordinator,
+        NetworkTester network, MaintenanceRunner maintenance, IUserRegistry registry, IMachineRegistry machineRegistry,
+        GameSessionCoordinator coordinator,
         IGameExecutablePicker picker, ISettingsOpener settings, LatencyViewModel latency, HagsViewModel hags, IBoosterConfiguration config,
         TimeProvider time, ILogger<SystemViewModel> logger)
     {
@@ -92,6 +96,7 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
         _network = network;
         _maintenance = maintenance;
         _registry = registry;
+        _machineRegistry = machineRegistry;
         _coordinator = coordinator;
         _picker = picker;
         _settings = settings;
@@ -325,8 +330,11 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
             return;
 
         var request = StartRequest();
-        var risk = Risk(StartupAnalyzer.Advise([new StartupAssessment(new StartupItem(row.Entry, null), StartupVerdict.Candidate)]));
-        await PrepareAsync(request, new StartupItemAction(_registry, row.Entry, _time), location: null, risk, ct);
+        var action = new StartupItemAction(_registry, _machineRegistry, row.Entry, _time);
+        // Риск — из совета того же раздела: для всех пользователей он другой, и «Вернуть» тоже требует прав администратора.
+        var verdict = action.Descriptor.RequiresAdmin ? StartupVerdict.NeedsAdmin : StartupVerdict.Candidate;
+        var risk = Risk(StartupAnalyzer.Advise([new StartupAssessment(new StartupItem(row.Entry, null), verdict)]));
+        await PrepareAsync(request, action, location: null, risk, ct);
     }
 
     /// <summary>
@@ -517,13 +525,18 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
             return [];
 
         var current = _config.Current;
-        return [.. StartupAnalyzer.Assess(items, current.Thresholds.Startup, current.Catalog.Services)
-            .Where(a => a.Verdict == StartupVerdict.Candidate)
+        var catalog = current.Catalog.Services;
+        return [.. StartupAnalyzer.Assess(items, current.Thresholds.Startup, catalog)
             .OrderBy(a => a.Item.Entry.Name, StringComparer.OrdinalIgnoreCase)
-            .Select(a => new StartupRow(a.Item.Entry, a.Item.Entry.Name, EnumText.Format(a.Item.Entry.Location),
-                EnumText.Format(a.Item.Entry.State),
-                a.Item.PrivateBytes is { } bytes ? ByteSizeFormatter.Format(bytes, culture) : ReadingFormatter.StatusText(DataStatus.Unknown),
-                EnumText.Format(a.Verdict), CanDisable: true))];
+            .Select(a =>
+            {
+                var availability = StartupAnalyzer.DisableAvailability(a.Item.Entry, catalog, snapshot.Privileges.IsElevated);
+                var available = availability == StartupDisableAvailability.Available;
+                return new StartupRow(a.Item.Entry, a.Item.Entry.Name, EnumText.Format(a.Item.Entry.Location),
+                    EnumText.Format(a.Item.Entry.State),
+                    a.Item.PrivateBytes is { } bytes ? ByteSizeFormatter.Format(bytes, culture) : ReadingFormatter.StatusText(DataStatus.Unknown),
+                    EnumText.Format(a.Verdict), available, available ? null : EnumText.Format(availability));
+            })];
     }
 
     private void OnUiThread(Action action)

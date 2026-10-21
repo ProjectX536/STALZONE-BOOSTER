@@ -30,13 +30,15 @@ public sealed class SystemViewModelTests : IAsyncDisposable
         StartupState.Enabled);
 
     private readonly FakeGamingSettingsSource _gamingSettings = new();
-    private readonly ScreenSession _screen;
+    private ScreenSession _screen;
+    private bool _elevated = true;
     private readonly FakeSystemPressureSource _pressure = new();
     private readonly FakeProcessResourceSource _processes = new();
     private readonly FakePing _ping = new();
     private readonly FakeNetworkAdapters _adapters = new();
     private readonly FakeTimeProvider _networkTime = new(SessionFactory.Start);
     private readonly FakeUserRegistry _registry = new();
+    private readonly FakeUserRegistry _machine = new();
     private readonly ChangeJournal _journal = TestMaintenance.Journal();
     private readonly FakeGaming _gaming = new();
     private readonly FakeGamePicker _picker = new();
@@ -51,6 +53,14 @@ public sealed class SystemViewModelTests : IAsyncDisposable
 
     private static CancellationToken Ct => TestContext.Current.CancellationToken;
 
+    /// <summary>Другой список автозагрузки и права Booster; вызывается до <see cref="System"/>.</summary>
+    private void UseStartup(bool elevated, params StartupEntry[] entries)
+    {
+        _screen.Dispose();
+        _screen = new ScreenSession(collect: true, startup: new FakeStartupSource(entries), gaming: _gamingSettings, elevated: elevated);
+        _elevated = elevated;
+    }
+
     private static CultureInfo Culture => CultureInfo.CurrentCulture;
 
     /// <summary>Тест сети идёт на своих часах: пауза 0 мс — раунды без ожидания, иначе пауза ждёт, пока тест не сдвинет время.</summary>
@@ -59,13 +69,13 @@ public sealed class SystemViewModelTests : IAsyncDisposable
         _adapters.Adapters.Add(FakeNetworkAdapters.Adapter(gateways: "192.168.1.1"));
         var network = new NetworkTester(_ping, _adapters,
             new FakeConfiguration(network: new NetworkSettings(pingCount, pingIntervalMs, 1000, "example.org")), _networkTime);
-        var maintenance = TestMaintenance.Create(_journal, _registry, _screen.Config, _screen.Time);
+        var maintenance = TestMaintenance.Create(_journal, _registry, _screen.Config, _screen.Time, _machine, _elevated);
         var latency = new LatencyViewModel(new TraceRecorder(new FakeWprRunner(), _state, new FakeBootTimeSource(), _screen.Time,
             NullLogger<TraceRecorder>.Instance), _settings, NullLogger<LatencyViewModel>.Instance);
         var hags = new HagsViewModel(new HagsExperimentService(_state, new FakeHagsSource(), new FakeBootTimeSource(), new FakeBenchmarkStore(),
             _screen.Config, _screen.Time, NullLogger<HagsExperimentService>.Instance), _screen.Session, _settings, NullLogger<HagsViewModel>.Instance);
         _system = ScreenSession.OnUiContext(() => new SystemViewModel(_screen.Report, _screen.Session, _processes, _pressure, network,
-            maintenance, _registry, _gaming.Coordinator, _picker, _settings, latency, hags, _screen.Config, _screen.Time,
+            maintenance, _registry, _machine, _gaming.Coordinator, _picker, _settings, latency, hags, _screen.Config, _screen.Time,
             NullLogger<SystemViewModel>.Instance));
         return _system;
     }
@@ -119,6 +129,71 @@ public sealed class SystemViewModelTests : IAsyncDisposable
         var session = Assert.Single((await _journal.LoadAsync(Ct)).Sessions);
         Assert.Equal(SessionKind.Maintenance, session.Kind);
         Assert.Equal(ChangeStatus.Applied, Assert.Single(session.Changes).Status);
+    }
+
+    [Fact]
+    public async Task Every_startup_item_is_listed_and_only_safe_ones_can_be_disabled()
+    {
+        UseStartup(elevated: false,
+            Discord,
+            new StartupEntry("Notes", StartupLocation.UserFolder, @"C:\Startup\Notes.lnk", @"C:\Notes\Notes.exe", StartupState.Enabled),
+            new StartupEntry("Steam", StartupLocation.MachineRun, "steam.exe", @"C:\Steam\steam.exe", StartupState.Enabled),
+            new StartupEntry("Setup", StartupLocation.UserRunOnce, "setup.exe", @"C:\Setup\setup.exe", StartupState.Enabled),
+            new StartupEntry("SecurityHealth", StartupLocation.MachineRun, "SecurityHealthSystray.exe",
+                @"C:\Windows\System32\SecurityHealthSystray.exe", StartupState.Enabled),
+            new StartupEntry("Old", StartupLocation.UserRun, "old.exe", @"C:\Old\old.exe", StartupState.Disabled));
+
+        var system = await CollectedAsync();
+
+        Assert.Equal(
+            [
+                ("Discord", true, null),
+                ("Notes", true, null),
+                ("Old", false, EnumText.Format(StartupDisableAvailability.AlreadyDisabled)),
+                ("SecurityHealth", false, EnumText.Format(StartupDisableAvailability.Protected)),
+                ("Setup", false, EnumText.Format(StartupDisableAvailability.RunOnce)),
+                ("Steam", false, EnumText.Format(StartupDisableAvailability.NeedsAdmin)),
+            ],
+            system.StartupRows.Select(r => (r.Name, r.CanDisable, r.DisableHint)));
+        // Лёгкий или незапущенный элемент тоже можно отключить: вес — только подсказка в колонке вердикта.
+        Assert.Equal(EnumText.Format(StartupVerdict.NotRunning), system.StartupRows[1].Verdict);
+    }
+
+    [Fact]
+    public async Task Machine_item_is_disabled_in_elevated_booster_after_confirmation()
+    {
+        UseStartup(elevated: true, new StartupEntry("Steam", StartupLocation.MachineRun32, "steam.exe", @"C:\Steam\steam.exe",
+            StartupState.Enabled));
+        var system = await CollectedAsync();
+        var row = Assert.Single(system.StartupRows);
+        Assert.True(row.CanDisable);
+        Assert.Null(row.DisableHint);
+
+        await system.RequestDisableStartupCommand.ExecuteAsync(row);
+        Assert.Contains(ReportStrings.AdviceRisk_HeavyMachineStartupItems, system.PendingConfirmation, StringComparison.Ordinal);
+
+        await system.ConfirmMaintenanceCommand.ExecuteAsync(null);
+
+        Assert.Equal(Strings.MaintenanceApplied, system.MaintenanceStatus);
+        var value = Assert.IsType<UserRegistryValue>(_machine[StartupApprovedKeys.Run32, "Steam"]);
+        Assert.Equal(StartupState.Disabled, StartupApproval.Parse(value.ToBytes()));
+        Assert.Equal(0, _registry.Writes);
+        var change = Assert.Single(Assert.Single((await _journal.LoadAsync(Ct)).Sessions).Changes);
+        Assert.Equal((ActionIds.MachineStartupItem, ChangeStatus.Applied), (change.ActionId, change.Status));
+    }
+
+    [Fact]
+    public async Task Machine_item_button_does_nothing_without_elevation()
+    {
+        UseStartup(elevated: false, new StartupEntry("Steam", StartupLocation.MachineRun, "steam.exe", @"C:\Steam\steam.exe",
+            StartupState.Enabled));
+        var system = await CollectedAsync();
+
+        // Кнопка выключена, но и команда, вызванная в обход неё, ничего не готовит.
+        await system.RequestDisableStartupCommand.ExecuteAsync(Assert.Single(system.StartupRows));
+
+        Assert.Null(system.PendingConfirmation);
+        Assert.Equal((0, 0), (_machine.Reads, _machine.Writes));
     }
 
     [Fact]

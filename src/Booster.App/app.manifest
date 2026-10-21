@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1">
-  <assemblyIdentity version="1.0.0.0" name="Booster.App" />
+  <assemblyIdentity version="1.1.0.0" name="Booster.App" />
   <trustInfo xmlns="urn:schemas-microsoft-com:asm.v2">
     <security>
       <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
-        <!-- Интерфейс всегда работает без повышения прав (docs/ARCHITECTURE.md, раздел 8). -->
-        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+        <!-- highestAvailable (docs/ARCHITECTURE.md, раздел 8): администратор получает запрос UAC при запуске, обычный пользователь
+             запускает Booster без запроса, со своими правами, HKCU и LOCALAPPDATA. requireAdministrator потребовал бы у него
+             данные другой учётной записи, и журнал отката оказался бы в её профиле. -->
+        <requestedExecutionLevel level="highestAvailable" uiAccess="false" />
       </requestedPrivileges>
     </security>
   </trustInfo>

@@ -16,10 +16,10 @@ namespace Booster.App.Tests.TestSupport;
 /// </summary>
 internal sealed class ScreenSession : IDisposable
 {
-    public ScreenSession(bool collect = false, IStartupSource? startup = null, IGamingSettingsSource? gaming = null)
+    public ScreenSession(bool collect = false, IStartupSource? startup = null, IGamingSettingsSource? gaming = null, bool elevated = true)
     {
         var profiles = new FakeProfileRepository();
-        var collector = collect ? TestCollector.Create(Time, Config, profiles, startup: startup, gaming: gaming) : null!;
+        var collector = collect ? TestCollector.Create(Time, Config, profiles, startup: startup, gaming: gaming, elevated: elevated) : null!;
         var hags = new HagsExperimentService(new InMemoryStateFileStore(), new FakeHagsSource(), new FakeBootTimeSource(), new FakeBenchmarkStore(),
             Config, Time, NullLogger<HagsExperimentService>.Instance);
         Session = new DiagnosticsSession(collector, hags, profiles, Config, Time, NullLogger<DiagnosticsSession>.Instance);

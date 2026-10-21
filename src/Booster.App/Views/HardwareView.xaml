@@ -1,7 +1,8 @@
 <UserControl x:Class="Booster.App.Views.HardwareView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:res="clr-namespace:Booster.App.Resources">
+             xmlns:res="clr-namespace:Booster.App.Resources"
+             xmlns:controls="clr-namespace:Booster.App.Views.Controls">
   <DockPanel>
     <StackPanel DockPanel.Dock="Top" Margin="24,16,24,4">
       <TextBlock Style="{StaticResource PageTitle}" Text="{x:Static res:Strings.NavHardware}" />
@@ -26,7 +27,7 @@
         <TextBlock Style="{StaticResource Hint}" Text="{x:Static res:Strings.LiveSensorsHint}" />
         <TextBlock Style="{StaticResource EmptyHint}" Tag="{Binding Sensors}" Text="{x:Static res:Strings.LiveSensorsWaiting}" />
         <DataGrid ItemsSource="{Binding Sensors}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column"
-                  CanUserSortColumns="False" CanUserReorderColumns="False" GridLinesVisibility="Horizontal"
+                  controls:TableSorting.IsEnabled="True" CanUserReorderColumns="False" GridLinesVisibility="Horizontal"
                   HorizontalAlignment="Left" Margin="0,4,0,16">
           <DataGrid.Columns>
             <DataGridTextColumn Header="{x:Static res:Strings.ColumnDevice}" Binding="{Binding Device}" />

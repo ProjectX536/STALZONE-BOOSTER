@@ -2,8 +2,10 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>HKCU в памяти: ключ и имя значения сравниваются без учёта регистра, как в реестре.</summary>
-public sealed class FakeUserRegistry : IUserRegistry
+/// <summary>
+/// HKCU или HKLM в памяти (для каждого раздела — свой экземпляр): ключ и имя значения сравниваются без учёта регистра, как в реестре.
+/// </summary>
+public sealed class FakeUserRegistry : IUserRegistry, IMachineRegistry
 {
     private readonly Dictionary<string, UserRegistryValue> _values = new(StringComparer.OrdinalIgnoreCase);
 

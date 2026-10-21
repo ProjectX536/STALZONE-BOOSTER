@@ -19,23 +19,24 @@ public class StartupItemActionTests
         @"C:\Spotify\Spotify.exe", StartupState.Enabled);
 
     private readonly FakeUserRegistry _registry = new();
+    private readonly FakeUserRegistry _machine = new();
     private readonly RecordingJournal _journal = new();
     private readonly FakeTimeProvider _time = new(Start);
 
     private static CancellationToken Ct => TestContext.Current.CancellationToken;
 
-    private static PolicyContext Context(bool confirmed) => new(ExecutionTrigger.UserInitiated, IsGamingSessionActive: false,
-        UserEnabled: false, UserConfirmed: confirmed, CanElevate: false);
+    private static PolicyContext Context(bool confirmed, bool elevated) => new(ExecutionTrigger.UserInitiated,
+        IsGamingSessionActive: false, UserEnabled: false, UserConfirmed: confirmed, CanElevate: elevated);
 
-    private StartupItemAction Action(StartupEntry? entry = null) => new(_registry, entry ?? Spotify, _time);
+    private StartupItemAction Action(StartupEntry? entry = null) => new(_registry, _machine, entry ?? Spotify, _time);
 
-    private Task<ExecutionResult> Execute(StartupItemAction action, bool confirmed) =>
+    private Task<ExecutionResult> Execute(StartupItemAction action, bool confirmed, bool elevated = false) =>
         new ActionExecutor(new ActionPolicy(), _journal, _time, NullLogger<ActionExecutor>.Instance)
-            .ExecuteAsync(Session(), action, "s", ActionMode.AskFirst, Context(confirmed), Ct);
+            .ExecuteAsync(Session(), action, "s", ActionMode.AskFirst, Context(confirmed, elevated), Ct);
 
     private Task<SessionRecord> Restore(SessionRecord session) =>
-        new RollbackManager([new StartupItemRestorer(_registry)], _journal, _time, NullLogger<RollbackManager>.Instance)
-            .RestoreAsync(session, Ct);
+        new RollbackManager([new StartupItemRestorer(_registry), new MachineStartupItemRestorer(_machine)], _journal, _time,
+            NullLogger<RollbackManager>.Instance).RestoreAsync(session, Ct);
 
     [Fact]
     public async Task Disable_writes_task_manager_value_and_restorer_returns_original()
@@ -115,18 +116,89 @@ public class StartupItemActionTests
     }
 
     [Theory]
-    [InlineData(StartupLocation.MachineRun)]
-    [InlineData(StartupLocation.MachineRun32)]
-    [InlineData(StartupLocation.CommonFolder)]
     [InlineData(StartupLocation.UserRunOnce)]
     [InlineData(StartupLocation.MachineRunOnce)]
-    public async Task Machine_item_is_not_supported(StartupLocation location)
+    public async Task Run_once_item_is_not_supported(StartupLocation location)
     {
         var support = await Action(Spotify with { Location = location }).CheckSupportAsync(Ct);
 
         Assert.False(support.IsSupported);
-        Assert.Equal(ReportStrings.Skip_StartupItemNotUser, support.Reason);
+        Assert.Equal(ReportStrings.Skip_StartupItemRunOnce, support.Reason);
+        Assert.Equal((0, 0, 0, 0), (_registry.Reads, _registry.Writes, _machine.Reads, _machine.Writes));
+    }
+
+    public static TheoryData<StartupLocation, string> MachineLocations => new()
+    {
+        { StartupLocation.MachineRun, StartupApprovedKeys.Run },
+        { StartupLocation.MachineRun32, StartupApprovedKeys.Run32 },
+        { StartupLocation.CommonFolder, StartupApprovedKeys.StartupFolder },
+    };
+
+    [Theory]
+    [MemberData(nameof(MachineLocations))]
+    public async Task Machine_item_is_disabled_in_machine_startup_approved_and_restored(StartupLocation location, string key)
+    {
+        _machine[key, "Steam"] = Enabled;
+        var action = Action(Spotify with { Name = "Steam", Location = location });
+
+        var result = await Execute(action, confirmed: true, elevated: true);
+
+        Assert.Equal(ExecutionStatus.Applied, result.Status);
+        Assert.Equal(UserRegistryValue.FromBinary(StartupApproval.Disabled(Start)), _machine[key, "Steam"]);
         Assert.Equal((0, 0), (_registry.Reads, _registry.Writes));
+
+        var restored = await Restore(result.Session);
+
+        Assert.Equal(ChangeStatus.Restored, Assert.Single(restored.Changes).Status);
+        Assert.Equal(Enabled, _machine[key, "Steam"]);
+    }
+
+    [Fact]
+    public async Task Machine_item_is_refused_without_elevation()
+    {
+        var result = await Execute(Action(Spotify with { Location = StartupLocation.MachineRun }), confirmed: true, elevated: false);
+
+        Assert.Equal(ExecutionStatus.Refused, result.Status);
+        Assert.Equal(PolicyReason.RequiresAdmin, result.Decision.Reason);
+        Assert.Equal((0, 0), (_machine.Writes, _machine.Deletes));
+    }
+
+    [Fact]
+    public void Machine_descriptor_requires_admin()
+    {
+        Assert.Equal(new ActionDescriptor(ActionIds.MachineStartupItem, ReportStrings.Action_MachineStartupItem, SafetyLevel.L2Confirmed,
+                RequiresAdmin: true, RequiresReboot: false, RequiresConfirmation: true, IsReversible: true, AllowedDuringGaming: false,
+                VerifiedForAutomatic: false),
+            Action(Spotify with { Location = StartupLocation.CommonFolder }).Descriptor);
+    }
+
+    [Fact]
+    public async Task Machine_restore_without_admin_rights_fails_with_reason_and_can_be_retried()
+    {
+        _machine[StartupApprovedKeys.Run, "Steam"] = Enabled;
+        var result = await Execute(Action(Spotify with { Name = "Steam", Location = StartupLocation.MachineRun }), confirmed: true,
+            elevated: true);
+        // Booster перезапущен без прав администратора: запись в HKLM отклоняет Windows.
+        _machine.WriteFailure = new UnauthorizedAccessException("Access to the registry key is denied.");
+
+        var failed = Assert.Single((await Restore(result.Session)).Changes);
+
+        Assert.Equal(ChangeStatus.RestoreFailed, failed.Status);
+        Assert.Equal(ReportStrings.Restore_RegistryAccessDenied, failed.Detail);
+
+        _machine.WriteFailure = null;
+        Assert.Equal(ChangeStatus.Restored, Assert.Single((await Restore(result.Session with { Changes = [failed] })).Changes).Status);
+        Assert.Equal(Enabled, _machine[StartupApprovedKeys.Run, "Steam"]);
+    }
+
+    [Fact]
+    public async Task Machine_restorer_refuses_keys_outside_startup_approved()
+    {
+        var evil = UserRegistrySnapshot.Capture(ActionIds.MachineStartupItem, @"Software\Microsoft\Windows\CurrentVersion\Run", "Steam", null,
+            UserRegistryValue.FromString("evil.exe"), Start);
+
+        await Assert.ThrowsAsync<UnauthorizedAccessException>(() => new MachineStartupItemRestorer(_machine).RevertAsync(evil, Ct));
+        Assert.Equal((0, 0, 0), (_machine.Reads, _machine.Writes, _machine.Deletes));
     }
 
     [Fact]

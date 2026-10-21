@@ -41,7 +41,7 @@ public sealed class JournalViewModelTests
         var changes = TestMaintenance.Journal();
         var maintenance = TestMaintenance.Create(changes, registry, gaming.Config, gaming.Time);
         var entry = new StartupEntry("Discord", StartupLocation.UserRun, "Discord.exe", @"C:\Discord\Discord.exe", StartupState.Enabled);
-        var applied = await maintenance.ApplyAsync(new StartupItemAction(registry, entry, gaming.Time), userConfirmed: true,
+        var applied = await maintenance.ApplyAsync(new StartupItemAction(registry, new FakeUserRegistry(), entry, gaming.Time), userConfirmed: true,
             gamingSessionActive: false, Ct);
         Assert.Equal(MaintenanceStatus.Applied, applied.Status);
         Assert.NotNull(registry[StartupApprovedKeys.Run, "Discord"]);

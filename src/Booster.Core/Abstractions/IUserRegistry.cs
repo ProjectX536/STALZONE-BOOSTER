@@ -31,8 +31,8 @@ public sealed record UserRegistryValue(
         : throw new InvalidOperationException($"Registry value of kind {Kind} has no bytes");
 }
 
-/// <summary>Реестр текущего пользователя (HKCU, 64-битное представление). Только ключи из списка реализации.</summary>
-public interface IUserRegistry
+/// <summary>Значения одного раздела реестра в 64-битном представлении. Только ключи из списка реализации.</summary>
+public interface IRegistryValues
 {
     /// <summary>null — нет ключа или значения; значение другого типа — InvalidDataException.</summary>
     UserRegistryValue? Read(string subKey, string valueName);
@@ -43,3 +43,12 @@ public interface IUserRegistry
     /// <summary>Нет значения — ничего не делает. Ключ вне списка — UnauthorizedAccessException до открытия.</summary>
     void Delete(string subKey, string valueName);
 }
+
+/// <summary>Реестр текущего пользователя (HKCU). Права администратора не нужны.</summary>
+public interface IUserRegistry : IRegistryValues;
+
+/// <summary>
+/// HKLM: только ключи StartupApproved автозагрузки для всех пользователей. Чтение доступно всем, запись — только процессу с правами
+/// администратора, иначе UnauthorizedAccessException.
+/// </summary>
+public interface IMachineRegistry : IRegistryValues;

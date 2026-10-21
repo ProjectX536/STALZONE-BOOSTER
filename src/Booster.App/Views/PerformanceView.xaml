@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:res="clr-namespace:Booster.App.Resources"
+             xmlns:controls="clr-namespace:Booster.App.Views.Controls"
              xmlns:vm="clr-namespace:Booster.App.ViewModels">
   <DockPanel>
     <TextBlock DockPanel.Dock="Top" Style="{StaticResource PageTitle}" Text="{x:Static res:Strings.NavPerformance}" Margin="24,16,24,0" />
@@ -182,11 +183,11 @@
         <TextBlock Style="{StaticResource Hint}" Text="{Binding BaselineText}" />
         <TextBlock Style="{StaticResource EmptyHint}" Tag="{Binding History}" Text="{x:Static res:Strings.HistoryEmpty}" />
         <DataGrid ItemsSource="{Binding History}" SelectedItem="{Binding SelectedSeries}" SelectionMode="Single" AutoGenerateColumns="False"
-                  IsReadOnly="True" HeadersVisibility="Column" CanUserSortColumns="False" CanUserReorderColumns="False"
+                  IsReadOnly="True" HeadersVisibility="Column" controls:TableSorting.IsEnabled="True" CanUserReorderColumns="False"
                   GridLinesVisibility="Horizontal" HorizontalAlignment="Left" MaxHeight="320" Margin="0,4,0,16"
                   AutomationProperties.Name="{x:Static res:Strings.HistoryTitle}">
           <DataGrid.Columns>
-            <DataGridTextColumn Header="{x:Static res:Strings.HistoryColumnDate}" Binding="{Binding StartedAt}" />
+            <DataGridTextColumn Header="{x:Static res:Strings.HistoryColumnDate}" Binding="{Binding StartedAt}" SortMemberPath="Series.StartedAt" />
             <DataGridTextColumn Header="{x:Static res:Strings.HistoryColumnGame}" Binding="{Binding Target}" />
             <DataGridTextColumn Header="{x:Static res:Strings.HistoryColumnChange}" Binding="{Binding Change}" />
             <DataGridTextColumn Header="{x:Static res:Strings.HistoryColumnAverageFps}" Binding="{Binding AverageFps}" />

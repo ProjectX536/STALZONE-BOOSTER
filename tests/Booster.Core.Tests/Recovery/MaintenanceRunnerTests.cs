@@ -1,5 +1,6 @@
 using Booster.Core.Abstractions;
 using Booster.Core.Engine;
+using Booster.Core.Inventory;
 using Booster.Core.Profiles;
 using Booster.Core.Recovery;
 using Booster.Core.Reports;
@@ -15,6 +16,7 @@ public class MaintenanceRunnerTests
     private readonly FakeSystemState _state = new();
     private readonly InMemoryJournalFileStore _files = new();
     private readonly FakeTimeProvider _time = new(Start);
+    private readonly FakePrivilegeInfo _privileges = new();
     private readonly ChangeJournal _journal;
     private readonly FakeRestorer _restorer;
 
@@ -35,6 +37,7 @@ public class MaintenanceRunnerTests
             new RollbackManager(restorers, _journal, _time, NullLogger<RollbackManager>.Instance),
             new RecoveryValidator(restorers, _journal, _time, NullLogger<RecoveryValidator>.Instance),
             _journal,
+            _privileges,
             _time,
             NullLogger<MaintenanceRunner>.Instance);
     }
@@ -55,6 +58,20 @@ public class MaintenanceRunnerTests
         var result = await Runner().ApplyAsync(Action(), userConfirmed: true, gamingSessionActive: false, Ct);
         Assert.Equal(MaintenanceStatus.Applied, result.Status);
         return result.Session!;
+    }
+
+    [Theory]
+    [InlineData(false, MaintenanceStatus.Refused)]
+    [InlineData(true, MaintenanceStatus.Applied)]
+    public async Task Admin_action_runs_only_in_elevated_booster(bool elevated, MaintenanceStatus expected)
+    {
+        _privileges.State = new PrivilegeState(IsElevated: elevated, IsPerformanceLogUser: false);
+        var adminAction = new FakeAction(_state, "a") { Descriptor = Action().Descriptor with { RequiresAdmin = true } };
+
+        var result = await Runner().ApplyAsync(adminAction, userConfirmed: true, gamingSessionActive: false, Ct);
+
+        Assert.Equal(expected, result.Status);
+        Assert.Equal(elevated ? "boost" : "orig", _state["a"]);
     }
 
     [Fact]

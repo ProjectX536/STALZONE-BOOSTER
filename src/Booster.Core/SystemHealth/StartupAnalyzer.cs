@@ -10,7 +10,7 @@ public enum StartupVerdict
     /// <summary>HKCU Run или папка пользователя, включён, процесс запущен и тяжелее порога — можно отключить с подтверждением.</summary>
     Candidate,
 
-    /// <summary>Тяжёлый, но HKLM или общая папка: только рекомендация (нужны права администратора).</summary>
+    /// <summary>Тяжёлый, но HKLM или общая папка: отключить можно только в Booster с правами администратора.</summary>
     NeedsAdmin,
 
     /// <summary>Защитное ПО или античит по ключевым словам каталога служб — не предлагается.</summary>
@@ -27,6 +27,25 @@ public enum StartupVerdict
 }
 
 public sealed record StartupAssessment(StartupItem Item, StartupVerdict Verdict);
+
+/// <summary>Можно ли отключить элемент кнопкой. Вес элемента не важен: решает пользователь, Booster только подсказывает тяжёлые.</summary>
+public enum StartupDisableAvailability
+{
+    Available,
+
+    AlreadyDisabled,
+
+    /// <summary>RunOnce выполняется один раз и удаляется самой Windows: отключать нечего.</summary>
+    RunOnce,
+
+    StateUnknown,
+
+    /// <summary>Защитное ПО или античит — кнопки нет даже с правами администратора.</summary>
+    Protected,
+
+    /// <summary>HKLM или общая папка, а Booster запущен без прав администратора.</summary>
+    NeedsAdmin,
+}
 
 /// <summary>
 /// Оценка элементов автозагрузки. Первое совпадение сверху вниз: защита проверяется раньше памяти, поэтому тяжёлый антивирус
@@ -47,14 +66,14 @@ public static class StartupAnalyzer
         return items.Select(item => new StartupAssessment(item, Verdict(item, thresholds, catalog))).ToArray();
     }
 
-    /// <summary>Candidate → HeavyStartupItems (Info, L2); NeedsAdmin → HeavyMachineStartupItems (Info, L3); аргументы — имена через «, ».</summary>
+    /// <summary>Candidate → HeavyStartupItems (Info, L2); NeedsAdmin → HeavyMachineStartupItems (Info, L2); аргументы — имена через «, ».</summary>
     public static IReadOnlyList<SystemAdvice> Advise(IReadOnlyList<StartupAssessment> assessments)
     {
         ArgumentNullException.ThrowIfNull(assessments);
 
         var advice = new List<SystemAdvice>();
         Add(StartupVerdict.Candidate, AdviceId.HeavyStartupItems, SafetyLevel.L2Confirmed);
-        Add(StartupVerdict.NeedsAdmin, AdviceId.HeavyMachineStartupItems, SafetyLevel.L3ManualOnly);
+        Add(StartupVerdict.NeedsAdmin, AdviceId.HeavyMachineStartupItems, SafetyLevel.L2Confirmed);
         return advice;
 
         void Add(StartupVerdict verdict, AdviceId id, SafetyLevel level)
@@ -63,6 +82,26 @@ public static class StartupAnalyzer
             if (names.Length > 0)
                 advice.Add(new SystemAdvice(id, AdviceModule.Startup, FindingSeverity.Info, level, [string.Join(NameSeparator, names)]));
         }
+    }
+
+    /// <summary>
+    /// Первое совпадение сверху вниз. Защита проверяется по имени, команде и пути независимо от вердикта: exe может быть не найден,
+    /// а команда всё равно говорит об антивирусе.
+    /// </summary>
+    public static StartupDisableAvailability DisableAvailability(StartupEntry entry, ServiceCatalog catalog, bool isElevated)
+    {
+        ArgumentNullException.ThrowIfNull(entry);
+        ArgumentNullException.ThrowIfNull(catalog);
+
+        if (entry.State == StartupState.Disabled)
+            return StartupDisableAvailability.AlreadyDisabled;
+        if (entry.Location is StartupLocation.UserRunOnce or StartupLocation.MachineRunOnce)
+            return StartupDisableAvailability.RunOnce;
+        if (entry.State == StartupState.Unknown)
+            return StartupDisableAvailability.StateUnknown;
+        if (IsProtected(entry, catalog))
+            return StartupDisableAvailability.Protected;
+        return IsMachine(entry.Location) && !isElevated ? StartupDisableAvailability.NeedsAdmin : StartupDisableAvailability.Available;
     }
 
     private static StartupVerdict Verdict(StartupItem item, StartupThresholds thresholds, ServiceCatalog catalog)
@@ -82,10 +121,11 @@ public static class StartupAnalyzer
             return StartupVerdict.NotRunning;
         if (bytes < thresholds.MinPrivateMemoryMb * BytesPerMb)
             return StartupVerdict.Light;
-        return entry.Location is StartupLocation.MachineRun or StartupLocation.MachineRun32 or StartupLocation.CommonFolder
-            ? StartupVerdict.NeedsAdmin
-            : StartupVerdict.Candidate;
+        return IsMachine(entry.Location) ? StartupVerdict.NeedsAdmin : StartupVerdict.Candidate;
     }
+
+    private static bool IsMachine(StartupLocation location) =>
+        location is StartupLocation.MachineRun or StartupLocation.MachineRun32 or StartupLocation.CommonFolder;
 
     // Цель ярлыка тоже проверяется: имя ярлыка в папке «Автозагрузка» выбирает установщик и может ничего не говорить.
     private static bool IsProtected(StartupEntry entry, ServiceCatalog catalog) =>

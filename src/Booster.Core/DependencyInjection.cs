@@ -57,6 +57,7 @@ public static class DependencyInjection
         services.TryAddEnumerable(ServiceDescriptor.Singleton<IActionRestorer, PowerPlanRestorer>());
         services.TryAddEnumerable(ServiceDescriptor.Singleton<IActionRestorer, GamePriorityRestorer>());
         services.TryAddEnumerable(ServiceDescriptor.Singleton<IActionRestorer, StartupItemRestorer>());
+        services.TryAddEnumerable(ServiceDescriptor.Singleton<IActionRestorer, MachineStartupItemRestorer>());
         services.TryAddEnumerable(ServiceDescriptor.Singleton<IActionRestorer, RegistryTweakRestorer>());
         services.TryAddEnumerable(ServiceDescriptor.Singleton<IReportExporter, JsonReportExporter>());
         services.TryAddEnumerable(ServiceDescriptor.Singleton<IReportExporter, HtmlReportExporter>());

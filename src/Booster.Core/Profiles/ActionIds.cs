@@ -7,5 +7,8 @@ public static class ActionIds
     public const string GamePriority = "game-priority";
     public const string BackgroundApps = "user-selected-background-apps";
     public const string StartupItem = "startup-item";
+
+    /// <summary>Отключение элемента автозагрузки для всех пользователей (HKLM): только в Booster с правами администратора.</summary>
+    public const string MachineStartupItem = "machine-startup-item";
     public const string RegistryTweak = "registry-tweak";
 }

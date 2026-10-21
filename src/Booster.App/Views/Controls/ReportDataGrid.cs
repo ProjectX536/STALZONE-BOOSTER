@@ -47,6 +47,8 @@ public static class ReportDataGrid
                 Header = headers[i],
                 CellTemplate = new DataTemplate { VisualTree = presenter },
                 ClipboardContentBinding = new Binding($"{nameof(ReportRow.Cells)}[{i}].{nameof(ReportCell.Text)}"),
+                // Без пути колонка шаблона не сортируется; сами значения берёт TableSorting по номеру ячейки.
+                SortMemberPath = $"{nameof(ReportRow.Cells)}[{i}]",
             });
         }
     }

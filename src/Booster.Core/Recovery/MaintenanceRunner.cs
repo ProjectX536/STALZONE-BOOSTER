@@ -30,10 +30,11 @@ public sealed record MaintenanceResult(MaintenanceStatus Status, SessionRecord? 
 /// <summary>
 /// Постоянные изменения по кнопке пользователя: одно действие — одна сессия журнала вида
 /// <see cref="SessionKind.Maintenance"/>. Изменение остаётся Applied, пока его не вернут с экрана журнала; правила возврата те же,
-/// что у игровой сессии. Применение и возврат идут по очереди.
+/// что у игровой сессии. Применение и возврат идут по очереди. Действие с правами администратора политика пропускает, только если
+/// сам Booster запущен с ними: отдельного повышения на одно действие нет.
 /// </summary>
 public sealed partial class MaintenanceRunner(ActionExecutor executor, RollbackManager rollback, RecoveryValidator validator,
-    IChangeJournal journal, TimeProvider time, ILogger<MaintenanceRunner> logger)
+    IChangeJournal journal, IPrivilegeInfo privileges, TimeProvider time, ILogger<MaintenanceRunner> logger)
 {
     /// <summary>Режим всех действий обслуживания: подтверждение каждый раз.</summary>
     public const ActionMode Mode = ActionMode.AskFirst;
@@ -65,7 +66,7 @@ public sealed partial class MaintenanceRunner(ActionExecutor executor, RollbackM
             var session = new SessionRecord(SessionRecord.CurrentSchemaVersion, SessionIds.New(now), ProfileId, "", "", null,
                 ExecutionTrigger.UserInitiated, now, SessionState.Apply, null, null, [], [], SessionKind.Maintenance);
             var context = new PolicyContext(ExecutionTrigger.UserInitiated, gamingSessionActive, UserEnabled: false,
-                UserConfirmed: userConfirmed, CanElevate: false);
+                UserConfirmed: userConfirmed, CanElevate: privileges.GetCurrent().IsElevated);
             var result = await executor.ExecuteAsync(session, action, support.Summary, Mode, context, CancellationToken.None)
                 .ConfigureAwait(false);
 
