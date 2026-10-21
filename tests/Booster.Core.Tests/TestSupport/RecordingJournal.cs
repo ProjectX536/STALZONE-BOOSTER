@@ -2,15 +2,12 @@ using Booster.Core.Recovery;
 
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>Журнал в памяти, который помнит каждое сохранение по порядку.</summary>
 public sealed class RecordingJournal : IChangeJournal
 {
     private readonly List<SessionRecord> _saves = [];
 
-    /// <summary>Вернуть исключение, чтобы сохранение этой сессии упало.</summary>
     public Func<SessionRecord, Exception?>? FailWith { get; set; }
 
-    /// <summary>Чтение журнала падает с этим исключением.</summary>
     public Exception? LoadFailure { get; set; }
 
     public IReadOnlyList<SessionRecord> Saves

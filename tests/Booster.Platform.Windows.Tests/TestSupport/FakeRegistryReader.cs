@@ -2,14 +2,12 @@ using Booster.Platform.Windows.Common;
 
 namespace Booster.Platform.Windows.Tests.TestSupport;
 
-/// <summary>Реестр в памяти: ключ → значения. Нет ключа — как в настоящем реестре, null и пустой список.</summary>
 public sealed class FakeRegistryReader : IRegistryReader
 {
     private readonly Dictionary<(RegistryRoot, string), Dictionary<string, object?>> _keys = [];
     private readonly HashSet<(RegistryRoot, string)> _denied = [];
     private readonly Dictionary<(RegistryRoot, string), DateTimeOffset> _writeTimes = [];
 
-    /// <summary>Время записи ключа; без него ключ для <see cref="GetLastWriteTime"/> не существует.</summary>
     public FakeRegistryReader SetWriteTime(RegistryRoot root, string subKey, DateTimeOffset writtenAt)
     {
         _writeTimes[(root, subKey.ToUpperInvariant())] = writtenAt;
@@ -25,7 +23,6 @@ public sealed class FakeRegistryReader : IRegistryReader
         return this;
     }
 
-    /// <summary>Чтение ключа бросает <see cref="UnauthorizedAccessException"/>, как ключ с закрытым ACL.</summary>
     public FakeRegistryReader Deny(RegistryRoot root, string subKey)
     {
         _denied.Add((root, subKey.ToUpperInvariant()));

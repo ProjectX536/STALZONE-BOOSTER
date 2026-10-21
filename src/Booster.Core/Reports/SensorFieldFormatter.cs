@@ -5,10 +5,6 @@ using Booster.Core.Sensors;
 
 namespace Booster.Core.Reports;
 
-/// <summary>
-/// Поля датчиков одного адаптера и CPU — общие для отчёта и живого экрана «Оборудование», чтобы тексты значений
-/// и статусов («Неизвестно», «Нужны права администратора») совпадали.
-/// </summary>
 public static class SensorFieldFormatter
 {
     public static IReadOnlyList<(string Label, ReportCell Value)> Gpu(GpuSensorReading reading, CultureInfo culture)
@@ -43,7 +39,6 @@ public static class SensorFieldFormatter
         ];
     }
 
-    /// <summary>Значение или статус, подсказка — источник и пояснение.</summary>
     public static ReportCell Value<T>(Reading<T> reading, Func<T, string> format) => new(
         ReadingFormatter.Format(reading, format),
         ReadingFormatter.SourceText(reading.Source, reading.Note),
@@ -53,13 +48,11 @@ public static class SensorFieldFormatter
 
     public static string Percent(double value, CultureInfo culture) => Format(culture, ReportStrings.UnitPercent, value.ToString("0", culture));
 
-    /// <summary>Проценты с сотыми: время DPC и прерываний обычно меньше процента, целое число показало бы 0.</summary>
     public static string FractionPercent(double value, CultureInfo culture) =>
         Format(culture, ReportStrings.UnitPercent, value.ToString("0.0#", culture));
 
     public static string Celsius(double value, CultureInfo culture) => Format(culture, ReportStrings.UnitCelsius, value.ToString("0", culture));
 
-    /// <summary>Флаги по отдельности, в порядке перечисления; None — «нет».</summary>
     public static string Reasons(GpuThrottleReasons reasons) => reasons == GpuThrottleReasons.None
         ? EnumText.Format(reasons)
         : string.Join(ReportStrings.ListSeparator, Enum.GetValues<GpuThrottleReasons>()

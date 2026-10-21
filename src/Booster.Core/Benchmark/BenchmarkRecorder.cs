@@ -5,32 +5,18 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Core.Benchmark;
 
-/// <summary>Один замер сигналов. Timestamp — TimeProvider.GetTimestamp(): тот же QPC, что у кадров PresentMon.</summary>
-/// <param name="Sensors">null — датчики не ответили.</param>
-/// <param name="Activity">null — снимок процессов не получен.</param>
-/// <param name="Pressure">null — давление памяти и диска не прочитано.</param>
 public sealed record BenchmarkSample(DateTimeOffset At, long Timestamp, SensorSnapshot? Sensors, ProcessActivity? Activity,
     SystemPressure? Pressure);
 
-/// <summary>
-/// Запись сигналов на время серии: датчики, загрузка процессов, давление памяти и диска. Сбой одного источника
-/// не останавливает запись: его часть замера — null, предупреждение в лог — один раз на источник.
-/// </summary>
 public sealed partial class BenchmarkRecorder(ISensorProvider sensors, IProcessActivitySource activity, ISystemPressureSource pressure,
     IBoosterConfiguration config, TimeProvider time, ILogger<BenchmarkRecorder> logger)
 {
-    /// <summary>
-    /// Посторонних процессов в замере. Больше, чем попадает в сводку: процесс, который иногда выпадает из топа,
-    /// не должен терять эти замеры в медиане.
-    /// </summary>
     public const int ActivityTopCount = 10;
 
     private const string ActivityPart = "process activity";
     private const string PressurePart = "system pressure";
     private const string SensorsPart = "sensors";
 
-    /// <summary>Как SensorRecorder: первый замер сразу, далее раз в monitoring.sensorIntervalMs до отмены. Сбой источника — null в замере.</summary>
-    /// <param name="processName">Цель — ровно одно из имени и PID.</param>
     public async Task<IReadOnlyList<BenchmarkSample>> RecordAsync(string? processName, int? processId, CancellationToken stop)
     {
         if (string.IsNullOrWhiteSpace(processName) == processId is null)
@@ -64,7 +50,7 @@ public sealed partial class BenchmarkRecorder(ISensorProvider sensors, IProcessA
         }
         catch (OperationCanceledException) when (stop.IsCancellationRequested)
         {
-            // Серия окончена — собранного достаточно.
+            // Серия окончена.
         }
         return samples;
     }
@@ -84,7 +70,6 @@ public sealed partial class BenchmarkRecorder(ISensorProvider sensors, IProcessA
 
     private void ReportFailure(Exception ex, string part, HashSet<string> failedParts, int collected)
     {
-        // Замер идёт каждые 1–2 с всю серию: одно и то же предупреждение повторять незачем.
         if (failedParts.Add(part))
             LogPartFailed(ex, part, collected);
     }

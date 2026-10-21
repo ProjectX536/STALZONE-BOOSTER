@@ -3,10 +3,6 @@ using Booster.Platform.Windows.Tests.TestSupport;
 
 namespace Booster.Platform.Windows.Tests.Scripts;
 
-/// <summary>
-/// Диагностические скрипты только читают систему (docs/PRINCIPLES.md, «Безопасность машины разработчика»). Проверяется текст файлов, скрипты не запускаются.
-/// Install-PresentMon.ps1 не входит: он по назначению скачивает файл в профиль пользователя.
-/// </summary>
 public partial class ScriptSafetyTests
 {
     private static readonly string[] Expected =

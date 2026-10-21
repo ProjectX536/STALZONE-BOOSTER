@@ -1,6 +1,5 @@
 namespace Booster.Platform.Windows.Common;
 
-/// <summary>Запросы WMI/CIM. Реализация только читает; в тестах подменяется фикстурами.</summary>
 public interface ICimClient
 {
     Task<IReadOnlyList<CimRow>> QueryAsync(string wmiNamespace, string wql, CancellationToken ct);

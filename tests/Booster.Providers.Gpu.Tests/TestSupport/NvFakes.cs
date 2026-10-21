@@ -10,7 +10,6 @@ internal sealed class FakeNvApi : INvApi
 
     public List<NvPhysicalGpu> Gpus { get; } = [];
 
-    /// <summary>Не null — каждый метод бросает это исключение.</summary>
     public Exception? Throw { get; set; }
 
     public int EnumerateStatus { get; set; }
@@ -21,7 +20,6 @@ internal sealed class FakeNvApi : INvApi
     public Dictionary<nint, uint> PerfDecrease { get; } = [];
     public Dictionary<nint, uint> Fan { get; } = [];
 
-    /// <summary>Код для всех датчиков; не Ok — значения не возвращаются.</summary>
     public int SensorStatus { get; set; }
 
     public int DrsStatus { get; set; }
@@ -66,7 +64,6 @@ internal sealed class FakeNvApi : INvApi
 
 internal sealed class FakeNvApiFactory : INvApiFactory
 {
-    /// <summary>Каждый вызов TryCreate берёт следующий; очередь пуста — LIBRARY_NOT_FOUND.</summary>
     public Queue<FakeNvApi> Instances { get; } = [];
 
     public int Created { get; private set; }

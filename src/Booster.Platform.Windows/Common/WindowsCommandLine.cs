@@ -2,10 +2,7 @@ using System.Text;
 
 namespace Booster.Platform.Windows.Common;
 
-/// <summary>
-/// Сборка командной строки, которую CommandLineToArgvW и CRT разберут обратно в те же аргументы.
-/// Нужна для ShellExecute ("runas"): там аргументы передаются одной строкой.
-/// </summary>
+// Строка, которую CommandLineToArgvW разберёт обратно в те же аргументы (для runas).
 public static class WindowsCommandLine
 {
     public static string Join(IEnumerable<string> arguments)

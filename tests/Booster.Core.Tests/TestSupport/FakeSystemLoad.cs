@@ -2,7 +2,6 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>Нагрузка системы, заданная тестом; считает замеры.</summary>
 public sealed class FakeSystemLoad : ISystemLoadSource
 {
     private int _samples;

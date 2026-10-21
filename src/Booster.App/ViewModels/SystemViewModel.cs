@@ -18,32 +18,19 @@ using RunnerStatus = Booster.Core.Recovery.MaintenanceStatus;
 
 namespace Booster.App.ViewModels;
 
-/// <summary>Строка фоновой активности: процесс и его скорости чтения, записи и жёстких ошибок страниц.</summary>
 public sealed record ActivityRow(string Process, int ProcessId, string Read, string Write, string HardFaults);
 
-/// <summary>Элемент автозагрузки на панели изменений.</summary>
-/// <param name="CanDisable">Отключение доступно (<see cref="StartupDisableAvailability.Available"/>): подтверждение всё равно нужно.</param>
-/// <param name="DisableHint">Почему кнопка выключена; null, когда отключить можно.</param>
 public sealed record StartupRow(StartupEntry Entry, string Name, string Location, string State, string Memory, string Verdict, bool CanDisable,
     string? DisableHint)
 {
     public override string ToString() => Name;
 }
 
-/// <summary>Настройка белого списка реестра на панели изменений.</summary>
-/// <param name="CanApply">State == Proposed; ManualOnly — только рекомендация.</param>
 public sealed record TweakRow(TweakProposal Proposal, string Name, string State, string Evidence, bool CanApply)
 {
     public override string ToString() => Name;
 }
 
-/// <summary>
-/// Система: разделы отчёта о памяти и подкачке, службах, стабильности, сети, автозагрузке и игровых настройках Windows; фоновая
-/// активность, которая опрашивается раз в diagnostics.activityIntervalMs, только пока экран открыт; тест сети по кнопке.
-/// Систему экран меняет только по кнопке и после подтверждения: отключение элемента автозагрузки HKCU и
-/// настройки белого списка реестра идут через <see cref="MaintenanceRunner"/>, каждое — отдельной сессией журнала. Трасса WPR и
-/// A/B-тест HAGS — дочерние модели <see cref="Latency"/> и <see cref="Hags"/>.
-/// </summary>
 public sealed partial class SystemViewModel : ObservableObject, IPage
 {
     private const string PressureSource = "ISystemPressureSource";
@@ -75,7 +62,6 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
     private int _networkRun;
     private IReversibleAction? _pending;
 
-    /// <summary>Номер запроса изменения: проверка, которая опоздала после нового запроса или отмены, ничего не показывает.</summary>
     private int _request;
 
     public SystemViewModel(SessionReport report, DiagnosticsSession session, IProcessResourceSource processes, ISystemPressureSource pressure,
@@ -108,10 +94,8 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
         Update();
     }
 
-    /// <summary>Панель «Задержки драйверов»: трасса WPR и напоминание о незавершённой записи.</summary>
     public LatencyViewModel Latency { get; }
 
-    /// <summary>Панель A/B-теста HAGS: Booster открывает «Параметры» и сравнивает серии, переключает пользователь.</summary>
     public HagsViewModel Hags { get; }
 
     [ObservableProperty]
@@ -120,7 +104,6 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
     [ObservableProperty]
     public partial bool HasData { get; private set; }
 
-    /// <summary>Память и диск по последнему замеру; пусто, пока не прошло два замера.</summary>
     [ObservableProperty]
     public partial IReadOnlyList<ReportField> Pressure { get; private set; } = [];
 
@@ -130,32 +113,26 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
     [ObservableProperty]
     public partial IReadOnlyList<ActivityRow> TopHardFaults { get; private set; } = [];
 
-    /// <summary>Почему таблиц активности нет: ждём второй замер или источник не ответил; null — таблицы показаны.</summary>
     [ObservableProperty]
     public partial string? ActivityStatus { get; private set; }
 
     [ObservableProperty]
     public partial string? NetworkStatus { get; private set; }
 
-    /// <summary>Элементы автозагрузки, которые можно отключить; полная таблица — в разделе отчёта.</summary>
     [ObservableProperty]
     public partial IReadOnlyList<StartupRow> StartupRows { get; private set; } = [];
 
-    /// <summary>Настройки белого списка, для которых есть основание: Proposed и ManualOnly.</summary>
     [ObservableProperty]
     public partial IReadOnlyList<TweakRow> TweakRows { get; private set; } = [];
 
-    /// <summary>Что изменится и чем это грозит; null — подтверждать нечего.</summary>
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ConfirmMaintenanceCommand))]
     [NotifyCanExecuteChangedFor(nameof(CancelMaintenanceCommand))]
     public partial string? PendingConfirmation { get; private set; }
 
-    /// <summary>Итог последнего запроса или применения изменения.</summary>
     [ObservableProperty]
     public partial string? MaintenanceStatus { get; private set; }
 
-    /// <summary>Запускает опрос; повторный вызов без <see cref="Deactivate"/> второго цикла не создаёт.</summary>
     public void Activate()
     {
         if (_loop is not null)
@@ -166,12 +143,9 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
         TopIo = [];
         TopHardFaults = [];
         ActivityStatus = Strings.SystemActivityWaiting;
-        // Вне UI-потока: замер — синхронные нативные вызовы и счётчики производительности.
         var token = _loop.Token;
         _ = Task.Run(() => PollAsync(token), token);
-        // Пока экран был закрыт, запись могла прерваться перезагрузкой; ошибки чтения панель показывает сама.
         _ = Latency.RefreshAsync(CancellationToken.None);
-        // Пока экран был закрыт, HAGS могли переключить и перезагрузить компьютер.
         _ = Hags.RefreshAsync(CancellationToken.None);
     }
 
@@ -185,10 +159,6 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
         _loop = null;
     }
 
-    /// <summary>
-    /// Первый замер — точка отсчёта: скорости по нему считались бы за всё время, пока экран был закрыт. Далее — по таймеру;
-    /// сбой источника показывается статусом, цикл продолжается.
-    /// </summary>
     private async Task PollAsync(CancellationToken ct)
     {
         var diagnostics = _config.Current.Settings.Diagnostics;
@@ -277,7 +247,6 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
 
     private static string PerSecond(string value, CultureInfo culture) => string.Format(culture, Strings.SystemPerSecondFormat, value);
 
-    /// <summary>Тест сети в пуле потоков; результат попадает в сессию, а с ней — в раздел «Сеть» и в отчёт.</summary>
     [RelayCommand(IncludeCancelCommand = true)]
     private async Task RunNetworkTestAsync(CancellationToken ct)
     {
@@ -302,7 +271,6 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
         }
     }
 
-    /// <summary>Начало и итог теста; номер меняется, и опоздавший ход теста статус больше не меняет.</summary>
     private int SetNetworkStatus(string text)
     {
         lock (_networkGate)
@@ -312,7 +280,6 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
         }
     }
 
-    /// <summary>Ход теста приходит из пула и может опоздать: раунд показывается, только пока номер теста не сменился.</summary>
     private void ShowRound(int run, string text)
     {
         lock (_networkGate)
@@ -322,7 +289,6 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
         }
     }
 
-    /// <summary>«Отключить»: проверка текущего состояния и подтверждение; в реестр ничего не пишется.</summary>
     [RelayCommand]
     private async Task RequestDisableStartupAsync(StartupRow? row, CancellationToken ct)
     {
@@ -331,16 +297,11 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
 
         var request = StartRequest();
         var action = new StartupItemAction(_registry, _machineRegistry, row.Entry, _time);
-        // Риск — из совета того же раздела: для всех пользователей он другой, и «Вернуть» тоже требует прав администратора.
         var verdict = action.Descriptor.RequiresAdmin ? StartupVerdict.NeedsAdmin : StartupVerdict.Candidate;
         var risk = Risk(StartupAnalyzer.Advise([new StartupAssessment(new StartupItem(row.Entry, null), verdict)]));
         await PrepareAsync(request, action, location: null, risk, ct);
     }
 
-    /// <summary>
-    /// «Применить»: у пары UserGpuPreferences без известного пути сначала выбор exe игры — отмена ничего не делает, файл с другим
-    /// именем не принимается. Затем проверка и подтверждение; в реестр ничего не пишется.
-    /// </summary>
     [RelayCommand]
     private async Task RequestApplyTweakAsync(TweakRow? row, CancellationToken ct)
     {
@@ -374,7 +335,6 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
             Risk(TweakAdvisor.Advise([proposal])), ct);
     }
 
-    /// <summary>«Подтвердить»: изменение через <see cref="MaintenanceRunner"/> в пуле, затем новый снимок для разделов.</summary>
     [RelayCommand(CanExecute = nameof(HasPending))]
     private async Task ConfirmMaintenanceAsync(CancellationToken ct)
     {
@@ -407,7 +367,7 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
         }
         catch (OperationCanceledException) when (ct.IsCancellationRequested)
         {
-            // Экран закрыт; снимок обновится при следующем сборе.
+            // Экран закрыт.
         }
         catch (Exception ex)
         {
@@ -418,7 +378,6 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
     [RelayCommand(CanExecute = nameof(HasPending))]
     private void CancelMaintenance() => ClearPending();
 
-    /// <summary>Страница «Параметров», где пользователь меняет настройку сам; список страниц проверяет <see cref="ISettingsOpener"/>.</summary>
     [RelayCommand]
     private void OpenGamingSettings(string? page)
     {
@@ -428,7 +387,6 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
 
     private bool HasPending() => PendingConfirmation is not null;
 
-    /// <summary>Новый запрос сбрасывает прежний итог и неподтверждённое изменение.</summary>
     private int StartRequest()
     {
         ClearPending();
@@ -443,10 +401,6 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
         PendingConfirmation = null;
     }
 
-    /// <summary>
-    /// Проверка поддержки читает реестр — в пуле; подтверждение показывается, только если запрос ещё актуален. Текст — по строке:
-    /// что изменится, где (ключ и имя значения), чем это грозит.
-    /// </summary>
     private async Task PrepareAsync(int request, IReversibleAction action, string? location, string? risk, CancellationToken ct)
     {
         var culture = CultureInfo.CurrentCulture;
@@ -518,7 +472,6 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
         HasData = true;
     }
 
-    /// <summary>Только то, что можно отключить: оценка — по действующим порогам и справочнику, как в разделе отчёта.</summary>
     private List<StartupRow> BuildStartupRows(SystemSnapshot snapshot, CultureInfo culture)
     {
         if (snapshot.System.Startup is not { IsAvailable: true, Value: { } items })
@@ -547,7 +500,6 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
             _context.Post(_ => action(), null);
     }
 
-    /// <summary>Ход без перехода в UI-поток: Progress&lt;T&gt; привязан к контексту, где создан, а не к экрану.</summary>
     private sealed class DirectProgress(Action<int> report) : IProgress<int>
     {
         public void Report(int value) => report(value);

@@ -9,17 +9,10 @@ using Booster.Core.SystemHealth;
 
 namespace Booster.Core.Reports;
 
-/// <summary>
-/// Замечания только по фактам из снимка. Неизвестное значение — не повод для замечания: подпись драйвера Unknown
-/// не делает его неподписанным, а том без сведений о свободном месте не считается заполненным.
-/// </summary>
 public static class FindingsBuilder
 {
-    /// <summary>Тема замечания о замере кадров: сам замер выполняет PresentMon.</summary>
     public const string FrameCaptureSubject = "PresentMon";
 
-    /// <param name="benchmark">Последняя серия бенчмарка: её признаки троттлинга Medium/High дают одно предупреждение.</param>
-    /// <param name="advice">Рекомендации системной диагностики: каждая с важностью Warning даёт замечание.</param>
     public static IReadOnlyList<Finding> Build(SystemSnapshot snapshot, Thresholds thresholds, IReadOnlyList<ConfigWarning> configWarnings,
         BenchmarkReport? benchmark = null, IReadOnlyList<SystemAdvice>? advice = null)
     {
@@ -55,11 +48,9 @@ public static class FindingsBuilder
         if (benchmark?.Series.Telemetry.Throttle is { } throttle)
             AddThrottling(findings, throttle);
 
-        // Info-рекомендации видны только в своём разделе: замечание — лишь то, что стоит проверить.
         findings.AddRange((advice ?? []).Where(a => a.Severity == FindingSeverity.Warning).Select(a =>
             new Finding(FindingKind.SystemAdvice, FindingSeverity.Warning, EnumText.Format(a.Id), EnumText.Format(a.Module))));
 
-        // Предупреждения первыми; OrderBy устойчив, порядок внутри одной важности сохраняется.
         return findings.OrderByDescending(f => f.Severity).ToList();
     }
 
@@ -89,7 +80,6 @@ public static class FindingsBuilder
             findings.Add(new Finding(FindingKind.SectionRequiresAdmin, FindingSeverity.Info, section.Title, detail));
     }
 
-    /// <summary>Замечания к одному устройству; по ним же экран драйверов отбирает устройства с проблемами.</summary>
     public static IReadOnlyList<Finding> ForDevice(DeviceDriverInfo device)
     {
         ArgumentNullException.ThrowIfNull(device);
@@ -109,7 +99,6 @@ public static class FindingsBuilder
         return findings;
     }
 
-    /// <summary>Поставщик, версия и INF неподписанного драйвера — то, что известно.</summary>
     private static string? DriverText(DeviceDriverInfo device)
     {
         var parts = new[] { device.DriverProvider, device.DriverVersion, device.InfName }
@@ -119,10 +108,6 @@ public static class FindingsBuilder
         return parts.Count == 0 ? null : string.Join(", ", parts);
     }
 
-    /// <summary>
-    /// Одно предупреждение на серию: тема — раздел бенчмарка, где лежит таблица признаков; подробность — перечень сигналов.
-    /// Косвенные признаки (Low) предупреждения не дают: они видны только в разделе бенчмарка.
-    /// </summary>
     private static void AddThrottling(List<Finding> findings, ThrottleAssessment assessment)
     {
         var signals = assessment.Findings

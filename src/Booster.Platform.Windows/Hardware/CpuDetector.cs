@@ -17,7 +17,6 @@ public sealed class CpuDetector(ICimClient cim, ICpuTopologySource topology) : I
         return new(CpuMapper.MapPackages(rows), ReadTopology());
     }
 
-    // Топология — отдельное поле: без неё процессор всё равно описан, поэтому её сбой не роняет секцию.
     private Reading<CoreTopology> ReadTopology()
     {
         try

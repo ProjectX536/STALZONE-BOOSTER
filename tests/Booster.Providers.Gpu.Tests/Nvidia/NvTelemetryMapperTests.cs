@@ -19,7 +19,6 @@ public sealed class NvTelemetryMapperTests
     public void Not_present_domain_is_unsupported() =>
         Assert.Equal(DataStatus.NotSupported, NvTelemetryMapper.Utilization(Ok<uint?>(null)).Status);
 
-    /// <summary>Датчик с target GPU выбирает NvApiLibrary: [BOARD 40, GPU 63] даёт 63, его и показываем.</summary>
     [Fact]
     public void Gpu_target_sensor_temperature()
     {

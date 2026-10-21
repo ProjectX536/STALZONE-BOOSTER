@@ -4,15 +4,10 @@ using Booster.Providers.Gpu.Resources;
 
 namespace Booster.Providers.Gpu.Nvidia;
 
-/// <summary>
-/// Ответы <see cref="INvApi"/> → показания телеметрии. Предел температуры, VRAM и мощность NVAPI не даёт: их заполняет
-/// общий провайдер при слиянии. <c>defaultMaxTemp</c> — верхняя граница диапазона датчика, а не точка троттлинга.
-/// </summary>
 internal static class NvTelemetryMapper
 {
     public const string Source = NvApiLibrary.Source;
 
-    /// <param name="invalidated">Хотя бы один вызов вернул HANDLE_INVALIDATED: дескрипторы NVAPI пора получить заново.</param>
     public static GpuTelemetry Read(INvApi api, nint gpu, out bool invalidated)
     {
         var utilization = api.GetGraphicsUtilizationPercent(gpu);
@@ -72,14 +67,12 @@ internal static class NvTelemetryMapper
         return reasons;
     }
 
-    /// <summary>0 об/мин — то же примечание, что у D3DKMT: вентилятор остановлен или драйвер не сообщает.</summary>
     public static Reading<int> Fan(NvResult<uint> result) => !result.Ok
         ? FromStatus<int>(result.Status)
         : result.Value == 0
             ? Reading<int>.Unknown(Source, ReportStrings.KmtFanZeroRpm)
             : Reading<int>.Known((int)Math.Min(result.Value, int.MaxValue), Source);
 
-    /// <summary>NOT_SUPPORTED → NotSupported, INVALID_USER_PRIVILEGE → RequiresAdmin, прочие → Failed; примечание — имя кода.</summary>
     public static Reading<T> FromStatus<T>(int status) => status switch
     {
         NvApiStatus.NotSupported => Reading<T>.Unsupported(Source, NvApiStatus.Name(status)),

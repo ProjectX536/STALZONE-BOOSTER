@@ -6,7 +6,6 @@ using Booster.Core.Tests.TestSupport;
 
 namespace Booster.Core.Tests.Configuration;
 
-/// <summary>Файлы из config/ репозитория — те же, что копируются рядом с Booster.App.exe.</summary>
 public class ShippedConfigTests
 {
     private static string ReadShipped(string fileName) =>

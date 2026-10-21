@@ -7,26 +7,17 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.App.Services;
 
-/// <summary>Открывает страницу «Параметров» Windows, где пользователь меняет настройку сам, и файлы Booster в Проводнике.</summary>
 public interface ISettingsOpener
 {
-    /// <summary>false — страница не из списка разрешённых или не открылась.</summary>
     bool TryOpenSettings(string page);
 
-    /// <summary>Открывает папку файла в Проводнике и выделяет сам файл; false — Проводник не открылся.</summary>
     bool RevealFile(string path);
 }
 
-/// <summary>
-/// Открывает ссылки и папки во внешних программах. Ссылка открывается, только если её разрешает
-/// <see cref="OfficialSourceResolver.IsAllowed"/>: из окна Booster наружу ведут лишь официальные источники.
-/// Booster с правами администратора передаёт ссылку Проводнику: иначе браузер унаследовал бы права администратора.
-/// </summary>
 public sealed partial class LinkOpener(OfficialSourceResolver sources, IPrivilegeInfo privileges, ILogger<LinkOpener> logger) : ISettingsOpener
 {
     private const string SettingsScheme = "ms-settings:";
 
-    /// <summary>Страницы «Параметров», на которые ссылаются рекомендации экрана «Система»; другие не открываются.</summary>
     private static readonly string[] SettingsPages = ["gaming-gamebar", "gaming-gamedvr", "gaming-gamemode", "display-advancedgraphics"];
     public bool TryOpen(Uri uri)
     {
@@ -51,26 +42,21 @@ public sealed partial class LinkOpener(OfficialSourceResolver sources, IPrivileg
         return Start(ShellStartInfo(uri, privileges.GetCurrent().IsElevated), uri);
     }
 
-    /// <summary>
-    /// Без прав администратора — ShellExecute. С ними — explorer.exe с адресом: новый процесс Проводника передаёт адрес уже
-    /// запущенной оболочке пользователя, и браузер или «Параметры» стартуют без прав администратора. Адрес из списка разрешённых
-    /// кавычек не содержит.
-    /// </summary>
+    // ShellExecute из повышенного процесса запустил бы браузер с правами администратора,
+    // а explorer.exe передаёт адрес уже запущенной оболочке пользователя.
     internal static ProcessStartInfo ShellStartInfo(string target, bool elevated) => elevated
         ? new ProcessStartInfo(ExplorerPath, $"\"{target}\"") { UseShellExecute = false }
         : new ProcessStartInfo(target) { UseShellExecute = true };
 
     private static string ExplorerPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "explorer.exe");
 
-    /// <summary>Адрес ms-settings для страницы из списка; иначе null. Имя сравнивается точно, без обрезки пробелов.</summary>
     internal static string? TryBuildSettingsUri(string? page) =>
         page is not null && SettingsPages.Contains(page, StringComparer.Ordinal) ? SettingsScheme + page : null;
 
-    /// <summary>Открывает папку файла в Проводнике и выделяет сам файл.</summary>
     public bool RevealFile(string path)
     {
         ArgumentException.ThrowIfNullOrEmpty(path);
-        // Кавычка в пути Windows недопустима, поэтому путь заключается в кавычки без экранирования.
+        // Кавычек в путях Windows не бывает, экранировать нечего.
         return Start(new ProcessStartInfo(ExplorerPath, $"/select,\"{Path.GetFullPath(path)}\"") { UseShellExecute = false }, path);
     }
 

@@ -35,7 +35,6 @@ public partial class App : Application
 
         _headless = ExportCommand.TryParse(e.Args, out var exportDirectory);
 
-        // Экспорт только читает; второе окно восстановило бы при старте сессию, которую ведёт первое.
         if (!_headless && (_instance = SingleInstanceLock.TryAcquire(SingleInstanceLock.DefaultName)) is null)
         {
             MessageBox.Show(Strings.AlreadyRunning, Strings.AppTitle, MessageBoxButton.OK, MessageBoxImage.Information);
@@ -56,7 +55,7 @@ public partial class App : Application
             return;
         }
 
-        // Иначе WPF форматирует привязки по en-US, а не по региональным настройкам пользователя.
+        // Иначе WPF форматирует привязки по en-US.
         FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement),
             new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
 
@@ -74,12 +73,10 @@ public partial class App : Application
         {
             try
             {
-                // Остановка вне UI-потока: продолжения внутри хоста не должны ждать занятый диспетчер.
                 Task.Run(() => _host.StopAsync(HostStopTimeout)).GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
-                // Сессия не успела восстановиться за срок остановки: освобождение координатора дождётся восстановления.
                 if (_logger is not null)
                     LogStopFailed(_logger, ex);
             }
@@ -93,7 +90,6 @@ public partial class App : Application
         base.OnExit(e);
     }
 
-    // async void: исключение, если оно всё же вылетит, попадёт в DispatcherUnhandledException и завершит экспорт с кодом 1.
     private async void RunExport(string? directory)
     {
         var code = await _host!.Services.GetRequiredService<ExportCommand>().RunAsync(directory, CancellationToken.None);
@@ -106,14 +102,12 @@ public partial class App : Application
         LogUnexpected(e.Exception, "dispatcher");
         ShowErrorMessage();
 
-        // Без окна приложению больше нечего делать: экспорт или запуск не завершились.
         if (_headless || MainWindow is not { IsLoaded: true })
             Shutdown(FailureExitCode);
     }
 
     private void OnDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
     {
-        // Процесс завершается: сообщение показывается сразу в потоке ошибки, журнал сбрасывается на диск.
         LogUnexpected(e.ExceptionObject as Exception, "appdomain");
         if (e.IsTerminating)
             _host?.Dispose();
@@ -125,7 +119,6 @@ public partial class App : Application
         e.SetObserved();
         LogUnexpected(e.Exception, "task");
 
-        // Событие приходит в потоке финализатора; окно сообщения открывается в UI-потоке.
         Dispatcher.BeginInvoke(ShowErrorMessage);
     }
 

@@ -9,7 +9,6 @@ public static class CapabilityIds
     public const string DisplayConfig = "display.config";
     public const string StorageWmi = "storage.msft-wmi";
 
-    // Область адаптера: CapabilityScopes.Adapter(luid).
     public const string GpuVendorApi = "gpu.vendor-api";
     public const string GpuUtilization = "gpu.telemetry.utilization";
     public const string GpuTemperature = "gpu.telemetry.temperature";
@@ -20,7 +19,6 @@ public static class CapabilityIds
     public const string GpuFan = "gpu.telemetry.fan";
     public const string GpuThrottleReasonsSource = "gpu.throttle-reasons";
 
-    // Системная область: CapabilityScopes.System.
     public const string GpuSettingsRead = "gpu.settings.read";
     public const string CpuFrequency = "cpu.telemetry.frequency";
     public const string CpuPerformanceLimit = "cpu.telemetry.performance-limit";

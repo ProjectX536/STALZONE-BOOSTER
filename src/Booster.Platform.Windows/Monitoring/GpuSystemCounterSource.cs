@@ -5,11 +5,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Platform.Windows.Monitoring;
 
-/// <summary>
-/// Счётчики «GPU Engine\Utilization Percentage» и «GPU Adapter Memory\Dedicated Usage» всех процессов, только чтение.
-/// Категория читается целиком одним вызовом; загрузка экземпляра — разность с прошлым чтением, поэтому при первом вызове
-/// и для движков, появившихся с прошлого вызова, она неизвестна.
-/// </summary>
 public sealed partial class GpuSystemCounterSource(ILogger<GpuSystemCounterSource> logger) : IGpuSystemCounterSource
 {
     public const string EngineCategory = "GPU Engine";
@@ -75,10 +70,6 @@ public sealed partial class GpuSystemCounterSource(ILogger<GpuSystemCounterSourc
         }
     }
 
-    /// <summary>
-    /// Результат по адаптерам. Адаптер без единого экземпляра движка простаивает: ни у одного процесса нет на нём
-    /// контекста. Если все его движки появились с прошлого чтения, загрузка за интервал неизвестна.
-    /// </summary>
     internal static Dictionary<AdapterLuid, GpuCounterSample> Combine(bool hasBaseline,
         IReadOnlyList<(string Instance, double Percent)> measured, IEnumerable<string> engineInstances,
         IReadOnlyDictionary<AdapterLuid, long> dedicated)
@@ -130,7 +121,6 @@ public sealed partial class GpuSystemCounterSource(ILogger<GpuSystemCounterSourc
         }
     }
 
-    // Опрос идёт каждые 1–2 с: одно и то же предупреждение пишется один раз, пока чтение не восстановится.
     private Reading<bool> Fail(string reason)
     {
         if (reason != _loggedFailure)

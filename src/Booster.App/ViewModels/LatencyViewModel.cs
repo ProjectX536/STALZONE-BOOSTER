@@ -10,15 +10,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.App.ViewModels;
 
-/// <summary>
-/// Панель «Задержки драйверов» экрана «Система»: трасса WPR только по кнопке. Запуск, остановка и отмена идут через
-/// UAC, напоминание о незавершённой записи — по маркеру <see cref="TraceRecorder"/>. Живые DPC и прерывания показывает
-/// <see cref="SystemViewModel.Pressure"/>. Операции идут по одной: пока одна идёт или состояние не прочитано, кнопки записи недоступны.
-/// </summary>
 public sealed partial class LatencyViewModel(TraceRecorder recorder, ISettingsOpener opener, ILogger<LatencyViewModel> logger)
     : ObservableObject
 {
-    /// <summary>Операция или чтение состояния идёт: обновление при открытии экрана их не перебивает.</summary>
     private bool _running;
 
     [ObservableProperty]
@@ -28,7 +22,6 @@ public sealed partial class LatencyViewModel(TraceRecorder recorder, ISettingsOp
     [NotifyCanExecuteChangedFor(nameof(DismissTraceCommand))]
     public partial TraceState State { get; private set; }
 
-    /// <summary>Идёт операция, или состояние ещё не прочитано, или чтение не удалось: неизвестно, идёт ли запись.</summary>
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(StartTraceCommand))]
     [NotifyCanExecuteChangedFor(nameof(StopTraceCommand))]
@@ -36,20 +29,16 @@ public sealed partial class LatencyViewModel(TraceRecorder recorder, ISettingsOp
     [NotifyCanExecuteChangedFor(nameof(DismissTraceCommand))]
     public partial bool IsBusy { get; private set; } = true;
 
-    /// <summary>Незавершённая запись: идёт или прервана перезагрузкой; null — записи нет.</summary>
     [ObservableProperty]
     public partial string? Banner { get; private set; }
 
-    /// <summary>Итог последней операции или почему запись недоступна.</summary>
     [ObservableProperty]
     public partial string? Status { get; private set; }
 
-    /// <summary>Трасса, сохранённая последней остановкой.</summary>
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RevealTraceCommand))]
     public partial string? LastTracePath { get; private set; }
 
-    /// <summary>Перечитывает маркер: пока экран был закрыт, компьютер мог перезагрузиться. Во время операции ничего не делает.</summary>
     public async Task RefreshAsync(CancellationToken ct)
     {
         if (_running)
@@ -84,7 +73,6 @@ public sealed partial class LatencyViewModel(TraceRecorder recorder, ISettingsOp
     private Task CancelTraceAsync(CancellationToken ct) => RunAsync("cancel", async () =>
         Outcome(await Task.Run(() => recorder.CancelAsync(ct), ct), Strings.LatencyCancelled), ct);
 
-    /// <summary>Прерванная запись: маркер удаляется без UAC, wpr.exe не запускается.</summary>
     [RelayCommand(CanExecute = nameof(IsInterrupted))]
     private Task DismissTraceAsync(CancellationToken ct) => RunAsync("dismiss", async () =>
     {
@@ -107,7 +95,6 @@ public sealed partial class LatencyViewModel(TraceRecorder recorder, ISettingsOp
 
     private bool HasTrace() => LastTracePath is not null;
 
-    /// <summary>Операция в пуле, итог — в <see cref="Status"/>; затем состояние перечитывается из маркера, что бы ни случилось.</summary>
     private async Task RunAsync(string operation, Func<Task<string>> run, CancellationToken ct)
     {
         _running = true;
@@ -132,7 +119,6 @@ public sealed partial class LatencyViewModel(TraceRecorder recorder, ISettingsOp
         }
     }
 
-    /// <summary>Сбой чтения оставляет кнопки записи недоступными: неизвестно, идёт ли запись.</summary>
     private async Task LoadAsync(CancellationToken ct)
     {
         TraceStatus status;
@@ -163,7 +149,6 @@ public sealed partial class LatencyViewModel(TraceRecorder recorder, ISettingsOp
         _ => null,
     };
 
-    /// <summary>Дата и время: запись могла начаться не сегодня.</summary>
     private static string Time(DateTimeOffset value, CultureInfo culture) => value.ToLocalTime().ToString("g", culture);
 
     private static string Outcome(WprResult result, string done)

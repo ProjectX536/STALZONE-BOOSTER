@@ -2,7 +2,6 @@ using Booster.Platform.Windows.Common;
 
 namespace Booster.Platform.Windows.Tests.Common;
 
-/// <summary>Правила разбора командной строки — как у CommandLineToArgvW и CRT.</summary>
 public class WindowsCommandLineTests
 {
     [Theory]

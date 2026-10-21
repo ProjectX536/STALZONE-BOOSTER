@@ -2,10 +2,6 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Core.Engine;
 
-/// <summary>
-/// Правила проверяются по порядку, первое совпадение решает (docs/ARCHITECTURE.md, раздел 4).
-/// Запрет и ручной уровень проверяются раньше всего остального, поэтому их не снимает ни подтверждение, ни режим.
-/// </summary>
 public sealed class ActionPolicy : IActionPolicy
 {
     public PolicyDecision Evaluate(ActionDescriptor action, ActionMode? configuredMode, PolicyContext context)

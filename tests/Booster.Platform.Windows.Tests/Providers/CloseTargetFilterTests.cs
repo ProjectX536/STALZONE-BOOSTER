@@ -21,7 +21,6 @@ public class CloseTargetFilterTests
     [Fact]
     public void Name_with_exe_and_other_case_is_normalized()
     {
-        // «EXPLORER.EXE» — тот же защищённый explorer; «Discord.EXE» — обычное приложение.
         Assert.Equal([2], CloseTargetFilter.Filter([("EXPLORER.EXE", 1), ("Discord.EXE", 2)], OwnPid));
     }
 

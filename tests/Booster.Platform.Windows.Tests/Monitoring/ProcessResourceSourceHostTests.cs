@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Booster.Platform.Windows.Tests.Monitoring;
 
-/// <summary>Живая система, только чтение: снимок процессов без их открытия.</summary>
 [Trait("Category", "Host")]
 public class ProcessResourceSourceHostTests
 {

@@ -3,11 +3,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Core.Engine;
 
-/// <summary>
-/// Запускает сборщик одной секции с таймаутом и превращает любой исход в <see cref="Reading{T}"/>:
-/// ошибка, пустой результат или зависание сборщика дают <see cref="DataStatus.Failed"/> и запись
-/// уровня Warning, а не исключение. Исключение — только отмена через внешний токен.
-/// </summary>
 public sealed partial class SectionRunner(TimeProvider time, ILogger<SectionRunner> logger)
 {
     public async Task<Reading<T>> RunAsync<T>(string sectionId, Func<CancellationToken, Task<T>> collect,
@@ -36,7 +31,6 @@ public sealed partial class SectionRunner(TimeProvider time, ILogger<SectionRunn
         T value;
         try
         {
-            // WaitAsync отпускает ожидание по таймауту, даже если сборщик не смотрит на токен.
             value = await task.WaitAsync(timeout, time, ct).ConfigureAwait(false);
         }
         catch (TimeoutException ex) when (!IsFaultOf(task, ex))
@@ -72,11 +66,9 @@ public sealed partial class SectionRunner(TimeProvider time, ILogger<SectionRunn
         return Reading<T>.Failure(sectionId, $"{ex.GetType().Name}: {ex.Message}");
     }
 
-    /// <summary>Собственный <see cref="TimeoutException"/> сборщика — его ошибка, а не таймаут секции.</summary>
     private static bool IsFaultOf(Task task, Exception ex) =>
         task.IsFaulted && task.Exception!.InnerExceptions.Contains(ex);
 
-    /// <summary>Брошенный сборщиком позже результат никто не ждёт; исключение помечается наблюдённым.</summary>
     private static void ObserveLater(Task task) =>
         task.ContinueWith(static t => _ = t.Exception, CancellationToken.None,
             TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);

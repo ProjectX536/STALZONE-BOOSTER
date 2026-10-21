@@ -6,10 +6,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Platform.Windows.Common;
 
-/// <summary>
-/// Серии в <see cref="IAppPaths.Benchmarks"/>, по файлу <c>&lt;Id&gt;.json</c> на серию; запись через <see cref="AtomicFile"/>.
-/// Операции идут по одной: сохранение с удалением старых не пересекается с загрузкой и удалением.
-/// </summary>
 public sealed partial class BenchmarkFileStore : IBenchmarkStore
 {
     private const string Extension = ".json";
@@ -26,7 +22,6 @@ public sealed partial class BenchmarkFileStore : IBenchmarkStore
     {
     }
 
-    /// <param name="atomicWrite">Шов для тестов: запись с заменой файла.</param>
     internal BenchmarkFileStore(IAppPaths paths, IBoosterConfiguration config, ILogger<BenchmarkFileStore> logger,
         Func<string, string, CancellationToken, Task> atomicWrite)
     {
@@ -86,10 +81,6 @@ public sealed partial class BenchmarkFileStore : IBenchmarkStore
         }
     }
 
-    /// <summary>
-    /// Лишние сверх <c>benchmark.retainedSeriesCount</c> — самые старые из читаемых. Испорченные файлы и файлы новой схемы
-    /// не удаляются: их может прочитать более новая версия Booster или человек.
-    /// </summary>
     private async Task PruneAsync(string dir, CancellationToken ct)
     {
         var retained = _config.Current.Settings.Benchmark.RetainedSeriesCount;
@@ -106,7 +97,6 @@ public sealed partial class BenchmarkFileStore : IBenchmarkStore
         }
     }
 
-    /// <summary>Новые первыми: по времени старта, при равном — по Id. Id серии — имя файла, даже если файл переименовали.</summary>
     private async Task<IReadOnlyList<(string Path, BenchmarkSeries Series)>> LoadEntriesAsync(string dir, CancellationToken ct)
     {
         if (!Directory.Exists(dir))
@@ -141,7 +131,7 @@ public sealed partial class BenchmarkFileStore : IBenchmarkStore
 
     private static void RemoveLeftoverTempFiles(string dir)
     {
-        // Маска с расширением в Windows захватывает и более длинные: фильтр по полному суффиксу.
+        // Маска *.ext в Windows находит и более длинные расширения.
         foreach (var temp in Directory.EnumerateFiles(dir, "*" + TempSuffix)
                      .Where(f => f.EndsWith(TempSuffix, StringComparison.OrdinalIgnoreCase)))
         {
@@ -151,12 +141,11 @@ public sealed partial class BenchmarkFileStore : IBenchmarkStore
             }
             catch (IOException)
             {
-                // Занят записью, которая сейчас идёт: её собственная замена его и уберёт.
+                // Занят другой записью, она его и уберёт.
             }
         }
     }
 
-    /// <summary>Чтение не мешает замене файла другим процессом: доступ на запись и удаление разделяется.</summary>
     private static async Task<string> ReadAsync(string path, CancellationToken ct)
     {
         var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete, 4096,
@@ -168,7 +157,6 @@ public sealed partial class BenchmarkFileStore : IBenchmarkStore
         }
     }
 
-    /// <summary>Замена может упасть на нарушении совместного доступа (антивирус, индексатор держат файл): одна повторная попытка.</summary>
     private async Task WriteAsync(string path, string json, CancellationToken ct)
     {
         try
@@ -181,7 +169,6 @@ public sealed partial class BenchmarkFileStore : IBenchmarkStore
         }
     }
 
-    /// <summary>Id становится именем файла: путь в нём вывел бы запись и удаление за пределы каталога истории.</summary>
     private static void CheckId(string id) => FileNames.CheckBare(id);
 
     private static string PathOf(string dir, string id) => Path.Combine(dir, id + Extension);

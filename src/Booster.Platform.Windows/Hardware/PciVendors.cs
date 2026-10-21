@@ -21,7 +21,6 @@ public static partial class PciVendors
         _ => GpuVendor.Other,
     };
 
-    /// <summary>Разбирает <c>PCI\VEN_xxxx&amp;DEV_xxxx[&amp;SUBSYS_xxxxxxxx][&amp;REV_xx]\…</c>.</summary>
     public static bool TryParsePnpId(string? pnpDeviceId, out PciId id)
     {
         id = default;

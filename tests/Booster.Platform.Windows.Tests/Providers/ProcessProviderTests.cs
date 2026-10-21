@@ -3,7 +3,6 @@ using Booster.Platform.Windows.Providers;
 
 namespace Booster.Platform.Windows.Tests.Providers;
 
-/// <summary>Без системы: только сопоставление кодов ошибок; процессы не открываются.</summary>
 public class ProcessProviderTests
 {
     private const int ErrorAccessDenied = 5;

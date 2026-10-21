@@ -7,10 +7,6 @@ using Windows.Win32.System.SystemInformation;
 
 namespace Booster.Platform.Windows.Providers;
 
-/// <summary>
-/// CPU — по разности <c>GetSystemTimes</c> между вызовами, память — <c>GlobalMemoryStatusEx.dwMemoryLoad</c>.
-/// Оба вызова дешёвые и не открывают другие процессы.
-/// </summary>
 public sealed partial class SystemLoadSource(ILogger<SystemLoadSource> logger) : ISystemLoadSource
 {
     private readonly Lock _gate = new();
@@ -59,7 +55,6 @@ public sealed partial class SystemLoadSource(ILogger<SystemLoadSource> logger) :
     private static long Ticks(System.Runtime.InteropServices.ComTypes.FILETIME time) =>
         ((long)time.dwHighDateTime << 32) | (uint)time.dwLowDateTime;
 
-    // Замер идёт каждые 1–2 с: повторять одно и то же предупреждение незачем.
     private void LogFailureOnce(string function)
     {
         if (Interlocked.Exchange(ref _failureLogged, 1) == 0)

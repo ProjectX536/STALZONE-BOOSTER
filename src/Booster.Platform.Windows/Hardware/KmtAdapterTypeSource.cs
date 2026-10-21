@@ -4,15 +4,10 @@ using Kmt = Windows.Wdk.PInvoke;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>
-/// Читает <c>D3DKMT_ADAPTERTYPE</c> у всех адаптеров графического ядра. Открытые D3DKMTEnumAdapters2
-/// дескрипторы закрываются в любом случае.
-/// </summary>
 public sealed class KmtAdapterTypeSource : IKmtAdapterTypeSource
 {
     public const string Source = "D3DKMTQueryAdapterInfo(KMTQAITYPE_ADAPTERTYPE)";
 
-    // Между вызовом за количеством и вызовом за данными адаптер может появиться: повторяем запрос.
     private const int MaxAttempts = 3;
     private const int StatusBufferTooSmall = unchecked((int)0xC0000023);
 

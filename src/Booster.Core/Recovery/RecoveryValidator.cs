@@ -4,10 +4,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Core.Recovery;
 
-/// <summary>
-/// Повторная сверка после восстановления, только чтение: <see cref="IActionRestorer.RevertAsync"/> не вызывается.
-/// Журнал сохраняется один раз в конце.
-/// </summary>
 public sealed partial class RecoveryValidator(IEnumerable<IActionRestorer> restorers, IChangeJournal journal, TimeProvider time,
     ILogger<RecoveryValidator> logger)
 {

@@ -3,12 +3,6 @@
 .SYNOPSIS
     Отчёт о драйверах со ссылками на официальные страницы загрузки. Только чтение.
 
-.DESCRIPTION
-    Устройства и драйверы — как в 01-Collect-Drivers.ps1. Ссылки выбираются так же, как в приложении
-    (OfficialSourceResolver): видеоадаптер — сайт производителя GPU по PCI Vendor ID, системное устройство —
-    сайт производителя системной платы, плюс Центр обновления Windows. Ссылка из config/official-sources.json
-    попадает в отчёт, только если ведёт по https на разрешённый там домен. Скрипт ничего не скачивает и не открывает.
-
 .PARAMETER OutFile
     Файл для JSON (UTF-8). Без него JSON выводится в stdout, символы вне ASCII экранируются как \uXXXX.
 
@@ -33,12 +27,11 @@ $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 Import-Module (Join-Path $PSScriptRoot 'Booster.Diagnostics.psm1')
 
-# В 5.1 при запуске через -File $PSScriptRoot в значениях по умолчанию param() пуст — путь задаётся здесь.
+# В 5.1 при запуске через -File $PSScriptRoot в значениях по умолчанию param() пуст.
 if (-not $SourcesPath) {
     $SourcesPath = Join-Path $PSScriptRoot '..\config\official-sources.json'
 }
 
-# Как ReportStrings.WindowsUpdateLinkTitle в приложении.
 $windowsUpdateTitle = 'Центр обновления Windows'
 
 function ConvertTo-MarkdownCell([AllowNull()]$Value) {
@@ -95,7 +88,6 @@ if ($MarkdownFile) {
     }
     else {
         $devices = @($sections.drivers.value)
-        # Замечания — только факты из WMI: код ошибки устройства и неподписанный драйвер.
         $attention = @($devices | Where-Object { ($null -ne $_.state -and $_.state -ne 'Ok') -or ($null -ne $_.driver -and $_.driver.isSigned -eq $false) })
         [void]$md.AppendLine(('Устройств: {0}, с замечаниями: {1}.' -f $devices.Count, $attention.Count)).AppendLine()
 

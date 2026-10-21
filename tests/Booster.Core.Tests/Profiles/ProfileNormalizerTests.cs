@@ -89,7 +89,6 @@ public class ProfileNormalizerTests
     [Fact]
     public void Protected_name_in_games_is_removed_with_a_warning()
     {
-        // Иначе приоритет explorer повышался бы как приоритет игры.
         var result = Normalize(Profile(games: ["explorer", "stalcraft"]));
 
         Assert.Equal(["stalcraft"], result.Value.Games);

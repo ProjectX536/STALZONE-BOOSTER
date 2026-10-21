@@ -6,7 +6,6 @@ public enum FrameMetricsStatus
     InsufficientData,
 }
 
-/// <summary>Метрики одного прогона. Определения — docs/ARCHITECTURE.md, раздел 10.</summary>
 public sealed record FrameMetrics(
     int FrameCount,
     double DurationMs,
@@ -16,5 +15,4 @@ public sealed record FrameMetrics(
     double FrameTimeP95Ms,
     double FrameTimeP99Ms);
 
-/// <summary><see cref="Metrics"/> заполнен только при статусе <see cref="FrameMetricsStatus.Ok"/>.</summary>
 public sealed record FrameMetricsResult(FrameMetricsStatus Status, FrameMetrics? Metrics, int ValidIntervals, int InvalidIntervals);

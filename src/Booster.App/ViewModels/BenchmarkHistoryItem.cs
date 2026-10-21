@@ -4,13 +4,11 @@ using Booster.Core.Benchmark;
 
 namespace Booster.App.ViewModels;
 
-/// <summary>Строка истории серий: дата, игра, изменение и медианы FPS — то, по чему пользователь выбирает серию.</summary>
 public sealed record BenchmarkHistoryItem(BenchmarkSeries Series, string StartedAt, string Target, string Change, string AverageFps,
     string OnePercentLow)
 {
     public string Id => Series.Id;
 
-    /// <summary>Нет изменения или годных прогонов — «—»: значение не выдумывается.</summary>
     public static BenchmarkHistoryItem From(BenchmarkSeries series, CultureInfo culture)
     {
         ArgumentNullException.ThrowIfNull(series);

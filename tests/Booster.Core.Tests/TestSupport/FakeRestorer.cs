@@ -3,7 +3,6 @@ using Booster.Core.Recovery;
 
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>Восстановитель для значений-строк в <see cref="FakeSystemState"/>.</summary>
 public sealed class FakeRestorer(FakeSystemState state, string actionId) : IActionRestorer
 {
     public string ActionId { get; } = actionId;
@@ -12,10 +11,8 @@ public sealed class FakeRestorer(FakeSystemState state, string actionId) : IActi
 
     public bool ThrowOnRevert { get; set; }
 
-    /// <summary>Revert «успешен», но значение не меняется.</summary>
     public bool RevertHasNoEffect { get; set; }
 
-    /// <summary>Вызывается в начале Revert, до изменения.</summary>
     public Action<CancellationToken>? OnRevert { get; set; }
 
     public int Inspections { get; private set; }

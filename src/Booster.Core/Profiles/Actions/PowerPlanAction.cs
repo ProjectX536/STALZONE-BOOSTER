@@ -6,11 +6,6 @@ using Booster.Core.Resources;
 
 namespace Booster.Core.Profiles.Actions;
 
-/// <summary>
-/// Временное переключение на существующую схему питания (первую из <c>targetSchemes</c>, которая есть на ПК).
-/// Схема действует на всю систему, поэтому <see cref="ActionDescriptor.VerifiedForAutomatic"/> = false:
-/// подтверждение нужно даже при <c>mode: allowed</c>.
-/// </summary>
 public sealed class PowerPlanAction(IPowerPlanProvider power, IReadOnlyList<Guid> targetSchemes, TimeProvider time) : IReversibleAction
 {
     private Guid? _captured;
@@ -69,13 +64,11 @@ public sealed class PowerPlanAction(IPowerPlanProvider power, IReadOnlyList<Guid
         if (activeId == target.Id)
             return (null, target, ReportStrings.Skip_SchemeAlreadyActive);
 
-        // Схема, которой нет в списке, не вернётся при восстановлении: менять нельзя.
         var active = schemes.FirstOrDefault(s => s.Id == activeId);
         return active is null ? (null, target, ReportStrings.Skip_ActiveSchemeUnknown) : (active, target, null);
     }
 }
 
-/// <summary>Значение снимка <c>power-plan</c>: <c>{"scheme": "&lt;GUID&gt;", "name": "&lt;имя схемы&gt;"}</c>.</summary>
 internal sealed record PowerPlanValue(
     [property: JsonPropertyName("scheme")] Guid Scheme,
     [property: JsonPropertyName("name")] string Name)

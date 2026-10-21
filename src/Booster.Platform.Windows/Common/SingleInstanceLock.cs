@@ -1,9 +1,5 @@
 namespace Booster.Platform.Windows.Common;
 
-/// <summary>
-/// Одно окно Booster в сеансе пользователя: второе окно при старте восстановило бы сессию, которую ведёт первое.
-/// Держится открытый дескриптор именованного мьютекса без владения — он не привязан к потоку и закрывается вместе с процессом.
-/// </summary>
 public sealed class SingleInstanceLock : IDisposable
 {
     public const string DefaultName = @"Local\Booster.SingleInstance";
@@ -12,7 +8,6 @@ public sealed class SingleInstanceLock : IDisposable
 
     private SingleInstanceLock(Mutex mutex) => _mutex = mutex;
 
-    /// <summary>null — объект уже существует: Booster запущен (в том числе с другими правами — тогда доступ запрещён).</summary>
     public static SingleInstanceLock? TryAcquire(string name)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);

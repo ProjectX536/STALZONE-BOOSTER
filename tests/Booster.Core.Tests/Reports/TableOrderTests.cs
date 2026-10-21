@@ -23,7 +23,6 @@ public class TableOrderTests
     [Fact]
     public void Numbers_are_compared_by_value()
     {
-        // Разделитель разрядов ru-RU — неразрывный пробел.
         Assert.Equal(["-5 %", "3 %", "9,5 мс", "12,3 мс", "1 234 Гц"], Sorted(["12,3 мс", "1 234 Гц", "3 %", "9,5 мс", "-5 %"]));
     }
 

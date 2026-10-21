@@ -3,10 +3,6 @@ using Booster.Platform.Windows.Common;
 
 namespace Booster.Platform.Windows.Tests.TestSupport;
 
-/// <summary>
-/// Отвечает на WQL по имени класса из <c>FROM &lt;Class&gt;</c>. Класс, для которого ничего не задано,
-/// — ошибка теста, а не пустой результат: так забытая фикстура не маскируется под «нет устройств».
-/// </summary>
 public sealed partial class FakeCimClient : ICimClient
 {
     private readonly Dictionary<string, Func<CancellationToken, Task<IReadOnlyList<CimRow>>>> _classes =

@@ -18,10 +18,6 @@ public enum GpuAdapterKind
     Discrete,
 }
 
-/// <summary>
-/// Видеоадаптер. Объём видеопамяти берётся только из DXGI: <c>Win32_VideoController.AdapterRAM</c>
-/// 32-битный и не превышает 4 ГБ. <see cref="MatchNote"/> объясняет неоднозначное сопоставление источников.
-/// </summary>
 public sealed record GpuAdapterInfo(
     string Name,
     GpuVendor Vendor,
@@ -43,7 +39,6 @@ public enum AppGpuPreferenceKind
     HighPerformance,
 }
 
-/// <summary>Выбор GPU для приложения в «Параметры → Дисплей → Графика».</summary>
 public sealed record AppGpuPreference(string ExecutablePath, AppGpuPreferenceKind Preference);
 
 public sealed record GpuInventory(

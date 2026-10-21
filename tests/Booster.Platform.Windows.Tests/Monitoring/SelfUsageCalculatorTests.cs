@@ -28,7 +28,6 @@ public class SelfUsageCalculatorTests
     [Fact]
     public void Result_is_clamped_to_0_100()
     {
-        // Счётчики CPU и часы читаются не одновременно, поэтому на коротком отрезке доля может чуть выйти за 100%.
         Assert.Equal(100, SelfUsageCalculator.CpuPercent(TimeSpan.FromSeconds(9), TimeSpan.FromSeconds(2), 4));
         Assert.Equal(0, SelfUsageCalculator.CpuPercent(TimeSpan.FromSeconds(-1), TimeSpan.FromSeconds(2), 4));
     }

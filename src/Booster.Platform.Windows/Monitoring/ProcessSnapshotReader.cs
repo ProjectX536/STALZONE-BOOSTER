@@ -3,11 +3,6 @@ using System.Runtime.InteropServices;
 
 namespace Booster.Platform.Windows.Monitoring;
 
-/// <summary>
-/// Снимок процессов <see cref="SystemProcessInformation"/> в собственный буфер, который растёт до нужного размера.
-/// Буфер в неуправляемой памяти не перемещается, поэтому указатели на имена в нём остаются верными до разбора.
-/// Не потокобезопасен: владелец вызывает его под своей блокировкой.
-/// </summary>
 internal sealed class ProcessSnapshotReader : IDisposable
 {
     private const int InitialBufferBytes = 512 * 1024;
@@ -16,7 +11,6 @@ internal sealed class ProcessSnapshotReader : IDisposable
     private unsafe byte* _buffer;
     private int _bufferBytes;
 
-    /// <exception cref="InvalidDataException">Вызов вернул ошибку, буфер дорос до предела или снимок не разобрался.</exception>
     public unsafe IReadOnlyList<ProcessTimes> Read()
     {
         if (_buffer is null)

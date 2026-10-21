@@ -8,17 +8,12 @@ public static class CpuMapper
 {
     private const string Wmi = "WMI Win32_Processor";
 
-    /// <summary>Строка на сокет. Ноль ядер или частоты — не значение, а его отсутствие.</summary>
     public static IReadOnlyList<CpuPackage> MapPackages(IReadOnlyList<CimRow> win32Processor)
     {
         ArgumentNullException.ThrowIfNull(win32Processor);
         return win32Processor.Select(MapPackage).ToArray();
     }
 
-    /// <summary>
-    /// Ядра с наибольшим EfficiencyClass — производительные, остальные — энергоэффективные.
-    /// Один класс на все ядра — обычный процессор без гибридной архитектуры.
-    /// </summary>
     public static Reading<CoreTopology> MapTopology(IReadOnlyList<byte> efficiencyClasses, string source)
     {
         ArgumentNullException.ThrowIfNull(efficiencyClasses);
@@ -33,7 +28,6 @@ public static class CpuMapper
     }
 
     private static CpuPackage MapPackage(CimRow row) => new(
-        // Имя пустое, только если WMI его не сообщил: показывать вместо него выдуманное нельзя.
         OemPlaceholders.Clean(row.GetString("Name")) ?? string.Empty,
         Text(row, "Manufacturer"),
         Positive(row, "NumberOfCores"),

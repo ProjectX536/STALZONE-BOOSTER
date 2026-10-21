@@ -3,17 +3,10 @@ using System.Text.Json.Nodes;
 
 namespace Booster.Core.Configuration;
 
-/// <summary>
-/// Загружает файл конфигурации: встроенный документ, поверх него — пользовательский.
-/// Пользовательский файл, который нельзя применить (не JSON, нет версии, версия новее,
-/// миграция не удалась, значения не подходят по типу), пропускается целиком с предупреждением:
-/// частично применённый файл хуже предсказуемых встроенных значений.
-/// </summary>
 public static class ConfigLoader
 {
     private const string SchemaVersionKey = "schemaVersion";
 
-    /// <exception cref="JsonException">Встроенный документ повреждён — это ошибка поставки, а не пользователя.</exception>
     public static ConfigLoadResult<T> Load<T>(string fileName, string builtInJson, string? userJson,
         int supportedVersion, IReadOnlyList<IConfigMigration> migrations)
     {

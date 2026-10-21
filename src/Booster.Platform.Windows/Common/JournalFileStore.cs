@@ -2,7 +2,6 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Platform.Windows.Common;
 
-/// <summary>Файлы журнала в <see cref="IAppPaths.Journal"/>; запись через <see cref="AtomicFile"/>.</summary>
 public sealed class JournalFileStore : IJournalFileStore
 {
     private const string Extension = ".json";
@@ -15,7 +14,6 @@ public sealed class JournalFileStore : IJournalFileStore
     {
     }
 
-    /// <param name="atomicWrite">Шов для тестов: запись с заменой файла.</param>
     internal JournalFileStore(IAppPaths paths, Func<string, string, CancellationToken, Task> atomicWrite)
     {
         _paths = paths;
@@ -28,7 +26,7 @@ public sealed class JournalFileStore : IJournalFileStore
         if (!Directory.Exists(dir))
             return [];
 
-        // Маска с трёхбуквенным расширением в Windows захватывает и более длинные: фильтр по полному суффиксу.
+        // Маска *.ext в Windows находит и более длинные расширения.
         foreach (var temp in Directory.EnumerateFiles(dir, "*" + TempSuffix)
                      .Where(f => f.EndsWith(TempSuffix, StringComparison.OrdinalIgnoreCase)))
         {
@@ -38,7 +36,7 @@ public sealed class JournalFileStore : IJournalFileStore
             }
             catch (IOException)
             {
-                // Занят записью, которая сейчас идёт: её собственная замена его и уберёт.
+                // Занят другой записью, она его и уберёт.
             }
         }
 
@@ -50,7 +48,6 @@ public sealed class JournalFileStore : IJournalFileStore
             .ToArray();
     }
 
-    /// <summary>Чтение не мешает замене файла другим процессом или записью Booster: доступ на запись и удаление разделяется.</summary>
     public async Task<string> ReadAsync(string fileName, CancellationToken ct)
     {
         var stream = new FileStream(PathOf(fileName), FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete,
@@ -62,7 +59,6 @@ public sealed class JournalFileStore : IJournalFileStore
         }
     }
 
-    /// <summary>Замена может упасть на нарушении совместного доступа (антивирус, индексатор держат файл): одна повторная попытка.</summary>
     public async Task WriteAsync(string fileName, string json, CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(json);

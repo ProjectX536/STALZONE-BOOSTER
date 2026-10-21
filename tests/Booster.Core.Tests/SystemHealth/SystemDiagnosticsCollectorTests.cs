@@ -71,7 +71,6 @@ public class SystemDiagnosticsCollectorTests
 
         Assert.Equal(["Discord", "Steam", "Script"], system.Startup.Value!.Select(i => i.Entry.Name));
         Assert.Equal([500 * MiB, null, null], system.Startup.Value!.Select(i => i.PrivateBytes));
-        // Память считается по всем процессам, а не только по первым topProcessCount.
         Assert.Contains(int.MaxValue, _processes.MemoryTopCounts);
     }
 
@@ -184,7 +183,6 @@ public class SystemDiagnosticsCollectorTests
         var config = new FakeConfiguration(timeoutsMs: new Dictionary<string, int> { [SystemDiagnosticsCollector.HagsSectionId] = 2000 });
         try
         {
-            // Таймеры секций заводятся при вызове; остальные секции ждут 15 с по умолчанию и не истекают.
             var run = Collector(config: config).CollectAsync(Ct);
             _time.Advance(TimeSpan.FromMilliseconds(2000));
             var system = await run;

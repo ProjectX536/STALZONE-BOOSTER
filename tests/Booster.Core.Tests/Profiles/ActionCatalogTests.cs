@@ -54,7 +54,6 @@ public class ActionCatalogTests
     [InlineData("Normal")]
     public void Game_priority_value_outside_the_allowed_pair_is_not_created(string value)
     {
-        // ProfileNormalizer уже убирает такие записи; каталог не доверяет профилю, собранному в обход него.
         var profile = With(new ProfileActionEntry(ActionIds.GamePriority, ActionMode.Optional, Value: value));
 
         Assert.Null(Catalog().Create(ActionIds.GamePriority, profile, null));

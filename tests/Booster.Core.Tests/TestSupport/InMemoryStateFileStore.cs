@@ -2,7 +2,6 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>Каталог state в памяти: имя файла → содержимое.</summary>
 public sealed class InMemoryStateFileStore : IStateFileStore
 {
     private readonly Dictionary<string, string> _files = new(StringComparer.OrdinalIgnoreCase);

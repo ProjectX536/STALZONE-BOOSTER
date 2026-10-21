@@ -2,20 +2,13 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Core.Profiles;
 
-/// <param name="GameName">Имя запущенного процесса, как его видит система.</param>
-/// <param name="ProcessIds">Все процессы с этим именем, по возрастанию PID.</param>
 public sealed record GameMatch(GamingProfile Profile, string GameName, IReadOnlyList<int> ProcessIds);
 
 public static class ProfileMatcher
 {
-    /// <summary>
-    /// Первый профиль из <paramref name="candidates"/> (по порядку), у которого запущена игра из Games; внутри профиля —
-    /// первая игра по порядку Games. Имена сравниваются без учёта регистра и без «.exe».
-    /// </summary>
     public static GameMatch? Match(IReadOnlyList<ProcessInfo> running, IReadOnlyList<GamingProfile> candidates) =>
         MatchAll(running, candidates).FirstOrDefault();
 
-    /// <summary>Все запущенные игры в порядке <see cref="Match"/>: профили по порядку, внутри профиля — по порядку Games.</summary>
     public static IReadOnlyList<GameMatch> MatchAll(IReadOnlyList<ProcessInfo> running, IReadOnlyList<GamingProfile> candidates)
     {
         ArgumentNullException.ThrowIfNull(running);

@@ -8,25 +8,17 @@ namespace Booster.Core.Latency;
 
 public enum TraceState
 {
-    /// <summary>wpr.exe нет в системном каталоге, маркера записи нет.</summary>
     Unavailable,
 
     Idle,
 
-    /// <summary>Маркер записан после последней загрузки, время загрузки неизвестно или маркер не прочитался.</summary>
     Recording,
 
-    /// <summary>Маркер старше последней загрузки: запись в памяти пропала вместе с перезагрузкой.</summary>
     Interrupted,
 }
 
-/// <param name="StartedAt">null — маркер не прочитался.</param>
 public sealed record TraceStatus(TraceState State, DateTimeOffset? StartedAt);
 
-/// <summary>
-/// Запись трассы WPR по кнопке. Маркер в каталоге state напоминает о незавершённой записи после сбоя Booster;
-/// когда он пишется и удаляется — docs/ARCHITECTURE.md, раздел 11, «Задержки DPC и трасса WPR». Операции идут по одной.
-/// </summary>
 public sealed partial class TraceRecorder(IWprRunner wpr, IStateFileStore state, IBootTimeSource boot, TimeProvider time,
     ILogger<TraceRecorder> logger)
 {
@@ -49,11 +41,6 @@ public sealed partial class TraceRecorder(IWprRunner wpr, IStateFileStore state,
         }
     }
 
-    /// <summary>
-    /// Маркер пишется до запуска: если Booster упадёт после согласия в UAC, напоминание останется. Исключение из запуска
-    /// (отмена ожидания) маркер тоже оставляет: запись могла начаться, а остановить или отменить её безопасно.
-    /// </summary>
-    /// <exception cref="InvalidOperationException">Маркер уже есть: запись надо остановить, отменить или убрать как прерванную.</exception>
     public async Task<WprResult> StartAsync(CancellationToken ct)
     {
         await _gate.WaitAsync(ct).ConfigureAwait(false);
@@ -77,16 +64,12 @@ public sealed partial class TraceRecorder(IWprRunner wpr, IStateFileStore state,
         }
     }
 
-    /// <summary>Файл trace-yyyyMMdd-HHmmss.etl по местному времени. После сбоя маркер остаётся: запись ещё можно отменить.</summary>
     public Task<WprResult> StopAsync(CancellationToken ct) =>
         RunAsync("stop", token => wpr.StopAsync(TraceFileName(), token), outcome => outcome == WprOutcome.Done, ct);
 
-    /// <summary>После сбоя маркер удаляется: записи уже нет или её не отменить, напоминание бесполезно.</summary>
     public Task<WprResult> CancelAsync(CancellationToken ct) =>
         RunAsync("cancel", wpr.CancelAsync, outcome => outcome != WprOutcome.Declined, ct);
 
-    /// <summary>Только для Interrupted: удаляет маркер, wpr.exe не запускается.</summary>
-    /// <exception cref="InvalidOperationException">Запись не прервана.</exception>
     public async Task DismissAsync(CancellationToken ct)
     {
         await _gate.WaitAsync(ct).ConfigureAwait(false);
@@ -122,10 +105,6 @@ public sealed partial class TraceRecorder(IWprRunner wpr, IStateFileStore state,
         }
     }
 
-    /// <summary>
-    /// Запись в режиме памяти не переживает перезагрузку. Время загрузки неизвестно или маркер не прочитался — считается,
-    /// что запись идёт: остановить или отменить её безопасно, а потерять напоминание — нет.
-    /// </summary>
     private async Task<TraceStatus> ReadStatusAsync(CancellationToken ct)
     {
         var marker = await state.ReadAsync(MarkerFileName, ct).ConfigureAwait(false);

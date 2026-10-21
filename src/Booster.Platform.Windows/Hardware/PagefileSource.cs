@@ -3,7 +3,6 @@ using Booster.Platform.Windows.Common;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>Файлы подкачки через WMI. Только чтение: настройки меняет пользователь сам.</summary>
 public sealed class PagefileSource(ICimClient cim) : IPagefileSource
 {
     private const string SystemQuery = "SELECT AutomaticManagedPagefile FROM Win32_ComputerSystem";
@@ -20,7 +19,6 @@ public sealed class PagefileSource(ICimClient cim) : IPagefileSource
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
-            // Флаг автоматического управления — отдельный вопрос; без него файлы всё равно читаются.
             systemFailure = $"{ex.GetType().Name}: {ex.Message}";
         }
 

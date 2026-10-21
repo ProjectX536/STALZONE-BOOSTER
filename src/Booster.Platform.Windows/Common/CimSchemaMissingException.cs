@@ -1,9 +1,5 @@
 namespace Booster.Platform.Windows.Common;
 
-/// <summary>
-/// Пространства имён или класса WMI на этой системе нет. Отличается от прочих сбоев WMI тем, что повтор
-/// не поможет: возможности нет, и вызывающий код переходит на запасной источник.
-/// </summary>
 public sealed class CimSchemaMissingException : Exception
 {
     public CimSchemaMissingException()

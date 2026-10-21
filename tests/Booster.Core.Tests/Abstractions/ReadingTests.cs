@@ -61,7 +61,6 @@ public class ReadingTests
     [Fact]
     public void Default_reading_is_unknown_not_available()
     {
-        // default(Reading<T>) не должен выглядеть как достоверное значение
         Reading<long> reading = default;
 
         Assert.Equal(DataStatus.Unknown, reading.Status);

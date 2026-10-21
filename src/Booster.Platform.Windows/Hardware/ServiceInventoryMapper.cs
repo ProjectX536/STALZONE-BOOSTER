@@ -3,13 +3,10 @@ using Booster.Platform.Windows.Common;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>Строки Win32_Service и Win32_DependentService → <see cref="ServiceInfo"/>.</summary>
 public static class ServiceInventoryMapper
 {
     private const string ServiceReference = "Win32_Service.Name=\"";
 
-    /// <param name="serviceDll">ServiceDll по имени службы; вызывается только для служб svchost.</param>
-    /// <param name="publisher">Издатель по пути исполняемого файла.</param>
     public static IReadOnlyList<ServiceInfo> Map(IReadOnlyList<CimRow> services, IReadOnlyList<CimRow> dependencies,
         Func<string, string?> serviceDll, Func<string?, Reading<string>> publisher)
     {
@@ -47,7 +44,6 @@ public static class ServiceInventoryMapper
         var result = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
         foreach (var row in dependencies)
         {
-            // Ссылки на драйверы (Win32_SystemDriver) пропускаются: здесь только службы.
             if (ServiceName(row.GetString("Antecedent")) is not { } antecedent || ServiceName(row.GetString("Dependent")) is not { } dependent)
                 continue;
 
@@ -59,7 +55,6 @@ public static class ServiceInventoryMapper
         return result;
     }
 
-    /// <summary><c>\\HOST\root\cimv2:Win32_Service.Name="RpcSs"</c> → <c>RpcSs</c>.</summary>
     private static string? ServiceName(string? reference)
     {
         var start = reference?.IndexOf(ServiceReference, StringComparison.OrdinalIgnoreCase) ?? -1;

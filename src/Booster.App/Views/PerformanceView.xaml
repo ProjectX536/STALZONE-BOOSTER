@@ -9,7 +9,6 @@
 
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Padding="24,0,24,16">
       <StackPanel>
-        <!-- Захват кадров: готовность PresentMon -->
         <TextBlock Style="{StaticResource SectionTitle}" Text="{x:Static res:Strings.CaptureTitle}" Margin="0,4,0,6" />
         <TextBlock TextWrapping="Wrap" FontWeight="SemiBold">
           <TextBlock.Style>
@@ -51,9 +50,7 @@
         <Button Style="{StaticResource ToolbarButton}" Content="{x:Static res:Strings.CheckAgain}" Command="{Binding CheckReadinessCommand}"
                 HorizontalAlignment="Left" Margin="0,8,0,0" />
 
-        <!-- Поля цели и серии недоступны, пока серия идёт -->
         <StackPanel IsEnabled="{Binding StartCommand.IsRunning, Converter={StaticResource InverseBoolean}}">
-          <!-- Цель -->
           <TextBlock Style="{StaticResource SectionTitle}" Text="{x:Static res:Strings.TargetTitle}" />
           <RadioButton Content="{x:Static res:Strings.TargetWindow}" IsChecked="{Binding UseWindowList}" />
           <StackPanel Orientation="Horizontal" Margin="22,4,0,10" IsEnabled="{Binding UseWindowList}">
@@ -84,7 +81,6 @@
             <TextBlock Style="{StaticResource Hint}" Text="{x:Static res:Strings.ExeExample}" Margin="8,0,0,0" VerticalAlignment="Center" />
           </StackPanel>
 
-          <!-- Серия: расписание и заметки -->
           <TextBlock Style="{StaticResource SectionTitle}" Text="{x:Static res:Strings.SeriesTitle}" />
           <Grid HorizontalAlignment="Left">
             <Grid.ColumnDefinitions>
@@ -146,7 +142,6 @@
                   Visibility="{Binding StartCommand.IsRunning, Converter={StaticResource BooleanToVisibility}}" />
         </WrapPanel>
 
-        <!-- Ход серии -->
         <TextBlock Style="{StaticResource SectionTitle}" Text="{x:Static res:Strings.ProgressTitle}" />
         <TextBlock Style="{StaticResource Hint}" Text="{x:Static res:Strings.ProgressHint}" />
         <TextBlock Style="{StaticResource StatusText}" Text="{Binding ProgressText}" FontSize="16" FontWeight="SemiBold"
@@ -155,12 +150,10 @@
                      Visibility="{Binding StartCommand.IsRunning, Converter={StaticResource BooleanToVisibility}}" />
         <TextBlock Style="{StaticResource StatusText}" Text="{Binding StatusMessage}" />
 
-        <!-- Результат: раздел бенчмарка из отчёта -->
         <TextBlock Style="{StaticResource SectionTitle}" Text="{x:Static res:Strings.ResultTitle}" />
         <TextBlock Style="{StaticResource EmptyHint}" Tag="{Binding BenchmarkBlocks}" Text="{x:Static res:Strings.ResultPending}" />
         <ItemsControl ItemsSource="{Binding BenchmarkBlocks}" Focusable="False" HorizontalAlignment="Left" />
 
-        <!-- История и сравнение -->
         <TextBlock Style="{StaticResource SectionTitle}" Text="{x:Static res:Strings.HistoryTitle}" />
         <WrapPanel>
           <Button Style="{StaticResource ToolbarButton}" Content="{x:Static res:Strings.RefreshHistory}" Command="{Binding RefreshHistoryCommand}" />

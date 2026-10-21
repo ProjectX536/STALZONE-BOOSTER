@@ -7,10 +7,6 @@ using Booster.Core.Engine;
 
 namespace Booster.Core.Recovery;
 
-/// <summary>Одно изменение сессии.</summary>
-/// <param name="Summary">Что меняется, текстом для журнала: «Сбалансированная → Высокая производительность».</param>
-/// <param name="Result">Фактический результат применения (например, какие приложения закрылись).</param>
-/// <param name="Verified">Итог проверки после восстановления; null — не проверялось.</param>
 public sealed record ChangeEntry(
     string ActionId,
     string DisplayName,
@@ -26,9 +22,6 @@ public sealed record ChangeEntry(
 
 public sealed record SkippedAction(string ActionId, string DisplayName, string Reason);
 
-/// <summary>Файл журнала одной игровой сессии или подготовки к ней (docs/ARCHITECTURE.md, раздел 7).</summary>
-/// <param name="GameName">У подготовки — игры профиля через запятую: сама игра ещё не запущена.</param>
-/// <param name="Kind">Необязательное поле: в журналах Этапа 2 его нет, такая запись — игровая сессия. Версия схемы не меняется.</param>
 public sealed record SessionRecord(
     int SchemaVersion,
     string SessionId,
@@ -50,7 +43,6 @@ public sealed record SessionRecord(
     public bool IsFinished => Outcome is not null;
 }
 
-/// <summary>Идентификатор сессии — он же имя файла журнала: <c>yyyyMMdd-HHmmss-xxxxxxxx</c> (время UTC и 8 hex).</summary>
 public static partial class SessionIds
 {
     public static string New(DateTimeOffset now) =>

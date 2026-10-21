@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.App.ViewModels;
 
-/// <summary>Обзор: сводка по секциям, замечания, сбор данных и экспорт отчёта.</summary>
 public sealed partial class OverviewViewModel : ObservableObject
 {
     private readonly DiagnosticsSession _session;
@@ -44,7 +43,6 @@ public sealed partial class OverviewViewModel : ObservableObject
     [ObservableProperty]
     public partial string? StatusMessage { get; private set; }
 
-    /// <summary>Сбор идёт в пуле потоков: детекторы могут работать синхронно до первого await, окно при этом не замирает.</summary>
     [RelayCommand(IncludeCancelCommand = true)]
     private async Task RefreshAsync(CancellationToken ct)
     {

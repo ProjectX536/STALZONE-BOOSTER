@@ -4,12 +4,6 @@
     Настройки и состояние, влияющие на производительность: схема питания, память и commit, файл подкачки,
     загрузка процессора, Game Mode, HAGS. Только чтение.
 
-.DESCRIPTION
-    Схема питания — из вывода powercfg /getactivescheme и /list (имена схем — на языке системы).
-    Загрузка процессора — три замера счётчика \Processor(_Total)\% Processor Time с интервалом 1 с.
-    Game Mode (HKCU\Software\Microsoft\GameBar) и HAGS (HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers,
-    HwSchMode) читаются из реестра. Значения нет — enabled = null: действует умолчание Windows.
-
 .PARAMETER OutFile
     Файл для JSON (UTF-8). Без него JSON выводится в stdout, символы вне ASCII экранируются как \uXXXX.
 
@@ -31,7 +25,7 @@ function Get-PowerSchemes([string]$Argument) {
     if ($LASTEXITCODE -ne 0) {
         throw "powercfg $Argument exited with code $LASTEXITCODE"
     }
-    # Строка схемы: «<подпись>: <GUID>  (<имя>)», у активной в /list в конце звёздочка.
+    # «<подпись>: <GUID>  (<имя>)», у активной схемы в /list в конце звёздочка.
     foreach ($line in $lines) {
         $match = [regex]::Match($line, '(?<guid>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\s*\((?<name>.*)\)\s*(?<active>\*)?\s*$', 'IgnoreCase')
         if ($match.Success) {
@@ -45,7 +39,6 @@ function Get-PowerSchemes([string]$Argument) {
 }
 
 function Get-RegistryValue([string]$Key, [string]$Name) {
-    # Только чтение: ключа или значения нет — $null.
     [Microsoft.Win32.Registry]::GetValue($Key, $Name, $null)
 }
 
@@ -93,7 +86,6 @@ $sections.pageFile = New-BoosterSection {
                         peakUsageMb         = $_.PeakUsage
                     }
                 })
-        # Заданные вручную размеры; при automaticManaged = true список обычно пуст.
         settings         = @(Invoke-BoosterCim -ClassName Win32_PageFileSetting -Property Name, InitialSize, MaximumSize |
                 ForEach-Object {
                     [ordered]@{
@@ -131,7 +123,7 @@ $sections.gameMode = New-BoosterSection {
 $sections.hags = New-BoosterSection {
     $mode = Get-RegistryValue 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\GraphicsDrivers' 'HwSchMode'
     [ordered]@{
-        # 2 — планирование GPU с аппаратным ускорением включено, 1 — выключено.
+        # 2 — HAGS включён, 1 — выключен.
         enabled   = if ($mode -eq 2) { $true } elseif ($mode -eq 1) { $false } else { $null }
         hwSchMode = $mode
         source    = 'HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\HwSchMode'

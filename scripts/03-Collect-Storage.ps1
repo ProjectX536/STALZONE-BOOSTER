@@ -3,10 +3,6 @@
 .SYNOPSIS
     Физические диски, тома и счётчики надёжности дисков. Только чтение.
 
-.DESCRIPTION
-    Get-PhysicalDisk и Get-Volume. Get-StorageReliabilityCounter требует прав администратора: без них секция
-    reliability получает статус RequiresAdmin. Серийные номера дисков, метки и пути томов не выводятся.
-
 .PARAMETER OutFile
     Файл для JSON (UTF-8). Без него JSON выводится в stdout, символы вне ASCII экранируются как \uXXXX.
 
@@ -43,7 +39,6 @@ $sections.volumes = New-BoosterSection {
     , @(Get-Volume -ErrorAction Stop | ForEach-Object {
             $letter = $_.DriveLetter
             [ordered]@{
-                # У тома без буквы DriveLetter — $null или символ с кодом 0.
                 driveLetter        = if ($null -ne $letter -and [int][char]$letter -ne 0) { [string]$letter } else { $null }
                 fileSystem         = ConvertTo-BoosterText $_.FileSystemType
                 driveType          = [string]$_.DriveType
@@ -74,7 +69,6 @@ $sections.reliability = New-BoosterSection {
                 }
             }
             catch {
-                # Часть контроллеров (USB-мосты, RAID) счётчики не отдаёт — это не мешает остальным дискам.
                 [ordered]@{ deviceId = [string]$disk.DeviceId; note = $_.Exception.Message }
             }
         })

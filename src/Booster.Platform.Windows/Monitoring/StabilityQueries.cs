@@ -3,19 +3,13 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Platform.Windows.Monitoring;
 
-/// <summary>Запись журнала, уже извлечённая из EventRecord: разбор проверяется без живого журнала.</summary>
 public sealed record StabilityRecord(string Provider, int Id, byte? Level, DateTimeOffset Time, string? Subject);
 
-/// <summary>
-/// Какие события журналов Windows считаются признаками нестабильности. Идентификаторы — это опознание событий Windows,
-/// а не пороги: они не настраиваются.
-/// </summary>
 public static class StabilityQueries
 {
     public const string SystemLog = "System";
     public const string ApplicationLog = "Application";
 
-    /// <summary>Длина Subject для отчёта: путь или код ошибки помещается, многострочный текст — нет.</summary>
     public const int MaxSubjectLength = 200;
 
     private sealed record Rule(string Provider, int[] Ids, StabilityEventKind Kind, bool ErrorLevelsOnly = false);
@@ -80,7 +74,6 @@ public static class StabilityQueries
         return new StabilityEvent(kind, record.Time, record.Provider, record.Id, subject);
     }
 
-    /// <summary>«0x0000009f (0x3, 0xffff…)» → «0x0000009f»: параметры у каждого сбоя свои, группировать нужно по коду.</summary>
     private static string BugCheckCode(string text)
     {
         var end = text.IndexOfAny([' ', '(']);

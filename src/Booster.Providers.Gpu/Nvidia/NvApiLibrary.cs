@@ -6,11 +6,6 @@ using Booster.Core.Inventory;
 
 namespace Booster.Providers.Gpu.Nvidia;
 
-/// <summary>
-/// nvapi64.dll, загруженный динамически и только из System32. Адреса функций запрашиваются через
-/// <c>nvapi_QueryInterface</c> лениво и только по идентификаторам из <see cref="NvApiFunctionIds"/>; нулевой адрес —
-/// NO_IMPLEMENTATION. Все вызовы — под одной блокировкой. DRS-сессия закрывается в <c>finally</c> без сохранения.
-/// </summary>
 internal sealed unsafe class NvApiLibrary : INvApi
 {
     public const string LibraryName = "nvapi64.dll";
@@ -33,10 +28,8 @@ internal sealed unsafe class NvApiLibrary : INvApi
 
     public string DriverVersion { get; private set; } = string.Empty;
 
-    /// <summary>Код для отсутствующей функции: после Dispose — API_NOT_INITIALIZED, иначе драйвер её не реализует.</summary>
     private int Missing => _disposed ? NvApiStatus.ApiNotInitialized : NvApiStatus.NoImplementation;
 
-    /// <summary>Загружает библиотеку и вызывает NvAPI_Initialize; при неудаче библиотека выгружается.</summary>
     internal static NvApiLibrary? TryLoad(string libraryName, out int status)
     {
         if (!NativeLibrary.TryLoad(libraryName, typeof(NvApiLibrary).Assembly, DllImportSearchPath.System32, out var module))
@@ -63,11 +56,9 @@ internal sealed unsafe class NvApiLibrary : INvApi
         return library;
     }
 
-    /// <summary>NvAPI_SYS_GetDriverAndBranchVersion: 56094 → "560.94".</summary>
     internal static string FormatDriverVersion(uint version) =>
         string.Create(CultureInfo.InvariantCulture, $"{version / 100}.{version % 100:D2}");
 
-    /// <summary>NvAPI_GPU_GetPCIIdentifiers: pDeviceId = (DEV &lt;&lt; 16) | VEN, pSubSystemId — как SUBSYS_ в Hardware ID.</summary>
     internal static PciId ToPciId(uint deviceId, uint subSystemId, uint revisionId) =>
         new((ushort)(deviceId & 0xFFFF), (ushort)(deviceId >> 16), subSystemId, (byte)(revisionId & 0xFF));
 
@@ -255,7 +246,6 @@ internal sealed unsafe class NvApiLibrary : INvApi
                 continue;
             if (status != NvApiStatus.Ok)
                 return new(status, null);
-            // Строковые и двоичные параметры в первом NvU32 значения не хранят — такое число было бы выдуманным.
             if (setting.SettingType != NvDrsSetting.DwordType)
                 continue;
             values[id] = new NvDrsValue(id, setting.CurrentValue, setting.IsCurrentPredefined != 0, (int)setting.SettingLocation);
@@ -296,7 +286,6 @@ internal sealed unsafe class NvApiLibrary : INvApi
         return get(gpu, &name) == NvApiStatus.Ok ? Decode(name) : string.Empty;
     }
 
-    /// <summary>LUID адаптера Windows: через логический GPU, запасной путь — устаревший GPU_GetAdapterIdFromPhysicalGpu.</summary>
     private Reading<AdapterLuid> Luid(nint gpu)
     {
         var status = LuidFromLogicalGpu(gpu, out var luid);
@@ -343,7 +332,6 @@ internal sealed unsafe class NvApiLibrary : INvApi
                 $"NvAPI_GPU_GetPCIIdentifiers failed: NVAPI status {status}"));
     }
 
-    /// <summary>Адрес функции из белого списка; после Dispose — 0.</summary>
     private nint Bound(uint functionId) => _disposed ? 0 : Function(functionId);
 
     private nint Function(uint functionId)
@@ -370,7 +358,6 @@ internal sealed unsafe class NvApiLibrary : INvApi
         return new string(length < 0 ? chars : chars[..length]);
     }
 
-    /// <summary>LUID Windows: DWORD LowPart, LONG HighPart.</summary>
     [StructLayout(LayoutKind.Sequential)]
     private struct NativeLuid
     {
@@ -379,7 +366,6 @@ internal sealed unsafe class NvApiLibrary : INvApi
     }
 }
 
-/// <summary>Создаёт <see cref="NvApiLibrary"/>; имя библиотеки подменяется только в тестах.</summary>
 internal sealed class NvApiLibraryFactory : INvApiFactory
 {
     private readonly string _libraryName;

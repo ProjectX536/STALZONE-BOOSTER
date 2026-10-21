@@ -3,7 +3,6 @@ using Booster.Platform.Windows.Tests.TestSupport;
 
 namespace Booster.Platform.Windows.Tests.Common;
 
-/// <summary>Фикстуры коммитятся в репозиторий, поэтому в них не должно быть идентификаторов машины и людей.</summary>
 public class FixturePrivacyTests
 {
     private static readonly HashSet<string> ForbiddenProperties = new(StringComparer.OrdinalIgnoreCase)
@@ -28,7 +27,6 @@ public class FixturePrivacyTests
         Assert.DoesNotContain(names, ForbiddenProperties.Contains);
     }
 
-    /// <summary>Все фикстуры: JSON из WMI и CSV из PresentMon.</summary>
     public static TheoryData<string> AllFixtureFiles =>
         [.. Directory.EnumerateFiles(FixturesRoot, "*.*", SearchOption.AllDirectories)
             .Where(f => f.EndsWith(".json", StringComparison.OrdinalIgnoreCase) || f.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))

@@ -10,7 +10,7 @@ namespace Booster.App.Tests.ViewModels;
 
 public sealed class HardwareViewModelTests : IDisposable
 {
-    private static readonly TimeSpan Interval = TimeSpan.FromMilliseconds(2000); // FakeConfiguration: sensorIntervalMs
+    private static readonly TimeSpan Interval = TimeSpan.FromMilliseconds(2000);
 
     private readonly ScreenSession _screen = new();
     private readonly FakeSensorProvider _sensors;

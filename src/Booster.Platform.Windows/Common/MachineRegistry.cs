@@ -3,14 +3,8 @@ using Microsoft.Win32;
 
 namespace Booster.Platform.Windows.Common;
 
-/// <summary>
-/// HKLM в 64-битном представлении, только ключи StartupApproved автозагрузки для всех пользователей. Чтение доступно без прав
-/// администратора; запись без них отклоняет сама Windows (UnauthorizedAccessException), а действие до неё не доходит — его не
-/// пропускает политика.
-/// </summary>
 public sealed class MachineRegistry : IMachineRegistry
 {
-    /// <summary>Точное совпадение без учёта регистра: вложенные ключи не разрешены.</summary>
     public static IReadOnlyList<string> AllowedKeys { get; } =
     [
         StartupApprovedKeys.Run,

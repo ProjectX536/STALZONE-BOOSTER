@@ -16,7 +16,6 @@ public class SessionRecordJsonTests
     [Fact]
     public async Task Missing_kind_reads_as_game()
     {
-        // Журнал Этапа 2: поля kind ещё нет.
         var json = JsonNode.Parse(SnapshotStore.Serialize(SessionFactory.Session()))!.AsObject();
         Assert.True(json.Remove("kind"));
         _files.Put(SessionFactory.Id + ".json", json.ToJsonString());

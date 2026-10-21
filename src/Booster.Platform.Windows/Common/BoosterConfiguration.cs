@@ -6,15 +6,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Platform.Windows.Common;
 
-/// <summary>
-/// Три файла конфигурации: встроенные значения, поверх них — пользовательские. Любая проблема
-/// пользовательского файла даёт предупреждение и встроенные значения этого файла, но не мешает старту.
-/// </summary>
 public sealed partial class BoosterConfiguration : IBoosterConfiguration
 {
     private const string SchemaVersionKey = "schemaVersion";
 
-    // Кириллица в путях остаётся читаемой в файле, который пользователь может открыть руками.
     private static readonly JsonSerializerOptions UserFileWriteOptions = new(ConfigJson.SerializerOptions)
     {
         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
@@ -36,10 +31,6 @@ public sealed partial class BoosterConfiguration : IBoosterConfiguration
 
     public BoosterConfigurationSnapshot Current => _current;
 
-    /// <summary>
-    /// Пишет в пользовательский файл только отличия от встроенного, чтобы новые встроенные значения
-    /// следующих версий доходили до пользователя. Затем перечитывает конфигурацию.
-    /// </summary>
     public async Task SaveUserSettingsAsync(BoosterSettings settings, CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(settings);
@@ -87,10 +78,6 @@ public sealed partial class BoosterConfiguration : IBoosterConfiguration
         return new(normalized.Value, normalizedThresholds.Value, sources.Value, catalog.Value, warnings);
     }
 
-    /// <summary>
-    /// Справочник политики безопасности: пользовательский файл не применяется, чтобы правка конфигурации не снимала защиту.
-    /// Если он есть — только предупреждение.
-    /// </summary>
     private ConfigLoadResult<T> LoadBuiltInOnly<T>(string fileName, int supportedVersion)
     {
         var loaded = ConfigLoader.Load<T>(fileName, _files.ReadBuiltIn(fileName), null, supportedVersion, []);
@@ -101,7 +88,6 @@ public sealed partial class BoosterConfiguration : IBoosterConfiguration
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            // Файл всё равно не применяется: его недоступность ничего не меняет.
             return loaded;
         }
         return user is null
@@ -123,7 +109,6 @@ public sealed partial class BoosterConfiguration : IBoosterConfiguration
             return fallback with { Warnings = [new(ConfigWarningKind.Unreadable, fileName, ex.Message)] };
         }
 
-        // Миграций пока нет: все схемы — версии 1.
         return ConfigLoader.Load<T>(fileName, builtIn, user, supportedVersion, []);
     }
 

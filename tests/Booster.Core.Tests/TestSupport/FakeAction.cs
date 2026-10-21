@@ -3,7 +3,6 @@ using static Booster.Core.Tests.TestSupport.SessionFactory;
 
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>Действие над значением-строкой в <see cref="FakeSystemState"/>: Apply ставит <c>applied</c>.</summary>
 public sealed class FakeAction(FakeSystemState state, string id, string applied = "boost") : IReversibleAction
 {
     public string Id { get; } = id;
@@ -22,10 +21,8 @@ public sealed class FakeAction(FakeSystemState state, string id, string applied 
 
     public bool ThrowOnApply { get; set; }
 
-    /// <summary>Подменить ActionId снимка.</summary>
     public string? SnapshotActionId { get; set; }
 
-    /// <summary>Вызывается в начале Apply, до изменения.</summary>
     public Action? OnApply { get; set; }
 
     public int Checks { get; private set; }

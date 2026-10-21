@@ -2,7 +2,6 @@ using Booster.Core.Profiles;
 
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>Готовый набор профилей без файлов; сохранение не поддерживается.</summary>
 public sealed class FakeProfileRepository(params GamingProfile[] profiles) : IProfileRepository
 {
     public ProfileSet Current { get; set; } = new(profiles, []);

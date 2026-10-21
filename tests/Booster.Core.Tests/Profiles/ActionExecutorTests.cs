@@ -151,7 +151,6 @@ public class ActionExecutorTests
         Assert.Null(result.Error);
         Assert.Equal("нет доступа", result.Detail);
         Assert.Empty(result.Session.Changes);
-        // Сначала Pending (снимок до изменения), затем запись без него: восстанавливать нечего.
         Assert.Equal(2, _journal.Saves.Count);
         Assert.Equal(ChangeStatus.Pending, Assert.Single(_journal.Saves[0].Changes).Status);
         Assert.Same(result.Session, _journal.Last);

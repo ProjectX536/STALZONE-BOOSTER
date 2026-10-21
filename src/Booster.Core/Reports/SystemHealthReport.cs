@@ -10,20 +10,8 @@ using static Booster.Core.Reports.ReportFormat;
 
 namespace Booster.Core.Reports;
 
-/// <summary>
-/// Разделы системной диагностики: память и подкачка, службы, стабильность, сеть, автозагрузка, игровые настройки Windows,
-/// задержки DPC; у каждого — рекомендации своего модуля. Последний — A/B-тест HAGS. Booster ничего не меняет сам: рекомендации
-/// выполняет пользователь, а обратимые изменения — только после подтверждения; HAGS переключает только пользователь. Не полученное
-/// значение показано статусом, а не догадкой, и без данных раздел не говорит «замечаний нет».
-/// </summary>
 public static class SystemHealthReport
 {
-    /// <summary>
-    /// Разделы в порядке: память и подкачка, службы, стабильность, сеть, автозагрузка, игровые настройки, задержки DPC, HAGS.
-    /// Трассы WPR в отчёте нет: это действие на экране «Система», а не состояние системы.
-    /// </summary>
-    /// <param name="catalog">Справочник служб: по нему службы делятся на категории, а защитное ПО в автозагрузке не предлагается.</param>
-    /// <param name="startup">Порог памяти, с которого элемент автозагрузки считается тяжёлым.</param>
     public static IReadOnlyList<ReportSection> Build(SystemReport report, ServiceCatalog catalog, StartupThresholds startup, CultureInfo culture)
     {
         ArgumentNullException.ThrowIfNull(report);
@@ -71,7 +59,6 @@ public static class SystemHealthReport
             return Section(ReportSectionIds.SystemMemory, AdviceModule.Memory, memory.Status, writer);
         }
 
-        /// <summary>Строка на путь: текущие файлы и заданные, но ещё не созданные (ждут перезагрузки или тома).</summary>
         private void Pagefiles(ReportBlockWriter writer)
         {
             writer.Heading(ReportStrings.PagefileHeading);
@@ -133,10 +120,6 @@ public static class SystemHealthReport
                     [Text(p.Name), Text(Number(p.ProcessId, culture)), Text(Bytes(p.PrivateBytes)), Text(Bytes(p.WorkingSetBytes))])));
         }
 
-        /// <summary>
-        /// Счётчики по категориям и службы, которые не входят в Windows: системные и службы Microsoft скрыты, защита и античит
-        /// видны, чтобы было ясно, что их Booster не предлагает трогать.
-        /// </summary>
         public ReportSection Services()
         {
             var writer = new ReportBlockWriter();
@@ -218,7 +201,6 @@ public static class SystemHealthReport
             return Section(ReportSectionIds.Stability, AdviceModule.Stability, stability.Status, writer);
         }
 
-        /// <summary>Адаптеры из снимка; задержка и потери — только если тест сети запускали (он идёт по запросу).</summary>
         public ReportSection Network()
         {
             var writer = new ReportBlockWriter();
@@ -270,10 +252,6 @@ public static class SystemHealthReport
                 ])));
         }
 
-        /// <summary>
-        /// Элементы автозагрузки с оценкой — сначала те, что можно отключить, — и запущенные программы с оверлеем.
-        /// Exe не определён — ни файл, ни память не известны: такой элемент не называется «не запущенным».
-        /// </summary>
         public ReportSection Startup()
         {
             var writer = new ReportBlockWriter();
@@ -333,7 +311,6 @@ public static class SystemHealthReport
             writer.Paragraph(Text(ReportStrings.OverlaysCaveat) with { Tone = CellTone.Note });
         }
 
-        /// <summary>Game Mode и фоновая запись, затем настройки белого списка реестра с состоянием и основанием.</summary>
         public ReportSection Tweaks()
         {
             var writer = new ReportBlockWriter();
@@ -364,10 +341,6 @@ public static class SystemHealthReport
             return Section(ReportSectionIds.Tweaks, AdviceModule.Tweaks, gaming.Status, writer);
         }
 
-        /// <summary>
-        /// Время DPC и прерываний по серии бенчмарка текущей сессии: живые значения на экране не сохраняются. Без серии раздел так
-        /// и говорит — «не оценивалось», а не «замечаний нет».
-        /// </summary>
         public ReportSection Latency()
         {
             var writer = new ReportBlockWriter();
@@ -396,10 +369,6 @@ public static class SystemHealthReport
             return Section(ReportSectionIds.Latency, AdviceModule.Latency, telemetry?.DpcTimePeakPercent.Status ?? DataStatus.Unknown, writer);
         }
 
-        /// <summary>
-        /// Значение HAGS из снимка, этап A/B-теста и, когда тест завершён, вердикт с метриками сравнения и ручным шагом. Booster
-        /// HAGS не переключает: вердикт — подсказка пользователю.
-        /// </summary>
         public ReportSection Hags()
         {
             var writer = new ReportBlockWriter();
@@ -443,11 +412,9 @@ public static class SystemHealthReport
 
         private static string HagsValue(bool enabled) => enabled ? ReportStrings.HagsEnabled : ReportStrings.HagsDisabled;
 
-        /// <summary>Секция не собрана — её статус; собрана — значение или статус самого значения.</summary>
         private static ReportCell GamingValue(Reading<GamingSettings> gaming, Func<GamingSettings, Reading<bool>> select) =>
             gaming is { IsAvailable: true, Value: { } settings } ? Value(select(settings), Bool) : Value(gaming, _ => string.Empty);
 
-        /// <summary>Рекомендации модуля; без данных для проверки — так и сказано, а не «замечаний нет».</summary>
         private void Advice(ReportBlockWriter writer, AdviceModule module, bool assessed)
         {
             writer.Heading(ReportStrings.AdviceHeading);
@@ -473,7 +440,6 @@ public static class SystemHealthReport
         private static ReportSection Section(string id, AdviceModule module, DataStatus status, ReportBlockWriter writer) =>
             new(id, EnumText.Format(module), status, writer.Blocks);
 
-        /// <summary>Значение секции; если его нет — абзац со статусом.</summary>
         private static bool Available<T>(ReportBlockWriter writer, Reading<T> reading, [NotNullWhen(true)] out T? value)
             where T : class
         {
@@ -502,7 +468,6 @@ public static class SystemHealthReport
 
         private string Megabytes(int megabytes) => Bytes(megabytes * BytesPerMegabyte);
 
-        /// <summary>Доля части от целого в процентах; целое 0 — значение неизвестно.</summary>
         private string Share(long part, long whole) =>
             whole > 0 ? ((double)part / whole).ToString("P0", culture) : ReadingFormatter.StatusText(DataStatus.Unknown);
 

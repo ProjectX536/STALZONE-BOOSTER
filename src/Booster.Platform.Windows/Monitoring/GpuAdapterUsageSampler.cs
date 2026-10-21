@@ -8,10 +8,6 @@ namespace Booster.Platform.Windows.Monitoring;
 
 public interface IGpuAdapterUsageSampler
 {
-    /// <summary>
-    /// Опрашивает счётчики GPU Engine процесса до отмены и возвращает адаптер с наибольшей 3D-нагрузкой.
-    /// Отмена — штатный конец опроса, а не исключение; сбой счётчиков — <see cref="DataStatus.Failed"/>.
-    /// </summary>
     Task<Reading<AdapterLuid>> SampleUntilCancelledAsync(int processId, CancellationToken ct);
 }
 
@@ -39,7 +35,7 @@ public sealed partial class GpuAdapterUsageSampler(
         }
         catch (OperationCanceledException) when (ct.IsCancellationRequested)
         {
-            // Захват кадров закончился — собранного достаточно.
+            // Захват закончился.
         }
         catch (Exception ex)
         {

@@ -7,10 +7,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Booster.App.ViewModels;
 
-/// <summary>
-/// Драйверы: таблица устройств из отчёта со ссылками на официальные источники. «Только с проблемами» оставляет строки,
-/// к которым есть замечания (<see cref="ReportRow.Flagged"/>), — те же, что попадают в список замечаний.
-/// </summary>
 public sealed partial class DriversViewModel : ObservableObject
 {
     private readonly SessionReport _report;
@@ -30,7 +26,6 @@ public sealed partial class DriversViewModel : ObservableObject
     [ObservableProperty]
     public partial IReadOnlyList<ReportRow> Rows { get; private set; } = [];
 
-    /// <summary>Статус раздела, если таблицы нет: инвентаризация не удалась или устройств нет.</summary>
     [ObservableProperty]
     public partial ReportCell? Message { get; private set; }
 

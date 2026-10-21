@@ -2,9 +2,6 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>
-/// HKCU или HKLM в памяти (для каждого раздела — свой экземпляр): ключ и имя значения сравниваются без учёта регистра, как в реестре.
-/// </summary>
 public sealed class FakeUserRegistry : IUserRegistry, IMachineRegistry
 {
     private readonly Dictionary<string, UserRegistryValue> _values = new(StringComparer.OrdinalIgnoreCase);
@@ -15,10 +12,8 @@ public sealed class FakeUserRegistry : IUserRegistry, IMachineRegistry
 
     public int Deletes { get; private set; }
 
-    /// <summary>Чтение бросает это исключение (например, InvalidDataException — значение другого типа).</summary>
     public Exception? ReadFailure { get; set; }
 
-    /// <summary>Запись и удаление бросают это исключение.</summary>
     public Exception? WriteFailure { get; set; }
 
     public UserRegistryValue? this[string subKey, string valueName]

@@ -7,10 +7,6 @@ using Booster.Providers.Gpu.Resources;
 
 namespace Booster.Providers.Gpu.Generic;
 
-/// <summary>
-/// Общий провайдер для любого аппаратного адаптера: загрузка и занятая видеопамять — системные счётчики, температура,
-/// предел, вентилятор и частота памяти — D3DKMT. Частоты ядра, мощности и причин снижения частоты у Windows нет.
-/// </summary>
 public sealed class GenericGpuProvider(IGpuSystemCounterSource counters, IKmtPerfDataSource kmt) : IGpuProvider
 {
     public const string Id = "providers.gpu.generic";
@@ -26,10 +22,6 @@ public sealed class GenericGpuProvider(IGpuSystemCounterSource counters, IKmtPer
     public Task<bool> IsAvailableAsync(GpuAdapterInfo adapter, CancellationToken ct) =>
         Task.FromResult(adapter.Luid.IsAvailable && !adapter.IsSoftware);
 
-    /// <summary>
-    /// Пробное чтение. Загрузка поддерживается, если адаптер есть в счётчиках: в первом снимке её ещё нет, но это
-    /// нехватка второго чтения, а не источника. Поле известно — Supported; ошибка чтения — Unknown; иначе — NotSupported.
-    /// </summary>
     public Task<GpuCapabilities> GetCapabilitiesAsync(GpuAdapterInfo adapter, CancellationToken ct)
     {
         if (adapter.Luid is not { IsAvailable: true, Value: var luid })
@@ -84,11 +76,9 @@ public sealed class GenericGpuProvider(IGpuSystemCounterSource counters, IKmtPer
             Reading<GpuThrottleReasons>.Unsupported(Id, ProviderStrings.GenericThrottleReasonsVendorOnly)));
     }
 
-    /// <summary>У Windows нет параметров драйвера для чтения; параметры ОС (HAGS и т. п.) — Этап 5.</summary>
     public Task<GpuSettingsResult> ReadSettingsAsync(GpuAdapterInfo adapter, string? application, CancellationToken ct) =>
         Task.FromResult(new GpuSettingsResult(Id, application, null, Reading<IReadOnlyList<GpuSetting>>.Known([], Id)));
 
-    /// <summary>Текущий снимок счётчиков без начала нового круга: пробному чтению нужна только запись адаптера.</summary>
     private GpuCounterSample? Peek(AdapterLuid luid)
     {
         lock (_lock)
@@ -98,11 +88,6 @@ public sealed class GenericGpuProvider(IGpuSystemCounterSource counters, IKmtPer
         }
     }
 
-    /// <summary>
-    /// Один снимок счётчиков на круг опроса всех адаптеров: загрузка — разность с прошлым снимком, и второй вызов
-    /// <see cref="IGpuSystemCounterSource.Sample"/> сразу после первого дал бы интервал в миллисекунды. Адаптер, уже
-    /// получивший данные из текущего снимка, начинает следующий круг.
-    /// </summary>
     private GpuCounterSample? Next(AdapterLuid luid)
     {
         lock (_lock)

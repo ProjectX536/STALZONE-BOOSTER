@@ -7,10 +7,6 @@ using Booster.Core.Resources;
 
 namespace Booster.Core.SystemHealth;
 
-/// <summary>
-/// Настройка белого списка реестра HKCU. Запись с именем значения — DWORD <see cref="RegistryTweakDefinition.Value"/>;
-/// без имени — пара в строке UserGpuPreferences для exe игры: остальные пары строки сохраняются.
-/// </summary>
 public sealed class RegistryTweakAction : IReversibleAction
 {
     private readonly IUserRegistry _registry;
@@ -19,8 +15,6 @@ public sealed class RegistryTweakAction : IReversibleAction
     private readonly TimeProvider _time;
     private UserRegistryValue? _applied;
 
-    /// <param name="definition">Запись каталога с Id из <see cref="RegistryTweakIds"/>; другой Id — ArgumentException.</param>
-    /// <param name="valueName">Имя значения: у game-mode — из каталога, у пар — путь к exe игры.</param>
     public RegistryTweakAction(IUserRegistry registry, RegistryTweakDefinition definition, string valueName, TimeProvider time)
     {
         ArgumentNullException.ThrowIfNull(definition);

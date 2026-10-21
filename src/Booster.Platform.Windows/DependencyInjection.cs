@@ -13,11 +13,6 @@ namespace Booster.Platform.Windows;
 
 public static class PlatformDependencyInjection
 {
-    /// <summary>
-    /// Службы Platform. Регистрации через TryAdd: композиция или тест, зарегистрировавшие свою
-    /// реализацию раньше, её сохраняют. Общие службы (<c>SectionRunner</c>, <c>ICapabilityRegistry</c>, <c>TimeProvider</c>)
-    /// регистрирует <c>AddBoosterCore</c>, логирование (<c>ILogger&lt;T&gt;</c>) — App.
-    /// </summary>
     public static IServiceCollection AddBoosterPlatformWindows(this IServiceCollection services)
     {
         ArgumentNullException.ThrowIfNull(services);
@@ -63,7 +58,7 @@ public static class PlatformDependencyInjection
         services.TryAddSingleton<IInventoryDetector<Reading<IReadOnlyList<DisplayInfo>>>, DisplayDetector>();
         services.TryAddSingleton<IHardwareProvider, HardwareScanner>();
 
-        // Свой клиент: Win32_PnPSignedDriver отдаёт строки медленнее остальных классов, ожидание строки — по таймауту секции драйверов.
+        // Отдельный клиент: Win32_PnPSignedDriver отдаёт строки заметно медленнее остальных.
         services.TryAddSingleton<IDriverInventoryProvider>(sp => new DriverInventory(new ManagementCimClient(
             sp.GetRequiredService<IBoosterConfiguration>().Current.Settings.Detectors.TimeoutFor(SectionIds.Drivers))));
 

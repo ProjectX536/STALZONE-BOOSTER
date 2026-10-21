@@ -6,11 +6,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Core.Sensors;
 
-/// <summary>
-/// Датчики через провайдеры. Для каждого аппаратного адаптера с известным LUID — вендорский провайдер (первый доступный
-/// для его производителя) и общий; их телеметрия сливается поле за полем. Исключение провайдера становится Failure
-/// в его полях и записью в лог, а не сбоем замера. Замеры идут по одному: провайдеры не обязаны быть потокобезопасными.
-/// </summary>
 public sealed partial class SensorProvider(
     IInventoryDetector<GpuInventory> gpuDetector,
     IEnumerable<IGpuProvider> providers,
@@ -19,7 +14,6 @@ public sealed partial class SensorProvider(
     TimeProvider time,
     ILogger<SensorProvider> logger) : ISensorProvider
 {
-    /// <summary>ProviderId замера адаптера, для которого не нашлось ни одного провайдера.</summary>
     public const string NoProviderId = "none";
 
     private const string CpuSource = "sensors.cpu";
@@ -67,7 +61,6 @@ public sealed partial class SensorProvider(
         }
     }
 
-    /// <summary>Адаптер, который опрашивается: вендорский и общий провайдеры, а также все провайдеры его производителя.</summary>
     private sealed record PolledAdapter(GpuAdapterInfo Adapter, IGpuProvider? Vendor, IGpuProvider? Generic, IReadOnlyList<IGpuProvider> Matching);
 
     private async Task<IReadOnlyList<PolledAdapter>> SelectProvidersAsync(IReadOnlyList<GpuAdapterInfo> adapters, CancellationToken ct)
@@ -95,7 +88,6 @@ public sealed partial class SensorProvider(
                 }
             }
 
-            // Вендорские раньше общих: при равном статусе возможности побеждает вендорский.
             polled.Add(new PolledAdapter(adapter, vendor, generic.FirstOrDefault(), [.. vendorProviders, .. generic]));
         }
 
@@ -115,10 +107,6 @@ public sealed partial class SensorProvider(
         }
     }
 
-    /// <summary>
-    /// Возможности спрашиваются у всех провайдеров производителя, даже недоступных: так в реестр попадает причина,
-    /// по которой провайдер не подключён. Для каждой пары (id, область) остаётся лучший статус.
-    /// </summary>
     private async Task ReportCapabilitiesAsync(IReadOnlyList<PolledAdapter> polled, CancellationToken ct)
     {
         var best = new Dictionary<(string Id, string Scope), CapabilityReport>();
@@ -216,10 +204,6 @@ public sealed partial class SensorProvider(
         }
     }
 
-    /// <summary>
-    /// Глобальные параметры — у каждого доступного вендорского провайдера один раз (через первый его адаптер), затем —
-    /// для каждого приложения.
-    /// </summary>
     private async Task<IReadOnlyList<GpuSettingsResult>> ReadSettingsAsync(IReadOnlyList<PolledAdapter> polled,
         IReadOnlyList<string> applications, CancellationToken ct)
     {

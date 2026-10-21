@@ -42,7 +42,6 @@ public class MaintenanceRunnerTests
             NullLogger<MaintenanceRunner>.Instance);
     }
 
-    /// <summary>Как действия обслуживания: L2, подтверждение, не во время игры.</summary>
     private FakeAction Action() => new(_state, "a")
     {
         Descriptor = new ActionDescriptor("a", "Действие a", SafetyLevel.L2Confirmed, RequiresAdmin: false, RequiresReboot: false,

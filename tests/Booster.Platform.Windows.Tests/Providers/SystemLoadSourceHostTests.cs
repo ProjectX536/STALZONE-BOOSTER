@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Booster.Platform.Windows.Tests.Providers;
 
-/// <summary>Читают счётчики времени процессоров и загрузку памяти; ничего не меняют.</summary>
 [Trait("Category", "Host")]
 public class SystemLoadSourceHostTests
 {

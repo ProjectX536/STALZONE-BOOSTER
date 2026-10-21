@@ -6,12 +6,6 @@ using Booster.Core.Reports;
 
 namespace Booster.App.Views.Controls;
 
-/// <summary>
-/// Небольшая таблица отчёта статичной сеткой — для таблиц внутри прокручиваемой страницы, где у DataGrid была бы своя
-/// прокрутка. Ячейки показывает шаблон <see cref="ReportCell"/> из ресурсов; строка с замечанием подсвечена.
-/// Длинные списки (драйверы) показывает DataGrid с <see cref="ReportDataGrid"/>. Щелчок по заголовку сортирует строки
-/// (<see cref="TableOrder"/>): по возрастанию, затем по убыванию; порядок сохраняется, когда таблица обновляется.
-/// </summary>
 public sealed class ReportTableGrid : ContentControl
 {
     public static readonly DependencyProperty TableProperty = DependencyProperty.Register(
@@ -37,7 +31,6 @@ public sealed class ReportTableGrid : ContentControl
 
     internal IReadOnlyList<ReportRow> DisplayedRows { get; private set; } = [];
 
-    /// <summary>Та же колонка — смена направления, другая — по возрастанию.</summary>
     internal void SortBy(int column)
     {
         _descending = column == _sortColumn && !_descending;
@@ -82,7 +75,6 @@ public sealed class ReportTableGrid : ContentControl
                 Place(grid, Cell(style, new ContentPresenter { Content = cells.Cells[column] }), row + 1, column);
         }
 
-        // Ячейки рисуют правую и нижнюю границы, рамка — левую и верхнюю.
         var frame = new Border { Child = grid };
         frame.SetResourceReference(StyleProperty, "ReportTableFrame");
         Content = frame;

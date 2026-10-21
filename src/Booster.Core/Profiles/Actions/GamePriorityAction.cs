@@ -7,11 +7,6 @@ using Booster.Core.Resources;
 
 namespace Booster.Core.Profiles.Actions;
 
-/// <summary>
-/// Повышение приоритета процесса игры. Эффект живёт не дольше процесса, восстановление проверено тестами,
-/// поэтому <see cref="ActionDescriptor.VerifiedForAutomatic"/> = true. Приоритет только повышается.
-/// </summary>
-/// <param name="game">null — план без игры (предпросмотр): поддержка проверяется при запуске.</param>
 public sealed class GamePriorityAction(IProcessPriorityController priorities, GameProcess? game, ProcessPriority target, TimeProvider time)
     : IReversibleAction
 {
@@ -60,7 +55,6 @@ public sealed class GamePriorityAction(IProcessPriorityController priorities, Ga
         }
         catch (UnauthorizedAccessException)
         {
-            // Доступ был при проверке, но пропал (античит снял права): приоритет не изменён, откатывать сессию не за что.
             return Task.FromResult(ApplyResult.NotApplied(ReportStrings.Skip_NoAccessToGame));
         }
 
@@ -79,7 +73,6 @@ public sealed class GamePriorityAction(IProcessPriorityController priorities, Ga
     private static string Format(string format, params object[] args) => string.Format(CultureInfo.CurrentCulture, format, args);
 }
 
-/// <summary>Значение снимка <c>game-priority</c>: <c>{"processId", "startTime", "name", "priority"}</c>.</summary>
 internal sealed record GamePriorityValue(
     [property: JsonPropertyName("processId")] int ProcessId,
     [property: JsonPropertyName("startTime")] DateTimeOffset StartTime,

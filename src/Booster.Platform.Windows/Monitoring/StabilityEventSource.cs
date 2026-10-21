@@ -3,10 +3,6 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Platform.Windows.Monitoring;
 
-/// <summary>
-/// События стабильности из журналов System и Application через EventLogReader. Только чтение. Каждый журнал читается
-/// от новых к старым не дальше предела; затем оба сливаются и остаются самые новые <c>maxEvents</c>.
-/// </summary>
 public sealed class StabilityEventSource : IStabilityEventSource
 {
     public Task<StabilityLog> ReadAsync(DateTimeOffset since, int maxEvents, CancellationToken ct)

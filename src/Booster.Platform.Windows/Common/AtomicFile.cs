@@ -6,11 +6,6 @@ using Windows.Win32.Storage.FileSystem;
 
 namespace Booster.Platform.Windows.Common;
 
-/// <summary>
-/// Атомарная замена файла (docs/ARCHITECTURE.md, раздел 7): запись в <c>&lt;имя&gt;.tmp</c> рядом,
-/// сброс на диск, затем <c>MoveFileEx(REPLACE_EXISTING | WRITE_THROUGH)</c>. Основной файл в любой
-/// момент целиком старый или целиком новый.
-/// </summary>
 internal static class AtomicFile
 {
     private static readonly UTF8Encoding Utf8NoBom = new(encoderShouldEmitUTF8Identifier: false);
@@ -38,7 +33,6 @@ internal static class AtomicFile
         }
     }
 
-    /// <summary>Остаток прерванной записи: основной файл не тронут, .tmp не нужен.</summary>
     public static void DeleteTemp(string path)
     {
         try
@@ -47,7 +41,7 @@ internal static class AtomicFile
         }
         catch (IOException)
         {
-            // Занят параллельной записью — её собственная замена его и уберёт.
+            // Занят другой записью, она его и уберёт.
         }
     }
 

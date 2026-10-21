@@ -34,7 +34,6 @@ public class FileProbeTests
     [Fact]
     public void Text_is_opened_as_utf8_without_bom()
     {
-        // Так пишет PresentMon: UTF-8 с BOM.
         var csv = Path.Combine(AppContext.BaseDirectory, "Fixtures", "PresentMon", "pm-header-only.csv");
 
         using var reader = _probe.OpenText(csv);

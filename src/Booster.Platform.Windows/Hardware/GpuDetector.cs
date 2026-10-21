@@ -6,10 +6,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>
-/// Видеоадаптеры из четырёх независимых источников. Сбой одного источника не мешает остальным:
-/// он становится <see cref="DataStatus.Failed"/> с причиной и предупреждением в логе.
-/// </summary>
 public sealed partial class GpuDetector(
     ICimClient cim,
     IDxgiAdapterSource dxgi,
@@ -65,7 +61,6 @@ public sealed partial class GpuDetector(
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
-            // Нет библиотеки, функции или версии Windows — возможности нет; иной сбой не говорит, есть ли она.
             status = ex is DllNotFoundException or EntryPointNotFoundException or PlatformNotSupportedException
                 ? CapabilityStatus.NotSupported
                 : CapabilityStatus.Unknown;
@@ -76,7 +71,6 @@ public sealed partial class GpuDetector(
     private Reading<T> Failed<T>(string source, Exception ex)
     {
         LogSourceFailed(source, ex.GetType().Name, ex.Message);
-        // Тип исключения нужен в причине: по нему видно, отсутствует ли API или он отказал.
         return Reading<T>.Failure(source, $"{ex.GetType().Name}: {ex.Message}");
     }
 

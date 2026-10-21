@@ -12,7 +12,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.App.ViewModels;
 
-/// <summary>Строка действия профиля, которое Booster умеет выполнять.</summary>
 public sealed partial class ProfileActionRow : ObservableObject
 {
     public ProfileActionRow(string id, string name, string modeText, string levelText, ActionTexts texts, bool isOptional, bool isEnabled)
@@ -42,23 +41,19 @@ public sealed partial class ProfileActionRow : ObservableObject
 
     public string Undo { get; }
 
-    /// <summary>Режим optional: действие выполняется, только если пользователь его включил.</summary>
     public bool IsOptional { get; }
 
     [ObservableProperty]
     public partial bool IsEnabled { get; set; }
 
-    /// <summary>Имя строки для экранного диктора.</summary>
     public override string ToString() => Name;
 }
 
-/// <summary>Запись профиля без реализации: Booster только рекомендует.</summary>
 public sealed record RecommendationRow(string Id, string Text)
 {
     public override string ToString() => Id;
 }
 
-/// <summary>Приложение, которое пользователь разрешает закрывать перед игрой.</summary>
 public sealed partial class BackgroundAppRow(string name, bool isSelected) : ObservableObject
 {
     public string Name { get; } = name;
@@ -69,7 +64,6 @@ public sealed partial class BackgroundAppRow(string name, bool isSelected) : Obs
     public override string ToString() => Name;
 }
 
-/// <summary>Описание, риск и способ отмены действия (у L2/L3 — риск и способ отмены).</summary>
 public sealed record ActionTexts(string Description, string Risk, string Undo)
 {
     public static ActionTexts For(string actionId) => actionId switch
@@ -81,10 +75,6 @@ public sealed record ActionTexts(string Description, string Risk, string Undo)
     };
 }
 
-/// <summary>
-/// «Игровые профили»: игры профиля, действия и их режимы, фоновые приложения, автозапуск. Сохраняются только выбор
-/// пользователя (<see cref="ProfileUserChoices"/>); панель сессии работает с сохранённым профилем.
-/// </summary>
 public sealed partial class ProfilesViewModel : ObservableObject, IPage
 {
     private readonly IProfileRepository _profiles;
@@ -144,14 +134,12 @@ public sealed partial class ProfilesViewModel : ObservableObject, IPage
     [ObservableProperty]
     public partial string? StatusMessage { get; private set; }
 
-    /// <summary>Замечания к файлам профилей при последней загрузке: файл не принят или часть значений исправлена.</summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasLoadWarnings))]
     public partial IReadOnlyList<string> LoadWarnings { get; private set; } = [];
 
     public bool HasLoadWarnings => LoadWarnings.Count > 0;
 
-    /// <summary>Переход на экран обновляет список запущенных окон; несохранённые правки остаются.</summary>
     public void Activate()
     {
         if (RefreshProcessesCommand.CanExecute(null))
@@ -262,7 +250,6 @@ public sealed partial class ProfilesViewModel : ObservableObject, IPage
         var recommendations = new List<RecommendationRow>();
         foreach (var entry in profile?.Actions ?? [])
         {
-            // Только конструктор действия: ни проверок, ни изменений.
             if (_catalog.Create(entry.Id, profile!, game: null) is not { } action)
             {
                 recommendations.Add(new RecommendationRow(entry.Id, RecommendationText(entry.Id)));
@@ -278,10 +265,6 @@ public sealed partial class ProfilesViewModel : ObservableObject, IPage
         Recommendations = recommendations;
     }
 
-    /// <summary>
-    /// Ошибка чтения или разбора, как и у <see cref="ProfileRepository"/>, значит, что пользовательский файл не применён целиком;
-    /// исправленные и удалённые значения — что остальной файл действует.
-    /// </summary>
     private static List<string> WarningLines(IReadOnlyList<ConfigWarning> warnings) =>
         [.. warnings.Select(w => w.Kind is ConfigWarningKind.ValueClamped or ConfigWarningKind.InvalidValue
             ? string.Format(CultureInfo.CurrentCulture, Strings.ConfigWarningFormat, w.File, EnumText.Format(w.Kind), w.Detail)
@@ -296,10 +279,6 @@ public sealed partial class ProfilesViewModel : ObservableObject, IPage
         _ => Strings.RecommendOther,
     };
 
-    /// <summary>
-    /// Запущенные окна, кроме защищённых процессов и игр профиля, плюс уже выбранные — даже если они не запущены.
-    /// Отметки сохраняются.
-    /// </summary>
     private void RebuildBackgroundApps(IEnumerable<string>? selected = null)
     {
         var chosen = new HashSet<string>(selected ?? BackgroundApps.Where(a => a.IsSelected).Select(a => a.Name), StringComparer.OrdinalIgnoreCase);

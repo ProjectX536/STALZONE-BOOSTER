@@ -77,7 +77,6 @@ public class CimRowTests
     [Fact]
     public void Char_is_read_as_string_and_zero_char_as_null()
     {
-        // MSFT_Partition.DriveLetter приходит из System.Management как char, '\0' — буквы нет.
         Assert.Equal("C", Row(("DriveLetter", 'C')).GetString("DriveLetter"));
         Assert.Null(Row(("DriveLetter", '\0')).GetString("DriveLetter"));
     }

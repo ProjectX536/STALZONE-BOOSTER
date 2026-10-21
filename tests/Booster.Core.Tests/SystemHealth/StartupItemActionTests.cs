@@ -83,7 +83,6 @@ public class StartupItemActionTests
     public async Task User_change_after_disable_is_restore_conflict()
     {
         var result = await Execute(Action(), confirmed: true);
-        // Пользователь снова включил элемент в диспетчере задач.
         _registry[StartupApprovedKeys.Run, "Spotify"] = Enabled;
 
         var restored = await Restore(result.Session);
@@ -178,7 +177,6 @@ public class StartupItemActionTests
         _machine[StartupApprovedKeys.Run, "Steam"] = Enabled;
         var result = await Execute(Action(Spotify with { Name = "Steam", Location = StartupLocation.MachineRun }), confirmed: true,
             elevated: true);
-        // Booster перезапущен без прав администратора: запись в HKLM отклоняет Windows.
         _machine.WriteFailure = new UnauthorizedAccessException("Access to the registry key is denied.");
 
         var failed = Assert.Single((await Restore(result.Session)).Changes);

@@ -9,8 +9,6 @@ public static class OsMapper
     private const string Wmi = "WMI Win32_OperatingSystem";
     public const string RegistryKey = @"HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion";
 
-    /// <param name="displayVersion">Значение реестра DisplayVersion (REG_SZ, например "24H2").</param>
-    /// <param name="ubr">Значение реестра UBR (REG_DWORD); значение другого типа не принимается.</param>
     public static OsInfo Map(CimRow? win32Os, object? displayVersion, object? ubr) => new(
         Text(win32Os, "Caption"),
         Text(win32Os, "Version"),
@@ -21,7 +19,6 @@ public static class OsMapper
         displayVersion is string s && !string.IsNullOrWhiteSpace(s)
             ? Reading<string>.Known(s.Trim(), $@"{RegistryKey}\DisplayVersion")
             : Reading<string>.Unknown($@"{RegistryKey}\DisplayVersion"),
-        // Текст Windows как есть, на языке системы ("64-разрядная").
         Text(win32Os, "OSArchitecture"),
         DmtfDate.ParseDateTime(win32Os?.GetString("LastBootUpTime")) is { } boot
             ? Reading<DateTimeOffset>.Known(boot, $"{Wmi}.LastBootUpTime")

@@ -9,10 +9,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Platform.Windows.Monitoring;
 
-/// <summary>
-/// Замер кадров внешним PresentMon (ETW). В процесс игры Booster не вмешивается: PresentMon только читает события
-/// презентации кадров. Параллельно счётчики GPU Engine показывают, на каком адаптере игра рисует.
-/// </summary>
 public sealed partial class PresentMonProvider(
     PresentMonLocator locator,
     IProcessRunner runner,
@@ -28,7 +24,6 @@ public sealed partial class PresentMonProvider(
 {
     public const string ProviderId = "platform.windows.presentmon";
 
-    /// <summary>ERROR_CANCELLED: пользователь отказал в запросе UAC.</summary>
     private const int ErrorCancelled = 1223;
 
     private const string AdapterSource = GpuAdapterUsageAggregator.Source;
@@ -71,7 +66,6 @@ public sealed partial class PresentMonProvider(
         };
 
         using var sampling = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        // Отдельный поток: первое чтение счётчиков синхронное и не должно задерживать вызывающий (UI) поток.
         var adapterTask = Task.Run(() => SampleRenderAdapterAsync(request, sampling.Token), CancellationToken.None);
 
         int exitCode;
@@ -105,7 +99,7 @@ public sealed partial class PresentMonProvider(
                 string.Create(CultureInfo.InvariantCulture, $"PresentMon exited with code {exitCode}"));
         }
 
-        // PresentMon 2.6.0 не создаёт CSV, если цель не показала ни одного кадра: процесс не запущен или ничего не рисует.
+        // PresentMon 2.6.0 не создаёт CSV, если цель не показала ни одного кадра.
         if (!files.FileExists(csvPath))
         {
             return new FrameCaptureResult(FrameCaptureStatus.TargetNotFound, null, adapter,
@@ -136,7 +130,6 @@ public sealed partial class PresentMonProvider(
                 $"PresentMon runs elevated and exits by itself within {PresentMonArguments.TimedSeconds(request.Duration)} s"));
         }
 
-        // Убитый PresentMon оставляет ETW-сессию открытой; следующий захват закрыл бы её сам (--stop_existing_session), но лучше сразу.
         try
         {
             var code = await runner.RunAsync(
@@ -162,7 +155,6 @@ public sealed partial class PresentMonProvider(
         }
         else
         {
-            // PresentMon ждёт процесс по имени, а счётчикам нужен PID уже сейчас. Процесс, запущенный позже, — без адаптера.
             IReadOnlyList<int> ids;
             try
             {
@@ -193,7 +185,6 @@ public sealed partial class PresentMonProvider(
 
     private static Reading<AdapterLuid> NotMeasured(string note) => Reading<AdapterLuid>.Unknown(AdapterSource, note);
 
-    /// <summary>Часть имени файла: имя процесса без запрещённых в именах файлов символов или <c>pid1234</c>.</summary>
     private static string FileLabel(FrameCaptureRequest request)
     {
         if (request.ProcessName is not { } name)

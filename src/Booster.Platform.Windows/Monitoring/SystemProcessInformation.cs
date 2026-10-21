@@ -3,15 +3,9 @@ using System.Runtime.InteropServices;
 
 namespace Booster.Platform.Windows.Monitoring;
 
-/// <summary>Время CPU процесса: ядро + пользователь, в тиках по 100 нс с его запуска.</summary>
-/// <param name="CreateTime">Время запуска: вместе с PID отличает процесс от нового с тем же PID.</param>
 public sealed record ProcessTimes(int ProcessId, string Name, long CreateTime, long CpuTime100ns, IReadOnlyList<ThreadTimes> Threads,
     ProcessCounters Counters);
 
-/// <summary>Память и накопительные счётчики ввода-вывода процесса.</summary>
-/// <param name="PrivateBytes">PagefileUsage: частная выделенная память (commit).</param>
-/// <param name="HardFaultCount">Ошибки страниц с чтением с диска, с запуска процесса.</param>
-/// <param name="ReadBytes">Прочитано байт всеми операциями ввода-вывода (файлы, устройства), с запуска.</param>
 public sealed record ProcessCounters(long WorkingSetBytes, long PrivateBytes, long HardFaultCount, long ReadBytes, long WriteBytes)
 {
     public static readonly ProcessCounters Zero = new(0, 0, 0, 0, 0);
@@ -19,20 +13,14 @@ public sealed record ProcessCounters(long WorkingSetBytes, long PrivateBytes, lo
 
 public sealed record ThreadTimes(int ThreadId, long CpuTime100ns);
 
-/// <summary>
-/// Снимок всех процессов и их потоков одним вызовом <c>NtQuerySystemInformation(SystemProcessInformation)</c>.
-/// Ни один процесс не открывается, поэтому вызов не требует прав и не трогает игру.
-/// </summary>
 public static partial class SystemProcessInformation
 {
-    /// <summary>NTSTATUS: буфер мал для снимка.</summary>
     public const int StatusInfoLengthMismatch = unchecked((int)0xC0000004);
 
     private const int SystemProcessInformationClass = 5;
     private const int IdleProcessId = 0;
     private const string IdleName = "Idle";
 
-    /// <summary>Раскладка x64 из winternl.h и исходников .NET; только читаемые поля.</summary>
     [StructLayout(LayoutKind.Explicit, Size = 256)]
     internal struct ProcessEntry
     {
@@ -59,11 +47,6 @@ public static partial class SystemProcessInformation
         [FieldOffset(48)] public nint UniqueThread;
     }
 
-    /// <summary>
-    /// Разбирает буфер снимка. Потоки идут сразу за записью процесса, следующая запись — через NextEntryOffset, 0 — конец.
-    /// Имя — указатель внутрь этого же буфера, поэтому буфер должен лежать там, куда его записала система.
-    /// </summary>
-    /// <exception cref="InvalidDataException">Запись, потоки или имя выходят за границы буфера.</exception>
     public static unsafe IReadOnlyList<ProcessTimes> Parse(ReadOnlySpan<byte> buffer)
     {
         var processSize = sizeof(ProcessEntry);
@@ -101,7 +84,6 @@ public static partial class SystemProcessInformation
         }
     }
 
-    /// <summary>Снимок в буфер. Возвращает NTSTATUS; при нехватке места — <see cref="StatusInfoLengthMismatch"/>.</summary>
     internal static unsafe int Query(byte* buffer, int length, out int written)
     {
         var status = NtQuerySystemInformation(SystemProcessInformationClass, buffer, (uint)length, out var returned);
@@ -119,7 +101,6 @@ public static partial class SystemProcessInformation
             throw new InvalidDataException($"Image name of process {processId} is outside the buffer.");
 
         var name = new string(MemoryMarshal.Cast<byte, char>(buffer.Slice((int)nameOffset, entry.ImageNameLength & ~1)));
-        // Обычно это уже имя файла, но у части процессов ядро отдаёт путь.
         return name[(name.LastIndexOf('\\') + 1)..];
     }
 

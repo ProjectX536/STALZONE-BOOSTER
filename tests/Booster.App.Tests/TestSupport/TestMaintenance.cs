@@ -10,10 +10,6 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Booster.App.Tests.TestSupport;
 
-/// <summary>
-/// Настоящий <see cref="MaintenanceRunner"/> с восстановителями HKCU и HKLM на подставном реестре: система не меняется.
-/// <paramref name="elevated"/> — запущен ли Booster с правами администратора (без них действия HKLM отклоняются).
-/// </summary>
 internal static class TestMaintenance
 {
     public static MaintenanceRunner Create(IChangeJournal journal, FakeUserRegistry registry, IBoosterConfiguration config, TimeProvider time,

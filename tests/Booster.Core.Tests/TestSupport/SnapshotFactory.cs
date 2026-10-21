@@ -8,10 +8,6 @@ using Booster.Core.SystemHealth;
 
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>
-/// Снимок исправной системы: все секции Available, устройства работают и подписаны, на томе свободно 50%,
-/// права повышены. Тест меняет только то, что проверяет, через <c>with</c> и методы <c>With*</c>.
-/// </summary>
 internal static class SnapshotFactory
 {
     public const string Source = "test";
@@ -34,7 +30,6 @@ internal static class SnapshotFactory
             Device("Стандартный контроллер SATA AHCI", "System", @"PCI\VEN_1022&DEV_7901&SUBSYS_7C561462&REV_51"),
         ])),
         [],
-        // Датчики не опрошены: отчёт о них проверяют тесты, которые задают замер сами.
         Known(new SensorSurvey(new SensorSnapshot(TakenAt, [], new CpuTelemetry(
             Reading<double>.Unknown(Source), Reading<double>.Unknown(Source), Reading<double>.Unknown(Source),
             Reading<double>.Unknown(Source), Reading<double>.Unknown(Source))), [])),
@@ -54,7 +49,6 @@ internal static class SnapshotFactory
         Known(new MemoryInventory(Known(32 * GiB),
             [Module("DIMM 0", "P0 CHANNEL A"), Module("DIMM 1", "P0 CHANNEL B")],
             Known(4),
-            // Режим каналов не измеряется: на Этапе 1 он всегда Unknown, и это не повод для замечания.
             Reading<bool>.Unknown(Source, "not measured"),
             ChannelLabelHint.DifferentChannelsByLabel)),
         Known(new SystemBoardInfo(Known("Micro-Star International Co., Ltd."), Known("MS-7C56"), Known(PcFormFactor.Desktop),
@@ -72,7 +66,6 @@ internal static class SnapshotFactory
                 Known(GpuLuid), IsPrimary: true),
         ]));
 
-    /// <summary>Работающее устройство с подписанным драйвером.</summary>
     public static DeviceDriverInfo Device(string name, string deviceClass = "System", string hardwareId = @"ACPI\PNP0A08") => new(
         hardwareId + @"\0",
         Known(name),

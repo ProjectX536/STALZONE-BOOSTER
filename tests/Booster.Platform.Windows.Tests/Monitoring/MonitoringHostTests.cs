@@ -3,10 +3,6 @@ using Booster.Platform.Windows.Monitoring;
 
 namespace Booster.Platform.Windows.Tests.Monitoring;
 
-/// <summary>
-/// Живая система, только чтение: счётчики производительности, список процессов и запуск <c>cmd.exe</c>,
-/// который ничего не делает, кроме выхода. PresentMon здесь не запускается.
-/// </summary>
 [Trait("Category", "Host")]
 public class MonitoringHostTests
 {
@@ -59,7 +55,6 @@ public class MonitoringHostTests
     [Fact]
     public void Process_list_has_titled_windows_only_and_not_this_process()
     {
-        // На машине без рабочего стола (CI) список может быть пустым; проверяются только свойства записей.
         var entries = new ProcessListSource().GetWindowedProcesses();
 
         Assert.DoesNotContain(entries, e => e.ProcessId == Environment.ProcessId);
@@ -82,7 +77,6 @@ public class MonitoringHostTests
         source.Sample(pid);
         var samples = source.Sample(pid);
 
-        // Значение — разность двух чтений и на коротком отрезке изредка выходит за 100, поэтому проверяется только знак.
         Assert.NotEmpty(samples);
         Assert.All(samples, s => Assert.True(s.UtilizationPercent >= 0, $"{s}"));
     }

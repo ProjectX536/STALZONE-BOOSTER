@@ -4,18 +4,10 @@ using Booster.Core.Reports;
 
 namespace Booster.Core.SystemHealth;
 
-/// <summary>
-/// Фоновая запись и программы с оверлеем — только рекомендации L3: Booster не меняет настройки GameDVR и не закрывает программы.
-/// </summary>
 public static class GamingAdvisor
 {
     private const string NameSeparator = ", ";
 
-    /// <summary>
-    /// Модуль Startup. BackgroundRecording true → BackgroundRecordingOn (Info, L3, ms-settings:gaming-gamedvr);
-    /// оверлеи → OverlaysRunning (Info, L3, имена через «, »). Unknown рекомендаций не даёт.
-    /// Game Mode здесь не оценивается: рекомендацию GameModeOff даёт TweakAdvisor, уровень зависит от сборки.
-    /// </summary>
     public static IReadOnlyList<SystemAdvice> Advise(Reading<GamingSettings> gaming, Reading<IReadOnlyList<RunningOverlay>> overlays)
     {
         var advice = new List<SystemAdvice>();

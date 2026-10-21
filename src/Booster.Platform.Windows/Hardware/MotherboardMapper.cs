@@ -27,8 +27,6 @@ public static class MotherboardMapper
             : Reading<DateOnly>.Unknown("WMI Win32_BIOS.ReleaseDate"),
         firmware);
 
-    /// <param name="pcSystemType">Win32_ComputerSystem.PCSystemType: 1 Desktop, 2 Mobile, 3 Workstation.</param>
-    /// <param name="chassisTypes">Win32_SystemEnclosure.ChassisTypes — используются, когда PCSystemType не решает.</param>
     public static Reading<PcFormFactor> MapFormFactor(int? pcSystemType, IReadOnlyList<int> chassisTypes)
     {
         switch (pcSystemType)

@@ -2,10 +2,6 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Core.Inventory;
 
-/// <summary>
-/// Подсказка по меткам слотов. Это не измерение режима работы памяти:
-/// <see cref="MemoryInventory.DualChannel"/> всегда остаётся Unknown.
-/// </summary>
 public enum ChannelLabelHint
 {
     None,

@@ -8,7 +8,6 @@ using Microsoft.Extensions.Time.Testing;
 
 namespace Booster.App.Tests.TestSupport;
 
-/// <summary>Игровая часть Core на фейках: журнал в памяти, процессы и время подставные, система не меняется.</summary>
 internal sealed class FakeGaming : IAsyncDisposable
 {
     public FakeGaming(FakeProfileRepository? profiles = null, FakeActionCatalog? catalog = null, IReadOnlyList<IActionRestorer>? restorers = null)

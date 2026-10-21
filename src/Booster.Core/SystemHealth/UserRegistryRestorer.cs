@@ -4,18 +4,12 @@ using Booster.Core.Resources;
 
 namespace Booster.Core.SystemHealth;
 
-/// <summary>
-/// Возврат значения реестра (HKCU или HKLM — какой раздел передан) по снимку <see cref="UserRegistrySnapshot"/>. Ключ и имя
-/// проверяются до любого обращения к реестру: журнал — файл на диске, и подменённый снимок не должен превратить восстановление в
-/// запись произвольного значения.
-/// </summary>
 public abstract class UserRegistryRestorer(IRegistryValues registry) : IActionRestorer
 {
     public abstract string ActionId { get; }
 
     public int SnapshotSchemaVersion => UserRegistrySnapshot.SchemaVersion;
 
-    /// <summary>Ключ и имя, которые может менять действие этого восстановителя.</summary>
     protected abstract bool IsAllowed(string subKey, string valueName);
 
     public Task<ObservedState> InspectAsync(ActionSnapshot snapshot, CancellationToken ct)
@@ -31,7 +25,6 @@ public abstract class UserRegistryRestorer(IRegistryValues registry) : IActionRe
         }
         catch (InvalidDataException)
         {
-            // Значение другого типа Booster не записывал: его поставил пользователь или другая программа.
             return Task.FromResult(ObservedState.Other);
         }
 
@@ -55,7 +48,6 @@ public abstract class UserRegistryRestorer(IRegistryValues registry) : IActionRe
         }
         catch (UnauthorizedAccessException ex)
         {
-            // Чаще всего это HKLM в Booster без прав администратора: текст системы ничего не говорит о том, как вернуть изменение.
             throw new UnauthorizedAccessException(ReportStrings.Restore_RegistryAccessDenied, ex);
         }
 

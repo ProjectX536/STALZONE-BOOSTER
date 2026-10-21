@@ -12,7 +12,6 @@ public class BottleneckAnalyzerTests
 
     private static readonly ThrottleAssessment NoThrottle = new(30, 10, true, []);
 
-    /// <summary>Ровная серия без ограничений: GPU 80–85%, потоки и память свободны, 100 FPS на 144 Гц без синхронизации.</summary>
     private static readonly BottleneckInput Healthy = new(
         new FrameMetrics(6000, 60_000, 100, 80, 10, 13, 15),
         new FrameStats(6000, GpuBusyShare: 0.8, CpuBusyShare: 0.6, SyncedShare: 0, TypicalSyncInterval: 0),
@@ -64,8 +63,6 @@ public class BottleneckAnalyzerTests
         Assert.Empty(assessment.MissingData);
     }
 
-    // GpuLimited
-
     [Fact]
     public void Gpu_busy_share_and_utilization_high_is_gpu_limited_high()
     {
@@ -105,8 +102,6 @@ public class BottleneckAnalyzerTests
         Assert.False(Assert.Single(finding.Evidence, e => e.Kind == EvidenceKind.GpuUtilization).Supports);
         Assert.True(Assert.Single(finding.Evidence, e => e.Kind == EvidenceKind.GpuBusyFrameShare).Supports);
     }
-
-    // CpuLimited
 
     [Fact]
     public void Average_cpu_low_but_one_thread_saturated_is_cpu_limited_high()
@@ -153,8 +148,6 @@ public class BottleneckAnalyzerTests
         Assert.Equal(BottleneckAnalyzer.LimiterDetail, Assert.Single(external.Evidence, e => e.Kind == EvidenceKind.UniformFrameTimes).Detail);
     }
 
-    // ExternalLimit
-
     [Fact]
     public void Vsync_at_refresh_is_external_limit_high()
     {
@@ -196,8 +189,6 @@ public class BottleneckAnalyzerTests
         Assert.Contains(EvidenceKind.CpuBusyFrameShare, assessment.MissingData);
     }
 
-    // ThermalThrottling
-
     [Theory]
     [InlineData(ThrottleConfidence.Low, AnalysisConfidence.Low)]
     [InlineData(ThrottleConfidence.Medium, AnalysisConfidence.Medium)]
@@ -226,8 +217,6 @@ public class BottleneckAnalyzerTests
         Assert.Equal([EvidenceKind.Throttle], assessment.MissingData);
     }
 
-    // VideoMemoryPressure
-
     [Fact]
     public void Vram_median_high_is_video_memory_pressure_medium()
     {
@@ -243,8 +232,6 @@ public class BottleneckAnalyzerTests
 
         Assert.Equal(AnalysisConfidence.Low, ConfidenceOf(assessment, BottleneckClass.VideoMemoryPressure));
     }
-
-    // MemoryPressure
 
     [Fact]
     public void Low_memory_with_page_reads_is_memory_pressure_high()
@@ -275,8 +262,6 @@ public class BottleneckAnalyzerTests
         Assert.Null(ConfidenceOf(Analyze(With(telemetry: Telemetry(pageReads: 500))), BottleneckClass.MemoryPressure));
     }
 
-    // Storage
-
     [Fact]
     public void Busy_disk_with_stutters_is_storage_medium()
     {
@@ -292,8 +277,6 @@ public class BottleneckAnalyzerTests
 
         Assert.Equal(AnalysisConfidence.Low, ConfidenceOf(assessment, BottleneckClass.Storage));
     }
-
-    // DriverLatency
 
     [Fact]
     public void High_dpc_without_stutters_is_low_driver_latency()
@@ -336,7 +319,6 @@ public class BottleneckAnalyzerTests
     [Fact]
     public void Missing_latency_counters_are_listed()
     {
-        // Серия Этапа 4: полей нет, читаются как default.
         var assessment = Analyze(With(telemetry: Telemetry() with
         {
             DpcTimeMedianPercent = default, DpcTimePeakPercent = default, InterruptTimeMedianPercent = default, InterruptTimePeakPercent = default,
@@ -345,8 +327,6 @@ public class BottleneckAnalyzerTests
         Assert.Equal([EvidenceKind.DpcTime, EvidenceKind.InterruptTime], assessment.MissingData);
         Assert.Null(ConfidenceOf(assessment, BottleneckClass.DriverLatency));
     }
-
-    // FramePacing
 
     [Fact]
     public void Long_tail_with_stutters_is_frame_pacing_high()

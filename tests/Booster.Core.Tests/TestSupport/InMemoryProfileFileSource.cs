@@ -2,7 +2,6 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>Файлы профилей в памяти: встроенные и пользовательские.</summary>
 public sealed class InMemoryProfileFileSource : IProfileFileSource
 {
     private readonly Dictionary<string, string> _builtIn = new(StringComparer.OrdinalIgnoreCase);

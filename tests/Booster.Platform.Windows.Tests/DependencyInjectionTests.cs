@@ -30,7 +30,7 @@ public sealed class DependencyInjectionTests : IDisposable
     [Fact]
     public void Common_services_resolve_and_keep_registrations_made_before()
     {
-        // Пути заданы заранее, чтобы тест не создавал каталоги в настоящем %LOCALAPPDATA%.
+        // Чтобы тест не создавал каталоги в настоящем %LOCALAPPDATA%.
         var paths = new AppPaths(Path.Combine(_root, "data"), AppContext.BaseDirectory);
         var services = new ServiceCollection()
             .AddSingleton(typeof(ILogger<>), typeof(NullLogger<>))

@@ -63,7 +63,6 @@ public class HagsSourceTests
         Assert.Equal(Reading<bool>.Known(false, Source), Read());
     }
 
-    /// <summary>Значения нет — Windows решает по GPU и драйверу; другое число или тип — не выдумывается.</summary>
     [Theory]
     [InlineData(null)]
     [InlineData(0)]
@@ -92,7 +91,6 @@ public class HagsSourceTests
         Assert.Equal(Source, reading.Source);
     }
 
-    /// <summary>Только чтение: ключ HKLM открывается на чтение, HwSchMode не пишется.</summary>
     [Fact]
     [Trait("Category", "Host")]
     public void Reads_real_hags_value()
@@ -102,7 +100,6 @@ public class HagsSourceTests
         Assert.Equal(Source, reading.Source);
     }
 
-    /// <summary>Только чтение: ключ GraphicsDrivers есть в любой Windows 10/11, время его записи — в прошлом и в UTC.</summary>
     [Fact]
     [Trait("Category", "Host")]
     public void Reads_real_key_write_time()

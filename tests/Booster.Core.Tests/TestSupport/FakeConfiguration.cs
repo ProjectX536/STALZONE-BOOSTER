@@ -2,8 +2,6 @@ using Booster.Core.Configuration;
 
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>Конфигурация в памяти: значения как в поставляемых config/*.json, таймауты детекторов задаются тестом.</summary>
-/// <param name="timeoutsMs">Таймауты секций целиком, вместо единственного <c>drivers</c>.</param>
 public sealed class FakeConfiguration(
     int defaultTimeoutMs = 15000,
     int driversTimeoutMs = 90000,
@@ -16,7 +14,6 @@ public sealed class FakeConfiguration(
     NetworkSettings? network = null,
     IReadOnlyDictionary<string, int>? timeoutsMs = null) : IBoosterConfiguration
 {
-    /// <summary>Значения <c>config/thresholds.json</c>; совпадение проверяет ShippedConfigTests.</summary>
     public static readonly Thresholds DefaultThresholds = new(1, 300, 10,
         new ThrottleSettings(2, 90, 10, 10, 30),
         new StutterSettings(2.0, 8, 30),
@@ -33,7 +30,6 @@ public sealed class FakeConfiguration(
         new NetworkThresholds(10, 100, 10, 1),
         new StartupThresholds(50));
 
-    /// <summary>Значения <c>config/system-catalog.json</c>; совпадение проверяет ShippedConfigTests.</summary>
     public static readonly SystemCatalog DefaultCatalog = new(SystemCatalog.CurrentSchemaVersion, new ServiceCatalog(
         SystemCritical:
         [
@@ -73,12 +69,10 @@ public sealed class FakeConfiguration(
             new(RegistryTweakIds.WindowedFlipModel, @"Software\Microsoft\DirectX\UserGpuPreferences", null, "SwapEffectUpgradeEnable=1", 22621),
         ]);
 
-    /// <summary>Значения разделов <c>diagnostics</c> и <c>network</c> из <c>config/settings.json</c>.</summary>
     public static readonly DiagnosticsSettings DefaultDiagnostics = new(14, 500, 10, 2000);
 
     public static readonly NetworkSettings DefaultNetwork = new(30, 1000, 1000, null);
 
-    /// <summary>Значения раздела <c>benchmark</c> из <c>config/settings.json</c>.</summary>
     public static readonly BenchmarkSettings DefaultBenchmark = new(3, 30, 10, 10, true, 100, 300);
 
     public BoosterConfigurationSnapshot Current { get; } = new(

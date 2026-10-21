@@ -20,20 +20,13 @@ public interface IProfileRepository
 
     event EventHandler? Changed;
 
-    /// <summary>Пользовательский файл профиля — только отличия от встроенного (<see cref="JsonMerge.Diff"/>) и schemaVersion; затем перечитать.</summary>
-    /// <exception cref="ProfileFileRejectedException">Пользовательский файл при загрузке не применён — он не перезаписывается.</exception>
     Task SaveUserChoicesAsync(string profileId, ProfileUserChoices choices, CancellationToken ct);
 }
 
-/// <summary>
-/// Профили из встроенных файлов, поверх каждого — пользовательский файл с тем же именем. Пользовательский файл
-/// без встроенной пары не читается. Проблемы пользовательского файла дают предупреждение и встроенные значения.
-/// </summary>
 public sealed partial class ProfileRepository : IProfileRepository
 {
     private const string SchemaVersionKey = "schemaVersion";
 
-    // Пустые необязательные поля не пишутся: во встроенном файле их тоже нет, и Diff их не замечает.
     private static readonly JsonSerializerOptions UserFileWriteOptions = new(ConfigJson.SerializerOptions)
     {
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
@@ -45,7 +38,6 @@ public sealed partial class ProfileRepository : IProfileRepository
     private readonly SemaphoreSlim _saveLock = new(1, 1);
     private volatile Loaded _loaded;
 
-    /// <exception cref="JsonException">Встроенный профиль повреждён — это ошибка поставки.</exception>
     public ProfileRepository(IProfileFileSource files, ILogger<ProfileRepository> logger)
     {
         ArgumentNullException.ThrowIfNull(files);
@@ -111,7 +103,6 @@ public sealed partial class ProfileRepository : IProfileRepository
         {
             var loaded = LoadFile(fileName);
 
-            // Предупреждение загрузки значит, что пользовательский файл пропущен целиком; поправки нормализатора — нет.
             if (loaded.Warnings.Count > 0)
                 rejected[fileName] = loaded.Warnings[0];
             var normalized = ProfileNormalizer.Normalize(loaded.Value, fileName);
@@ -148,14 +139,12 @@ public sealed partial class ProfileRepository : IProfileRepository
             return fallback with { Warnings = [new(ConfigWarningKind.Unreadable, fileName, ex.Message)] };
         }
 
-        // Миграций пока нет: схема профиля — версии 1.
         return ConfigLoader.Load<GamingProfile>(fileName, builtIn, user, GamingProfile.CurrentSchemaVersion, []);
     }
 
     [LoggerMessage(Level = LogLevel.Warning, Message = "Profile {File}: {Kind}: {Detail}")]
     private partial void LogWarning(string file, ConfigWarningKind kind, string detail);
 
-    /// <param name="RejectedUserFiles">Имя файла → почему пользовательский файл не применён.</param>
     private sealed record Loaded(ProfileSet Set, IReadOnlyDictionary<string, string> FileByProfileId,
         IReadOnlyDictionary<string, ConfigWarning> RejectedUserFiles);
 }

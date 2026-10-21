@@ -3,7 +3,6 @@ using Booster.Providers.Gpu.Nvidia;
 
 namespace Booster.Providers.Gpu.Tests.Nvidia;
 
-/// <summary>Настоящий nvapi64.dll: только функции чтения из белого списка, DRS-сессия без сохранения.</summary>
 [Trait("Category", "Host")]
 public sealed class NvApiHostTests
 {

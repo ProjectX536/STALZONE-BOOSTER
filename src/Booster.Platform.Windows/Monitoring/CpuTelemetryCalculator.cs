@@ -4,11 +4,6 @@ using Booster.Core.Sensors;
 
 namespace Booster.Platform.Windows.Monitoring;
 
-/// <summary>
-/// Телеметрия CPU из значений счётчиков «Processor Information». Эффективная частота — номинальная, умноженная на
-/// «% Processor Performance». «% Performance Limit» — гарантированная производительность в процентах от номинала
-/// (100 — ограничения нет), в телеметрию идёт доля ниже номинала. Температура CPU без драйвера ядра недоступна.
-/// </summary>
 public static class CpuTelemetryCalculator
 {
     private const double NominalPercent = 100;

@@ -49,13 +49,12 @@
       <ListBox.ItemContainerStyle>
         <Style TargetType="ListBoxItem">
           <Setter Property="Padding" Value="16,8" />
-          <!-- Без этого экранный диктор читает ToString() записи NavigationItem. -->
+          <!-- Без этого экранный диктор читает ToString() записи. -->
           <Setter Property="AutomationProperties.Name" Value="{Binding Title}" />
         </Style>
       </ListBox.ItemContainerStyle>
     </ListBox>
 
-    <!-- Экран выбранного раздела: шаблон подбирается по типу его модели представления. -->
     <ContentControl Content="{Binding SelectedPage.Content}" Focusable="False" IsTabStop="False" />
   </DockPanel>
 </Window>

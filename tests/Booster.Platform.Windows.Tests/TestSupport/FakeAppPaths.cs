@@ -2,7 +2,6 @@ using Booster.Platform.Windows.Common;
 
 namespace Booster.Platform.Windows.Tests.TestSupport;
 
-/// <summary>Пути без обращения к диску: каталоги не создаются.</summary>
 public sealed class FakeAppPaths(string root = @"C:\Fake") : IAppPaths
 {
     public string DataRoot { get; } = Path.Combine(root, "data");

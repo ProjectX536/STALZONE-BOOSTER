@@ -5,10 +5,6 @@ using Booster.Platform.Windows.Common;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>
-/// Game Mode и фоновая запись из HKCU. Только чтение: ключи GameBar и GameDVR открываются на чтение и не пишутся.
-/// Значения DWORD: 0 → false, 1 → true, другое — Unknown; нет значения — Unknown (Windows пишет его не всегда).
-/// </summary>
 public sealed class GamingSettingsSource(IRegistryReader registry) : IGamingSettingsSource
 {
     private const string GameBarKey = @"Software\Microsoft\GameBar";
@@ -18,7 +14,6 @@ public sealed class GamingSettingsSource(IRegistryReader registry) : IGamingSett
 
     public GamingSettings Read() => new(Flag(GameBarKey, GameModeValue), Flag(GameDvrKey, BackgroundRecordingValue));
 
-    // Сбой одного ключа не прячет второй: каждый флаг читается отдельно.
     private Reading<bool> Flag(string subKey, string valueName)
     {
         var source = $@"HKCU\{subKey}\{valueName}";

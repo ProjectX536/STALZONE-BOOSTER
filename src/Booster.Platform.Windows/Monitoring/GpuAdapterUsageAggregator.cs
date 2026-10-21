@@ -3,10 +3,6 @@ using Booster.Core.Inventory;
 
 namespace Booster.Platform.Windows.Monitoring;
 
-/// <summary>
-/// Адаптер рендеринга — тот, на 3D-движках которого процесс дал наибольшую суммарную загрузку за время замера.
-/// Другие движки (копирование, видео, оверлей) не говорят, где рисуется игра.
-/// </summary>
 public static class GpuAdapterUsageAggregator
 {
     public const string Source = @"Performance counters GPU Engine\Utilization Percentage, engtype_3D";

@@ -91,7 +91,6 @@ public class RegistryTweakActionTests
 
         Assert.Equal(UserRegistryValue.FromString("GpuPreference=2;SwapEffectUpgradeEnable=1;"), _registry[GpuPreferences, GamePath]);
 
-        // Первая сессия откатывается раньше второй: в строке уже есть чужая пара, затирать её нельзя.
         var firstRestored = await Restore(first.Session);
         Assert.Equal(ChangeStatus.RestoreConflict, Assert.Single(firstRestored.Changes).Status);
         Assert.Equal(UserRegistryValue.FromString("GpuPreference=2;SwapEffectUpgradeEnable=1;"), _registry[GpuPreferences, GamePath]);

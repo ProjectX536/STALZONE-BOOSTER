@@ -8,13 +8,9 @@ using Windows.Win32.Graphics.Gdi;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>
-/// Активные пути вывода через QueryDisplayConfig: разрешение и положение источника, частота цели, имя монитора
-/// из EDID и состояние HDR. Только чтение: SetDisplayConfig и запросы DISPLAYCONFIG_DEVICE_INFO_SET_* не используются.
-/// </summary>
 public sealed class DisplayConfigSource : IDisplayConfigSource
 {
-    // Топология может смениться между GetDisplayConfigBufferSizes и QueryDisplayConfig (монитор подключили или разбудили).
+    // Топология может смениться между двумя вызовами (подключили монитор).
     private const int MaxAttempts = 3;
 
     public IReadOnlyList<DisplayPathRecord> QueryActivePaths()
@@ -30,14 +26,12 @@ public sealed class DisplayConfigSource : IDisplayConfigSource
             var target = path.targetInfo;
             uint width = 0, height = 0;
             var primary = false;
-            // Без QDC_VIRTUAL_MODE_AWARE modeInfoIdx — простой индекс в массиве режимов.
             var sourceIndex = path.sourceInfo.modeInfoIdx;
             if (sourceIndex < modes.Length && modes[sourceIndex].infoType == DISPLAYCONFIG_MODE_INFO_TYPE.DISPLAYCONFIG_MODE_INFO_TYPE_SOURCE)
             {
                 var mode = modes[sourceIndex].sourceMode;
                 width = mode.width;
                 height = mode.height;
-                // Основной дисплей — тот, чей рабочий стол начинается в (0, 0).
                 primary = mode.position.x == 0 && mode.position.y == 0;
             }
 
@@ -78,14 +72,9 @@ public sealed class DisplayConfigSource : IDisplayConfigSource
             header = Header(DISPLAYCONFIG_DEVICE_INFO_TYPE.DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME,
                 sizeof(DISPLAYCONFIG_TARGET_DEVICE_NAME), adapter, targetId),
         };
-        // Встроенные панели ноутбуков часто имени не сообщают; пустая строка станет Unknown в маппере.
         return PInvoke.DisplayConfigGetDeviceInfo(ref request.header) == 0 ? request.monitorFriendlyDeviceName.ToString() : null;
     }
 
-    /// <summary>
-    /// Поддержка и включённость именно HDR. Windows 11 24H2+ отвечает на запрос версии 2 отдельными флагами HDR;
-    /// в старой структуре «advanced color» включает и WCG-режим SDR-монитора (wideColorEnforced), его HDR не считаем.
-    /// </summary>
     [SupportedOSPlatform("windows10.0")]
     private static unsafe (bool? Supported, bool? Enabled) AdvancedColor(LUID adapter, uint targetId)
     {

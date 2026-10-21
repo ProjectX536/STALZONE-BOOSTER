@@ -2,7 +2,6 @@ using Booster.Platform.Windows.Monitoring;
 
 namespace Booster.Platform.Windows.Tests.Monitoring;
 
-/// <summary>Читают журналы System и Application живой системы, ничего не меняя.</summary>
 [Trait("Category", "Host")]
 public class StabilityEventSourceHostTests
 {
@@ -31,7 +30,6 @@ public class StabilityEventSourceHostTests
         {
             Assert.True(one.Truncated);
             Assert.Single(one.Events);
-            // Самое новое; за время между чтениями могло появиться ещё более новое.
             Assert.True(one.Events[0].Time >= all.Events.Max(e => e.Time));
         }
         else

@@ -3,17 +3,8 @@
 .SYNOPSIS
     Полная диагностика в одну папку: запускает 00–03 и 07, складывает JSON и пишет summary.md. Только чтение.
 
-.DESCRIPTION
-    В папке появляются hardware.json, drivers.json, performance.json, storage.json, driver-report.json,
-    drivers.md (драйверы и официальные ссылки) и summary.md (кратко по-русски). Существующие файлы с этими
-    именами перезаписываются, остальное содержимое папки не трогается. Сбой одного скрипта не прерывает
-    остальные: он попадает в summary.md, а код выхода становится 1.
-
 .PARAMETER OutDir
     Папка для результатов; создаётся, если её нет.
-
-.OUTPUTS
-    Полный путь к summary.md.
 
 .EXAMPLE
     .\04-Export-Diagnostics.ps1 -OutDir "$env:USERPROFILE\Desktop\booster-diagnostics"
@@ -53,9 +44,7 @@ foreach ($run in $runs) {
     }
 }
 
-#region summary.md
-
-# Значение по пути через точку; нет свойства — $null (ConvertFrom-Json даёт объекты, а StrictMode запрещает обращаться к несуществующим свойствам).
+# StrictMode не даёт обращаться к несуществующим свойствам.
 function Get-JsonValue($Node, [string]$Path) {
     foreach ($part in $Path.Split('.')) {
         if ($null -eq $Node) { return $null }
@@ -66,7 +55,6 @@ function Get-JsonValue($Node, [string]$Path) {
     , $Node
 }
 
-# Значение секции со статусом Available, иначе $null.
 function Get-Section([string]$File, [string]$Name) {
     $section = Get-JsonValue $documents[$File] "sections.$Name"
     if ((Get-JsonValue $section 'status') -eq 'Available') { , (Get-JsonValue $section 'value') } else { $null }
@@ -184,8 +172,6 @@ if ($failures.Count -gt 0) {
 
 $summary = Join-Path $directory 'summary.md'
 [IO.File]::WriteAllText($summary, $md.ToString(), (New-Object Text.UTF8Encoding $false))
-
-#endregion
 
 $summary
 if ($failures.Count -gt 0) {

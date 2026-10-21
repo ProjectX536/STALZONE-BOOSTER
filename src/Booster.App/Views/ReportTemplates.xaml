@@ -4,7 +4,6 @@
                     xmlns:reports="clr-namespace:Booster.Core.Reports;assembly=Booster.Core"
                     xmlns:controls="clr-namespace:Booster.App.Views.Controls"
                     xmlns:converters="clr-namespace:Booster.App.Converters">
-  <!-- Общие стили экранов и шаблоны раскладки отчёта (ReportDocument). Цвета — те же, что в HTML-отчёте. -->
 
   <SolidColorBrush x:Key="UnavailableBrush" Color="#6B6B6B" />
   <SolidColorBrush x:Key="WarningBrush" Color="#A4262C" />
@@ -17,7 +16,6 @@
   <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
   <converters:InverseBooleanConverter x:Key="InverseBoolean" />
 
-  <!-- Ширина текста в ячейке; абзацы переопределяют её на свою. -->
   <sys:Double x:Key="CellMaxWidth">460</sys:Double>
 
   <Style x:Key="PageTitle" TargetType="TextBlock">
@@ -38,7 +36,6 @@
     <Setter Property="MinWidth" Value="96" />
   </Style>
 
-  <!-- Текст сообщения: скрывается, пока сообщения нет. -->
   <Style x:Key="StatusText" TargetType="TextBlock">
     <Setter Property="TextWrapping" Value="Wrap" />
     <Setter Property="MaxWidth" Value="900" />
@@ -58,7 +55,6 @@
     <Setter Property="Foreground" Value="{StaticResource NoteBrush}" />
   </Style>
 
-  <!-- Подсказка для пустого списка: список передаётся в Tag. -->
   <Style x:Key="EmptyHint" TargetType="TextBlock" BasedOn="{StaticResource Hint}">
     <Setter Property="Visibility" Value="Collapsed" />
     <Style.Triggers>
@@ -95,7 +91,6 @@
     <Setter Property="Background" Value="{StaticResource FlaggedRowBrush}" />
   </Style>
 
-  <!-- Ячейка: текст с подсказкой-источником или официальные ссылки (их открывает MainWindow через LinkOpener). -->
   <DataTemplate DataType="{x:Type reports:ReportCell}">
     <Grid>
       <TextBlock x:Name="Text" Text="{Binding Text}" ToolTip="{Binding Tooltip}" TextWrapping="Wrap"

@@ -4,10 +4,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Booster.App.Services;
 
-/// <summary>
-/// Отчёт и его раскладка по последнему снимку — общие для всех экранов. Пересобираются при каждом изменении
-/// <see cref="DiagnosticsSession"/>; свойства меняются только в UI-потоке, поэтому объект создаётся в нём же.
-/// </summary>
 public sealed partial class SessionReport : ObservableObject, IDisposable
 {
     private readonly DiagnosticsSession _session;
@@ -26,7 +22,6 @@ public sealed partial class SessionReport : ObservableObject, IDisposable
         Rebuild();
     }
 
-    /// <summary>Нет, пока не собран первый снимок.</summary>
     [ObservableProperty]
     public partial SystemReport? Report { get; private set; }
 

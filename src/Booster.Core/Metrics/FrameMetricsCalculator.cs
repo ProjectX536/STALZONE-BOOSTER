@@ -1,11 +1,5 @@
 namespace Booster.Core.Metrics;
 
-/// <summary>
-/// Расчёт метрик по интервалам между кадрами (мс):
-/// средний FPS = 1000·N / Σинтервалов; перцентили — по ближайшему рангу ⌈p·N/100⌉;
-/// 1% low = 1000 / среднее k = ⌈N/100⌉ самых долгих интервалов.
-/// Интервалы ≤ 0, NaN и бесконечные отбрасываются и считаются в <see cref="FrameMetricsResult.InvalidIntervals"/>.
-/// </summary>
 public static class FrameMetricsCalculator
 {
     public static FrameMetricsResult Calculate(IReadOnlyList<double> frameIntervalsMs, int minimumFrames)
@@ -37,7 +31,7 @@ public static class FrameMetricsCalculator
 
     private static double NearestRank(double[] sorted, int percent)
     {
-        // p·N считается в целых, чтобы 0,99·300 не превратилось в 297,000…1 и ранг не сдвинулся
+        // В целых, чтобы 0,99·300 не стало 297,000…1.
         var rank = (int)Math.Ceiling(percent * (long)sorted.Length / 100.0);
         return sorted[Math.Max(rank, 1) - 1];
     }

@@ -2,7 +2,6 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:res="clr-namespace:Booster.App.Resources">
-  <!-- A/B-тест HAGS: Booster только открывает «Параметры» и сравнивает две серии; переключает HAGS пользователь -->
   <StackPanel>
     <TextBlock Style="{StaticResource SectionTitle}" Text="{x:Static res:Strings.HagsTitle}" />
     <TextBlock Style="{StaticResource Hint}" Text="{x:Static res:Strings.HagsHint}" />

@@ -7,12 +7,6 @@ namespace Booster.Core.Benchmark;
 
 public sealed record BackgroundProcess(string Name, double CpuPercent);
 
-/// <summary>Сводка сигналов по замерам внутри окон прогонов (паузы не учитываются). Медианы — «длительно», пики — для отчёта.</summary>
-/// <param name="Background">Посторонние процессы по убыванию медианной загрузки всех логических CPU.</param>
-/// <param name="Throttle">null — внутри прогонов нет ни одного замера датчиков.</param>
-/// <param name="DpcTimeMedianPercent">
-/// Время DPC и прерываний — с Этапа 5.3, поэтому параметры необязательные: в файлах серий Этапа 4 их нет, и они читаются как Unknown.
-/// </param>
 public sealed record SeriesTelemetry(
     int SampleCount,
     Reading<string> RenderAdapterName,
@@ -36,10 +30,6 @@ public sealed record SeriesTelemetry(
     Reading<double> InterruptTimeMedianPercent = default,
     Reading<double> InterruptTimePeakPercent = default);
 
-/// <summary>
-/// Сводка замеров серии. Не известное во всех замерах значение сохраняет самый частый статус и его причину:
-/// «не поддерживается» не превращается в «неизвестно».
-/// </summary>
 public static class TelemetryAggregator
 {
     public const string Source = "Benchmark telemetry";
@@ -48,7 +38,6 @@ public static class TelemetryAggregator
     public const string SeveralAdaptersNote = "render adapter is unknown and there are several hardware adapters";
     public const string AdapterNotSampledNote = "render adapter has no sensor readings";
 
-    /// <summary>Адаптер — по LUID из захвата; LUID неизвестен и аппаратный адаптер один — он, с примечанием; иначе Unknown.</summary>
     public static SeriesTelemetry Aggregate(IReadOnlyList<BenchmarkSample> samples, IReadOnlyList<RunWindow> windows,
         Reading<AdapterLuid> renderAdapter, Thresholds thresholds, int backgroundCount)
     {
@@ -151,7 +140,6 @@ public static class TelemetryAggregator
         return all.GroupBy(reading => reading.Status).MaxBy(group => group.Count())!.Last();
     }
 
-    /// <summary>Медиана по замерам с действующим снимком; процесс, которого нет в замере, — 0 в этом замере.</summary>
     private static IReadOnlyList<BackgroundProcess> Background(IReadOnlyList<ProcessActivity> activities, int count)
     {
         var perSample = activities

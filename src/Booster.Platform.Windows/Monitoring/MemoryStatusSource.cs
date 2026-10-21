@@ -6,7 +6,6 @@ using Windows.Win32.System.ProcessStatus;
 
 namespace Booster.Platform.Windows.Monitoring;
 
-/// <summary>Память системы через <c>GetPerformanceInfo</c>: значения в страницах переводятся в байты.</summary>
 public sealed class MemoryStatusSource : IMemoryStatusSource
 {
     public const string Source = "GetPerformanceInfo";

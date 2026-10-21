@@ -15,7 +15,6 @@ public partial class MainWindow : Window
         InitializeComponent();
         DataContext = viewModel;
 
-        // Любая ссылка в окне открывается только через LinkOpener: он пропускает лишь официальные источники.
         AddHandler(Hyperlink.RequestNavigateEvent, new RequestNavigateEventHandler((_, e) =>
         {
             links.TryOpen(e.Uri);

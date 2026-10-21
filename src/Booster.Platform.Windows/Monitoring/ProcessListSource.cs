@@ -19,7 +19,6 @@ public sealed class ProcessListSource : IProcessListSource
 
                 try
                 {
-                    // MainWindowHandle ищет видимое окно верхнего уровня по PID и не открывает сам процесс.
                     if (process.MainWindowHandle == IntPtr.Zero)
                         continue;
 
@@ -31,7 +30,7 @@ public sealed class ProcessListSource : IProcessListSource
                 }
                 catch (Exception ex) when (ex is InvalidOperationException or Win32Exception or NotSupportedException)
                 {
-                    // Процесс завершился между перечислением и чтением свойств, либо его свойства недоступны.
+                    // Процесс уже завершился.
                 }
             }
 

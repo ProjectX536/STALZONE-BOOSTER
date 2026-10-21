@@ -3,24 +3,17 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Core.Recovery;
 
-/// <param name="Sessions">От новых к старым.</param>
 public sealed record JournalContents(IReadOnlyList<SessionRecord> Sessions, IReadOnlyList<JournalProblem> Problems);
 
 public interface IChangeJournal
 {
-    /// <summary>Переписывает <c>&lt;SessionId&gt;.json</c> целиком.</summary>
     Task SaveAsync(SessionRecord session, CancellationToken ct);
 
     Task<JournalContents> LoadAsync(CancellationToken ct);
 
-    /// <summary>
-    /// Удаляет завершённые сессии сверх <paramref name="retainedFinished"/> последних. Незавершённые и проблемные файлы не трогает;
-    /// сессии с изменением в статусе Applied или RestoreFailed не удаляет и не считает: без их снимка изменение нельзя вернуть.
-    /// </summary>
     Task PruneAsync(int retainedFinished, CancellationToken ct);
 }
 
-/// <summary>Журнал сессий: файл на сессию (docs/ARCHITECTURE.md, раздел 7).</summary>
 public sealed partial class ChangeJournal(IJournalFileStore files, ILogger<ChangeJournal> logger) : IChangeJournal
 {
     private readonly SemaphoreSlim _gate = new(1, 1);
@@ -43,7 +36,6 @@ public sealed partial class ChangeJournal(IJournalFileStore files, ILogger<Chang
         }
     }
 
-    /// <summary>Под той же блокировкой, что запись: файл сессии не читается посреди её замены.</summary>
     public async Task<JournalContents> LoadAsync(CancellationToken ct)
     {
         await _gate.WaitAsync(ct).ConfigureAwait(false);
@@ -100,7 +92,6 @@ public sealed partial class ChangeJournal(IJournalFileStore files, ILogger<Chang
         try
         {
             var contents = await LoadCoreAsync(ct).ConfigureAwait(false);
-            // RestoreFailed — значение Booster всё ещё в системе, возврат можно повторить: без снимка это станет невозможно.
             var prunable = contents.Sessions.Where(s => s.IsFinished
                 && !s.Changes.Any(c => c.Status is ChangeStatus.Applied or ChangeStatus.RestoreFailed));
             foreach (var session in prunable.Skip(retainedFinished))

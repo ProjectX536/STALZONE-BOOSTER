@@ -5,7 +5,6 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Platform.Windows.Providers;
 
-/// <summary>Адаптеры и счётчики байт из <see cref="NetworkInterface"/>. Только чтение, без WMI.</summary>
 public sealed class NetworkAdapterSource : INetworkAdapterSource
 {
     private const string Source = "NetworkInterface";

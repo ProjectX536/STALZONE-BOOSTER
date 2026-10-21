@@ -6,10 +6,8 @@ using Booster.Core.Metrics;
 
 namespace Booster.Core.Benchmark;
 
-/// <summary>Серия из захвата: условия теста, прогоны по окнам, сводка по годным прогонам, анализ и рекомендации.</summary>
 public static class BenchmarkSeriesBuilder
 {
-    /// <summary>Сколько фоновых процессов попадает в условия теста.</summary>
     public const int BackgroundCount = 5;
 
     public const string DisplaySource = "Display configuration";
@@ -62,7 +60,6 @@ public static class BenchmarkSeriesBuilder
         return new BenchmarkRun(number, metrics, stutter, FrameStatsCalculator.Compute(frames));
     }
 
-    /// <summary>По прогонам со статусом Ok; годных нет — null.</summary>
     private static BenchmarkSummary? Summarize(IReadOnlyList<BenchmarkRun> runs)
     {
         var valid = runs.Where(run => run.Metrics is { Status: FrameMetricsStatus.Ok, Metrics: not null }).ToArray();
@@ -86,7 +83,6 @@ public static class BenchmarkSeriesBuilder
             fps.Median > 0 ? (fps.Max - fps.Min) / fps.Median * 100 : 0);
     }
 
-    /// <summary>Анализ — по объединению кадров годных прогонов: одна оценка на серию, а не на каждый прогон.</summary>
     private static BottleneckAssessment? Analyze(IReadOnlyList<IReadOnlyList<FrameSample>> validFrames, Reading<DisplayMode> display,
         SeriesTelemetry telemetry, Thresholds thresholds)
     {
@@ -103,10 +99,6 @@ public static class BenchmarkSeriesBuilder
         return BottleneckAnalyzer.Analyze(input, thresholds.Bottleneck);
     }
 
-    /// <summary>
-    /// Дисплей адаптера рендеринга (из нескольких — основной); не найден — основной с примечанием.
-    /// Режим — на начало первого прогона, а не разрешение рендеринга игры.
-    /// </summary>
     private static Reading<DisplayMode> SelectDisplay(Reading<IReadOnlyList<DisplayInfo>> displays, Reading<AdapterLuid> renderAdapter)
     {
         var source = displays.Source ?? DisplaySource;

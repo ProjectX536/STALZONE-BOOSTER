@@ -6,14 +6,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Platform.Windows.Monitoring;
 
-/// <summary>
-/// wpr.exe из системного каталога через UAC. Профиль CPU: выборки процессора, DPC и прерывания, переключения контекста.
-/// Режим памяти (без -filemode): забытая запись занимает кольцевой буфер, а не диск; в файл попадает последний отрезок
-/// перед остановкой.
-/// </summary>
 public sealed partial class WprRunner : IWprRunner
 {
-    /// <summary>ERROR_CANCELLED: пользователь отказал в запросе UAC.</summary>
     private const int ErrorCancelled = 1223;
 
     private const string TraceExtension = ".etl";
@@ -31,7 +25,6 @@ public sealed partial class WprRunner : IWprRunner
     {
     }
 
-    /// <param name="systemDirectory">Шов для тестов: каталог, где ищется wpr.exe.</param>
     internal WprRunner(IProcessRunner runner, IAppPaths paths, ILogger<WprRunner> logger, string systemDirectory)
     {
         _runner = runner;

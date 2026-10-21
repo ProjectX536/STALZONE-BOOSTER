@@ -2,21 +2,12 @@ using System.Globalization;
 
 namespace Booster.Platform.Windows.Common;
 
-/// <summary>
-/// Даты CIM в формате DMTF: <c>yyyyMMddHHmmss.ffffff±UUU</c>, где UUU — смещение от UTC в минутах,
-/// а неизвестные поля заполнены '*'.
-/// </summary>
 public static class DmtfDate
 {
     private const int FullLength = 25;
 
-    /// <summary>
-    /// Ниже этого года — заглушки прошивок и драйверов (1601-01-01, 1970-01-01), а не настоящие даты:
-    /// ни BIOS, ни драйверы для актуальных Windows не выпускались раньше.
-    /// </summary>
     private const int MinimumPlausibleYear = 1980;
 
-    // Пределы DateTimeOffset.Offset: ±14 ч.
     private const int MaximumOffsetMinutes = 14 * 60;
 
     public static DateOnly? ParseDate(string? dmtf)
@@ -28,7 +19,6 @@ public static class DmtfDate
         return date.Year < MinimumPlausibleYear ? null : date;
     }
 
-    /// <summary>null, если момент нельзя восстановить однозначно (неизвестное смещение, неполная строка).</summary>
     public static DateTimeOffset? ParseDateTime(string? dmtf)
     {
         if (dmtf is null || dmtf.Length != FullLength || dmtf[14] != '.' || dmtf[21] is not ('+' or '-'))

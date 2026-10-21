@@ -6,10 +6,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>
-/// Накопители: сначала Storage Management API (MSFT_*), при любом его сбое — Win32_DiskDrive без типа носителя и шины.
-/// Тома из Win32_LogicalDisk нужны обоим путям, поэтому их сбой проваливает секцию целиком.
-/// </summary>
 public sealed partial class StorageDetector(ICimClient cim, ICapabilityRegistry capabilities, ILogger<StorageDetector> logger)
     : IInventoryDetector<IReadOnlyList<StorageDeviceInfo>>
 {
@@ -36,7 +32,6 @@ public sealed partial class StorageDetector(ICimClient cim, ICapabilityRegistry 
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
             LogFallback(ex.GetType().Name, ex.Message);
-            // Нет пространства имён или класса — возможности нет; иной сбой (доступ, провайдер) не говорит, есть ли она.
             Report(ex is CimSchemaMissingException ? CapabilityStatus.NotSupported : CapabilityStatus.Unknown,
                 $"{ex.GetType().Name}: {ex.Message}");
         }

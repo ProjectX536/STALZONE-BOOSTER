@@ -3,7 +3,6 @@ using System.Xml.Linq;
 
 namespace Booster.App.Tests.Composition;
 
-/// <summary>Уровень запуска — решение пользователя (docs/ARCHITECTURE.md, раздел 8): тест не даёт сменить его незаметно.</summary>
 public sealed class AppManifestTests
 {
     private static readonly XNamespace AsmV3 = "urn:schemas-microsoft-com:asm.v3";

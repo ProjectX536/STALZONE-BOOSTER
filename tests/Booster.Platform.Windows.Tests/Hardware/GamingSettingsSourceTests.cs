@@ -63,7 +63,6 @@ public class GamingSettingsSourceTests
         Assert.Equal(DataStatus.Failed, settings.BackgroundRecording.Status);
     }
 
-    /// <summary>Только чтение: ключи HKCU открываются на чтение.</summary>
     [Fact]
     [Trait("Category", "Host")]
     public void Reads_real_gaming_settings()

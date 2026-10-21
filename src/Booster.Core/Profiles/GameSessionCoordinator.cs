@@ -9,33 +9,20 @@ namespace Booster.Core.Profiles;
 
 public enum CoordinatorMode
 {
-    /// <summary>Опроса нет: координатор не запущен, нет подготовки и профилей с автозапуском.</summary>
     Off,
 
-    /// <summary>Опрос ради профилей с автозапуском.</summary>
     Watching,
 
-    /// <summary>Опрос ради подготовленной сессии.</summary>
     Armed,
 
     InSession,
 }
 
-/// <param name="Plan">План активной сессии.</param>
-/// <param name="Progress">Последнее событие активной сессии.</param>
-/// <param name="LastSession">Последняя завершённая сессия.</param>
 public sealed record CoordinatorStatus(CoordinatorMode Mode, string? ArmedProfileId, SessionPlan? Plan, SessionProgress? Progress,
     SessionRecord? LastSession);
 
-/// <summary>Итог «Подготовить сессию» до игры.</summary>
-/// <param name="Preparation">Журнал подготовки; null — выполнять до игры было нечего или игра уже запущена.</param>
-/// <param name="SkippedReason">Почему подтверждённое необратимое действие не выполнено (игра уже запущена); null — не пропускалось.</param>
 public sealed record PreparationResult(SessionRecord? Preparation, string? SkippedReason);
 
-/// <summary>
-/// Обнаружение запуска игры лёгким опросом процессов (только чтение) и запуск сессии: подготовленной пользователем
-/// («Подготовить сессию», один раз) или автозапуска профиля. Опрос идёт, только если есть кандидаты.
-/// </summary>
 public sealed partial class GameSessionCoordinator(GamingProfileManager manager, IProcessProvider processes,
     IProfileRepository profiles, IBoosterConfiguration config, TimeProvider time, ILogger<GameSessionCoordinator> logger)
     : IAsyncDisposable
@@ -49,8 +36,6 @@ public sealed partial class GameSessionCoordinator(GamingProfileManager manager,
     private CancellationTokenSource? _loopCts;
     private Arming? _armed;
 
-    // Процессы прошлых попыток: сессия для них уже была (или применять было нечего), повторно не начинается.
-    // Процесс забывается, когда его PID пропадает из списка процессов. Игнорируемая игра не заслоняет другие.
     private readonly HashSet<ProcessIdentity> _ignored = [];
     private CancellationTokenSource? _sessionCts;
     private bool _preparing;
@@ -65,10 +50,8 @@ public sealed partial class GameSessionCoordinator(GamingProfileManager manager,
         }
     }
 
-    /// <summary>Вызывается из фонового потока. Новое состояние — в <see cref="Status"/>.</summary>
     public event EventHandler? StatusChanged;
 
-    /// <summary>Запускает опрос раз в monitoring.gameDetectionIntervalMs; первый шаг — сразу. Повторный вызов ничего не делает.</summary>
     public Task StartAsync(CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
@@ -86,7 +69,6 @@ public sealed partial class GameSessionCoordinator(GamingProfileManager manager,
         return Task.CompletedTask;
     }
 
-    /// <summary>Останавливает опрос; активная сессия завершается с восстановлением. Повторный вызов ничего не делает.</summary>
     public async Task StopAsync(CancellationToken ct)
     {
         Task? loop;
@@ -101,7 +83,6 @@ public sealed partial class GameSessionCoordinator(GamingProfileManager manager,
         if (loop is null || loopCts is null)
             return;
 
-        // Токен сессии связан с токеном цикла: отмена завершает Gaming, восстановление менеджер выполняет всегда.
         await loopCts.CancelAsync().ConfigureAwait(false);
         await loop.WaitAsync(ct).ConfigureAwait(false);
 
@@ -117,16 +98,9 @@ public sealed partial class GameSessionCoordinator(GamingProfileManager manager,
 
     public ValueTask DisposeAsync() => new(StopAsync(CancellationToken.None));
 
-    /// <summary>План без игры для экрана подтверждения; только чтение.</summary>
     public Task<SessionPlan> PreviewAsync(string profileId, CancellationToken ct) =>
         manager.PreflightAsync(Find(profileId), game: null, ExecutionTrigger.UserInitiated, NoConfirmations, ct);
 
-    /// <summary>
-    /// «Подготовить сессию»: сначала, пока игра не запущена, — подтверждённые необратимые действия (закрытие фоновых
-    /// приложений); затем игровая сессия один раз, при следующем запуске игры профиля. Игра уже запущена — необратимое
-    /// пропускается, сессия начинается сразу, даже если для этого процесса она уже была.
-    /// </summary>
-    /// <exception cref="InvalidOperationException">В профиле нет игр, идёт сессия или подготовка.</exception>
     public async Task<PreparationResult> ArmAsync(string profileId, IReadOnlySet<string> confirmedActionIds, CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(confirmedActionIds);
@@ -139,7 +113,6 @@ public sealed partial class GameSessionCoordinator(GamingProfileManager manager,
             if (_sessionCts is not null || _preparing)
                 throw new InvalidOperationException("A gaming session is already running");
 
-            // Пока идёт подготовка, опрос сессий не начинает: менеджер занят, а увиденная игра не должна попасть в игнорируемые.
             _preparing = true;
         }
 
@@ -168,7 +141,6 @@ public sealed partial class GameSessionCoordinator(GamingProfileManager manager,
         return result;
     }
 
-    /// <summary>Игра уже запущена: причина, если подтверждённое необратимое действие выполнилось бы до неё; иначе null.</summary>
     private async Task<string?> SkippedBecauseGameRunsAsync(GamingProfile profile, IReadOnlySet<string> confirmed, CancellationToken ct)
     {
         var plan = await manager.PreflightAsync(profile, game: null, ExecutionTrigger.UserInitiated, confirmed, ct).ConfigureAwait(false);
@@ -192,12 +164,10 @@ public sealed partial class GameSessionCoordinator(GamingProfileManager manager,
         Publish(s => s.Mode == CoordinatorMode.InSession ? s : s with { Mode = IdleMode(), ArmedProfileId = null });
     }
 
-    /// <summary>«Завершить сессию»: Gaming заканчивается, применённое восстанавливается. Сессии нет — ничего.</summary>
     public void StopSession()
     {
         lock (_gate)
         {
-            // Асинхронно: продолжение менеджера (восстановление) не выполняется в потоке вызывающего (UI).
             _ = _sessionCts?.CancelAsync();
         }
     }
@@ -257,11 +227,9 @@ public sealed partial class GameSessionCoordinator(GamingProfileManager manager,
             var plan = await manager.PreflightAsync(match.Profile, game, trigger, arm?.Confirmed ?? NoConfirmations, ct)
                 .ConfigureAwait(false);
 
-            // Остановка до начала: иначе менеджер применил бы план и тут же его восстановил.
             if (sessionCts.IsCancellationRequested)
                 return;
 
-            // Применять нечего — менеджер пишет об этом в лог и журнал не создаёт; режим сессии не показывается.
             if (plan.Actions.Any(a => a.WillApply))
                 Publish(s => s with { Mode = CoordinatorMode.InSession, ArmedProfileId = null, Plan = plan, Progress = null });
             session = await manager.RunAsync(plan, sessionCts.Token).ConfigureAwait(false);
@@ -281,7 +249,6 @@ public sealed partial class GameSessionCoordinator(GamingProfileManager manager,
         }
     }
 
-    /// <summary>Подготовленный профиль, иначе профили с автозапуском и играми.</summary>
     private IReadOnlyList<GamingProfile> Candidates()
     {
         var set = profiles.Current;
@@ -306,7 +273,6 @@ public sealed partial class GameSessionCoordinator(GamingProfileManager manager,
         return candidates;
     }
 
-    /// <summary>Завершившиеся процессы больше не игнорируются: PID и время старта не повторятся.</summary>
     private void Forget(IReadOnlyList<ProcessInfo> running)
     {
         lock (_gate)
@@ -318,7 +284,6 @@ public sealed partial class GameSessionCoordinator(GamingProfileManager manager,
         }
     }
 
-    /// <summary>Первая по порядку <see cref="ProfileMatcher.MatchAll"/> игра, для процесса которой сессии ещё не было.</summary>
     private (GameMatch Match, GameProcess Game)? FirstNotIgnored(IReadOnlyList<GameMatch> matches)
     {
         foreach (var match in matches)
@@ -335,7 +300,6 @@ public sealed partial class GameSessionCoordinator(GamingProfileManager manager,
         return null;
     }
 
-    /// <summary>У игры несколько процессов с одним именем — игрой считается запущенный раньше всех.</summary>
     private GameProcess? Earliest(GameMatch match)
     {
         ProcessIdentity? earliest = null;
@@ -348,7 +312,6 @@ public sealed partial class GameSessionCoordinator(GamingProfileManager manager,
         return earliest is { } game ? new GameProcess(match.GameName, game) : null;
     }
 
-    /// <summary>Вызывать под <see cref="_gate"/>.</summary>
     private CoordinatorMode IdleMode() =>
         !_active ? CoordinatorMode.Off
         : _armed is not null ? CoordinatorMode.Armed
@@ -377,7 +340,6 @@ public sealed partial class GameSessionCoordinator(GamingProfileManager manager,
 
         try
         {
-            // ForceYielding: продолжение не выполняется в потоке, который вызвал Wake (UI).
             await Task.Delay(interval, time, wake.Token)
                 .ConfigureAwait(ConfigureAwaitOptions.SuppressThrowing | ConfigureAwaitOptions.ForceYielding);
         }
@@ -391,7 +353,6 @@ public sealed partial class GameSessionCoordinator(GamingProfileManager manager,
         }
     }
 
-    /// <summary>Следующий шаг опроса — сразу, не дожидаясь интервала.</summary>
     private void Wake()
     {
         lock (_gate)
@@ -406,7 +367,6 @@ public sealed partial class GameSessionCoordinator(GamingProfileManager manager,
         Publish(s => s.Mode == CoordinatorMode.InSession ? s with { Progress = progress } : s);
     }
 
-    /// <summary><paramref name="change"/> выполняется под <see cref="_gate"/>; событие — только если состояние изменилось.</summary>
     private void Publish(Func<CoordinatorStatus, CoordinatorStatus> change)
     {
         CoordinatorStatus status;
@@ -428,7 +388,6 @@ public sealed partial class GameSessionCoordinator(GamingProfileManager manager,
         }
     }
 
-    /// <param name="Profile">Профиль в том виде, в каком его план подтвердил пользователь; сохранения после подготовки не учитываются.</param>
     private sealed record Arming(GamingProfile Profile, IReadOnlySet<string> Confirmed)
     {
         public string ProfileId => Profile.ProfileId;

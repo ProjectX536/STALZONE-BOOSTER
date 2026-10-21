@@ -12,20 +12,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.App.ViewModels;
 
-/// <summary>
-/// Панель A/B-теста HAGS экрана «Система». Booster HAGS не переключает: панель открывает страницу «Параметров»,
-/// а пользователь переключает значение и перезагружает компьютер сам. Каждый прочитанный вид уходит в
-/// <see cref="DiagnosticsSession"/> для отчёта. Операции идут по одной.
-/// </summary>
 public sealed partial class HagsViewModel(HagsExperimentService experiment, DiagnosticsSession session, ISettingsOpener opener,
     ILogger<HagsViewModel> logger) : ObservableObject
 {
     private const string GraphicsSettingsPage = "display-advancedgraphics";
 
-    /// <summary>Операция или чтение идёт: обновление при открытии экрана их не перебивает.</summary>
     private bool _running;
 
-    /// <summary>null — состояние ещё не прочитано или чтение не удалось.</summary>
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(StartExperimentCommand))]
     [NotifyCanExecuteChangedFor(nameof(TakeCandidateCommand))]
@@ -39,23 +32,18 @@ public sealed partial class HagsViewModel(HagsExperimentService experiment, Diag
     [NotifyCanExecuteChangedFor(nameof(CheckCommand))]
     public partial bool IsBusy { get; private set; }
 
-    /// <summary>Значение HAGS в реестре сейчас.</summary>
     [ObservableProperty]
     public partial string? CurrentText { get; private set; }
 
-    /// <summary>Что делать дальше: по одному тексту на <see cref="HagsCheck"/>.</summary>
     [ObservableProperty]
     public partial string? StepText { get; private set; }
 
-    /// <summary>Только для завершённого теста: ручная рекомендация, изменение метрик и оговорки сравнения.</summary>
     [ObservableProperty]
     public partial string? VerdictText { get; private set; }
 
-    /// <summary>Итог или отказ последней операции.</summary>
     [ObservableProperty]
     public partial string? Status { get; private set; }
 
-    /// <summary>Перечитывает состояние: пока экран был закрыт, компьютер мог перезагрузиться. Во время операции ничего не делает.</summary>
     public async Task RefreshAsync(CancellationToken ct)
     {
         if (_running)
@@ -78,7 +66,6 @@ public sealed partial class HagsViewModel(HagsExperimentService experiment, Diag
     private Task StartExperimentAsync(CancellationToken ct) => RunAsync("start", async () =>
         await Task.Run(() => experiment.StartAsync(ct), ct) is { } refusal ? StartRefusalText(refusal) : Strings.HagsStarted, ct);
 
-    /// <summary>Только открывает страницу; переключает HAGS пользователь.</summary>
     [RelayCommand]
     private void OpenGraphicsSettings()
     {
@@ -98,7 +85,6 @@ public sealed partial class HagsViewModel(HagsExperimentService experiment, Diag
             : Strings.HagsCandidateTaken, ct);
     }
 
-    /// <summary>Удаляет только файл теста: серии остаются в истории.</summary>
     [RelayCommand(CanExecute = nameof(CanReset))]
     private Task ResetAsync(CancellationToken ct) => RunAsync("reset", async () =>
     {
@@ -114,7 +100,6 @@ public sealed partial class HagsViewModel(HagsExperimentService experiment, Diag
 
     private bool CanReset() => !IsBusy && View is { Check: not HagsCheck.NotStarted };
 
-    /// <summary>Операция в пуле, итог — в <see cref="Status"/>; затем состояние перечитывается, что бы ни случилось.</summary>
     private async Task RunAsync(string operation, Func<Task<string?>> run, CancellationToken ct)
     {
         _running = true;
@@ -140,7 +125,6 @@ public sealed partial class HagsViewModel(HagsExperimentService experiment, Diag
         }
     }
 
-    /// <summary>Сбой чтения убирает вид: без него ни начать, ни взять серию, ни сбросить нельзя — только проверить снова.</summary>
     private async Task LoadAsync(CancellationToken ct)
     {
         HagsExperimentView view;
@@ -167,7 +151,6 @@ public sealed partial class HagsViewModel(HagsExperimentService experiment, Diag
 
     private static string Value(bool enabled) => enabled ? Strings.HagsEnabled : Strings.HagsDisabled;
 
-    /// <summary>Значение кандидата — противоположное базе: переключение засчитывается, только когда значение сменилось.</summary>
     private static string StepTextOf(HagsExperimentView view, CultureInfo culture) => (view.Check, view.Experiment) switch
     {
         (HagsCheck.NotStarted, _) => Strings.HagsStep_NotStarted,
@@ -183,7 +166,6 @@ public sealed partial class HagsViewModel(HagsExperimentService experiment, Diag
         _ => Strings.HagsStep_StateUnknown,
     };
 
-    /// <summary>Рекомендация только по этим сериям; затем изменение среднего FPS и 1% low и оговорки <see cref="BenchmarkComparer"/>.</summary>
     private static string? VerdictTextOf(HagsExperimentView view, CultureInfo culture)
     {
         if (view is not { Verdict: { } verdict, Comparison: { } comparison, Experiment: { } e })
@@ -213,7 +195,6 @@ public sealed partial class HagsViewModel(HagsExperimentService experiment, Diag
         return string.Join(Environment.NewLine, lines);
     }
 
-    /// <summary>Знак всегда виден, минус — типографский, как в отчёте.</summary>
     private static string? Change(BenchmarkComparison comparison, ComparedMetric metric, CultureInfo culture) =>
         comparison.Metrics.FirstOrDefault(m => m.Metric == metric) is { } found
             ? string.Format(culture, ReportStrings.SignedPercentFormat, found.ChangePercent.ToString("+0.0;−0.0;0.0", culture))

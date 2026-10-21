@@ -30,7 +30,6 @@ public class FrameStatsTests
     [Fact]
     public void Busy_longer_than_interval_counts_as_full_share()
     {
-        // MsCPUBusy включает ожидание ограничителя и может превышать интервал.
         var stats = FrameStatsCalculator.Compute([Frame(10, cpu: 25), Frame(10, cpu: 12)]);
 
         Assert.Equal(1.0, stats.CpuBusyShare!.Value, Tolerance);

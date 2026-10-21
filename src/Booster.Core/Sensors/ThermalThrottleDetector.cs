@@ -3,11 +3,6 @@ using Booster.Core.Configuration;
 
 namespace Booster.Core.Sensors;
 
-/// <summary>
-/// Ищет признаки троттлинга в замерах прогона. Причины от драйвера — уверенность High; температура у предела драйвера —
-/// Medium; падение частоты под нагрузкой — Low или Medium, если в тех же замерах есть тепловая или силовая причина;
-/// ограничение CPU — Low. Универсального порога температуры нет: без предела от драйвера вывода по температуре не делаем.
-/// </summary>
 public static class ThermalThrottleDetector
 {
     private const GpuThrottleReasons OtherReasons =
@@ -42,7 +37,6 @@ public static class ThermalThrottleDetector
         var busy = all
             .Where(t => t.UtilizationPercent.IsAvailable && t.UtilizationPercent.Value >= settings.GpuBusyUtilizationPercent && t.CoreClockMhz.IsAvailable)
             .ToList();
-        // Падение — это сравнение замеров между собой: одному «занятому» замеру сравнивать не с чем.
         if (busy.Count < 2)
             return;
         var floor = busy.Max(t => t.CoreClockMhz.Value) * (1 - (settings.ClockDropPercent / 100));
@@ -78,7 +72,6 @@ public static class ThermalThrottleDetector
         && telemetry.TemperatureLimitC.IsAvailable
         && telemetry.TemperatureC.Value >= telemetry.TemperatureLimitC.Value - settings.TemperatureMarginC;
 
-    /// <summary>Известный замер с наибольшим или наименьшим значением — вместе с его источником; нет известных — Unknown.</summary>
     private static Reading<double> Extreme(IEnumerable<Reading<double>> readings, bool highest)
     {
         Reading<double>? best = null;
@@ -90,10 +83,6 @@ public static class ThermalThrottleDetector
         return best ?? Reading<double>.Unknown();
     }
 
-    /// <summary>
-    /// Телеметрия по адаптерам в порядке первого появления. Ключ — LUID; без LUID — имя адаптера. Имя в находке — из
-    /// первого замера: после переустановки драйвера имя может смениться, LUID в пределах загрузки системы — нет.
-    /// </summary>
     private static List<AdapterSeries> GroupByAdapter(IReadOnlyList<SensorSnapshot> samples)
     {
         var byKey = new Dictionary<string, AdapterSeries>(StringComparer.Ordinal);

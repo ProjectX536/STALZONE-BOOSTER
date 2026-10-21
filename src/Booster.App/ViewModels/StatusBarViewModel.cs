@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.App.ViewModels;
 
-/// <summary>Права процесса и нагрузка самого Booster; замер — в фоне с интервалом SelfUsageIntervalMs из settings.json.</summary>
 public sealed partial class StatusBarViewModel : ObservableObject, IDisposable
 {
     private readonly SelfUsageMonitor _monitor;
@@ -32,13 +31,11 @@ public sealed partial class StatusBarViewModel : ObservableObject, IDisposable
         UsageText = Strings.StatusSelfUsagePending;
     }
 
-    /// <summary>Права не меняются, пока процесс работает: повышение и членство в группе фиксируются при входе.</summary>
     public string PrivilegesText { get; }
 
     [ObservableProperty]
     public partial string UsageText { get; private set; }
 
-    /// <summary>Запускает замеры. Вызывается из UI-потока: текст обновляется через его контекст синхронизации.</summary>
     public void Start()
     {
         if (_stop is not null)
@@ -72,7 +69,6 @@ public sealed partial class StatusBarViewModel : ObservableObject, IDisposable
         }
         catch (Exception ex)
         {
-            // Строка состояния перестаёт обновляться, остальное приложение продолжает работу.
             LogSamplingFailed(ex);
         }
     }

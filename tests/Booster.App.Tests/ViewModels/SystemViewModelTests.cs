@@ -21,11 +21,10 @@ namespace Booster.App.Tests.ViewModels;
 
 public sealed class SystemViewModelTests : IAsyncDisposable
 {
-    private static readonly TimeSpan Interval = TimeSpan.FromMilliseconds(2000); // FakeConfiguration: activityIntervalMs
+    private static readonly TimeSpan Interval = TimeSpan.FromMilliseconds(2000);
 
     private const string DiscordPath = @"C:\Users\Player\AppData\Local\Discord\Discord.exe";
 
-    /// <summary>HKCU Run, включён; процесс Discord.exe из <see cref="SystemSamples.Processes"/> тяжелее порога — Candidate.</summary>
     private static readonly StartupEntry Discord = new("Discord", StartupLocation.UserRun, $"\"{DiscordPath}\"", DiscordPath,
         StartupState.Enabled);
 
@@ -53,7 +52,6 @@ public sealed class SystemViewModelTests : IAsyncDisposable
 
     private static CancellationToken Ct => TestContext.Current.CancellationToken;
 
-    /// <summary>Другой список автозагрузки и права Booster; вызывается до <see cref="System"/>.</summary>
     private void UseStartup(bool elevated, params StartupEntry[] entries)
     {
         _screen.Dispose();
@@ -63,7 +61,6 @@ public sealed class SystemViewModelTests : IAsyncDisposable
 
     private static CultureInfo Culture => CultureInfo.CurrentCulture;
 
-    /// <summary>Тест сети идёт на своих часах: пауза 0 мс — раунды без ожидания, иначе пауза ждёт, пока тест не сдвинет время.</summary>
     private SystemViewModel System(int pingCount = 2, int pingIntervalMs = 0)
     {
         _adapters.Adapters.Add(FakeNetworkAdapters.Adapter(gateways: "192.168.1.1"));
@@ -155,7 +152,6 @@ public sealed class SystemViewModelTests : IAsyncDisposable
                 ("Steam", false, EnumText.Format(StartupDisableAvailability.NeedsAdmin)),
             ],
             system.StartupRows.Select(r => (r.Name, r.CanDisable, r.DisableHint)));
-        // Лёгкий или незапущенный элемент тоже можно отключить: вес — только подсказка в колонке вердикта.
         Assert.Equal(EnumText.Format(StartupVerdict.NotRunning), system.StartupRows[1].Verdict);
     }
 
@@ -189,7 +185,6 @@ public sealed class SystemViewModelTests : IAsyncDisposable
             StartupState.Enabled));
         var system = await CollectedAsync();
 
-        // Кнопка выключена, но и команда, вызванная в обход неё, ничего не готовит.
         await system.RequestDisableStartupCommand.ExecuteAsync(Assert.Single(system.StartupRows));
 
         Assert.Null(system.PendingConfirmation);
@@ -251,7 +246,6 @@ public sealed class SystemViewModelTests : IAsyncDisposable
         await system.RequestDisableStartupCommand.ExecuteAsync(system.StartupRows[0]);
 
         system.CancelMaintenanceCommand.Execute(null);
-        // Команда без ожидающего изменения ничего не делает, даже если её вызвать в обход кнопки.
         await system.ConfirmMaintenanceCommand.ExecuteAsync(null);
 
         Assert.Null(system.PendingConfirmation);
@@ -324,7 +318,6 @@ public sealed class SystemViewModelTests : IAsyncDisposable
 
         system.Activate();
         await ScreenSession.WaitUntilAsync(() => _pressure.Calls == 1 && _processes.IoCalls == 1, "first sample was not taken");
-        // Первый замер после открытия экрана — точка отсчёта скоростей, он не показывается.
         Assert.Empty(system.Pressure);
         Assert.Empty(system.TopIo);
         Assert.Equal(Strings.SystemActivityWaiting, system.ActivityStatus);
@@ -369,7 +362,6 @@ public sealed class SystemViewModelTests : IAsyncDisposable
     [Fact]
     public async Task Pressure_shows_dpc_and_interrupt_time()
     {
-        // Доли процента: целые проценты показали бы 0 % там, где DPC уже заметны.
         _pressure.Answer = _ => FakeSystemPressureSource.Pressure(50, 40, 0, 0, 0, dpcTime: 0.4, interruptTime: 1.25);
         var system = System();
 
@@ -450,7 +442,6 @@ public sealed class SystemViewModelTests : IAsyncDisposable
     {
         public List<string> Requests { get; } = [];
 
-        /// <summary>Что «выбрал» пользователь; null — отмена.</summary>
         public string? Result { get; set; }
 
         public string? Pick(string expectedFileName)

@@ -9,11 +9,6 @@ using Microsoft.Extensions.Time.Testing;
 
 namespace Booster.App.Tests.TestSupport;
 
-/// <summary>
-/// Сессия диагностики и отчёт для экранов. Без <paramref name="collect"/> сборщика нет: тест не обновляет снимок.
-/// С ним <see cref="DiagnosticsSession.RefreshAsync"/> собирает снимок из <see cref="TestCollector"/>.
-/// Экраны создаются под простым контекстом синхронизации — отправленное в UI-поток выполняется в пуле.
-/// </summary>
 internal sealed class ScreenSession : IDisposable
 {
     public ScreenSession(bool collect = false, IStartupSource? startup = null, IGamingSettingsSource? gaming = null, bool elevated = true)
@@ -48,7 +43,6 @@ internal sealed class ScreenSession : IDisposable
         }
     }
 
-    /// <summary>Ждёт условия, которое выполнится в пуле потоков.</summary>
     public static async Task WaitUntilAsync(Func<bool> condition, string what)
     {
         var deadline = DateTime.UtcNow.AddSeconds(10);

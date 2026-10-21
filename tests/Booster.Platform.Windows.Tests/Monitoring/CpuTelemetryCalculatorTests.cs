@@ -39,7 +39,6 @@ public class CpuTelemetryCalculatorTests
         Assert.Equal(ReportStrings.CpuTemperatureNoSource, cpu.TemperatureC.Note);
     }
 
-    // Счётчик «% Performance Limit» — гарантированная производительность в процентах от номинала: 100 — ограничения нет.
     [Theory]
     [InlineData(100, 0)]
     [InlineData(88, 12)]

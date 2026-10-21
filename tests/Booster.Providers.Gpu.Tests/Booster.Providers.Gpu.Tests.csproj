@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <!-- Провайдеры GPU на фейках источников Platform; вендорские библиотеки не загружаются. -->
   <PropertyGroup>
     <TargetFramework>net10.0-windows</TargetFramework>
     <OutputType>Exe</OutputType>

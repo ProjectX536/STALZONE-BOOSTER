@@ -1,9 +1,5 @@
 namespace Booster.Core.Abstractions;
 
-/// <summary>
-/// Значение вместе с его статусом и источником. Если значение не получено надёжно,
-/// статус отличен от <see cref="DataStatus.Available"/>, а <see cref="Value"/> не используется.
-/// </summary>
 public readonly record struct Reading<T>(T? Value, DataStatus Status, string? Source = null, string? Note = null)
 {
     public bool IsAvailable => Status == DataStatus.Available;

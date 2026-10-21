@@ -3,7 +3,6 @@ using Booster.Core.Reports;
 
 namespace Booster.Core.SystemHealth;
 
-/// <summary>Раздел системной диагностики, к которому относится рекомендация.</summary>
 public enum AdviceModule
 {
     Memory,
@@ -13,11 +12,9 @@ public enum AdviceModule
     Startup,
     Tweaks,
 
-    /// <summary>Время DPC и прерываний по серии бенчмарка.</summary>
     Latency,
 }
 
-/// <summary>Рекомендации системной диагностики. Тексты — <c>AdviceId_*</c>, <c>AdviceText_*</c>, <c>AdviceAction_*</c>, <c>AdviceRisk_*</c>.</summary>
 public enum AdviceId
 {
     PagefileDisabled,
@@ -51,23 +48,16 @@ public enum AdviceId
     InterruptTimeHigh,
 }
 
-/// <summary>Рекомендация по снимку системы. Booster её не выполняет: уровень говорит, кто и как может это сделать.</summary>
-/// <param name="Arguments">Подставляются в AdviceText_{Id}: числа — в инвариантной культуре, имена — как есть.</param>
 public sealed record SystemAdvice(AdviceId Id, AdviceModule Module, FindingSeverity Severity, SafetyLevel Level,
     IReadOnlyList<string> Arguments);
 
-/// <summary>Как задан размер файла подкачки.</summary>
 public enum PagefileMode
 {
-    /// <summary>Размером всех файлов управляет система.</summary>
     SystemManaged,
 
-    /// <summary>Файлы выбраны вручную, размер каждого выбирает система.</summary>
     SystemManagedSize,
 
-    /// <summary>Размер задан вручную.</summary>
     Manual,
 
-    /// <summary>Файла подкачки нет (или не будет после перезагрузки).</summary>
     Disabled,
 }

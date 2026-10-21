@@ -3,7 +3,6 @@ using System.Text.Json.Serialization;
 
 namespace Booster.Core.Abstractions;
 
-/// <summary>Режим действия в профиле. В JSON записывается строками из <see cref="ActionModeText"/>.</summary>
 public enum ActionMode
 {
     Allowed,

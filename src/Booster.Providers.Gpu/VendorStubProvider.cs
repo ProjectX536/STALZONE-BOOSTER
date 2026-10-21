@@ -7,20 +7,14 @@ using Booster.Providers.Gpu.Resources;
 
 namespace Booster.Providers.Gpu;
 
-/// <summary>
-/// Вендорский провайдер, чей SDK не подключён: никогда не доступен и сообщает в <c>gpu.vendor-api</c> почему.
-/// Библиотека вендора только ищется в System32 (<see cref="IFileProbe.FileExists"/>) и не загружается.
-/// </summary>
 public abstract class VendorStubProvider(IFileProbe files, string providerId, GpuVendor vendor, string libraryName) : IGpuProvider
 {
     public string ProviderId => providerId;
 
     public GpuVendor? Vendor => vendor;
 
-    /// <summary>Причина, по которой SDK не подключён; без сведений о библиотеке.</summary>
     protected abstract string LicenseNote { get; }
 
-    /// <summary>Дополнение после сведений о библиотеке; null — нет.</summary>
     protected virtual string? Remark => null;
 
     public Task<bool> IsAvailableAsync(GpuAdapterInfo adapter, CancellationToken ct) => Task.FromResult(false);

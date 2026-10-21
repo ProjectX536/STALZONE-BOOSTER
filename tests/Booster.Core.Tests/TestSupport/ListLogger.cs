@@ -4,7 +4,6 @@ namespace Booster.Core.Tests.TestSupport;
 
 public sealed record LogEntry(LogLevel Level, string Message, Exception? Exception);
 
-/// <summary>Логгер, который складывает записи в список, чтобы тест мог проверить уровень и текст.</summary>
 public sealed class ListLogger<T> : ILogger<T>
 {
     private readonly List<LogEntry> _entries = [];

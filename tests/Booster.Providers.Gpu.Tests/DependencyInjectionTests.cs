@@ -22,7 +22,7 @@ public sealed class DependencyInjectionTests : IDisposable
     [Fact]
     public void Gpu_providers_are_registered()
     {
-        // Пути заданы заранее, чтобы тест не создавал каталоги в настоящем %LOCALAPPDATA%.
+        // Чтобы тест не создавал каталоги в настоящем %LOCALAPPDATA%.
         var services = new ServiceCollection()
             .AddSingleton(typeof(ILogger<>), typeof(NullLogger<>))
             .AddSingleton<IAppPaths>(new AppPaths(Path.Combine(_root, "data"), AppContext.BaseDirectory))

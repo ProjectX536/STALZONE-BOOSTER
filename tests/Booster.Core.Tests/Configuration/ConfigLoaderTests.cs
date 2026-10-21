@@ -7,7 +7,6 @@ public class ConfigLoaderTests
 {
     private const string FileName = "settings.json";
 
-    // Комментарии обоих видов и висячие запятые — так же, как в поставляемых файлах.
     private const string BuiltIn = """
         {
           "schemaVersion": 1,

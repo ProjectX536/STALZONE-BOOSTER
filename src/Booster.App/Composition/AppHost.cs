@@ -12,13 +12,8 @@ using Serilog;
 
 namespace Booster.App.Composition;
 
-/// <summary>Корень композиции: службы Core, Platform и App в одном контейнере, логирование — через Serilog.</summary>
 internal static class AppHost
 {
-    /// <summary>
-    /// Пустой построитель: без appsettings.json, переменных окружения и стандартных логгеров (в том числе журнала
-    /// событий Windows) — Booster пишет только в свой файл. Контейнер проверяется при построении.
-    /// </summary>
     public static IHost Build(IAppPaths paths, ILogger logger)
     {
         ArgumentNullException.ThrowIfNull(paths);
@@ -49,7 +44,6 @@ internal static class AppHost
         builder.Services.AddSingleton<IGameExecutablePicker>(sp => sp.GetRequiredService<FilePicker>());
         builder.Services.AddSingleton<IBenchmarkCuePlayer, BenchmarkCuePlayer>();
         builder.Services.AddSingleton<SessionReport>();
-        // Запускается только из окна (MainViewModel.Start); как служба хоста — останавливает координатор при выходе.
         builder.Services.AddSingleton<GamingLifecycle>();
         builder.Services.AddHostedService(sp => sp.GetRequiredService<GamingLifecycle>());
         builder.Services.AddSingleton<StatusBarViewModel>();

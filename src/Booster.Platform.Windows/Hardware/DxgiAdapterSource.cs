@@ -8,17 +8,12 @@ using Windows.Win32.Graphics.Dxgi;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>
-/// Перечисляет адаптеры DXGI. Только чтение: фабрика и временные устройства D3D12 живут внутри процесса
-/// и освобождаются сразу после запроса.
-/// </summary>
 public sealed class DxgiAdapterSource : IDxgiAdapterSource
 {
     public const string Source = "DXGI";
 
     public unsafe IReadOnlyList<DxgiAdapterRecord> Enumerate()
     {
-        // CreateDXGIFactory2 есть с Windows 8.1; приложение рассчитано на Windows 10/11.
         if (!OperatingSystem.IsWindowsVersionAtLeast(10))
             throw new PlatformNotSupportedException("DXGI 1.3 requires Windows 10 or later");
 
@@ -61,7 +56,6 @@ public sealed class DxgiAdapterSource : IDxgiAdapterSource
         }
     }
 
-    /// <summary>Порядок адаптеров «от самого производительного»; пусто, если IDXGIFactory6 нет (до Windows 10 1803).</summary>
     private static unsafe Dictionary<AdapterLuid, int> HighPerformanceRanks(object factoryObject)
     {
         var ranks = new Dictionary<AdapterLuid, int>();
@@ -96,7 +90,6 @@ public sealed class DxgiAdapterSource : IDxgiAdapterSource
         }
     }
 
-    /// <summary><c>D3D12_FEATURE_DATA_ARCHITECTURE.UMA</c>; null — адаптер не поддерживает D3D12 или D3D12 нет.</summary>
     private static unsafe bool? QueryUma(IDXGIAdapter1 adapter)
     {
         try

@@ -3,11 +3,6 @@
 .SYNOPSIS
     Оборудование: процессор, видеокарты, память, системная плата, BIOS, ОС. Только чтение.
 
-.DESCRIPTION
-    Источники — WMI (Win32_Processor, Win32_VideoController, Win32_PhysicalMemory, Win32_BaseBoard, Win32_BIOS,
-    Win32_OperatingSystem) и раздел реестра HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion.
-    Серийные номера, имя компьютера и имя пользователя не выводятся.
-
 .PARAMETER OutFile
     Файл для JSON (UTF-8). Без него JSON выводится в stdout, символы вне ASCII экранируются как \uXXXX.
 
@@ -24,7 +19,6 @@ $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 Import-Module (Join-Path $PSScriptRoot 'Booster.Diagnostics.psm1')
 
-# SMBIOS Memory Device, поле Memory Type — те же коды, что в приложении (RamMapper).
 $memoryTypes = @{ 24 = 'DDR3'; 26 = 'DDR4'; 30 = 'LPDDR4'; 34 = 'DDR5'; 35 = 'LPDDR5' }
 
 $sections = [ordered]@{}
@@ -46,13 +40,12 @@ $sections.cpu = New-BoosterSection {
             })
 }
 
-# AdapterRAM не выводится: поле 32-битное и для карт больше 4 ГБ показывает неверный объём.
+# AdapterRAM 32-битный и для карт больше 4 ГБ врёт.
 $sections.gpu = New-BoosterSection {
     , @(Invoke-BoosterCim -ClassName Win32_VideoController `
             -Property Name, AdapterCompatibility, VideoProcessor, DriverVersion, DriverDate, PNPDeviceID, `
             CurrentHorizontalResolution, CurrentVerticalResolution, CurrentRefreshRate, Status |
             ForEach-Object {
-                # Из PNPDeviceID берётся только идентификатор модели: хвост после VEN/DEV/SUBSYS/REV — экземпляр устройства.
                 $pci = [regex]::Match([string]$_.PNPDeviceID, '^PCI\\VEN_[0-9A-F]{4}&DEV_[0-9A-F]{4}(&SUBSYS_[0-9A-F]{8})?(&REV_[0-9A-F]{2})?', 'IgnoreCase')
                 [ordered]@{
                     name                 = ConvertTo-BoosterText $_.Name

@@ -5,11 +5,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Core.Hags;
 
-/// <summary>
-/// A/B-тест HAGS по двум сериям бенчмарка. Booster HAGS не переключает: пользователь меняет его в «Параметрах» и
-/// перезагружает компьютер, а сервис проверяет, что новое значение действует, и сравнивает серии. Значение из реестра
-/// действует, только если ключ записан раньше последней загрузки. Операции идут по одной.
-/// </summary>
 public sealed partial class HagsExperimentService(IStateFileStore state, IHagsSource hags, IBootTimeSource boot,
     IBenchmarkStore series, IBoosterConfiguration config, TimeProvider time, ILogger<HagsExperimentService> logger)
 {
@@ -17,7 +12,6 @@ public sealed partial class HagsExperimentService(IStateFileStore state, IHagsSo
 
     private readonly SemaphoreSlim _gate = new(1, 1);
 
-    /// <summary>Переводит AwaitingSwitch → AwaitingCandidate, когда условия выполнены, и сохраняет.</summary>
     public async Task<HagsExperimentView> GetAsync(CancellationToken ct)
     {
         await _gate.WaitAsync(ct).ConfigureAwait(false);
@@ -31,10 +25,6 @@ public sealed partial class HagsExperimentService(IStateFileStore state, IHagsSo
         }
     }
 
-    /// <summary>
-    /// База — новейшая завершённая серия с годными прогонами, начатая после последней загрузки, причём ключ записан до неё:
-    /// тогда во время серии действовало значение, которое сейчас в реестре.
-    /// </summary>
     public async Task<HagsStartRefusal?> StartAsync(CancellationToken ct)
     {
         await _gate.WaitAsync(ct).ConfigureAwait(false);
@@ -68,7 +58,6 @@ public sealed partial class HagsExperimentService(IStateFileStore state, IHagsSo
         }
     }
 
-    /// <summary>Кандидат — новейшая завершённая серия той же игры после загрузки с новым значением; не база.</summary>
     public async Task<HagsCandidateRefusal?> TakeCandidateAsync(CancellationToken ct)
     {
         await _gate.WaitAsync(ct).ConfigureAwait(false);
@@ -97,7 +86,6 @@ public sealed partial class HagsExperimentService(IStateFileStore state, IHagsSo
         }
     }
 
-    /// <summary>Удаляет файл эксперимента, в том числе испорченный; серии остаются в истории.</summary>
     public async Task ResetAsync(CancellationToken ct)
     {
         await _gate.WaitAsync(ct).ConfigureAwait(false);
@@ -148,11 +136,6 @@ public sealed partial class HagsExperimentService(IStateFileStore state, IHagsSo
         }
     }
 
-    /// <summary>
-    /// Новое значение действует, только если была загрузка позже и момента, когда Booster последний раз видел прежнее, и записи
-    /// ключа: перезагрузку, после которой HAGS переключили, Booster мог не застать. Выход из сна и «Завершение работы» при быстром
-    /// запуске время загрузки не меняют: тогда нужна перезагрузка.
-    /// </summary>
     private async Task<(HagsExperiment Experiment, HagsCheck Check)> CheckSwitchAsync(HagsExperiment experiment, Reading<bool> current,
         CancellationToken ct)
     {
@@ -162,7 +145,6 @@ public sealed partial class HagsExperimentService(IStateFileStore state, IHagsSo
         var lastBoot = boot.LastBootTime();
         if (current.Value == experiment.BaselineEnabled)
         {
-            // Прежнее значение после новой загрузки: переключение, сделанное позже, вступит в силу только со следующей.
             if (lastBoot.IsAvailable && lastBoot.Value > experiment.UnchangedSeenAt)
             {
                 experiment = experiment with { UnchangedSeenAt = time.GetUtcNow() };

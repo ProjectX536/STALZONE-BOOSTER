@@ -4,7 +4,6 @@ using Booster.Platform.Windows.Monitoring;
 
 namespace Booster.Platform.Windows.Tests.Monitoring;
 
-/// <summary>Сборка результата из уже прочитанных счётчиков; само чтение — в хост-тестах.</summary>
 public class GpuSystemCounterSourceTests
 {
     private static readonly AdapterLuid A = new(0x0000C2A1, 0);
@@ -36,7 +35,6 @@ public class GpuSystemCounterSourceTests
     [Fact]
     public void Adapter_without_engine_instances_is_idle()
     {
-        // Ни у одного процесса нет контекста на движках адаптера — работы на нём нет.
         var result = GpuSystemCounterSource.Combine(true, [(Engine(100, A), 42)], [Engine(100, A)],
             new Dictionary<AdapterLuid, long> { [A] = 4096, [B] = 0 });
 

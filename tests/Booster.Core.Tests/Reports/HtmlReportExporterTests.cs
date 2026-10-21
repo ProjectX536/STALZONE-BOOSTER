@@ -36,7 +36,6 @@ public class HtmlReportExporterTests
         return Encoding.UTF8.GetString(stream.ToArray());
     }
 
-    /// <summary>Строка таблицы, в которой есть <paramref name="marker"/>.</summary>
     private static string RowWith(string html, string marker)
     {
         var row = Regex.Matches(html, "<tr>.*?</tr>", RegexOptions.Singleline).Select(m => m.Value)
@@ -112,7 +111,6 @@ public class HtmlReportExporterTests
 
         var html = await ExportAsync(Report(snapshot));
 
-        // Режим каналов памяти в исправном снимке Unknown.
         Assert.Contains("Неизвестно", html, StringComparison.Ordinal);
         Assert.Contains("Нужны права администратора", html, StringComparison.Ordinal);
     }

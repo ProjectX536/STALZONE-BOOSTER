@@ -3,10 +3,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Platform.Windows.Monitoring;
 
-/// <summary>
-/// Память и ввод-вывод процессов через <c>NtQuerySystemInformation</c>: снимок всей системы, без открытия процессов.
-/// У источника свой буфер и свой прошлый снимок, поэтому он не мешает замерам CPU.
-/// </summary>
 public sealed partial class ProcessResourceSource : IProcessResourceSource, IDisposable
 {
     private const string NotSupportedNote = "process snapshot layout is known only for 64-bit processes";

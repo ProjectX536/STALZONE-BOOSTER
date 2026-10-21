@@ -4,13 +4,8 @@ using Booster.Providers.Gpu.Resources;
 
 namespace Booster.Providers.Gpu.Nvidia;
 
-/// <param name="Format">Имя значения; null — значение не из списка.</param>
 internal sealed record NvDrsSettingEntry(uint SettingId, string DisplayName, Func<uint, string?> Format);
 
-/// <summary>
-/// Параметры драйвера NVIDIA, которые Booster показывает (только чтение). Идентификаторы и значения —
-/// NvApiDriverSettings.h (NVIDIA/nvapi, R560).
-/// </summary>
 internal static class NvDrsSettingCatalog
 {
     public static IReadOnlyList<NvDrsSettingEntry> Entries { get; } =
@@ -67,10 +62,6 @@ internal static class NvDrsSettingCatalog
 
     public static IReadOnlyList<uint> SettingIds { get; } = Entries.Select(e => e.SettingId).ToArray();
 
-    /// <summary>
-    /// <paramref name="value"/> null — ключа нет в профиле (SETTING_NOT_FOUND): NotSet, действует значение драйвера.
-    /// isCurrentPredefined — DriverDefault, иначе UserChanged.
-    /// </summary>
     public static GpuSetting Describe(NvDrsSettingEntry entry, NvDrsValue? value)
     {
         var id = string.Create(CultureInfo.InvariantCulture, $"0x{entry.SettingId:X8}");

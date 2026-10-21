@@ -2,7 +2,6 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>wpr.exe из теста: запоминает вызовы и отвечает <see cref="Result"/>; успешная остановка возвращает путь в <see cref="TracesFolder"/>.</summary>
 public sealed class FakeWprRunner : IWprRunner
 {
     public const string TracesFolder = @"C:\Fake\data\traces";
@@ -11,10 +10,8 @@ public sealed class FakeWprRunner : IWprRunner
 
     public WprResult Result { get; set; } = new(WprOutcome.Done);
 
-    /// <summary>Вызывается в начале <see cref="StartAsync"/>: так тест видит состояние до запуска wpr.exe.</summary>
     public Action? OnStart { get; set; }
 
-    /// <summary>"start", "stop имя.etl", "cancel".</summary>
     public List<string> Calls { get; } = [];
 
     public Task<WprResult> StartAsync(CancellationToken ct)

@@ -6,17 +6,10 @@ using Booster.Core.Reports;
 
 namespace Booster.Core.SystemHealth;
 
-/// <summary>
-/// Рекомендации по памяти и файлу подкачки. Все — только вручную (L3): Booster не меняет подкачку и настройки памяти.
-/// Система работает штатно — рекомендаций нет.
-/// </summary>
 public static class MemoryAdvisor
 {
     private const string PathSeparator = ", ";
 
-    /// <summary>
-    /// Режим по настройкам, а не по текущим файлам: заданное, но ещё не применённое (ждёт перезагрузки) уже определяет режим.
-    /// </summary>
     public static Reading<PagefileMode> Mode(Reading<PagefileConfiguration> pagefile)
     {
         if (!pagefile.IsAvailable)
@@ -74,7 +67,6 @@ public static class MemoryAdvisor
         if (hardware.Memory.IsAvailable)
             AddModules(advice, hardware.Memory.Value!.Modules);
 
-        // Сортировка устойчива: внутри важности остаётся порядок правил.
         return advice.OrderByDescending(a => a.Severity).ToArray();
     }
 
@@ -94,7 +86,6 @@ public static class MemoryAdvisor
 
     private static void AddModules(List<SystemAdvice> advice, IReadOnlyList<MemoryModule> modules)
     {
-        // Только частоты модуля: режим каналов не измеряется и здесь не используется.
         var slow = modules.FirstOrDefault(m => m.RatedSpeedMts.IsAvailable && m.ConfiguredSpeedMts.IsAvailable
             && m.ConfiguredSpeedMts.Value < m.RatedSpeedMts.Value);
         if (slow is not null)
@@ -117,7 +108,6 @@ public static class MemoryAdvisor
         }
     }
 
-    /// <summary>Буквы томов файлов подкачки: из текущих файлов, а если их нет — из настроек.</summary>
     private static IReadOnlyList<string> PagefileVolumes(Reading<PagefileConfiguration> pagefile)
     {
         if (!pagefile.IsAvailable)
@@ -134,7 +124,6 @@ public static class MemoryAdvisor
             .ToArray();
     }
 
-    /// <summary>«C:\pagefile.sys» → «C:»; «?:\pagefile.sys» (на всех томах) и прочее → null.</summary>
     internal static string? VolumeLetter(string path) =>
         path.Length >= 2 && char.IsAsciiLetter(path[0]) && path[1] == ':' ? $"{char.ToUpperInvariant(path[0])}:" : null;
 

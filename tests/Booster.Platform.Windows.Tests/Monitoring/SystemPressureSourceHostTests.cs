@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Booster.Platform.Windows.Tests.Monitoring;
 
-/// <summary>Живая система, только чтение: GlobalMemoryStatusEx и счётчики производительности.</summary>
 [Trait("Category", "Host")]
 public class SystemPressureSourceHostTests
 {

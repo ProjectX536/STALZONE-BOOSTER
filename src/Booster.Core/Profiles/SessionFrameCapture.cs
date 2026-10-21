@@ -8,36 +8,23 @@ namespace Booster.Core.Profiles;
 
 public enum SessionFrameStatus
 {
-    /// <summary>Профиль не собирает метрики кадров: выключены monitoring.collectFrameMetrics или monitoring.enabled.</summary>
     Disabled,
 
-    /// <summary>PresentMon без запроса UAC не запустить, а во время игры Booster этот запрос не показывает.</summary>
     NeedsElevation,
 
     NotInstalled,
     Capturing,
     Completed,
 
-    /// <summary>Замер не удался; причина — в <see cref="SessionFrameSummary.Detail"/> и в логе.</summary>
     Failed,
 }
 
-/// <summary>Метрики кадров первых benchmark.sessionCaptureSeconds сессии.</summary>
-/// <param name="Duration">Запланированная длительность замера. Фактическая — в метриках: меньше, если игра закрылась раньше.</param>
-/// <param name="Metrics">Только при <see cref="SessionFrameStatus.Completed"/>; InsufficientData — кадров слишком мало.</param>
-/// <param name="Stutter">Рывки; только если метрики посчитаны.</param>
 public sealed record SessionFrameSummary(SessionFrameStatus Status, TimeSpan Duration, FrameMetricsResult? Metrics, StutterResult? Stutter,
     string? Detail);
 
-/// <summary>
-/// Метрики кадров начала игровой сессии (collectFrameMetrics): PresentMon по PID игры в фоне, первые
-/// benchmark.sessionCaptureSeconds. Запрос UAC во время игры не показывается — без прав замер не начинается.
-/// Сбой замера не затрагивает ни сессию, ни восстановление: состояние становится <see cref="SessionFrameStatus.Failed"/>.
-/// </summary>
 public sealed partial class SessionFrameCapture(IFrameCaptureProvider capture, IBoosterConfiguration config,
     ILogger<SessionFrameCapture> logger)
 {
-    /// <summary>Начинает замер в фоне. Конец — отмена <paramref name="ct"/> или <see cref="SessionFrameRun.DisposeAsync"/>.</summary>
     public SessionFrameRun Start(ProfileMonitoring monitoring, GameProcess game, CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(monitoring);
@@ -74,7 +61,6 @@ public sealed partial class SessionFrameCapture(IFrameCaptureProvider capture, I
             LogStarted(game.Name, game.Identity.ProcessId, (long)duration.TotalSeconds);
             var result = await capture.CaptureAsync(request, null, ct).ConfigureAwait(false);
 
-            // Сессия закончилась раньше замера: показывать уже нечего.
             if (ct.IsCancellationRequested)
                 return;
 
@@ -127,7 +113,6 @@ public sealed partial class SessionFrameCapture(IFrameCaptureProvider capture, I
     private partial void LogCaptureThrew(Exception exception, string game);
 }
 
-/// <summary>Замер кадров одной сессии. <see cref="DisposeAsync"/> останавливает его, не дожидаясь PresentMon.</summary>
 public sealed partial class SessionFrameRun : IAsyncDisposable
 {
     private readonly CancellationTokenSource? _cts;
@@ -136,14 +121,12 @@ public sealed partial class SessionFrameRun : IAsyncDisposable
     private Task _task = Task.CompletedTask;
     private int _disposed;
 
-    /// <param name="cts">null — замер не запускается.</param>
     internal SessionFrameRun(CancellationTokenSource? cts, ILogger logger)
     {
         _cts = cts;
         _logger = logger;
     }
 
-    /// <summary>Состояние замера; null — пока проверяется PresentMon.</summary>
     public SessionFrameSummary? Summary
     {
         get => Volatile.Read(ref _summary);
@@ -154,7 +137,6 @@ public sealed partial class SessionFrameRun : IAsyncDisposable
 
     internal void Track(Task task) => _task = task;
 
-    /// <summary>Не бросает исключений: остановка замера не должна помешать восстановлению.</summary>
     public async ValueTask DisposeAsync()
     {
         if (_cts is not { } cts || Interlocked.Exchange(ref _disposed, 1) != 0)
@@ -169,7 +151,6 @@ public sealed partial class SessionFrameRun : IAsyncDisposable
             LogStopFailed(_logger, ex);
         }
 
-        // Источник отмены освобождается, когда фоновый замер перестаёт им пользоваться.
         _ = _task.ContinueWith(_ => cts.Dispose(), CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
     }
 

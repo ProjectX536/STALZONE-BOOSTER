@@ -5,11 +5,9 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Booster.Platform.Windows.Tests.Monitoring;
 
-/// <summary>Живая система, только чтение счётчиков «Processor Information(_Total)».</summary>
 [Trait("Category", "Host")]
 public class CpuSensorSourceHostTests
 {
-    // Относительному счётчику нужен промежуток между чтениями.
     private static readonly TimeSpan Gap = TimeSpan.FromMilliseconds(250);
 
     [Fact]

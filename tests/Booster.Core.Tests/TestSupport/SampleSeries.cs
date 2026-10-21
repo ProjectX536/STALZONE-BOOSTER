@@ -5,12 +5,10 @@ using Booster.Core.Sensors;
 
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>Серии бенчмарка для тестов хранения; файл подключается и в Booster.Platform.Windows.Tests.</summary>
 public static class SampleSeries
 {
     public const string Source = "test";
 
-    /// <summary>Серия, в которой заполнены все вложенные записи, перечисления и все статусы <see cref="Reading{T}"/>.</summary>
     public static BenchmarkSeries Full(string id = "20261020-120000-game", int minutes = 0)
     {
         var display = new DisplayMode("Monitor", 2560, 1440, 143.856, false, null);
@@ -47,7 +45,6 @@ public static class SampleSeries
             @"C:\Data\captures\a.csv");
     }
 
-    /// <summary>Завершённая серия из трёх годных прогонов: средний FPS <paramref name="fps"/> ± 1, 1% low — 70% от него ± 1.</summary>
     public static BenchmarkSeries Completed(string id, DateTimeOffset startedAt, string target = "game.exe", double fps = 100)
     {
         var sample = Full(id);

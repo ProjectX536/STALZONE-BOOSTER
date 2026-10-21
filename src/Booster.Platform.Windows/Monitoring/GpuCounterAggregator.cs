@@ -3,15 +3,10 @@ using Booster.Core.Inventory;
 
 namespace Booster.Platform.Windows.Monitoring;
 
-/// <summary>
-/// Загрузка и занятая видеопамять адаптеров из экземпляров системных счётчиков. Загрузка движка — сумма по процессам,
-/// загрузка адаптера — самый занятый тип движка (как в диспетчере задач), не больше 100.
-/// </summary>
 public static partial class GpuCounterAggregator
 {
     private const double MaxPercent = 100;
 
-    /// <param name="engines">(имя экземпляра "pid_…_luid_0x…_0x…_phys_0_eng_N_engtype_X", загрузка, %)</param>
     public static IReadOnlyDictionary<AdapterLuid, double> Utilization(IEnumerable<(string Instance, double Percent)> engines)
     {
         ArgumentNullException.ThrowIfNull(engines);
@@ -30,8 +25,6 @@ public static partial class GpuCounterAggregator
         return result;
     }
 
-    /// <param name="memory">(имя экземпляра "luid_0x…_0x…_phys_0", байты)</param>
-    /// <remarks>Связанные физические адаптеры (phys_0, phys_1…) одного LUID суммируются.</remarks>
     public static IReadOnlyDictionary<AdapterLuid, long> DedicatedUsage(IEnumerable<(string Instance, long Bytes)> memory)
     {
         ArgumentNullException.ThrowIfNull(memory);

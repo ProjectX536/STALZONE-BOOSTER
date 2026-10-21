@@ -6,10 +6,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>
-/// Автозагрузка из ключей Run и RunOnce и папок «Автозагрузка» с состоянием по StartupApproved. Только чтение.
-/// 32-битный HKLM Run читается как <c>Software\WOW6432Node\…</c> в 64-битном представлении.
-/// </summary>
 public sealed partial class StartupSource(IRegistryReader registry, IStartupFolders folders, ILogger<StartupSource> logger)
     : IStartupSource
 {
@@ -63,7 +59,6 @@ public sealed partial class StartupSource(IRegistryReader registry, IStartupFold
         var entries = new List<StartupEntry>();
         foreach (var (name, value) in values)
         {
-            // Безымянное значение «(По умолчанию)» в списке не назвать; не строка — не команда.
             if (name.Length == 0 || value is not string command)
                 continue;
             entries.Add(new StartupEntry(name, location, command, ServiceImagePath.Executable(command), state(name)));
@@ -93,8 +88,6 @@ public sealed partial class StartupSource(IRegistryReader registry, IStartupFold
         return entries;
     }
 
-    // RunOnce не отключается через StartupApproved — всегда Enabled. Сбой чтения StartupApproved не прячет элементы:
-    // их состояние неизвестно.
     private Func<string, StartupState> Approvals(RegistryRoot root, string? approvedKey)
     {
         if (approvedKey is null)
@@ -111,7 +104,6 @@ public sealed partial class StartupSource(IRegistryReader registry, IStartupFold
             return _ => StartupState.Unknown;
         }
 
-        // Значение не REG_BINARY — формат неизвестен: пустой массив даёт Unknown.
         return name => StartupApproval.Parse(values.TryGetValue(name, out var value) ? value as byte[] ?? [] : null);
     }
 

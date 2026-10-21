@@ -9,7 +9,6 @@ namespace Booster.Core.Tests.Hags;
 
 public sealed class HagsExperimentServiceTests
 {
-    /// <summary>Два часа после загрузки <see cref="FakeBootTimeSource.DefaultBoot"/>.</summary>
     private static readonly DateTimeOffset Now = new(2026, 10, 20, 10, 0, 0, TimeSpan.Zero);
 
     private readonly FakeTimeProvider _time = new(Now);
@@ -30,7 +29,6 @@ public sealed class HagsExperimentServiceTests
 
     private void RestartAt(DateTimeOffset boot) => _boot.Boot = Reading<DateTimeOffset>.Known(boot, "test-boot");
 
-    /// <summary>Эксперимент по серии «b»; через час HAGS выключен и компьютер перезагружен.</summary>
     private async Task<HagsExperimentService> SwitchedAsync()
     {
         var service = Service();
@@ -95,7 +93,6 @@ public sealed class HagsExperimentServiceTests
         Assert.False(_state.Contains(HagsExperimentService.FileName));
     }
 
-    /// <summary>Без времени загрузки не узнать, действует ли значение из реестра во время базовой серии.</summary>
     [Fact]
     public async Task Start_refuses_unknown_boot_time()
     {
@@ -104,7 +101,6 @@ public sealed class HagsExperimentServiceTests
         Assert.Equal(HagsStartRefusal.StateUnknown, await Service().StartAsync(Ct));
     }
 
-    /// <summary>HAGS переключили после загрузки, до базовой серии: в реестре не то значение, что действовало во время неё.</summary>
     [Fact]
     public async Task Start_refuses_value_changed_after_boot()
     {
@@ -159,10 +155,6 @@ public sealed class HagsExperimentServiceTests
         Assert.Equal(HagsCandidateRefusal.NotReady, await service.TakeCandidateAsync(Ct));
     }
 
-    /// <summary>
-    /// Booster видел прежнее значение уже после перезагрузки; переключение после этого вступит в силу только со следующей
-    /// загрузкой, хотя и она, и прошлая позже начала эксперимента.
-    /// </summary>
     [Fact]
     public async Task Switch_after_seen_restart_needs_another_restart()
     {
@@ -183,10 +175,6 @@ public sealed class HagsExperimentServiceTests
         Assert.Equal(_time.GetUtcNow(), view.Experiment!.SwitchedBootTime);
     }
 
-    /// <summary>
-    /// Перезагрузка прошла, пока Booster был закрыт, а HAGS переключили уже после неё: прежнее значение Booster не видел,
-    /// но ключ записан позже загрузки, и новое значение вступит в силу только со следующей.
-    /// </summary>
     [Fact]
     public async Task Switch_after_unseen_restart_needs_another_restart()
     {
@@ -241,7 +229,6 @@ public sealed class HagsExperimentServiceTests
     {
         await SwitchedAsync();
 
-        // Новый экземпляр читает переход из файла, даже если время загрузки теперь неизвестно.
         _boot.Boot = Reading<DateTimeOffset>.Unknown("test-boot", "query failed");
         var view = await Service().GetAsync(Ct);
 
@@ -295,7 +282,6 @@ public sealed class HagsExperimentServiceTests
         Assert.Equal(("b", "candidate"), (view.Comparison!.BaselineId, view.Comparison.CandidateId));
         Assert.Equal(ChangeVerdict.Improved, view.Comparison.AverageFpsVerdict);
         Assert.Equal(HagsVerdict.Keep, view.Verdict);
-        // Серии и сравнение в файл не копируются: оно пересчитывается при каждом чтении.
         Assert.DoesNotContain("verdict", _state.Files[HagsExperimentService.FileName], StringComparison.OrdinalIgnoreCase);
     }
 

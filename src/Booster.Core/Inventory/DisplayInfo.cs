@@ -2,7 +2,6 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Core.Inventory;
 
-/// <summary>Активный путь вывода. <see cref="AdapterLuid"/> — адаптер, к которому подключён монитор.</summary>
 public sealed record DisplayInfo(
     Reading<string> MonitorName,
     Reading<int> Width,

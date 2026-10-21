@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <!-- net10.0 без -windows: анализатор CA1416 вместе с TreatWarningsAsErrors не пропускает Windows API в Core. -->
+  <!-- net10.0 без -windows, чтобы CA1416 не пропускал Windows API в Core. -->
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -12,7 +12,6 @@
     <InternalsVisibleTo Include="Booster.Core.Tests" />
   </ItemGroup>
   <ItemGroup>
-    <!-- Класс ReportStrings генерируется при сборке; в репозитории только .resx. -->
     <EmbeddedResource Update="Resources\ReportStrings.resx" Generator="MSBuild:Compile"
                       StronglyTypedFileName="$(IntermediateOutputPath)ReportStrings.Designer.cs" StronglyTypedLanguage="CSharp"
                       StronglyTypedNamespace="Booster.Core.Resources" StronglyTypedClassName="ReportStrings" PublicClass="true" />

@@ -24,20 +24,13 @@ public enum CaptureReadiness
     NeedsElevation,
     Ready,
 
-    /// <summary>Проверка сама завершилась ошибкой; подробности в журнале.</summary>
     CheckFailed,
 }
 
-/// <summary>
-/// Производительность: серия бенчмарка через PresentMon, её ход, история серий и сравнение с базой. Booster не трогает
-/// процесс игры — только запускает PresentMon и читает его CSV. Показанная серия хранится в <see cref="DiagnosticsSession"/>
-/// и попадает в отчёт.
-/// </summary>
 public sealed partial class PerformanceViewModel : ObservableObject, IPage
 {
     private const string ExecutableExtension = ".exe";
 
-    /// <summary>Обратный отсчёт показывается в целых секундах — чаще обновлять незачем.</summary>
     private static readonly TimeSpan ProgressRefresh = TimeSpan.FromSeconds(1);
 
     private readonly IFrameCaptureProvider _capture;
@@ -53,7 +46,6 @@ public sealed partial class PerformanceViewModel : ObservableObject, IPage
     private readonly ILogger<PerformanceViewModel> _logger;
     private readonly SynchronizationContext? _context;
 
-    /// <summary>Ход серии приходит из пула потоков и от таймера; текст считается под замком по последней фазе.</summary>
     private readonly Lock _progressLock = new();
     private BenchmarkProgress? _progress;
     private string? _progressText;
@@ -96,10 +88,8 @@ public sealed partial class PerformanceViewModel : ObservableObject, IPage
 
     public ObservableCollection<ProcessEntry> Processes { get; } = [];
 
-    /// <summary>Сохранённые серии, новые первыми.</summary>
     public ObservableCollection<BenchmarkHistoryItem> History { get; } = [];
 
-    /// <summary>true — цель выбирается из списка окон, false — вводится имя exe (игра ещё не запущена).</summary>
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(StartCommand))]
     public partial bool UseWindowList { get; set; } = true;
@@ -128,10 +118,8 @@ public sealed partial class PerformanceViewModel : ObservableObject, IPage
     [NotifyCanExecuteChangedFor(nameof(StartCommand))]
     public partial string StartDelayText { get; set; }
 
-    /// <summary>Допустимые значения полей серии — те же, что у нормализатора настроек.</summary>
     public string LimitsText { get; }
 
-    /// <summary>Заметки пользователя: Booster не читает настройки игры, их записывает человек.</summary>
     [ObservableProperty]
     public partial string GraphicsProfile { get; set; } = string.Empty;
 
@@ -151,22 +139,18 @@ public sealed partial class PerformanceViewModel : ObservableObject, IPage
     [NotifyCanExecuteChangedFor(nameof(StartCommand))]
     public partial CaptureReadiness Readiness { get; private set; }
 
-    /// <summary>Найденный PresentMon: версия и путь.</summary>
     [ObservableProperty]
     public partial string? PresentMonText { get; private set; }
 
     [ObservableProperty]
     public partial string? StatusMessage { get; private set; }
 
-    /// <summary>Обратный отсчёт текущей фазы серии; null, когда серия не идёт.</summary>
     [ObservableProperty]
     public partial string? ProgressText { get; private set; }
 
-    /// <summary>Раздел бенчмарка из отчёта: серия, условия, прогоны, итог, ограничения, рекомендации.</summary>
     [ObservableProperty]
     public partial IReadOnlyList<ReportBlock> BenchmarkBlocks { get; private set; } = [];
 
-    /// <summary>Раздел сравнения из отчёта; пуст, если базы нет.</summary>
     [ObservableProperty]
     public partial IReadOnlyList<ReportBlock> ComparisonBlocks { get; private set; } = [];
 
@@ -175,7 +159,6 @@ public sealed partial class PerformanceViewModel : ObservableObject, IPage
     [NotifyCanExecuteChangedFor(nameof(AskDeleteCommand))]
     public partial BenchmarkHistoryItem? SelectedSeries { get; set; }
 
-    /// <summary>База сравнения, выбранная пользователем; null — предыдущая серия той же игры.</summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(BaselineText))]
     [NotifyCanExecuteChangedFor(nameof(ClearBaselineCommand))]
@@ -185,7 +168,6 @@ public sealed partial class PerformanceViewModel : ObservableObject, IPage
         ? string.Format(CultureInfo.CurrentCulture, Strings.BaselineFormat, baseline.StartedAt, baseline.Target, baseline.Change)
         : Strings.BaselineAuto;
 
-    /// <summary>Открыта панель подтверждения удаления — вместо системного диалога.</summary>
     [ObservableProperty]
     public partial bool IsConfirmingDelete { get; private set; }
 
@@ -245,10 +227,6 @@ public sealed partial class PerformanceViewModel : ObservableObject, IPage
         && TryGetSchedule(out _)
         && (UseWindowList ? SelectedProcess is not null : NormalizeExecutableName(ExecutableName) is not null);
 
-    /// <summary>
-    /// Серия одним захватом PresentMon в пуле потоков. Отмена останавливает его, а не бросает исключение: серия со статусом
-    /// «Отменён» показывается, но без годных прогонов в историю не попадает.
-    /// </summary>
     [RelayCommand(IncludeCancelCommand = true, CanExecute = nameof(CanStart))]
     private async Task StartAsync(CancellationToken ct)
     {
@@ -256,7 +234,6 @@ public sealed partial class PerformanceViewModel : ObservableObject, IPage
             return;
 
         var notes = new BenchmarkNotes(Note(GraphicsProfile), Note(Scene), Note(WindowMode), Note(ChangeNote));
-        // Профиль отмечается, только если его сессия идёт сейчас: иначе условия серии были бы выдуманы.
         var activeProfile = _coordinator.Status is { Mode: CoordinatorMode.InSession, Plan: { } plan } ? plan.Profile.Name : null;
         var request = UseWindowList && SelectedProcess is { } process
             ? new BenchmarkRequest(null, process.ProcessId, schedule, notes, activeProfile)
@@ -328,7 +305,6 @@ public sealed partial class PerformanceViewModel : ObservableObject, IPage
     [RelayCommand]
     private void CancelDelete() => IsConfirmingDelete = false;
 
-    /// <summary>Подтверждённое удаление выбранной серии из истории: файл серии удаляется.</summary>
     [RelayCommand]
     private async Task DeleteSeriesAsync(CancellationToken ct)
     {
@@ -360,10 +336,6 @@ public sealed partial class PerformanceViewModel : ObservableObject, IPage
             ShowSeries(value.Series);
     }
 
-    /// <summary>
-    /// Серия с годными прогонами сохраняется в историю и выбирается в ней; без годных — только показывается: сравнивать её
-    /// не с чем, а история засорялась бы пустыми записями.
-    /// </summary>
     private async Task ShowNewSeriesAsync(BenchmarkSeries series)
     {
         if (!series.HasValidRuns)
@@ -403,13 +375,11 @@ public sealed partial class PerformanceViewModel : ObservableObject, IPage
         if (SelectedSeries?.Id != saved.Id)
             ShowSeries(saved);
 
-        // Результат показывается разделом отчёта; без снимка отчёта нет, и виден только статус.
         StatusMessage = _session.Snapshot is null
             ? string.Format(CultureInfo.CurrentCulture, Strings.MeasurementStatusOnly, EnumText.Format(series.Status))
             : null;
     }
 
-    /// <summary>Список истории заново; выбор и база сохраняются, если их серии ещё есть.</summary>
     private void ReplaceHistory(IReadOnlyList<BenchmarkSeries> all, string? selectId)
     {
         var baselineId = Baseline?.Id;
@@ -421,10 +391,6 @@ public sealed partial class PerformanceViewModel : ObservableObject, IPage
         SelectedSeries = History.FirstOrDefault(h => h.Id == selectId);
     }
 
-    /// <summary>
-    /// Серия в отчёт вместе со сравнением: база — выбранная пользователем серия той же игры, иначе предыдущая серия этой
-    /// игры с годными прогонами. Цепочка — соседние серии той же игры до показанной включительно.
-    /// </summary>
     private void ShowSeries(BenchmarkSeries series)
     {
         var settings = _config.Current.Thresholds.Comparison;
@@ -449,7 +415,6 @@ public sealed partial class PerformanceViewModel : ObservableObject, IPage
     private static bool SameTarget(BenchmarkSeries a, BenchmarkSeries b) =>
         string.Equals(a.Conditions.Target, b.Conditions.Target, StringComparison.OrdinalIgnoreCase);
 
-    /// <summary>Сигнал звучит при входе в прогон и при выходе из него — в паузу, в обработку или в следующий прогон.</summary>
     private void OnProgress(BenchmarkProgress progress, bool cues)
     {
         lock (_progressLock)
@@ -474,7 +439,6 @@ public sealed partial class PerformanceViewModel : ObservableObject, IPage
         PublishProgress();
     }
 
-    /// <summary>Серия закончилась или отменена посреди прогона — конец прогона тоже озвучивается.</summary>
     private void EndProgress(bool cues)
     {
         lock (_progressLock)
@@ -488,7 +452,6 @@ public sealed partial class PerformanceViewModel : ObservableObject, IPage
         ProgressText = null;
     }
 
-    /// <summary>В UI-поток уходит не значение, а чтение последнего текста: устаревшая отправка не перезапишет новый.</summary>
     private void PublishProgress() => OnUiThread(() => ProgressText = Volatile.Read(ref _progressText));
 
     private static int? RunIndex(BenchmarkProgress? progress) => progress is { Phase: BenchmarkPhase.Run } p ? p.RunIndex : null;
@@ -507,7 +470,6 @@ public sealed partial class PerformanceViewModel : ObservableObject, IPage
         };
     }
 
-    /// <summary>Имя файла exe: путь отбрасывается, расширение .exe дописывается. null — если имени нет.</summary>
     internal static string? NormalizeExecutableName(string? input)
     {
         if (string.IsNullOrWhiteSpace(input))
@@ -519,7 +481,6 @@ public sealed partial class PerformanceViewModel : ObservableObject, IPage
         return name.EndsWith(ExecutableExtension, StringComparison.OrdinalIgnoreCase) ? name : name + ExecutableExtension;
     }
 
-    /// <summary>Поля серии в пределах нормализатора настроек; иначе серию не начать.</summary>
     private bool TryGetSchedule([NotNullWhen(true)] out BenchmarkSchedule? schedule)
     {
         schedule = null;
@@ -561,7 +522,6 @@ public sealed partial class PerformanceViewModel : ObservableObject, IPage
         ComparisonBlocks = document?.Section(ReportSectionIds.Comparison)?.Blocks ?? [];
     }
 
-    /// <summary>Ход серии без перехода в UI-поток: сигналы и текст считаются сразу, в порядке фаз.</summary>
     private sealed class DirectProgress(Action<BenchmarkProgress> report) : IProgress<BenchmarkProgress>
     {
         public void Report(BenchmarkProgress value) => report(value);

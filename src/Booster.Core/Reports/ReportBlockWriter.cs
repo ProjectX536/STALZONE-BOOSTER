@@ -1,6 +1,5 @@
 namespace Booster.Core.Reports;
 
-/// <summary>Блоки раздела по порядку: заголовки, абзацы, списки полей и таблицы.</summary>
 internal sealed class ReportBlockWriter
 {
     private readonly List<ReportBlock> _blocks = [];

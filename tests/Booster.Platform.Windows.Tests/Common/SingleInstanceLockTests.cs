@@ -4,7 +4,7 @@ namespace Booster.Platform.Windows.Tests.Common;
 
 public class SingleInstanceLockTests
 {
-    // Своё имя на каждый тест: настоящий Booster на машине разработчика не мешает и не задевается.
+    // Своё имя на каждый тест, чтобы не мешал запущенный Booster.
     private readonly string _name = @"Local\Booster.Tests." + Guid.NewGuid().ToString("N");
 
     [Fact]

@@ -10,7 +10,6 @@ public class RecommendationEngineTests
 
     private static readonly MetricSpread Flat = new(100, 100, 100);
 
-    /// <summary>Три ровных прогона по 100 FPS.</summary>
     private static readonly BenchmarkSummary Consistent = new(3, Flat, Flat, Flat, Flat, new MetricSpread(0, 0, 0), 1.0);
 
     private static readonly BottleneckAssessment Healthy = new([], GpuLoadState.Normal, []);

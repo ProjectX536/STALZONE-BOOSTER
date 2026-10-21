@@ -3,12 +3,10 @@ using Booster.Platform.Windows.Common;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>Строки WMI о файлах подкачки. Размеры в WMI уже в мегабайтах.</summary>
 public static class PagefileMapper
 {
     public const string AutomaticSource = "WMI Win32_ComputerSystem.AutomaticManagedPagefile";
 
-    /// <param name="computerSystem">null — строки нет.</param>
     public static PagefileConfiguration Map(CimRow? computerSystem, IReadOnlyList<CimRow> settings, IReadOnlyList<CimRow> usage)
     {
         ArgumentNullException.ThrowIfNull(settings);

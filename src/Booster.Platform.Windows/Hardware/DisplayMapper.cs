@@ -3,7 +3,6 @@ using Booster.Core.Inventory;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>Активные пути вывода → дисплеи. Поле, которого Windows не сообщила, становится Unknown, а не нулём.</summary>
 public static class DisplayMapper
 {
     public const string Source = "QueryDisplayConfig(QDC_ONLY_ACTIVE_PATHS)";
@@ -17,7 +16,6 @@ public static class DisplayMapper
     public static Reading<IReadOnlyList<DisplayInfo>> Map(IReadOnlyList<DisplayPathRecord> paths)
     {
         ArgumentNullException.ThrowIfNull(paths);
-        // RDP-сессия, выключенные или спящие мониторы: активных путей нет. Это не сбой, а отсутствие данных.
         if (paths.Count == 0)
             return Reading<IReadOnlyList<DisplayInfo>>.Unknown(Source, "no active display paths (RDP session or displays off)");
         return Reading<IReadOnlyList<DisplayInfo>>.Known(paths.Select(MapPath).ToArray(), Source);
@@ -39,7 +37,7 @@ public static class DisplayMapper
     private static Reading<int> Dimension(uint pixels) =>
         pixels is > 0 and <= int.MaxValue ? Reading<int>.Known((int)pixels, ModeSource) : Reading<int>.Unknown(ModeSource);
 
-    // Частота приходит дробью: 59940/1000 и 60000/1001 — это 59,94 Гц. Трёх знаков хватает, чтобы отличить 143,856 от 144.
+    // 60000/1001 = 59,94 Гц; трёх знаков хватает, чтобы отличить 143,856 от 144.
     private static Reading<double> Refresh(uint numerator, uint denominator) =>
         numerator > 0 && denominator > 0
             ? Reading<double>.Known(Math.Round((double)numerator / denominator, 3), RefreshSource)

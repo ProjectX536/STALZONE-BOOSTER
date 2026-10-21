@@ -8,7 +8,7 @@ namespace Booster.Core.Tests.Benchmark;
 public sealed class BenchmarkRecorderTests
 {
     private static readonly CancellationToken Ct = TestContext.Current.CancellationToken;
-    private static readonly TimeSpan Interval = TimeSpan.FromMilliseconds(2000); // FakeConfiguration: sensorIntervalMs
+    private static readonly TimeSpan Interval = TimeSpan.FromMilliseconds(2000);
 
     private readonly FakeTimeProvider _time = new(SessionFactory.Start);
     private readonly FakeSensorProvider _sensors;

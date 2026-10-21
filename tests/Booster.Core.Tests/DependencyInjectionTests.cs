@@ -91,7 +91,6 @@ public class DependencyInjectionTests
             .AddSingleton<IBootTimeSource, FakeBootTimeSource>()
             .AddBoosterCore();
 
-        // Как Host.Dispose: GameSessionCoordinator освобождается только асинхронно.
         await using var provider = services.BuildServiceProvider(new ServiceProviderOptions { ValidateOnBuild = true, ValidateScopes = true });
 
         Assert.IsType<ActionPolicy>(provider.GetRequiredService<IActionPolicy>());

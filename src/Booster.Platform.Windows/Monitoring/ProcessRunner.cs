@@ -10,7 +10,6 @@ public sealed class ProcessRunner : IProcessRunner
         ArgumentNullException.ThrowIfNull(launch);
         ct.ThrowIfCancellationRequested();
 
-        // Строку аргументов собирает WindowsCommandLine в обоих режимах: ShellExecute принимает только одну строку.
         var info = new ProcessStartInfo(launch.FileName, WindowsCommandLine.Join(launch.Arguments))
         {
             UseShellExecute = launch.Elevate,

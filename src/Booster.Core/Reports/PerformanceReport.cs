@@ -9,13 +9,8 @@ using static Booster.Core.Reports.ReportFormat;
 
 namespace Booster.Core.Reports;
 
-/// <summary>
-/// Разделы бенчмарка: серия (условия, прогоны, итог, ограничения, рекомендации, сигналы) и сравнение с базой. Booster ничего
-/// не меняет сам: рекомендации — только советы, выводы сравнения — только по повторным прогонам и с оговорками.
-/// </summary>
 public static class PerformanceReport
 {
-    /// <summary>Раздел серии; null-серия — раздел с текстом «серий ещё не было».</summary>
     public static ReportSection BuildSeries(BenchmarkReport? report, CultureInfo culture)
     {
         ArgumentNullException.ThrowIfNull(culture);
@@ -27,7 +22,6 @@ public static class PerformanceReport
         return new ReportSection(ReportSectionIds.Benchmark, ReportStrings.SectionBenchmark, null, writer.Blocks);
     }
 
-    /// <summary>Раздел сравнения; без сравнения — null (раздела нет).</summary>
     public static ReportSection? BuildComparison(BenchmarkReport? report, CultureInfo culture)
     {
         ArgumentNullException.ThrowIfNull(culture);
@@ -39,7 +33,6 @@ public static class PerformanceReport
         public void Compose()
         {
             Overview();
-            // Захват не состоялся: кроме статуса и причины, показывать нечего.
             if (series.Status != FrameCaptureStatus.Completed && series.Runs.Count == 0)
                 return;
 
@@ -116,7 +109,6 @@ public static class PerformanceReport
                 series.Runs.Select(Run));
         }
 
-        /// <summary>Прогон без метрик (мало кадров) виден со статусом, но без чисел: прочерк, а не ноль.</summary>
         private ReportRow Run(BenchmarkRun run)
         {
             var metrics = run.Metrics is { Status: FrameMetricsStatus.Ok, Metrics: { } known } ? known : null;
@@ -136,7 +128,6 @@ public static class PerformanceReport
             ], Flagged: metrics is null);
         }
 
-        /// <summary>Медиана и разброс по годным прогонам; меньше <c>minimumRuns</c> — оговорка.</summary>
         private void Summary()
         {
             writer.Heading(ReportStrings.BenchmarkSummaryHeading);
@@ -166,7 +157,6 @@ public static class PerformanceReport
             }
         }
 
-        /// <summary>Режим вывода и доли кадров — медианы по годным прогонам; данных нет — «Неизвестно».</summary>
         private void Presentation()
         {
             var frames = series.Runs.Where(run => run.Metrics.Status == FrameMetricsStatus.Ok).Select(run => run.Frames).ToList();
@@ -215,7 +205,6 @@ public static class PerformanceReport
             }
         }
 
-        /// <summary>Сигнал, значение, порог и «за/против»: видно, почему уверенность такая, а не выше.</summary>
         private ReportRow EvidenceRow(Evidence evidence) => new(
         [
             EvidenceName(evidence),
@@ -237,7 +226,6 @@ public static class PerformanceReport
             };
         }
 
-        /// <summary>Значение в единицах сигнала: доли кадров 0..1 — в процентах, пик троттлинга — в единицах его признака.</summary>
         private string EvidenceValue(Evidence evidence, double value) => evidence.Kind switch
         {
             EvidenceKind.GpuBusyFrameShare or EvidenceKind.CpuBusyFrameShare or EvidenceKind.SyncedFrames => Percent(value * 100),
@@ -281,7 +269,6 @@ public static class PerformanceReport
             _ => NotMeasuredCell,
         };
 
-        /// <summary>Сводка датчиков за серию и признаки троттлинга; без замеров датчиков — так и сказано.</summary>
         private void Telemetry()
         {
             var telemetry = series.Telemetry;
@@ -317,7 +304,6 @@ public static class PerformanceReport
             writer.Paragraph(Text(ReportStrings.BenchmarkNoSensorSamples) with { Tone = CellTone.Unavailable });
         }
 
-        /// <summary>Поле режима дисплея с подсказкой-источником; режима нет — его статус.</summary>
         private static ReportCell Display(Reading<DisplayMode> display, Func<DisplayMode, ReportCell> cell)
         {
             if (display is not { IsAvailable: true, Value: { } mode })
@@ -328,7 +314,6 @@ public static class PerformanceReport
 
         private static ReportCell Flag(bool? value) => value is { } known ? Text(Bool(known)) : UnknownCell;
 
-        /// <summary>Пометка пользователя; не указана — так и сказано, а не пусто.</summary>
         private static ReportCell Noted(string? note) => string.IsNullOrWhiteSpace(note)
             ? Text(ReportStrings.BenchmarkNotNoted) with { Tone = CellTone.Unavailable }
             : Text(note.Trim());

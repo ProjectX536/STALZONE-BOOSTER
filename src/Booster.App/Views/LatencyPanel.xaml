@@ -2,7 +2,6 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:res="clr-namespace:Booster.App.Resources">
-  <!-- Трасса WPR: только по кнопке, через UAC; живые DPC и прерывания — в «Фоновой активности» -->
   <StackPanel>
     <TextBlock Style="{StaticResource SectionTitle}" Text="{x:Static res:Strings.LatencyTitle}" />
     <TextBlock Style="{StaticResource Hint}" Text="{x:Static res:Strings.LatencyHint}" />

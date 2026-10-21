@@ -97,7 +97,6 @@ public class TableSortingTests
         return grid;
     }
 
-    // Как во вьюмоделях: список строк собирается выражением коллекции в IReadOnlyList.
     private static IReadOnlyList<Item> Rows(Item[] items) => [.. items.Select(i => i)];
 
     private static Item Make(string name, string size, int order = 0) => new(name, size, new Nested(order));

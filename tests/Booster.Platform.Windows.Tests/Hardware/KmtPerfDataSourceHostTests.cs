@@ -3,7 +3,6 @@ using Booster.Platform.Windows.Hardware;
 
 namespace Booster.Platform.Windows.Tests.Hardware;
 
-/// <summary>Живая система, только чтение: D3DKMTQueryAdapterInfo(KMTQAITYPE_ADAPTERPERFDATA и …_CAPS).</summary>
 [Trait("Category", "Host")]
 public class KmtPerfDataSourceHostTests
 {

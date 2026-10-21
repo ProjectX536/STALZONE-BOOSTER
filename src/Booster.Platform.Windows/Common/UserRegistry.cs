@@ -3,13 +3,8 @@ using Microsoft.Win32;
 
 namespace Booster.Platform.Windows.Common;
 
-/// <summary>
-/// HKCU в 64-битном представлении, только ключи из <see cref="AllowedKeys"/> — защита в глубину поверх проверок действий:
-/// ключ вне списка отклоняется до открытия реестра. Права администратора не нужны.
-/// </summary>
 public sealed class UserRegistry : IUserRegistry
 {
-    /// <summary>Точное совпадение без учёта регистра: вложенные ключи не разрешены.</summary>
     public static IReadOnlyList<string> AllowedKeys { get; } =
     [
         StartupApprovedKeys.Run,

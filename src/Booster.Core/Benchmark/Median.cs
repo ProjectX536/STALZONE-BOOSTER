@@ -2,7 +2,6 @@ namespace Booster.Core.Benchmark;
 
 internal static class Median
 {
-    /// <summary>Медиана; при чётном числе значений — среднее двух средних. Сортирует <paramref name="values"/> на месте.</summary>
     public static double Of(Span<double> values)
     {
         if (values.IsEmpty)

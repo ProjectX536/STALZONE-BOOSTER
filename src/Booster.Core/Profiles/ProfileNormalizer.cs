@@ -2,20 +2,12 @@ using Booster.Core.Configuration;
 
 namespace Booster.Core.Profiles;
 
-/// <summary>
-/// Исправляет значения профиля, которые нарушили бы модель безопасности или сломали бы работу. Каждое исправление —
-/// предупреждение: <see cref="ConfigWarningKind.ValueClamped"/> для подъёма до минимума,
-/// <see cref="ConfigWarningKind.InvalidValue"/> для удаления значения. Режимы действий не меняются: решает ActionPolicy.
-/// </summary>
 public static class ProfileNormalizer
 {
-    /// <summary>docs/PRINCIPLES.md: мониторинг не чаще раза в секунду.</summary>
     private const int MinimumSampleIntervalMs = 1000;
 
-    /// <summary>Нижняя граница корректности: быстрее секунды программа не успевает даже начать штатное закрытие.</summary>
     private const int MinimumCloseTimeoutMs = 1000;
 
-    /// <summary>RealTime может отнять процессор у системных потоков ввода и звука; ниже Normal игре не нужно.</summary>
     private static readonly string[] SupportedPriorities = ["AboveNormal", "High"];
 
     private const string DefaultPriority = "AboveNormal";
@@ -122,7 +114,6 @@ public static class ProfileNormalizer
             return entry with { TargetSchemes = schemes };
         }
 
-        // Защищённое имя в играх получило бы повышенный приоритет как процесс игры.
         var games = Names(profile.Games, "games", name => ProtectedProcesses.IsProtected(name) ? "is protected" : null);
         var gameSet = new HashSet<string>(games, StringComparer.OrdinalIgnoreCase);
         var userSelected = Names(profile.BackgroundApps.UserSelected, "backgroundApps.userSelected",

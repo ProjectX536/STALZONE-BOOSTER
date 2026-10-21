@@ -16,14 +16,12 @@ public class TweakAdvisorTests
     private const string Target = "cyberpunk2077.exe";
     private const string CopyMode = "Composed: Copy with GPU GDI";
 
-    // Профиль хранит имя с другим регистром и без «.exe»: сравнение идёт по нормализованному имени.
     private static readonly IReadOnlyList<string> Games = ["Cyberpunk2077"];
 
     private static readonly IReadOnlyList<RegistryTweakDefinition> Catalog = FakeConfiguration.DefaultCatalog.RegistryTweaks;
 
     private static Reading<T> Known<T>(T value) => Reading<T>.Known(value, SystemSamples.Source);
 
-    /// <summary>Ноутбук со встроенной и дискретной видеокартой; Game Mode включён.</summary>
     private static SystemSnapshot Laptop(IReadOnlyList<AppGpuPreference>? preferences = null, Reading<int>? build = null,
         Reading<GamingSettings>? gaming = null)
     {
@@ -75,7 +73,6 @@ public class TweakAdvisorTests
         Assert.Equal("AutoGameModeEnabled", gameMode.ValueName);
         Assert.Null(gameMode.Game);
         Assert.Empty(gameMode.Evidence);
-        // Без серии правила по серии не срабатывают.
         Assert.Equal(TweakState.NotNeeded, Proposal(proposals, RegistryTweakIds.GpuHighPerformance).State);
         Assert.Equal(TweakState.NotNeeded, Proposal(proposals, RegistryTweakIds.WindowedFlipModel).State);
 
@@ -216,7 +213,6 @@ public class TweakAdvisorTests
     [Fact]
     public void Old_or_unknown_build_is_manual_only()
     {
-        // Сборка 19045 (Windows 10 22H2): Game Mode и выбор GPU уже есть, оптимизации оконного режима ещё нет.
         var windows10 = Laptop(build: Known(19045), gaming: GameMode(Known(false)));
         var unknown = Laptop(build: Reading<int>.Unknown(SystemSamples.Source), gaming: GameMode(Known(false)));
         var series = Series(modes: [CopyMode]);

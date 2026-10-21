@@ -41,7 +41,6 @@ public class SectionRunnerTests
     [Fact]
     public async Task Collector_failing_asynchronously_gives_failure()
     {
-        // Собственный TimeoutException сборщика — это ошибка сборщика, а не таймаут SectionRunner.
         static async Task<int> Fail(CancellationToken _)
         {
             await Task.Yield();

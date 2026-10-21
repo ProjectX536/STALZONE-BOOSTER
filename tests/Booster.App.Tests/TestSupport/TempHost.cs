@@ -6,10 +6,6 @@ using Serilog;
 
 namespace Booster.App.Tests.TestSupport;
 
-/// <summary>
-/// Корень композиции Booster с данными во временном каталоге. Хост не запускается: восстановление, координатор и замеры
-/// не стартуют, система не меняется.
-/// </summary>
 internal sealed class TempHost : IDisposable
 {
     private readonly string _dataRoot = Path.Combine(Path.GetTempPath(), "Booster.App.Tests", Guid.NewGuid().ToString("N"));
@@ -23,10 +19,6 @@ internal sealed class TempHost : IDisposable
     public T Resolve<T>()
         where T : notnull => (T)Resolve(typeof(T));
 
-    /// <summary>
-    /// Окно создаёт экраны в UI-потоке, и часть из них запоминает его контекст синхронизации. Здесь UI-поток заменяет
-    /// простой контекст, который выполняет отправленное в пуле потоков.
-    /// </summary>
     public object Resolve(Type type)
     {
         var previous = SynchronizationContext.Current;

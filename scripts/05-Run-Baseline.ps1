@@ -3,14 +3,6 @@
 .SYNOPSIS
     Базовый замер FPS через PresentMon или пересчёт метрик по готовому CSV PresentMon.
 
-.DESCRIPTION
-    Замер: PresentMon запускается с теми же аргументами, что и в приложении, на -DurationSec секунд и пишет CSV.
-    Без прав администратора и членства в группе Performance Log Users PresentMon запускается с запросом UAC.
-    Процесс игры скрипт не трогает: PresentMon читает только события ETW.
-    С -InputCsv ничего не запускается — метрики считаются по готовому файлу.
-    Разбор CSV и метрики — те же, что в приложении (docs/ARCHITECTURE.md, раздел 10). Один прогон — не сравнение:
-    разброс между прогонами бывает больше разницы, которую хочется измерить.
-
 .PARAMETER PresentMonPath
     Путь к PresentMon. По умолчанию — самый новый PresentMon-*.exe в %LOCALAPPDATA%\Booster\tools\PresentMon
     (туда его кладёт Install-PresentMon.ps1).
@@ -88,7 +80,7 @@ if ($byName -and -not $ProcessName.EndsWith('.exe', [StringComparison]::OrdinalI
 if (-not $PSBoundParameters.ContainsKey('MinimumFrames')) {
     $MinimumFrames = Get-BoosterSetting -File thresholds.json -Name minimumFramesForMetrics
 }
-# Внутри блока секции у $PSBoundParameters своё, пустое значение — поэтому проверка здесь.
+# Внутри блока секции $PSBoundParameters пуст.
 $durationGiven = $PSBoundParameters.ContainsKey('DurationSec')
 
 function Find-PresentMon {
@@ -101,7 +93,7 @@ function Find-PresentMon {
 }
 
 function Test-CanTraceWithoutElevation {
-    # Группа Performance Log Users (S-1-5-32-559) разрешает ETW-захват без повышения прав.
+    # Performance Log Users (S-1-5-32-559) может писать ETW без повышения.
     if (Test-BoosterElevated) { return $true }
     $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
     try {
@@ -113,12 +105,12 @@ function Test-CanTraceWithoutElevation {
 }
 
 function Start-PresentMon([string]$Path, [string[]]$Arguments, [bool]$Elevate) {
-    # Start-Process склеивает аргументы через пробел без кавычек, поэтому аргументы с пробелами берутся в кавычки здесь.
+    # Start-Process склеивает аргументы через пробел без кавычек.
     $quoted = @($Arguments | ForEach-Object { if ($_ -match '\s') { '"{0}"' -f $_ } else { $_ } })
     $start = @{ FilePath = $Path; ArgumentList = $quoted; PassThru = $true; WindowStyle = 'Hidden' }
     if ($Elevate) { $start.Verb = 'RunAs' }
     $process = Start-Process @start
-    # Без обращения к Handle в 5.1 у процесса, запущенного с -PassThru, ExitCode после выхода бывает пустым.
+    # Без обращения к Handle в 5.1 ExitCode после выхода бывает пустым.
     $null = $process.Handle
     $process
 }
@@ -159,7 +151,6 @@ $sections.capture = New-BoosterSection {
             '--no_console_stats', '--session_name', $session, '--stop_existing_session')
         $elevate = -not (Test-CanTraceWithoutElevation)
         $process = Start-PresentMon $presentMon $arguments $elevate
-        # --timed завершает PresentMon сам; запас — на запуск и запись CSV.
         if (-not $process.WaitForExit(($duration + 30) * 1000)) {
             $stop = Start-PresentMon $presentMon @('--terminate_existing_session', '--session_name', $session) $elevate
             [void]$stop.WaitForExit(30000)
@@ -171,7 +162,6 @@ $sections.capture = New-BoosterSection {
     }
     $info.csvPath = ConvertTo-BoosterSafePath $csv
 
-    # Как в приложении: PresentMon без ошибки, но без CSV — целевой процесс не показал ни одного кадра.
     $script:parse = if (Test-Path -LiteralPath $csv -PathType Leaf) {
         if ($byName) { Read-PresentMonCsv -Path $csv -ProcessName $ProcessName } else { Read-PresentMonCsv -Path $csv -ProcessId $ProcessId }
     }

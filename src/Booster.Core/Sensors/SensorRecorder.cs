@@ -4,10 +4,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Core.Sensors;
 
-/// <summary>
-/// Запись датчиков на время замера: первый замер сразу, далее раз в monitoring.sensorIntervalMs до отмены.
-/// Неудачный замер пропускается с записью в лог; отмена — штатный конец записи, а не ошибка.
-/// </summary>
 public sealed partial class SensorRecorder(ISensorProvider sensors, IBoosterConfiguration config, TimeProvider time,
     ILogger<SensorRecorder> logger)
 {
@@ -32,7 +28,7 @@ public sealed partial class SensorRecorder(ISensorProvider sensors, IBoosterConf
         }
         catch (OperationCanceledException) when (stop.IsCancellationRequested)
         {
-            // Замер окончен — собранного достаточно.
+            // Замер окончен.
         }
 
         return samples;

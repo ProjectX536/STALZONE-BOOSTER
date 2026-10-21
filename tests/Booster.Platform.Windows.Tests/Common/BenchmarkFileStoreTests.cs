@@ -71,7 +71,6 @@ public sealed class BenchmarkFileStoreTests : IDisposable
         var loaded = await store.LoadAllAsync(Ct);
 
         Assert.Equal("a", Assert.Single(loaded).Id);
-        // Чужие для этой версии файлы не удаляются хранением: их может прочитать более новая версия или человек.
         Assert.Equal(["a.json", "broken.json", "future.json"], FileNames());
         Assert.Contains(_logger.Entries, e => e.Level == LogLevel.Warning && e.Message.Contains("broken.json", StringComparison.Ordinal));
         Assert.Contains(_logger.Entries, e => e.Level == LogLevel.Warning && e.Message.Contains("future.json", StringComparison.Ordinal));
@@ -88,7 +87,6 @@ public sealed class BenchmarkFileStoreTests : IDisposable
 
         await Assert.ThrowsAnyAsync<ArgumentException>(() => store.DeleteAsync(id, Ct));
         await Assert.ThrowsAnyAsync<ArgumentException>(() => store.SaveAsync(SampleSeries.Full(id), Ct));
-        // Проверка до обращения к диску: каталог данных даже не создан.
         Assert.False(Directory.Exists(_paths.DataRoot));
     }
 

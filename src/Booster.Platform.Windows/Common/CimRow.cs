@@ -3,11 +3,6 @@ using System.Globalization;
 
 namespace Booster.Platform.Windows.Common;
 
-/// <summary>
-/// Одна строка результата WMI. Имена свойств — без учёта регистра. System.Management отдаёт целые
-/// числа разных типов (uint16, uint32, uint64…), а часть провайдеров — числовые строки; геттеры
-/// принимают и то и другое. Значение, которое нельзя прочитать как нужный тип, даёт null, а не исключение.
-/// </summary>
 public sealed class CimRow
 {
     private readonly Dictionary<string, object?> _properties;
@@ -18,7 +13,6 @@ public sealed class CimRow
         _properties = new(properties, StringComparer.OrdinalIgnoreCase);
     }
 
-    /// <summary>Обрезает пробелы и нулевые символы; пустая строка → null.</summary>
     public string? GetString(string name) => ToText(Raw(name));
 
     public long? GetInt64(string name) => ToInt64(Raw(name));
@@ -32,10 +26,8 @@ public sealed class CimRow
         _ => null,
     };
 
-    /// <summary>Нет свойства или null → пустой список; пустые элементы пропускаются.</summary>
     public IReadOnlyList<string> GetStringArray(string name) => Items(Raw(name)).Select(ToText).OfType<string>().ToArray();
 
-    /// <summary>Нет свойства или null → пустой список; нечисловые элементы пропускаются.</summary>
     public IReadOnlyList<int> GetInt32Array(string name) =>
         Items(Raw(name)).Select(ToInt32).Where(v => v.HasValue).Select(v => v!.Value).ToArray();
 
@@ -62,7 +54,6 @@ public sealed class CimRow
             IFormattable f => f.ToString(null, CultureInfo.InvariantCulture),
             _ => value.ToString(),
         };
-        // char '\0' (например, MSFT_Partition.DriveLetter без буквы) и строки с хвостовыми '\0' из SMBIOS.
         text = text?.Trim().Trim('\0').Trim();
         return string.IsNullOrEmpty(text) ? null : text;
     }

@@ -7,17 +7,8 @@ using Windows.Win32.System.SystemInformation;
 
 namespace Booster.Platform.Windows.Monitoring;
 
-/// <summary>Поля <c>MEMORYSTATUSEX</c>, нужные для давления памяти, в байтах.</summary>
-/// <param name="CommitLimit">ullTotalPageFile: предел выделения.</param>
-/// <param name="CommitAvailable">ullAvailPageFile: сколько ещё можно выделить.</param>
 public readonly record struct GlobalMemoryStatus(ulong TotalPhysical, ulong AvailablePhysical, ulong CommitLimit, ulong CommitAvailable);
 
-/// <summary>
-/// Давление памяти и диска, время DPC и прерываний, только чтение. Счётчики «Memory\Page Reads/sec», «PhysicalDisk(_Total)»
-/// и «Processor(_Total)» открываются при первом вызове и живут между вызовами: все считаются по разности чтений,
-/// первое чтение отбрасывается.
-/// Счётчик, который не открылся, больше не открывается — его значение NotSupported с причиной.
-/// </summary>
 public sealed partial class SystemPressureSource(ILogger<SystemPressureSource> logger) : ISystemPressureSource, IDisposable
 {
     public const string MemorySource = "GlobalMemoryStatusEx";
@@ -60,8 +51,6 @@ public sealed partial class SystemPressureSource(ILogger<SystemPressureSource> l
         }
     }
 
-    /// <summary>Проценты памяти и пересчёт счётчиков. Не известное значение счётчика проходит как есть.</summary>
-    /// <param name="memory">null — GlobalMemoryStatusEx не ответил.</param>
     public static SystemPressure Compute(GlobalMemoryStatus? memory, Reading<double> pageReadsPerSecond, Reading<double> diskIdlePercent,
         Reading<double> diskSecondsPerTransfer, Reading<double> dpcTimePercent, Reading<double> interruptTimePercent) =>
         new(memory is { } m ? Percent(m.AvailablePhysical, m.TotalPhysical) : Reading<double>.Failure(MemorySource, MemoryFailedNote),
@@ -73,7 +62,6 @@ public sealed partial class SystemPressureSource(ILogger<SystemPressureSource> l
             Map(dpcTimePercent, ClampPercent),
             Map(interruptTimePercent, ClampPercent));
 
-    /// <summary>Чтение счётчика: не открылся — NotSupported, только что открыт — Unknown, не прочитался — Failed.</summary>
     public static Reading<double> CounterReading(string source, string? openError, bool justOpened, double? value)
     {
         if (openError is not null)
@@ -121,7 +109,6 @@ public sealed partial class SystemPressureSource(ILogger<SystemPressureSource> l
         try
         {
             counter = new PerformanceCounter(category, counterName, instance, readOnly: true);
-            // Первое чтение проверяет, что счётчик есть, и задаёт отправную точку.
             counter.NextValue();
             return new Slot(source, counter, null);
         }
@@ -154,7 +141,6 @@ public sealed partial class SystemPressureSource(ILogger<SystemPressureSource> l
 
     private void LogReadFailedOnce(string source, string reason)
     {
-        // Опрос идёт во время замера каждую секунду: одно и то же предупреждение повторять незачем.
         if (_readFailureLogged)
             return;
         _readFailureLogged = true;

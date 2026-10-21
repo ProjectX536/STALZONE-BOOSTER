@@ -39,7 +39,6 @@ public class StartupRecoveryTests
         _time,
         NullLogger<StartupRecovery>.Instance);
 
-    // Файл кладётся мимо журнала: счётчик записей хранилища показывает только работу StartupRecovery.
     private void Put(SessionRecord session) => _files.Put(session.SessionId + ".json", SnapshotStore.Serialize(session));
 
     private async Task<SessionRecord> Stored(string id) =>
@@ -50,7 +49,6 @@ public class StartupRecoveryTests
     [Fact]
     public async Task Interrupted_preparation_is_marked_for_manual_check()
     {
-        // Восстановление после сбоя в профиле выключено, но подготовке возвращать нечего: кнопки она не ждёт.
         _profiles = new FakeProfileRepository(ProfileFactory.Profile(recovery: new ProfileRecovery(true, true, false, true)));
         _state["a"] = "boost";
         Put(Session(changes: [Change("a", reversible: false)], state: SessionState.Apply) with
@@ -73,8 +71,6 @@ public class StartupRecoveryTests
     [Fact]
     public async Task Unfinished_maintenance_session_is_rolled_back_at_startup()
     {
-        // Сбой посреди применения: пользователь не видел итога — изменение возвращается без вопроса, даже если в профиле с
-        // тем же Id восстановление выключено.
         _profiles = new FakeProfileRepository(ProfileFactory.Profile(recovery: new ProfileRecovery(true, true, false, true)));
         _state["a"] = "boost";
         _state["b"] = "boost";
@@ -194,7 +190,6 @@ public class StartupRecoveryTests
     [Fact]
     public async Task Newer_unfinished_session_is_restored_first()
     {
-        // Вторая сессия началась поверх незавершённой первой и сменила то же значение ещё раз.
         _state["a"] = "turbo";
         Put(Session(OlderId, [Change("a", "orig", "boost")], startedAt: Start.AddDays(-1)));
         Put(Session(changes: [Change("a", "boost", "turbo")]));
@@ -345,7 +340,6 @@ public class StartupRecoveryTests
 
         var report = await Recovery().RunAsync(Ct);
 
-        // Восстановленная сессия уже завершена и считается в число хранимых.
         Assert.Single(report.Recovered);
         Assert.Equal(["20261016-120000-00000003.json", "20261017-120000-00000002.json"], _files.Deleted.Order());
         Assert.Contains(Id + ".json", _files.Files.Keys);

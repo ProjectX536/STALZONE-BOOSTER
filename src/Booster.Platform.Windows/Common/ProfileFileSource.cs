@@ -2,7 +2,6 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Platform.Windows.Common;
 
-/// <summary>Встроенные профили — <see cref="IAppPaths.BuiltInProfiles"/>, пользовательские — <see cref="IAppPaths.UserProfiles"/>.</summary>
 public sealed class ProfileFileSource(IAppPaths paths) : IProfileFileSource
 {
     private const string Extension = ".json";

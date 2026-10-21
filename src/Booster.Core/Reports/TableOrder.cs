@@ -5,11 +5,6 @@ using Booster.Core.Resources;
 
 namespace Booster.Core.Reports;
 
-/// <summary>
-/// Порядок строк таблицы по колонке. Размеры и скорости — по величине с учётом единиц («512 МБ» раньше «1,2 ГБ»), даты — как
-/// даты, версии и номера внутри текста — по числам («Диск 2» раньше «Диск 10»), остальное — по алфавиту без учёта регистра.
-/// «Неизвестно», «—» и недоступные ячейки всегда в конце, в любом направлении: недоступное значение не самое маленькое.
-/// </summary>
 public static partial class TableOrder
 {
     private const double ByteBase = 1024;
@@ -25,7 +20,6 @@ public static partial class TableOrder
 
     private readonly record struct SortKey(Kind Kind, double Number = 0, long Ticks = 0, string Text = "", IComparable? Value = null);
 
-    /// <summary>Сравнивает ячейки <see cref="ReportCell"/>, строки или значения одного сравнимого типа (числа, даты).</summary>
     public static int Compare(object? x, object? y, bool descending, CultureInfo culture)
     {
         ArgumentNullException.ThrowIfNull(culture);
@@ -38,7 +32,6 @@ public static partial class TableOrder
         return descending ? -result : result;
     }
 
-    /// <summary>Строки по колонке; равные остаются в исходном порядке, у строки без этой ячейки значение неизвестно.</summary>
     public static IReadOnlyList<ReportRow> Sort(IReadOnlyList<ReportRow> rows, int column, bool descending, CultureInfo culture)
     {
         ArgumentNullException.ThrowIfNull(rows);
@@ -97,10 +90,6 @@ public static partial class TableOrder
         || Enum.GetValues<DataStatus>().Any(status => status != DataStatus.Available
             && string.Equals(text, ReadingFormatter.StatusText(status), StringComparison.OrdinalIgnoreCase));
 
-    /// <summary>
-    /// Число в начале текста: знак, цифры с неразрывными пробелами между разрядами, дробная часть после «,» или «.».
-    /// Несколько точек подряд («31.0.15.3623», «1.2.9») — версия, а не дробь: такой текст сравнивается по частям.
-    /// </summary>
     private static bool TryLeadingNumber(string text, out double number, out string rest)
     {
         number = 0;
@@ -141,13 +130,12 @@ public static partial class TableOrder
         return true;
     }
 
-    // Разделитель разрядов — неразрывный пробел (ru-RU) перед ровно тремя цифрами; обычный пробел отделяет число от слова.
+    // Разделитель разрядов в ru-RU — неразрывный пробел.
     private static bool IsGroupSeparator(string text, int i) =>
         text[i] is ' ' or ' '
         && i + 3 < text.Length && char.IsAsciiDigit(text[i + 1]) && char.IsAsciiDigit(text[i + 2]) && char.IsAsciiDigit(text[i + 3])
         && (i + 4 >= text.Length || !char.IsAsciiDigit(text[i + 4]));
 
-    /// <summary>Множитель единицы в начале остатка: байты по основанию 1024, как <see cref="ByteSizeFormatter"/>; биты в секунду — 1000.</summary>
     private static double Scale(string rest)
     {
         (string Unit, double Factor)[] units =
@@ -171,7 +159,6 @@ public static partial class TableOrder
 
     private static string RateUnit(string format) => string.Format(CultureInfo.InvariantCulture, format, string.Empty).Trim();
 
-    /// <summary>Текст по частям: цифры — как числа, остальное — по алфавиту культуры без учёта регистра.</summary>
     private static int Natural(string x, string y, CultureInfo culture)
     {
         int i = 0, j = 0;
@@ -200,7 +187,6 @@ public static partial class TableOrder
         return end;
     }
 
-    // Без перевода в число: у длинных номеров нет переполнения.
     private static int CompareDigits(string x, string y)
     {
         x = x.TrimStart('0');
@@ -208,7 +194,6 @@ public static partial class TableOrder
         return x.Length != y.Length ? x.Length.CompareTo(y.Length) : string.CompareOrdinal(x, y);
     }
 
-    // Дата целиком: «15.03.2024», «21.10.2026 9:05:00», «2026-10-21». Версия «1.2.9» не подходит — год из четырёх цифр.
     [GeneratedRegex(@"^(\d{1,2}[./]\d{1,2}[./]\d{4}|\d{4}-\d{1,2}-\d{1,2})(\s|$)", RegexOptions.CultureInvariant)]
     private static partial Regex DatePattern();
 }

@@ -3,7 +3,6 @@ using Booster.Platform.Windows.Common;
 
 namespace Booster.Platform.Windows.Tests.TestSupport;
 
-/// <summary>Файловая система в памяти: пути без учёта регистра, маска <c>*</c>/<c>?</c> — только по имени файла.</summary>
 public sealed class FakeFileProbe : IFileProbe
 {
     private readonly Dictionary<string, string> _contents = new(StringComparer.OrdinalIgnoreCase);

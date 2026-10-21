@@ -10,10 +10,6 @@ using Microsoft.Extensions.Time.Testing;
 
 namespace Booster.App.Tests.TestSupport;
 
-/// <summary>
-/// Настоящий сборщик снимка на фейках: оборудование из <see cref="SnapshotFactory"/>, драйверов и датчиков нет, по умолчанию права
-/// администратора. Подкачку, журнал стабильности, автозагрузку, игровые настройки и права тест может подменить.
-/// </summary>
 internal static class TestCollector
 {
     public static SnapshotCollector Create(FakeTimeProvider time, FakeConfiguration config, IProfileRepository profiles,

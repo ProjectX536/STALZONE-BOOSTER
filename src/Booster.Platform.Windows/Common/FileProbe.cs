@@ -3,18 +3,14 @@ using System.Text;
 
 namespace Booster.Platform.Windows.Common;
 
-/// <summary>Чтение файловой системы для поиска внешних инструментов; подменяется в тестах.</summary>
 public interface IFileProbe
 {
     bool FileExists(string path);
 
-    /// <summary>Нет каталога → пустая последовательность.</summary>
     IEnumerable<string> EnumerateFiles(string directory, string pattern);
 
-    /// <summary>FileVersion из ресурса версии; нет файла или версии → null.</summary>
     string? GetFileVersion(string path);
 
-    /// <summary>Текст в UTF-8; BOM, если есть, пропускается.</summary>
     TextReader OpenText(string path);
 }
 

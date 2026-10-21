@@ -6,17 +6,13 @@ using Microsoft.Win32;
 
 namespace Booster.App.Services;
 
-/// <summary>Выбор exe игры для настройки, которой нужен путь к файлу.</summary>
 public interface IGameExecutablePicker
 {
-    /// <summary>Полный путь к выбранному файлу или null, если выбор отменён. Имя файла проверяет вызывающий.</summary>
     string? Pick(string expectedFileName);
 }
 
-/// <summary>Стандартный диалог выбора файла; отдельно от ViewModel, чтобы та не создавала окна.</summary>
 public sealed class FilePicker : IGameExecutablePicker
 {
-    /// <summary>Путь к выбранному exe или null, если выбор отменён.</summary>
     public string? PickExecutable(string? current)
     {
         var dialog = new OpenFileDialog
@@ -31,7 +27,6 @@ public sealed class FilePicker : IGameExecutablePicker
         return Show(dialog);
     }
 
-    /// <summary>Диалог показывает только файлы с именем <paramref name="expectedFileName"/>; путь можно ввести и вручную.</summary>
     public string? PickGameExecutable(string expectedFileName)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(expectedFileName);

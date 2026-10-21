@@ -2,10 +2,8 @@ using System.Diagnostics;
 
 namespace Booster.Platform.Windows.Monitoring;
 
-/// <summary>Запущенные процессы по имени exe; подменяется в тестах.</summary>
 public interface IProcessLookup
 {
-    /// <summary>PID процессов с этим именем; окончание ".exe" необязательно. Нет таких — пустой список.</summary>
     IReadOnlyList<int> FindIdsByName(string processName);
 }
 

@@ -23,7 +23,6 @@ public class NetworkTesterTests
     private NetworkTester Tester(string? host = Host, int count = 3) =>
         new(_ping, _adapters, new FakeConfiguration(network: new NetworkSettings(count, (int)Interval.TotalMilliseconds, 1000, host)), _time);
 
-    /// <summary>Двигает время на интервал после каждого завершённого раунда: пауза уже ждёт таймер.</summary>
     private async Task<NetworkTestResult> DriveAsync(Task<NetworkTestResult> run)
     {
         var advanced = 0;

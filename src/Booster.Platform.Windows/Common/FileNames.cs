@@ -2,10 +2,6 @@ namespace Booster.Platform.Windows.Common;
 
 internal static class FileNames
 {
-    /// <summary>
-    /// Имя файла без пути. Имена приходят из кода и из журнала, но путь в имени вывел бы чтение и запись
-    /// за пределы каталога Booster.
-    /// </summary>
     public static string CheckBare(string fileName)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(fileName);

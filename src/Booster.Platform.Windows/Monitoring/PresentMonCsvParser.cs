@@ -6,17 +6,10 @@ namespace Booster.Platform.Windows.Monitoring;
 
 public sealed record PresentMonCsvParse(FrameCaptureStatus Status, FrameCapture? Capture, string? Detail);
 
-/// <summary>
-/// CSV PresentMon → кадры одной swap chain одного процесса (docs/ARCHITECTURE.md, раздел 10).
-/// Имена колонок сравниваются без учёта регистра: с <c>--v1_metrics</c> PresentMon пишет <c>msBetweenPresents</c>.
-/// Колонки меток и занятости в форматах 2.6, <c>--v2_metrics</c> и <c>--v1_metrics</c> называются по-разному,
-/// поэтому ищутся по спискам имён; кадр без них остаётся, нужные поля равны null.
-/// </summary>
 public static class PresentMonCsvParser
 {
     public const string MsBetweenPresents = "MsBetweenPresents";
 
-    /// <summary>Колонка интервала в формате <c>--v2_metrics</c>.</summary>
     public const string FrameTime = "FrameTime";
 
     public static PresentMonCsvParse Parse(TextReader csv, string? processName, int? processId, string csvPath)
@@ -78,7 +71,6 @@ public static class PresentMonCsvParser
         if (targetRows == 0)
             return new(FrameCaptureStatus.TargetNotFound, null, $"CSV has no rows for {target}");
 
-        // Несколько PID — процесс перезапускался; несколько swap chain — оверлей или второе окно. Берётся основной поток кадров.
         var chosen = FirstMax(processOrder, x => x.ValidFrames);
         var chain = FirstMax(chosen.Chains, c => c.Frames.Count);
         if (chain.Frames.Count == 0)
@@ -98,14 +90,11 @@ public static class PresentMonCsvParser
     private static int Column(List<string> header, string name) =>
         header.FindIndex(h => string.Equals(h.Trim(), name, StringComparison.OrdinalIgnoreCase));
 
-    /// <summary>Первая найденная колонка из списка в порядке приоритета; -1 — нет ни одной.</summary>
     private static int FirstColumn(List<string> header, params string[] names) =>
         names.Select(name => Column(header, name)).FirstOrDefault(index => index >= 0, -1);
 
-    /// <summary>Пусто, если колонки нет (-1) или строка короче заголовка.</summary>
     private static string Field(List<string> row, int index) => index >= 0 && index < row.Count ? row[index] : string.Empty;
 
-    /// <summary>При равенстве — встреченный в файле первым.</summary>
     private static T FirstMax<T>(IReadOnlyList<T> items, Func<T, int> key)
     {
         var best = items[0];
@@ -117,10 +106,8 @@ public static class PresentMonCsvParser
         return best;
     }
 
-    /// <summary>Записи RFC 4180: поля в кавычках могут содержать запятые, переводы строк и удвоенные кавычки; концы строк CR, LF или CRLF.</summary>
     private static IEnumerable<List<string>> ReadRecords(TextReader reader)
     {
-        // StreamReader убирает BOM сам, а строка, прочитанная иначе, может начинаться с него.
         if (reader.Peek() == '﻿')
             reader.Read();
 
@@ -205,7 +192,6 @@ public static class PresentMonCsvParser
         }
     }
 
-    /// <summary>Индексы колонок кадра; -1 — колонки нет.</summary>
     private sealed record FrameColumns(int Interval, int FrameType, int PresentMode, int Qpc, int CpuBusy, int GpuBusy, int SyncInterval);
 
     private sealed class ChainFrames
@@ -221,10 +207,6 @@ public static class PresentMonCsvParser
 
         public List<string> PresentModes { get; } = [];
 
-        /// <summary>
-        /// Интервал NA, пустой, нечисловой или не больше нуля — кадр отбрасывается и считается.
-        /// Остальные поля с такими значениями становятся null, кадр остаётся.
-        /// </summary>
         public bool Add(List<string> row, FrameColumns columns)
         {
             if (!double.TryParse(Field(row, columns.Interval), NumberStyles.Float, CultureInfo.InvariantCulture, out var ms)
@@ -252,7 +234,6 @@ public static class PresentMonCsvParser
         private static double? Duration(string value) =>
             double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var ms) && double.IsFinite(ms) && ms >= 0 ? ms : null;
 
-        /// <summary>Различные непустые значения в порядке первого появления.</summary>
         private static void Remember(string value, HashSet<string> seen, List<string> values)
         {
             if (value.Length > 0 && seen.Add(value))

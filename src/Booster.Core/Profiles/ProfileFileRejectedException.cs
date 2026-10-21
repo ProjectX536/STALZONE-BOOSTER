@@ -1,9 +1,5 @@
 namespace Booster.Core.Profiles;
 
-/// <summary>
-/// Пользовательский файл профиля при загрузке не применён (повреждён, записан более новой версией, не прочитан).
-/// Сохранение его не перезаписывает: в файле могут быть настройки, которые пользователь потерял бы.
-/// </summary>
 public sealed class ProfileFileRejectedException : InvalidOperationException
 {
     public ProfileFileRejectedException()

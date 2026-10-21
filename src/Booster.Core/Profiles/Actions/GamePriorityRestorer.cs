@@ -5,11 +5,6 @@ using Booster.Core.Resources;
 
 namespace Booster.Core.Profiles.Actions;
 
-/// <summary>
-/// Возврат приоритета процессу из снимка — по PID и времени старта. Процесса нет или PID достался другому
-/// процессу — <see cref="ObservedState.Gone"/>: менять нечего, чужой процесс не трогается. Процесс с этим PID и
-/// именем работает, но приоритет не читается — исключение: сказать, что возвращать нечего, нельзя.
-/// </summary>
 public sealed class GamePriorityRestorer(IProcessPriorityController priorities, IProcessProvider processes) : IActionRestorer
 {
     public string ActionId => ActionIds.GamePriority;
@@ -44,7 +39,6 @@ public sealed class GamePriorityRestorer(IProcessPriorityController priorities, 
         return Task.CompletedTask;
     }
 
-    // Список процессов строится без открытия процесса: в нём есть и те, к которым нет доступа, а вышедших нет.
     private bool IsListed(GamePriorityValue original) =>
         processes.List().Any(p => p.ProcessId == original.ProcessId
             && string.Equals(ProcessNames.Normalize(p.Name), original.Name, StringComparison.OrdinalIgnoreCase));

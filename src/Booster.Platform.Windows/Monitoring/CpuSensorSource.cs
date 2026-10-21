@@ -7,11 +7,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Platform.Windows.Monitoring;
 
-/// <summary>
-/// Счётчики «Processor Information(_Total)», только чтение: «% Processor Performance», «Processor Frequency»,
-/// «% Performance Limit». Счётчики открываются при первом обращении и живут между вызовами: производительность —
-/// относительный счётчик, его чтение сразу после открытия не имеет смысла и отбрасывается.
-/// </summary>
 public sealed partial class CpuSensorSource(ILogger<CpuSensorSource> logger) : ICpuSensorSource, IDisposable
 {
     public const string ProviderId = "platform.windows.cpu-counters";
@@ -85,7 +80,6 @@ public sealed partial class CpuSensorSource(ILogger<CpuSensorSource> logger) : I
         try
         {
             counter = new PerformanceCounter(Category, name, Instance, readOnly: true);
-            // Первое чтение проверяет, что счётчик есть, и задаёт отправную точку относительному счётчику.
             counter.NextValue();
             return new Slot(name, counter, null);
         }
@@ -109,7 +103,6 @@ public sealed partial class CpuSensorSource(ILogger<CpuSensorSource> logger) : I
         }
         catch (Exception ex)
         {
-            // Опрос идёт каждые 1–2 с: повторять одно и то же предупреждение незачем.
             if (!_readFailureLogged)
             {
                 _readFailureLogged = true;

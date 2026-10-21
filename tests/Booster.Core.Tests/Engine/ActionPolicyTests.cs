@@ -70,7 +70,6 @@ public class ActionPolicyTests
     [Fact]
     public void Automatic_execution_allows_only_read_only_and_verified_reversible_actions()
     {
-        // Правило docs/PRINCIPLES.md: без подтверждения автоматически выполняются только L0 и проверенные обратимые L1.
         var context = Ctx(ExecutionTrigger.Automatic, gaming: false, enabled: true, confirmed: false, canElevate: true);
 
         foreach (var level in Enum.GetValues<SafetyLevel>())

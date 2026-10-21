@@ -3,7 +3,6 @@ using System.Windows.Data;
 
 namespace Booster.App.Converters;
 
-/// <summary>Отрицание bool в обе стороны: вторая из пары радиокнопок, поле, доступное при выключенном флаге.</summary>
 [ValueConversion(typeof(bool), typeof(bool))]
 public sealed class InverseBooleanConverter : IValueConverter
 {

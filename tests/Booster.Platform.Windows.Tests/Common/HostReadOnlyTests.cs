@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Booster.Platform.Windows.Tests.Common;
 
-/// <summary>Читают живую систему и ничего в ней не меняют. Исключаются фильтром <c>--filter-not-trait Category=Host</c>.</summary>
 [Trait("Category", "Host")]
 public class HostReadOnlyTests
 {

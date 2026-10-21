@@ -6,10 +6,6 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Core.Benchmark;
 
-/// <summary>
-/// Файл истории серии: <c>{ "schemaVersion": 1, "series": { ... } }</c>. camelCase, перечисления строками,
-/// <see cref="Reading{T}"/> — объект <c>{ value, status, source, note }</c>, как в JSON-отчёте, но читается обратно.
-/// </summary>
 public static class BenchmarkJson
 {
     public const int CurrentSchemaVersion = 1;
@@ -24,12 +20,9 @@ public static class BenchmarkJson
         var options = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            // Пометки пользователя на русском остаются читаемыми; файл в HTML не встраивается.
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
             WriteIndented = true,
-            // NaN в метрике не должен стоить пользователю всей серии.
             NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals,
-            // Файл без обязательного поля — испорчен, а не серия с пустыми значениями.
             RespectRequiredConstructorParameters = true,
             Converters = { new JsonStringEnumConverter(), new ReadingJsonConverterFactory() },
         };
@@ -48,8 +41,6 @@ public static class BenchmarkJson
         return document.ToJsonString(Options);
     }
 
-    /// <exception cref="JsonException">Неверный формат.</exception>
-    /// <exception cref="NotSupportedException">schemaVersion больше текущей.</exception>
     public static BenchmarkSeries Deserialize(string json)
     {
         ArgumentNullException.ThrowIfNull(json);
@@ -73,7 +64,6 @@ public static class BenchmarkJson
             (JsonConverter)Activator.CreateInstance(typeof(ReadingJsonConverter<>).MakeGenericType(typeToConvert.GetGenericArguments()))!;
     }
 
-    /// <summary>Значение пишется и читается только у Available: у остальных статусов <see cref="Reading{T}.Value"/> не используется.</summary>
     private sealed class ReadingJsonConverter<T> : JsonConverter<Reading<T>>
     {
         public override Reading<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

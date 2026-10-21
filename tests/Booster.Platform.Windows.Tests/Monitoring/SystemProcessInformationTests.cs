@@ -8,8 +8,6 @@ namespace Booster.Platform.Windows.Tests.Monitoring;
 
 public class SystemProcessInformationTests
 {
-    // Раскладка x64 из winternl.h и исходников .NET. Буфер пишется по смещениям, а не структурами парсера,
-    // чтобы тест проверял раскладку независимо от кода.
     private const int ProcessSize = 256;
     private const int ThreadSize = 80;
 
@@ -28,12 +26,10 @@ public class SystemProcessInformationTests
     private static readonly SyntheticProcess Game = new(4242, "game.exe", 133_000_000_000, 2_000_000, 8_000_000,
         new SyntheticThread(100, 1_000_000, 5_000_000), new SyntheticThread(101, 500_000, 2_000_000), new SyntheticThread(102, 500_000, 1_000_000));
 
-    /// <param name="lengthChange">Сколько байт добавить к длине записей (мусор в конце) или отнять (обрезка).</param>
     private static IReadOnlyList<ProcessTimes> Parse(SyntheticProcess[] processes, int lengthChange = 0)
     {
         var buffer = new byte[64 * 1024];
         buffer.AsSpan().Fill(0xCD);
-        // Имя процесса — указатель внутрь буфера, поэтому адрес буфера не должен меняться.
         var handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
         try
         {
@@ -126,10 +122,8 @@ public class SystemProcessInformationTests
     [Fact]
     public void Parse_stops_at_zero_next_offset_and_rejects_truncated_buffer()
     {
-        // После последней записи — мусор 0xCD: разбор останавливается на NextEntryOffset = 0.
         Assert.Equal(2, Parse([Idle, Game], lengthChange: 512).Count);
 
-        // Обрезана середина потоков последнего процесса.
         Assert.Throws<InvalidDataException>(() => Parse([Idle, Game], lengthChange: -(ThreadSize + 40)));
     }
 

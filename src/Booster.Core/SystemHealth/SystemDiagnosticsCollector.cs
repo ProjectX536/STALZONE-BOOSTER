@@ -6,15 +6,10 @@ using Booster.Core.Profiles;
 
 namespace Booster.Core.SystemHealth;
 
-/// <summary>
-/// Секции системной диагностики, параллельно и каждая со своим таймаутом из settings.json. Синхронные источники
-/// выполняются в пуле потоков. Только чтение: ничего в системе не меняется.
-/// </summary>
 public sealed class SystemDiagnosticsCollector(IMemoryStatusSource memory, IPagefileSource pagefile, IProcessResourceSource processes,
     IServiceInventorySource services, IStabilityEventSource stability, INetworkAdapterSource network, IStartupSource startup,
     IGamingSettingsSource gaming, IHagsSource hags, IProcessProvider processList, SectionRunner runner, IBoosterConfiguration config, TimeProvider time)
 {
-    /// <summary>Ключи таймаутов в settings.json и имена секций в логах и отчёте.</summary>
     public const string MemorySectionId = "memoryStatus", PagefileSectionId = "pagefile", ProcessMemorySectionId = "processMemory",
         ServicesSectionId = "services", StabilitySectionId = "stability", NetworkSectionId = "networkAdapters",
         StartupSectionId = "startup", GamingSectionId = "gaming", OverlaysSectionId = "overlays", HagsSectionId = "hags";
@@ -48,15 +43,12 @@ public sealed class SystemDiagnosticsCollector(IMemoryStatusSource memory, IPage
             await overlaysTask.ConfigureAwait(false), Inner(await hagsTask.ConfigureAwait(false)));
     }
 
-    // Источник сам возвращает Reading: собранная секция отдаёт его как есть, сбой или таймаут секции — свой статус.
     private static Reading<T> Inner<T>(Reading<Reading<T>> section) =>
         section.IsAvailable ? section.Value : new Reading<T>(default, section.Status, section.Source, section.Note);
 
     private Task<Reading<T>> RunSync<T>(string sectionId, Func<T> read, DetectorSettings detectors, CancellationToken ct) =>
         runner.RunAsync(sectionId, t => Task.Run(read, t), detectors.TimeoutFor(sectionId), ct);
 
-    // Элементы и память их процессов. Без снимка процессов список всё равно полезен: память остаётся неизвестной (null),
-    // а сбой снимка уже виден в секции processMemory.
     private IReadOnlyList<StartupItem> ReadStartup()
     {
         var entries = startup.Read();
@@ -80,7 +72,6 @@ public sealed class SystemDiagnosticsCollector(IMemoryStatusSource memory, IPage
                 : null))];
     }
 
-    // Программы каталога с оверлеем, которые сейчас запущены: точное имя процесса без учёта регистра и «.exe».
     private IReadOnlyList<RunningOverlay> ReadOverlays()
     {
         var running = processList.List()
@@ -93,8 +84,7 @@ public sealed class SystemDiagnosticsCollector(IMemoryStatusSource memory, IPage
             .Select(o => new RunningOverlay(o.overlay.Process, o.overlay.Name, o.ids))];
     }
 
-    // Имя файла без «.exe». Разделители разбираются явно: Core собирается под net10.0, а Path.GetFileName вне Windows
-    // не считает «\» разделителем.
+    // Вне Windows Path.GetFileName не считает «\» разделителем.
     private static string? ExecutableName(string? path) =>
         path is null ? null : ProcessNames.Normalize(path[(path.LastIndexOfAny(PathSeparators) + 1)..]);
 }

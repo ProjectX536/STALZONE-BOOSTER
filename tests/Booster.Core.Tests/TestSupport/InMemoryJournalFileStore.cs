@@ -2,7 +2,6 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>Каталог журнала в памяти: имя файла → содержимое.</summary>
 public sealed class InMemoryJournalFileStore : IJournalFileStore
 {
     private readonly Dictionary<string, string> _files = new(StringComparer.OrdinalIgnoreCase);
@@ -13,7 +12,6 @@ public sealed class InMemoryJournalFileStore : IJournalFileStore
 
     public int Writes { get; private set; }
 
-    /// <summary>Если задан, запись ждёт его завершения: так тест держит запись «в процессе».</summary>
     public TaskCompletionSource? WriteGate { get; set; }
 
     public IReadOnlyDictionary<string, string> Files

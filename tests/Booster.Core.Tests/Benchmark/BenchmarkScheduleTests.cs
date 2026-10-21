@@ -6,7 +6,6 @@ namespace Booster.Core.Tests.Benchmark;
 
 public class BenchmarkScheduleTests
 {
-    // 3 прогона по 30 с, пауза 10 с, задержка старта 10 с.
     private static readonly BenchmarkSchedule Default = BenchmarkSchedule.From(FakeConfiguration.DefaultBenchmark);
 
     private static FrameSample Frame(long? qpc) => new(qpc, 10, null, null, null);
@@ -73,7 +72,6 @@ public class BenchmarkScheduleTests
         var runs = RunSlicer.Slice(frames, [new RunWindow(0, 100, 200), new RunWindow(1, 200, 300)]);
 
         Assert.Equal([Frame(150)], runs[0]);
-        // Кадр на границе — первый во втором окне: его интервал начался в первом, поэтому он не учтён нигде.
         Assert.Equal([Frame(250), Frame(260)], runs[1]);
     }
 

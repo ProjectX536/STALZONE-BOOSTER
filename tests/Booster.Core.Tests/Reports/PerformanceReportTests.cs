@@ -28,7 +28,6 @@ public class PerformanceReportTests
 
     private static IEnumerable<ReportCell> Paragraphs(ReportSection section) => section.Blocks.OfType<ReportParagraph>().Select(p => p.Content);
 
-    /// <summary>Серия той же игры с тремя годными прогонами: прочие метрики одинаковые, сравнение решают средний FPS и 1% low.</summary>
     private static BenchmarkSeries Valid(string id, int minutes, MetricSpread averageFps, MetricSpread onePercentLow, string? change = "Новый драйвер")
     {
         var series = SampleSeries.Full(id, minutes);
@@ -240,7 +239,6 @@ public class PerformanceReportTests
     [InlineData(100, 104, 60, 60, "Разница меньше разброса между прогонами — эффект не доказан.")]
     public void Comparison_summary_sentence_follows_verdicts(double fpsBefore, double fpsAfter, double lowBefore, double lowAfter, string expected)
     {
-        // Прогоны ±1 FPS; в последнем случае у кандидата ±5 FPS, и +4 % остаются в пределах разброса.
         static MetricSpread Spread(double median, double half) => new(median, median - half, median + half);
         var baseline = Valid("a", 0, Spread(fpsBefore, 1), Spread(lowBefore, 0.5));
         var candidate = Valid("b", 10, Spread(fpsAfter, fpsAfter is 104 ? 5 : 1), Spread(lowAfter, 0.5));

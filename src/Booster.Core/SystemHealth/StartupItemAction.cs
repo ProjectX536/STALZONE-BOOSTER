@@ -5,11 +5,6 @@ using Booster.Core.Resources;
 
 namespace Booster.Core.SystemHealth;
 
-/// <summary>
-/// Отключение элемента автозагрузки записью в StartupApproved, как в диспетчере задач. Действует со следующего входа:
-/// запущенный процесс не завершается, сам элемент автозагрузки не удаляется. Элемент текущего пользователя меняется в HKCU,
-/// элемент для всех пользователей (HKLM Run, Run32, общая папка) — в HKLM и только в Booster с правами администратора.
-/// </summary>
 public sealed class StartupItemAction : IReversibleAction
 {
     private readonly IRegistryValues? _registry;
@@ -33,7 +28,6 @@ public sealed class StartupItemAction : IReversibleAction
             StartupLocation.UserRun or StartupLocation.MachineRun => StartupApprovedKeys.Run,
             StartupLocation.MachineRun32 => StartupApprovedKeys.Run32,
             StartupLocation.UserFolder or StartupLocation.CommonFolder => StartupApprovedKeys.StartupFolder,
-            // RunOnce выполняется один раз и удаляется самой Windows: отключать в нём нечего.
             _ => null,
         };
         _registry = _key is null ? null : isMachine ? machineRegistry : (IRegistryValues)userRegistry;
@@ -93,7 +87,6 @@ public sealed class StartupItemAction : IReversibleAction
             return (null, ReportStrings.Skip_StartupItemStateUnknown);
         }
 
-        // Значение не REG_BINARY — формат неизвестен: отключать поверх него нельзя.
         var state = current is null ? StartupApproval.Parse(null)
             : current.Kind == UserRegistryValueKind.Binary ? StartupApproval.Parse(current.ToBytes())
             : StartupState.Unknown;

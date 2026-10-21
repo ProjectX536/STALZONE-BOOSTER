@@ -22,7 +22,6 @@
 
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Padding="24,0,24,16">
       <StackPanel>
-        <!-- Живые датчики: опрашиваются, только пока экран открыт -->
         <TextBlock Style="{StaticResource SectionTitle}" Text="{x:Static res:Strings.LiveSensorsTitle}" />
         <TextBlock Style="{StaticResource Hint}" Text="{x:Static res:Strings.LiveSensorsHint}" />
         <TextBlock Style="{StaticResource EmptyHint}" Tag="{Binding Sensors}" Text="{x:Static res:Strings.LiveSensorsWaiting}" />

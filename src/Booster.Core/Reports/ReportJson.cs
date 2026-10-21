@@ -6,11 +6,6 @@ using Booster.Core.Inventory;
 
 namespace Booster.Core.Reports;
 
-/// <summary>
-/// Параметры JSON-отчёта: camelCase, перечисления строками, <see cref="Reading{T}"/> — объект
-/// <c>{ value, status, source, note }</c>, LUID и PCI ID — в привычном строковом виде, отступы.
-/// Числа пишутся в инвариантной культуре при любой текущей.
-/// </summary>
 public static class ReportJson
 {
     public static JsonSerializerOptions Options { get; } = CreateOptions();
@@ -20,8 +15,6 @@ public static class ReportJson
         var options = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            // Кириллица остаётся читаемой. Отчёт — отдельный файл .json и в HTML не встраивается,
-            // поэтому экранирование символов, опасных для HTML, не нужно.
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
             WriteIndented = true,
             Converters =
@@ -47,7 +40,6 @@ public static class ReportJson
             (JsonConverter)Activator.CreateInstance(typeof(ReadingJsonConverter<>).MakeGenericType(typeToConvert.GetGenericArguments()))!;
     }
 
-    /// <summary>Значение пишется только у Available: у остальных статусов <see cref="Reading{T}.Value"/> не используется.</summary>
     private sealed class ReadingJsonConverter<T> : JsonConverter<Reading<T>>
     {
         public override Reading<T> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>

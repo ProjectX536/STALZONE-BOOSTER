@@ -16,14 +16,8 @@ public enum BenchmarkPhase
     Processing,
 }
 
-/// <param name="RunIndex">С 0; для StartingCapture и StartDelay — 0.</param>
-/// <param name="EndsAt">Конец фазы; null — неизвестен (ожидание UAC, обработка).</param>
 public sealed record BenchmarkProgress(BenchmarkPhase Phase, int RunIndex, int RunCount, DateTimeOffset? EndsAt);
 
-/// <summary>
-/// Серия прогонов одним захватом PresentMon: окна прогонов отсчитываются от его фактического старта (после UAC),
-/// сигналы пишутся только после старта. Система не меняется: дисплеи, схема и источник питания только читаются.
-/// </summary>
 public sealed partial class BenchmarkRunner(IFrameCaptureProvider capture, BenchmarkRecorder recorder,
     IInventoryDetector<Reading<IReadOnlyList<DisplayInfo>>> displays, IPowerPlanProvider power, IBoosterConfiguration config,
     TimeProvider time, ILogger<BenchmarkRunner> logger)
@@ -34,7 +28,6 @@ public sealed partial class BenchmarkRunner(IFrameCaptureProvider capture, Bench
     public const string ReadFailedNote = "read failed";
     public const string UnknownSchemeNote = "active power scheme is not in the scheme list";
 
-    /// <summary>Запрещённые в именах файлов Windows символы, кроме управляющих (их проверяет char.IsControl).</summary>
     private const string InvalidFileNameChars = "<>:\"/\\|?*";
 
     private sealed record Conditions(Reading<IReadOnlyList<DisplayInfo>> Displays, Reading<string> PowerPlan, PowerSource PowerSource);
@@ -42,8 +35,6 @@ public sealed partial class BenchmarkRunner(IFrameCaptureProvider capture, Bench
     private static readonly Conditions NotRead = new(Reading<IReadOnlyList<DisplayInfo>>.Unknown(DisplaySource, NotReadNote),
         Reading<string>.Unknown(PowerPlanSource, NotReadNote), PowerSource.Unknown);
 
-    /// <summary>Отмена — серия со статусом Cancelled, без прогонов; исключение не бросается.</summary>
-    /// <exception cref="ArgumentException">Цель — не ровно одно из имени процесса и PID.</exception>
     public async Task<BenchmarkSeries> RunAsync(BenchmarkRequest request, IProgress<BenchmarkProgress>? progress, CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(request);
@@ -71,7 +62,6 @@ public sealed partial class BenchmarkRunner(IFrameCaptureProvider capture, Bench
         await Task.WhenAny(started.Task, captureTask).ConfigureAwait(false);
         if (!started.Task.IsCompleted)
         {
-            // Отказ UAC, нет PresentMon, ошибка до старта: расписание не начиналось, сигналы не писались.
             return Build(await captureTask.ConfigureAwait(false), [], [], NotRead);
         }
 
@@ -79,7 +69,6 @@ public sealed partial class BenchmarkRunner(IFrameCaptureProvider capture, Bench
         var windows = schedule.Windows(t0, time.TimestampFrequency);
         using var stopRecording = CancellationTokenSource.CreateLinkedTokenSource(ct);
         var recording = RecordAsync(request, stopRecording.Token);
-        // Запущенный PresentMon может завершиться раньше расписания (ошибка ETW, сбой): отсчитывать прогоны дальше незачем.
         using var scheduleCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
         var captureEnded = captureTask.ContinueWith(static (_, state) => ((CancellationTokenSource)state!).Cancel(), scheduleCts,
             CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
@@ -109,11 +98,9 @@ public sealed partial class BenchmarkRunner(IFrameCaptureProvider capture, Bench
         }
         catch (OperationCanceledException) when (scheduleToken.IsCancellationRequested)
         {
-            // Иначе захват закончился раньше расписания: его статус и причина идут в серию как есть.
             cancelled = ct.IsCancellationRequested;
         }
 
-        // При отмене провайдер сам вернёт Cancelled; повышенный PresentMon дорабатывает свой --timed.
         var result = await captureTask.ConfigureAwait(false);
         await captureEnded.ConfigureAwait(false);
         await stopRecording.CancelAsync().ConfigureAwait(false);
@@ -124,7 +111,6 @@ public sealed partial class BenchmarkRunner(IFrameCaptureProvider capture, Bench
         return Build(result, windows, samples, read);
     }
 
-    /// <summary><c>yyyyMMdd-HHmmss-игра</c>: имя без .exe (или pid), запрещённые в именах файлов символы заменены на «_».</summary>
     private static string SeriesId(DateTimeOffset startedAt, BenchmarkRequest request)
     {
         var name = request.ProcessName is { } processName
@@ -177,7 +163,6 @@ public sealed partial class BenchmarkRunner(IFrameCaptureProvider capture, Bench
         }
     }
 
-    /// <summary>Только чтение, в пуле потоков. Ошибка — Failed/Unknown в условиях, а не сбой серии.</summary>
     private async Task<Conditions> ReadConditionsAsync(CancellationToken ct)
     {
         Reading<IReadOnlyList<DisplayInfo>> displayReading;

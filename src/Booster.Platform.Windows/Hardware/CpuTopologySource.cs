@@ -6,7 +6,6 @@ using Windows.Win32.System.SystemInformation;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>Топология ядер через GetLogicalProcessorInformationEx(RelationProcessorCore).</summary>
 public sealed class CpuTopologySource : ICpuTopologySource
 {
     public const string Source = "GetLogicalProcessorInformationEx(RelationProcessorCore).EfficiencyClass";
@@ -14,8 +13,6 @@ public sealed class CpuTopologySource : ICpuTopologySource
     public unsafe IReadOnlyList<byte> GetEfficiencyClassPerCore()
     {
         uint length = 0;
-        // Первый вызов сообщает размер буфера; между вызовами набор ядер может измениться (горячее
-        // подключение процессоров), поэтому повторяем, пока буфера хватает не впритык.
         for (var attempt = 0; attempt < 3; attempt++)
         {
             if (!PInvoke.GetLogicalProcessorInformationEx(LOGICAL_PROCESSOR_RELATIONSHIP.RelationProcessorCore, null, &length))
@@ -41,7 +38,6 @@ public sealed class CpuTopologySource : ICpuTopologySource
         throw new Win32Exception((int)WIN32_ERROR.ERROR_INSUFFICIENT_BUFFER);
     }
 
-    // Записи переменной длины: каждая начинается с Relationship и Size, следующая — через Size байт.
     private static unsafe byte[] Parse(byte* start, uint length)
     {
         var classes = new List<byte>();

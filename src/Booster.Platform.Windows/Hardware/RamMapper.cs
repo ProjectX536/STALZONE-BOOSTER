@@ -29,12 +29,11 @@ public static partial class RamMapper
             slots > 0
                 ? Reading<int>.Known(slots, "WMI Win32_PhysicalMemoryArray.MemoryDevices")
                 : Reading<int>.Unknown("WMI Win32_PhysicalMemoryArray.MemoryDevices"),
-            // Windows не сообщает, в каком режиме реально работает контроллер памяти; метки слотов — только подсказка.
+            // Windows не сообщает реальный режим каналов, метки слотов — только подсказка.
             Reading<bool>.Unknown(note: "Windows does not report the active memory channel mode"),
             ChannelHint(physicalMemory));
     }
 
-    /// <summary>SMBIOS Memory Device Type (таблица 7.18.2).</summary>
     public static Reading<string> MapMemoryType(int? smbiosMemoryType) => smbiosMemoryType switch
     {
         24 => Reading<string>.Known("DDR3", $"{Wmi}.SMBIOSMemoryType"),
@@ -81,7 +80,6 @@ public static partial class RamMapper
             var bank = module.GetString("BankLabel");
             var letter = ChannelLetter(locator) ?? ChannelLetter(bank);
             var controller = Controller(locator) ?? Controller(bank);
-            // Модуль без распознанного канала делает подсказку недостоверной для всего набора.
             if (letter is null && controller is null)
                 return ChannelLabelHint.None;
             keys.Add($"{controller}|{letter}");

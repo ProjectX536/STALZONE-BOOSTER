@@ -3,15 +3,10 @@ using System.Windows.Threading;
 
 namespace Booster.App.Tests.TestSupport;
 
-/// <summary>
-/// Один STA-поток с <see cref="Application"/> и ресурсами приложения на весь тестовый процесс: WPF допускает только один
-/// Application на процесс, а классы тестов идут параллельно. Экран создаётся и раскладывается на этом потоке.
-/// </summary>
 internal static class WpfHost
 {
     private static readonly Lazy<Dispatcher> UiDispatcher = new(Start);
 
-    /// <summary>Создаёт элемент, раскладывает его и возвращает исключение загрузки XAML или привязок, если оно было.</summary>
     public static Exception? TryRender(Func<FrameworkElement> create)
     {
         try
@@ -31,7 +26,6 @@ internal static class WpfHost
         }
     }
 
-    /// <summary>Выполняет код на потоке WPF и возвращает результат.</summary>
     public static T Invoke<T>(Func<T> action) => UiDispatcher.Value.Invoke(action);
 
     private static Dispatcher Start()

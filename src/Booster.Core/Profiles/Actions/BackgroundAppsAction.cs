@@ -6,13 +6,6 @@ using Booster.Core.Resources;
 
 namespace Booster.Core.Profiles.Actions;
 
-/// <summary>
-/// Штатное закрытие фоновых приложений, выбранных пользователем. Закрытые приложения не перезапускаются, поэтому действие
-/// необратимо (L2): восстановителя нет, после подготовки запись получает <c>NeedsManualCheck</c>.
-/// Выполняется только при подготовке сессии, до запуска игры: в игровую сессию необратимое не попадает.
-/// Закрываются только приложения из <see cref="BackgroundAppsSettings.UserSelected"/>, кроме защищённых процессов и игр профиля.
-/// </summary>
-/// <param name="game">null — подготовка до запуска игры или её предпросмотр.</param>
 public sealed class BackgroundAppsAction(IProcessProvider processes, IAppCloser closer, GamingProfile profile, GameProcess? game,
     TimeProvider time) : IReversibleAction
 {
@@ -69,7 +62,6 @@ public sealed class BackgroundAppsAction(IProcessProvider processes, IAppCloser 
             }
             catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
-                // Сбой по одному приложению не мешает закрыть остальные; пробрасывается только отмена.
                 outcome.Failed.Add(app);
                 continue;
             }
@@ -88,7 +80,6 @@ public sealed class BackgroundAppsAction(IProcessProvider processes, IAppCloser 
             Format(ReportStrings.BackgroundAppsDetailFormat, List(outcome.Closed), List(notClosed)));
     }
 
-    /// <summary>Выбор пользователя без защищённых процессов и игр, в исходном порядке, без повторов.</summary>
     private List<string> Candidates()
     {
         var excluded = profile.Games.Append(game?.Name).Select(ProcessNames.Normalize).OfType<string>()
@@ -109,7 +100,6 @@ public sealed class BackgroundAppsAction(IProcessProvider processes, IAppCloser 
     private static string Format(string format, params object[] args) => string.Format(CultureInfo.CurrentCulture, format, args);
 }
 
-/// <summary>Значение снимка <c>user-selected-background-apps</c>: <c>{"apps": [...]}</c> — что Booster собирался закрыть.</summary>
 internal sealed record BackgroundAppsValue([property: JsonPropertyName("apps")] IReadOnlyList<string> Apps)
 {
     public const int SchemaVersion = 1;
@@ -117,7 +107,6 @@ internal sealed record BackgroundAppsValue([property: JsonPropertyName("apps")] 
     public static JsonElement Write(IReadOnlyList<string> apps) => JsonSerializer.SerializeToElement(new BackgroundAppsValue(apps));
 }
 
-/// <summary>Итог закрытия для журнала (<see cref="ApplyResult.Data"/>).</summary>
 internal sealed record BackgroundAppsOutcome(
     [property: JsonPropertyName("closed")] List<string> Closed,
     [property: JsonPropertyName("stillRunning")] List<string> StillRunning,

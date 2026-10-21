@@ -3,18 +3,10 @@ using EnumerationOptions = System.Management.EnumerationOptions;
 
 namespace Booster.Platform.Windows.Common;
 
-/// <summary>
-/// WMI через System.Management. Запрос выполняется в потоке пула, строки читаются полусинхронно
-/// (<see cref="EnumerationOptions.ReturnImmediately"/>), токен проверяется между строками.
-/// </summary>
 public sealed class ManagementCimClient : ICimClient
 {
     private readonly TimeSpan _timeout;
 
-    /// <param name="timeout">
-    /// Сколько ждать очередной строки от WMI (<see cref="EnumerationOptions.Timeout"/>). Это защита потока
-    /// от зависшего провайдера; общий срок секции задаёт <c>SectionRunner</c>.
-    /// </param>
     public ManagementCimClient(TimeSpan timeout)
     {
         ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(timeout, TimeSpan.Zero);
@@ -34,7 +26,7 @@ public sealed class ManagementCimClient : ICimClient
         {
             return Read(wmiNamespace, wql, ct);
         }
-        // С ReturnImmediately ошибка схемы приходит при чтении первой строки, а не в Get(), поэтому ловится весь обход.
+        // С ReturnImmediately ошибка схемы приходит на первой строке, а не в Get().
         catch (ManagementException ex) when (ex.ErrorCode is ManagementStatus.InvalidNamespace or ManagementStatus.InvalidClass)
         {
             throw new CimSchemaMissingException(wmiNamespace, $"{ex.ErrorCode}: {wql}", ex);

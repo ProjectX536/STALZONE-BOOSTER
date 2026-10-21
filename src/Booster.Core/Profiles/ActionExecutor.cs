@@ -11,22 +11,14 @@ public enum ExecutionStatus
     Refused,
     Failed,
 
-    /// <summary>Действие сообщило, что ничего не изменило; записи в журнале нет.</summary>
     NotApplied,
 }
 
-/// <param name="Session">Сессия после выполнения: с новой записью, если она попала в журнал.</param>
-/// <param name="Detail">Причина <see cref="ExecutionStatus.NotApplied"/>.</param>
 public sealed record ExecutionResult(ExecutionStatus Status, PolicyDecision Decision, SessionRecord Session, Exception? Error,
     string? Detail = null);
 
-/// <summary>
-/// Единственный путь к <see cref="IReversibleAction.ApplyAsync"/>: только с разрешения <see cref="IActionPolicy"/>
-/// и только после записи исходного значения в журнал (docs/PRINCIPLES.md, «Модель безопасности действий»).
-/// </summary>
 public sealed partial class ActionExecutor(IActionPolicy policy, IChangeJournal journal, TimeProvider time, ILogger<ActionExecutor> logger)
 {
-    /// <summary>Решение политики вычисляется здесь же по Descriptor, режиму из профиля и контексту; готовых решений вызывающего нет.</summary>
     public async Task<ExecutionResult> ExecuteAsync(SessionRecord session, IReversibleAction action, string summary,
         ActionMode? mode, PolicyContext context, CancellationToken ct)
     {
@@ -63,7 +55,6 @@ public sealed partial class ActionExecutor(IActionPolicy policy, IChangeJournal 
         }
         catch (Exception ex) when (ex is not OperationCanceledException || !ct.IsCancellationRequested)
         {
-            // Исходное значение не записано — менять нельзя.
             LogFailed(ex, action.Id, "journal");
             return new ExecutionResult(ExecutionStatus.Failed, decision, session, ex);
         }
@@ -74,7 +65,7 @@ public sealed partial class ActionExecutor(IActionPolicy policy, IChangeJournal 
             var applied = await action.ApplyAsync(ct).ConfigureAwait(false);
             if (!applied.Applied)
             {
-                // Система не изменилась: запись Pending убирается, иначе восстановление искало бы несделанное изменение.
+                // Ничего не изменилось: убираем Pending, иначе восстановление искало бы несделанное изменение.
                 LogNotApplied(action.Id, applied.Detail);
                 await SaveAfterApplyAsync(session, ct).ConfigureAwait(false);
                 return new ExecutionResult(ExecutionStatus.NotApplied, decision, session, null, applied.Detail);
@@ -103,7 +94,6 @@ public sealed partial class ActionExecutor(IActionPolicy policy, IChangeJournal 
     private static SessionRecord Replace(SessionRecord session, ChangeEntry last) =>
         session with { Changes = [.. session.Changes.Take(session.Changes.Count - 1), last] };
 
-    // Запись Pending со снимком уже на диске: её достаточно для восстановления, поэтому сбой этой записи не отменяет итог.
     private async Task SaveAfterApplyAsync(SessionRecord session, CancellationToken ct)
     {
         try

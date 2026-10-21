@@ -5,11 +5,6 @@ using Booster.Platform.Windows.Common;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>
-/// HAGS из HKLM. Только чтение: ключ GraphicsDrivers открывается на чтение, HwSchMode не пишется.
-/// Значения DWORD: 2 → true, 1 → false, другое — Unknown; нет значения — Unknown (Windows решает по GPU и драйверу).
-/// Время изменения — время записи ключа (RegQueryInfoKey): у отдельного значения своего времени нет.
-/// </summary>
 public sealed class HagsSource(IRegistryReader registry) : IHagsSource
 {
     private const string GraphicsDriversKey = @"SYSTEM\CurrentControlSet\Control\GraphicsDrivers";

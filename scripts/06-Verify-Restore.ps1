@@ -3,15 +3,6 @@
 .SYNOPSIS
     Сверка журнала игровой сессии с текущим состоянием системы. Только чтение.
 
-.DESCRIPTION
-    По каждому изменению сессии: значения из журнала (исходное и применённое), текущее значение и совпадает ли
-    оно с исходным. Скрипт ничего не восстанавливает — это делает приложение.
-    - power-plan: активная схема из вывода powercfg /getactivescheme.
-    - game-priority: приоритет процесса игры. Процесса нет или время его старта отличается больше чем на секунду
-      (PID достался другому процессу) — приоритет не пережил игру, это совпадение с исходным.
-    - user-selected-background-apps: необратимое действие, сверять нечего.
-    Действия, которых скрипт не знает, не сверяются.
-
 .PARAMETER JournalDir
     Каталог журнала. По умолчанию — %LOCALAPPDATA%\Booster\journal.
 
@@ -39,19 +30,14 @@ $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 Import-Module (Join-Path $PSScriptRoot 'Booster.Diagnostics.psm1')
 
-# Как SessionRecord.CurrentSchemaVersion и SessionIds в приложении: файл сессии — <yyyyMMdd-HHmmss-8 hex>.json.
 $supportedSchemaVersion = 1
 $sessionFilePattern = '^\d{8}-\d{6}-[0-9a-f]{8}\.json$'
-# Время старта в журнале и у Get-Process берётся из одного источника; секунда — запас на округление при записи.
+# Секунда — запас на округление времени старта в журнале.
 $startTimeToleranceSec = 1
 $invariant = [Globalization.CultureInfo]::InvariantCulture
 $journal = $null
 $activeScheme = $null
 
-<#
-.SYNOPSIS
-    Дата из JSON — строкой ISO 8601: Windows PowerShell 5.1 оставляет её строкой, PowerShell 7 превращает в DateTime.
-#>
 function ConvertTo-IsoText($Value) {
     if ($Value -is [datetime]) { return ([DateTimeOffset]$Value).ToString('o', $invariant) }
     $Value
@@ -68,7 +54,7 @@ function Get-ActiveSchemeGuid {
         if ($LASTEXITCODE -ne 0) {
             throw "powercfg /getactivescheme exited with code $LASTEXITCODE"
         }
-        # GUID — единственная часть вывода, которая не зависит от языка Windows.
+        # От языка Windows не зависит только GUID.
         $match = [regex]::Match(($lines -join "`n"), '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}', 'IgnoreCase')
         if (-not $match.Success) {
             throw 'powercfg /getactivescheme printed no scheme GUID'
@@ -158,7 +144,7 @@ $sections.session = New-BoosterSection {
         return New-BoosterStatus -Status Unknown -Note $note
     }
 
-    # Журнал пишется в UTF-8; Get-Content в Windows PowerShell 5.1 прочитал бы его в кодировке ANSI.
+    # Get-Content в 5.1 прочитал бы UTF-8 как ANSI.
     $record = [IO.File]::ReadAllText($file.FullName, [Text.Encoding]::UTF8) | ConvertFrom-Json
     if ($record.schemaVersion -gt $supportedSchemaVersion) {
         return New-BoosterStatus -Status NotSupported -Note "schemaVersion $($record.schemaVersion): журнал записан более новой версией Booster"

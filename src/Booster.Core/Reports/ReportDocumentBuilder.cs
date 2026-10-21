@@ -8,11 +8,6 @@ using Booster.Core.Sensors;
 
 namespace Booster.Core.Reports;
 
-/// <summary>
-/// Раскладывает отчёт на разделы, поля и таблицы. Одна раскладка на HTML-отчёт и окна приложения: подписи, единицы,
-/// статусы и подсказки-источники везде одинаковые. Тексты — из <see cref="ReportStrings"/>, числа и даты — в переданной
-/// культуре.
-/// </summary>
 public sealed class ReportDocumentBuilder(OfficialSourceResolver links, IBoosterConfiguration config)
 {
     public ReportDocument Build(SystemReport report, CultureInfo culture)
@@ -119,7 +114,6 @@ public sealed class ReportDocumentBuilder(OfficialSourceResolver links, IBooster
                     (ReportStrings.GpuSharedMemory, Value(adapter.SharedSystemMemoryBytes, Bytes)),
                     (ReportStrings.GpuDriverVersion, Value(adapter.DriverVersion, s => s)),
                     (ReportStrings.GpuDriverDate, Value(adapter.DriverDate, Date)),
-                    // Ранг — индекс в перечислении DXGI, для человека место считается с единицы.
                     (ReportStrings.GpuHighPerformanceRank, Value(adapter.HighPerformanceRank, rank => Number(rank + 1))),
                     (ReportStrings.GpuSoftware, Text(Bool(adapter.IsSoftware))),
                 };
@@ -138,10 +132,6 @@ public sealed class ReportDocumentBuilder(OfficialSourceResolver links, IBooster
             }
         });
 
-        /// <summary>
-        /// Датчики адаптера на момент снимка; параметры драйвера — под первым адаптером провайдера, который их прочитал
-        /// (DRS и подобные хранилища общие для всех адаптеров вендора).
-        /// </summary>
         private void AdapterSensors(GpuAdapterInfo adapter, HashSet<string> settingsShown)
         {
             Heading(ReportStrings.SensorsAtSnapshot);
@@ -160,7 +150,6 @@ public sealed class ReportDocumentBuilder(OfficialSourceResolver links, IBooster
                 DriverSettings(survey, reading.ProviderId);
         }
 
-        /// <summary>Глобальный профиль, затем профиль каждой игры; провайдер без параметров драйвера раздела не получает.</summary>
         private void DriverSettings(SensorSurvey survey, string providerId)
         {
             var results = survey.Settings.Where(s => s.ProviderId == providerId).ToList();
@@ -297,7 +286,6 @@ public sealed class ReportDocumentBuilder(OfficialSourceResolver links, IBooster
                     ReportStrings.ColumnDate, ReportStrings.ColumnSigned, ReportStrings.ColumnState, ReportStrings.ColumnLinks],
                 drivers.Devices.Select(device =>
                 {
-                    // Без имени устройство узнаётся по Instance ID; с именем Instance ID — в подсказке.
                     var name = device.DeviceName is { IsAvailable: true, Value: { Length: > 0 } deviceName }
                         ? Text(deviceName) with { Tooltip = device.DeviceInstanceId }
                         : Text(device.DeviceInstanceId);
@@ -334,7 +322,6 @@ public sealed class ReportDocumentBuilder(OfficialSourceResolver links, IBooster
                     Text(EnumText.Format(capability.Status)), Text(capability.ProviderId), Text(capability.Note))));
         });
 
-        /// <summary>Имя адаптера по LUID из секции GPU; если адаптер не найден — сам LUID.</summary>
         private ReportCell Adapter(Reading<AdapterLuid> luid)
         {
             if (luid.IsAvailable && Snapshot.Hardware.Gpu is { IsAvailable: true, Value: { } gpu }
@@ -350,7 +337,6 @@ public sealed class ReportDocumentBuilder(OfficialSourceResolver links, IBooster
             _sections.Add(new ReportSection(id, title, status, _blocks));
         }
 
-        /// <summary>Значение секции; если его нет — абзац со статусом и null.</summary>
         private T? SectionValue<T>(Reading<T> reading)
             where T : class
         {
@@ -360,7 +346,6 @@ public sealed class ReportDocumentBuilder(OfficialSourceResolver links, IBooster
             return null;
         }
 
-        /// <summary>Пустой список отмечается абзацем, чтобы раздел не выглядел потерянным.</summary>
         private bool NotEmpty<T>(IReadOnlyCollection<T> items)
         {
             if (items.Count > 0)

@@ -12,10 +12,6 @@ using Booster.Core.Tests.TestSupport;
 
 namespace Booster.App.Tests.ViewModels;
 
-/// <summary>
-/// Датчики на панели сессии. Довести координатор до Gaming на фейках без применимых действий нельзя, поэтому
-/// проверяется раскладка хода сессии в строки панели — её же вызывает ShowStatus.
-/// </summary>
 public sealed class SessionViewModelTests
 {
     [Fact]

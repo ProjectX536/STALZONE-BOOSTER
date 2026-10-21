@@ -10,16 +10,13 @@ public enum JournalProblemKind
     NewerSchemaVersion,
     Unreadable,
 
-    /// <summary>Сессия прочитана, но восстановление при запуске завершилось ошибкой; файл остаётся незавершённым.</summary>
     RecoveryFailed,
 }
 
-/// <summary>Файл журнала, из которого ничего не восстанавливается; показывается на экране журнала.</summary>
 public sealed record JournalProblem(string FileName, JournalProblemKind Kind, string Detail);
 
 public sealed record SessionReadResult(SessionRecord? Session, JournalProblem? Problem);
 
-/// <summary>Формат файла сессии. Чтение не бросает: плохой файл становится <see cref="JournalProblem"/>.</summary>
 public static class SnapshotStore
 {
     public static JsonSerializerOptions SerializerOptions { get; } = new()
@@ -30,7 +27,6 @@ public static class SnapshotStore
         RespectNullableAnnotations = true,
         RespectRequiredConstructorParameters = true,
 
-        // Файл локальный и читается человеком: кириллица в названиях действий остаётся читаемой.
         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
     };
 
@@ -61,7 +57,6 @@ public static class SnapshotStore
             if (session is null)
                 return Invalid(fileName, "null");
 
-            // Сохранение пишет <SessionId>.json: файл с чужим именем после восстановления остался бы незавершённым.
             if (!SessionIds.IsValid(session.SessionId) || !string.Equals(fileName, session.SessionId + ".json", StringComparison.OrdinalIgnoreCase))
                 return Invalid(fileName, $"session id '{session.SessionId}' does not match the file name");
             return new SessionReadResult(session, null);

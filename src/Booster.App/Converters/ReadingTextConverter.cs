@@ -10,17 +10,11 @@ namespace Booster.App.Converters;
 
 public enum ReadingPart
 {
-    /// <summary>Значение или, если его нет, статус: «Неизвестно», «Нужны права администратора», ...</summary>
     Value,
 
-    /// <summary>Подсказка «источник: пояснение»; null, если нет ни того, ни другого.</summary>
     Source,
 }
 
-/// <summary>
-/// Текст <see cref="Reading{T}"/> любого T для привязок XAML. ConverterParameter <see cref="BytesParameter"/> показывает
-/// целое число как размер (КБ, МБ, ...). Тексты — те же, что в отчёте (<see cref="ReadingFormatter"/>, <see cref="EnumText"/>).
-/// </summary>
 [ValueConversion(typeof(object), typeof(string))]
 public sealed class ReadingTextConverter : IValueConverter
 {

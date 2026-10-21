@@ -2,10 +2,8 @@ using System.Globalization;
 
 namespace Booster.Core.Inventory;
 
-/// <summary>LUID видеоадаптера — общий ключ для DXGI, DisplayConfig и счётчиков GPU Engine.</summary>
 public readonly record struct AdapterLuid(uint LowPart, int HighPart)
 {
-    /// <summary>Формат имён экземпляров счётчиков GPU Engine: <c>0x{High:X8}_0x{Low:X8}</c>.</summary>
     public override string ToString() =>
         string.Create(CultureInfo.InvariantCulture, $"0x{HighPart:X8}_0x{LowPart:X8}");
 

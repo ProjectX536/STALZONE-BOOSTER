@@ -13,7 +13,6 @@ namespace Booster.App.Tests.ViewModels;
 
 public sealed class HagsViewModelTests : IDisposable
 {
-    /// <summary>Два часа после загрузки <see cref="FakeBootTimeSource.DefaultBoot"/>.</summary>
     private static readonly DateTimeOffset Now = new(2026, 10, 20, 10, 0, 0, TimeSpan.Zero);
 
     private const string NotSwitchedByBooster = "Booster HAGS не переключает";
@@ -52,7 +51,6 @@ public sealed class HagsViewModelTests : IDisposable
         return panel;
     }
 
-    /// <summary>Тест начат по серии «base»; через час HAGS выключен и компьютер перезагружен.</summary>
     private async Task<HagsViewModel> SwitchedAsync()
     {
         var panel = await StartedAsync();
@@ -170,7 +168,6 @@ public sealed class HagsViewModelTests : IDisposable
     {
         var panel = await SwitchedAsync();
         var candidate = SampleSeries.Completed("candidate", _time.GetUtcNow().AddMinutes(10), fps: 80);
-        // Изменение не описано — у сравнения есть оговорка.
         await _series.SaveAsync(candidate with
         {
             Conditions = candidate.Conditions with { Notes = candidate.Conditions.Notes with { Change = null } },

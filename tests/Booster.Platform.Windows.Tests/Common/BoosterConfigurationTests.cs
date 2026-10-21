@@ -8,7 +8,6 @@ namespace Booster.Platform.Windows.Tests.Common;
 
 public class BoosterConfigurationTests
 {
-    /// <summary>Встроенные файлы — настоящие из config/, пользовательские — в памяти.</summary>
     private sealed class InMemoryUserFiles : IConfigFileSource
     {
         public Dictionary<string, string> User { get; } = new(StringComparer.OrdinalIgnoreCase);

@@ -3,10 +3,6 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>
-/// Процессы в памяти: PID → имя, время старта и приоритет. Считает вызовы <see cref="List"/>.
-/// <see cref="SetPriority"/> только запоминается: настоящие процессы не меняются.
-/// </summary>
 public sealed class FakeProcessProvider : IProcessProvider, IProcessPriorityController
 {
     private readonly Dictionary<int, (string Name, DateTimeOffset StartTime, ProcessPriority Priority)> _processes = [];
@@ -34,19 +30,16 @@ public sealed class FakeProcessProvider : IProcessProvider, IProcessPriorityCont
         lock (_processes) _processes.Remove(processId);
     }
 
-    /// <summary>Приоритет сменил кто-то другой (сама игра или пользователь).</summary>
     public void ChangePriority(int processId, ProcessPriority priority)
     {
         lock (_processes) _processes[processId] = _processes[processId] with { Priority = priority };
     }
 
-    /// <summary>Процесс запущен от имени администратора или защищён: менять приоритет нельзя.</summary>
     public void DenyAccess(int processId)
     {
         lock (_processes) _denied.Add(processId);
     }
 
-    /// <summary>Процесс работает и есть в списке, но открыть его даже для чтения нельзя (например, защищён античитом).</summary>
     public void DenyRead(int processId)
     {
         lock (_processes) _unreadable.Add(processId);
@@ -89,7 +82,6 @@ public sealed class FakeProcessProvider : IProcessProvider, IProcessPriorityCont
         {
             if (!Matches(process))
                 throw new InvalidOperationException($"Process {process.ProcessId} is not the one started at {process.StartTime:O}.");
-            // Как ProcessProvider: ERROR_ACCESS_DENIED приходит как UnauthorizedAccessException.
             if (_denied.Contains(process.ProcessId) || _unreadable.Contains(process.ProcessId))
                 throw new UnauthorizedAccessException("Access is denied.", new Win32Exception(5));
             _priorityCalls.Add((process, priority));

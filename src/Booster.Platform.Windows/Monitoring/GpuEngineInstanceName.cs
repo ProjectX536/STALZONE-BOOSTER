@@ -6,10 +6,6 @@ namespace Booster.Platform.Windows.Monitoring;
 
 public readonly record struct GpuEngineInstance(int ProcessId, AdapterLuid Luid, string EngineType);
 
-/// <summary>
-/// Имя экземпляра счётчика «GPU Engine»: <c>pid_1234_luid_0x00000000_0x0000C2A1_phys_0_eng_0_engtype_3D</c>.
-/// LUID в нём — тот же, что у DXGI, поэтому по нему адаптер сопоставляется с инвентаризацией.
-/// </summary>
 public static partial class GpuEngineInstanceName
 {
     public static bool TryParse(string? instanceName, out GpuEngineInstance instance)

@@ -1,5 +1,4 @@
 <Project>
-  <!-- Версии всех NuGet-пакетов решения. Лицензии — docs/ARCHITECTURE.md, раздел 2. -->
   <ItemGroup>
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.13" />

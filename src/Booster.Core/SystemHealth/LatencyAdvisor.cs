@@ -6,14 +6,8 @@ using Booster.Core.Reports;
 
 namespace Booster.Core.SystemHealth;
 
-/// <summary>
-/// Рекомендации по времени DPC и прерываний в серии бенчмарка. Какой драйвер виноват, показывает только трасса WPR, а драйверы
-/// Booster не меняет — поэтому рекомендация только ручная. Нет серии или значения — нет и рекомендации.
-/// </summary>
 public static class LatencyAdvisor
 {
-    /// <summary>Пик DPC или прерываний не ниже порога → Warning, L3, аргумент — пик в инвариантной культуре.</summary>
-    /// <param name="telemetry">Сводка серии бенчмарка текущей сессии; null — серии нет.</param>
     public static IReadOnlyList<SystemAdvice> Advise(SeriesTelemetry? telemetry, BottleneckSettings settings)
     {
         ArgumentNullException.ThrowIfNull(settings);

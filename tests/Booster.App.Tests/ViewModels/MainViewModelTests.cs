@@ -91,7 +91,6 @@ public sealed class MainViewModelTests
         Assert.Equal(AppPage.Overview, Leave(main));
     }
 
-    /// <summary>Экраны — из корня композиции; игровая часть и маркер трассы — на фейках: координатор хоста не запускается.</summary>
     private static MainViewModel Create(TempHost host, FakeGaming gaming, InMemoryStateFileStore state) => new(
         host.Resolve<StatusBarViewModel>(), host.Resolve<OverviewViewModel>(), host.Resolve<HardwareViewModel>(),
         host.Resolve<DriversViewModel>(), host.Resolve<SystemViewModel>(), host.Resolve<PerformanceViewModel>(),
@@ -100,7 +99,6 @@ public sealed class MainViewModelTests
         new TraceRecorder(new FakeWprRunner(), state, new FakeBootTimeSource(), gaming.Time, NullLogger<TraceRecorder>.Instance),
         NullLogger<MainViewModel>.Instance);
 
-    /// <summary>Выбранный экран; уход с него останавливает то, что он запустил при открытии.</summary>
     private static AppPage Leave(MainViewModel main)
     {
         var page = main.SelectedPage;

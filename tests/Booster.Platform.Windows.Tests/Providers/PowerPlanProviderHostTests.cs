@@ -4,7 +4,6 @@ using Booster.Platform.Windows.Providers;
 
 namespace Booster.Platform.Windows.Tests.Providers;
 
-/// <summary>Читают схемы питания и источник питания; SetActiveScheme не вызывается ни в одном тесте.</summary>
 [Trait("Category", "Host")]
 public partial class PowerPlanProviderHostTests
 {
@@ -35,7 +34,6 @@ public partial class PowerPlanProviderHostTests
         Assert.True(Enum.IsDefined(_provider.GetPowerSource()));
     }
 
-    /// <summary><c>powercfg /getactivescheme</c> — только чтение (docs/PRINCIPLES.md, «Безопасность машины разработчика»).</summary>
     private static Guid PowercfgActiveScheme()
     {
         using var process = Process.Start(new ProcessStartInfo("powercfg.exe", "/getactivescheme")

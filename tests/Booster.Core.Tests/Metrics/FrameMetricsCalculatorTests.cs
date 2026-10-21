@@ -32,7 +32,6 @@ public class FrameMetricsCalculatorTests
     [Fact]
     public void One_percent_low_shows_spikes_that_p99_misses()
     {
-        // P99 (ранг 297) попадает в обычные кадры, а 1% low (3 самых долгих кадра) — в провалы.
         var intervals = Repeat(10.0, 297).Concat(Repeat(40.0, 3)).ToArray();
 
         var m = Metrics(FrameMetricsCalculator.Calculate(intervals, MinimumFrames));

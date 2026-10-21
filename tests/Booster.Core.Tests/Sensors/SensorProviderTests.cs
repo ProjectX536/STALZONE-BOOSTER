@@ -307,7 +307,6 @@ public sealed class SensorProviderTests
         return (report.Status, report.ProviderId);
     }
 
-    /// <summary>Общий провайдер, чтение телеметрии которого ждёт разрешения теста и считает одновременные вызовы.</summary>
     private sealed class GatedProvider : IGpuProvider
     {
         private int _concurrent;

@@ -4,16 +4,11 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>Издатель исполняемого файла.</summary>
 internal interface IFilePublisherSource
 {
     Reading<string> GetPublisher(string? path);
 }
 
-/// <summary>
-/// CompanyName из ресурса версии файла. Это не проверка подписи: строку пишет сам автор файла, поэтому она годится
-/// только для того, чтобы НЕ предлагать службу к проверке, а не для доверия к ней.
-/// </summary>
 internal sealed class FilePublisherSource : IFilePublisherSource
 {
     public const string Source = "FileVersionInfo.CompanyName";

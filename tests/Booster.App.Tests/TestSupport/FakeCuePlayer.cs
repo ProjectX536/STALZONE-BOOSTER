@@ -2,7 +2,6 @@ using Booster.App.Services;
 
 namespace Booster.App.Tests.TestSupport;
 
-/// <summary>Вместо звука — запись сигналов: «start» в начале прогона, «end» в конце.</summary>
 internal sealed class FakeCuePlayer : IBenchmarkCuePlayer
 {
     private readonly Lock _lock = new();

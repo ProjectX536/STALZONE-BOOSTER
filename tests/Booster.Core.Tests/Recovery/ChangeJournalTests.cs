@@ -96,7 +96,6 @@ public class ChangeJournalTests
     [Fact]
     public async Task Prune_keeps_sessions_with_applied_changes()
     {
-        // Изменение обслуживания остаётся в системе, пока его не вернут: очистка не должна стирать его снимок.
         var journal = Journal();
         for (var day = 1; day <= 3; day++)
             await journal.SaveAsync(SessionFactory.Finished($"2026100{day}-120000-0000000{day}",
@@ -114,7 +113,6 @@ public class ChangeJournalTests
     [Fact]
     public async Task Prune_keeps_sessions_with_failed_restore()
     {
-        // Возврат не удался — значение Booster всё ещё в системе, «Вернуть» предлагает повтор: снимок нужен.
         var journal = Journal();
         for (var day = 1; day <= 2; day++)
             await journal.SaveAsync(SessionFactory.Finished($"2026100{day}-120000-0000000{day}",

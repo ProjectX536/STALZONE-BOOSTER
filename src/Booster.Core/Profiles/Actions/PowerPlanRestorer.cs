@@ -5,7 +5,6 @@ using Booster.Core.Resources;
 
 namespace Booster.Core.Profiles.Actions;
 
-/// <summary>Возврат схемы питания по GUID из снимка, в том числе пользовательской.</summary>
 public sealed class PowerPlanRestorer(IPowerPlanProvider power) : IActionRestorer
 {
     public string ActionId => ActionIds.PowerPlan;

@@ -38,7 +38,6 @@ public sealed class BenchmarkRunnerTests
         return new BenchmarkRunner(_capture, recorder, _displays, _power, config, _time, new ListLogger<BenchmarkRunner>());
     }
 
-    /// <summary>По 601 кадру на окно, равномерно: первый кадр окна отбрасывается, остаётся 600.</summary>
     private FrameCaptureResult FramesInWindows(long startTimestamp)
     {
         var frames = Schedule.Windows(startTimestamp, _time.TimestampFrequency)
@@ -49,10 +48,8 @@ public sealed class BenchmarkRunnerTests
             Reading<AdapterLuid>.Unknown(Source), null);
     }
 
-    /// <summary>Двигает время по секунде, пока серия не закончится; <paramref name="onStep"/> — после каждого шага.</summary>
     private async Task<BenchmarkSeries> DriveAsync(Task<BenchmarkSeries> run, Action? onStep = null)
     {
-        // Старт захвата идёт в пуле потоков: время не двигается, пока захват не стартовал или не ждёт UAC.
         for (var i = 0; i < 2000 && _capture.StartedAt is null && !run.IsCompleted && (_capture.ElevationWait == TimeSpan.Zero || _capture.Calls == 0); i++)
             await Task.Delay(1, Ct);
         for (var step = 0; step < 200 && !run.IsCompleted; step++)
@@ -118,7 +115,6 @@ public sealed class BenchmarkRunnerTests
         _capture.ExitedAfterStartResult = new FrameCaptureResult(FrameCaptureStatus.Failed, null, Reading<AdapterLuid>.Unknown(),
             "PresentMon exited with code 1");
 
-        // Время не двигается: серия должна закончиться сама, а не отсчитывать прогоны впустую.
         var series = await CreateRunner().RunAsync(Request, _progress, Ct).WaitAsync(TimeSpan.FromSeconds(10), Ct);
 
         Assert.Equal(FrameCaptureStatus.Failed, series.Status);
@@ -253,7 +249,6 @@ public sealed class BenchmarkRunnerTests
         }
     }
 
-    /// <summary>Только чтение: смена схемы в бенчмарке — ошибка теста.</summary>
     private sealed class ReadOnlyPower : IPowerPlanProvider
     {
         private static readonly PowerScheme Balanced = new(Guid.Parse("381b4222-f694-41f0-9685-ff5bb260df2e"), "Balanced");

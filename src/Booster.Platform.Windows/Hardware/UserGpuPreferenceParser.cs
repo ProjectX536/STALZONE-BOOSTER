@@ -3,10 +3,6 @@ using Booster.Core.Inventory;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>
-/// Значения ключа <c>HKCU\Software\Microsoft\DirectX\UserGpuPreferences</c>: имя — путь к exe,
-/// данные — строка вида <c>"SwapEffectUpgradeEnable=1;GpuPreference=2;"</c>.
-/// </summary>
 public static class UserGpuPreferenceParser
 {
     public const string RegistryKey = @"Software\Microsoft\DirectX\UserGpuPreferences";

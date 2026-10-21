@@ -5,10 +5,7 @@
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
-  <!--
-    Релиз: dotnet publish src/Booster.App/Booster.App.csproj -c Release -r win-x64 — один exe со средой .NET, установка .NET не нужна.
-    Конфигурация из config\ упакована в exe и распаковывается при запуске, поэтому читается так же, как рядом с exe.
-  -->
+  <!-- dotnet publish -c Release -r win-x64: один exe со средой .NET, config\ упакован внутрь. -->
   <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'win-x64'">
     <SelfContained>true</SelfContained>
     <PublishSingleFile>true</PublishSingleFile>
@@ -23,7 +20,6 @@
     <PackageReference Include="Serilog.Sinks.File" />
   </ItemGroup>
   <ItemGroup>
-    <!-- Тесты собирают корень композиции (AppHost) во временном каталоге. -->
     <InternalsVisibleTo Include="Booster.App.Tests" />
   </ItemGroup>
   <ItemGroup>
@@ -32,19 +28,13 @@
     <ProjectReference Include="..\Booster.Providers.Gpu\Booster.Providers.Gpu.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <!-- Класс Strings генерируется при сборке; в репозитории только .resx. Публичный — для x:Static в XAML. -->
     <EmbeddedResource Update="Resources\Strings.resx" Generator="MSBuild:Compile"
                       StronglyTypedFileName="$(IntermediateOutputPath)Strings.Designer.cs" StronglyTypedLanguage="CSharp"
                       StronglyTypedNamespace="Booster.App.Resources" StronglyTypedClassName="Strings" PublicClass="true" />
   </ItemGroup>
-  <!--
-    Разметку с локальными типами WPF компилирует через временную сборку (*_wpftmp.csproj), а в её сборке нет шага ResGen,
-    и класса Strings там нет. Генерация перед CoreCompile добавляет его и во временную сборку; в основной CoreResGen
-    к этому моменту уже выполнен, и цель ничего не делает.
-  -->
+  <!-- Во временной сборке *_wpftmp нет ResGen, поэтому Strings генерируется до CoreCompile. -->
   <Target Name="GenerateStringsForMarkupCompilation" BeforeTargets="CoreCompile" DependsOnTargets="PrepareResourceNames;CoreResGen" />
   <ItemGroup>
-    <!-- Встроенная конфигурация из репозитория копируется в config\ рядом с exe. -->
     <None Include="..\..\config\**" Link="config\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

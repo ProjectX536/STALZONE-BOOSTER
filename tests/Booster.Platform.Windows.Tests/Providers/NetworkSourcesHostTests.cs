@@ -3,7 +3,6 @@ using Booster.Platform.Windows.Providers;
 
 namespace Booster.Platform.Windows.Tests.Providers;
 
-/// <summary>Читают сетевые адаптеры и пингуют loopback. Внешние узлы не опрашиваются.</summary>
 [Trait("Category", "Host")]
 public class NetworkSourcesHostTests
 {

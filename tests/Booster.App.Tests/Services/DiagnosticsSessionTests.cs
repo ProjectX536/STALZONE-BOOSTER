@@ -19,7 +19,6 @@ public class DiagnosticsSessionTests
 
     private static CancellationToken Ct => TestContext.Current.CancellationToken;
 
-    /// <summary>Сессия с настоящим сборщиком на фейках: подкачка отключена, в журнале — сбой cs2.exe.</summary>
     private DiagnosticsSession Session(IProfileRepository profiles)
     {
         var collector = TestCollector.Create(_time, _config, profiles,
@@ -85,7 +84,6 @@ public class DiagnosticsSessionTests
         await session.RefreshAsync(Ct);
 
         Assert.NotNull(session.Snapshot);
-        // Прежний вид мог устареть: отчёт говорит, что состояние теста не прочитано, а не показывает старое.
         Assert.Null(session.Hags);
         Assert.Null(session.BuildReport().Hags);
     }

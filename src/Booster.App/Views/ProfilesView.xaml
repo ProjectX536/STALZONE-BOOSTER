@@ -28,7 +28,6 @@
 
     <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="24,0,24,16">
       <StackPanel MaxWidth="900" HorizontalAlignment="Left">
-        <!-- Замечания к пользовательским файлам профилей: видны, только если есть -->
         <StackPanel Margin="0,4,0,8" Visibility="{Binding HasLoadWarnings, Converter={StaticResource BooleanToVisibility}}">
           <TextBlock FontWeight="SemiBold" Foreground="{StaticResource WarningBrush}" Text="{x:Static res:Strings.ProfileLoadWarningsTitle}" Margin="0,0,0,4" />
           <ItemsControl ItemsSource="{Binding LoadWarnings}" Focusable="False">
@@ -40,24 +39,20 @@
           </ItemsControl>
         </StackPanel>
 
-        <!-- Профиль -->
         <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
           <Label Content="{x:Static res:Strings.ProfileLabel}" Target="{Binding ElementName=ProfilePicker}" Padding="0" VerticalAlignment="Center" />
           <ComboBox x:Name="ProfilePicker" ItemsSource="{Binding Profiles}" SelectedItem="{Binding SelectedProfile}" DisplayMemberPath="Name"
                     Width="300" Margin="8,0,0,0" AutomationProperties.Name="{x:Static res:Strings.ProfileLabel}" />
         </StackPanel>
 
-        <!-- Сессия -->
         <TextBlock Style="{StaticResource SectionTitle}" Text="{x:Static res:Strings.SessionTitle}" />
         <Border Style="{StaticResource Card}" DataContext="{Binding Session}">
           <StackPanel>
-            <!-- Нет сессии -->
             <StackPanel Visibility="{Binding IsIdle, Converter={StaticResource BooleanToVisibility}}">
               <Button Style="{StaticResource ToolbarButton}" Content="{x:Static res:Strings.PrepareSession}" Command="{Binding PrepareCommand}"
                       HorizontalAlignment="Left" />
               <TextBlock Style="{StaticResource Hint}" Text="{x:Static res:Strings.PrepareHint}" />
 
-              <!-- Подтверждение -->
               <StackPanel Visibility="{Binding IsPreviewing, Converter={StaticResource BooleanToVisibility}}" Margin="0,8,0,0">
                 <TextBlock FontWeight="SemiBold" Text="{x:Static res:Strings.ConfirmTitle}" Margin="0,4,0,4" />
                 <TextBlock Style="{StaticResource EmptyHint}" Tag="{Binding ConfirmActions}" Text="{x:Static res:Strings.NoneInGroup}" />
@@ -98,14 +93,12 @@
               </StackPanel>
             </StackPanel>
 
-            <!-- Подготовлено -->
             <StackPanel Visibility="{Binding IsArmed, Converter={StaticResource BooleanToVisibility}}">
               <TextBlock Text="{Binding ArmedText}" TextWrapping="Wrap" />
               <Button Style="{StaticResource ToolbarButton}" Content="{x:Static res:Strings.CancelPreparation}" Command="{Binding DisarmCommand}"
                       HorizontalAlignment="Left" Margin="0,8,0,0" />
             </StackPanel>
 
-            <!-- Идёт сессия -->
             <StackPanel Visibility="{Binding IsInSession, Converter={StaticResource BooleanToVisibility}}">
               <TextBlock Text="{Binding StateText, StringFormat={x:Static res:Strings.SessionStateFormat}}" FontWeight="SemiBold" />
               <TextBlock Text="{Binding GameText, StringFormat={x:Static res:Strings.SessionGameFormat}}" />
@@ -136,7 +129,6 @@
           </StackPanel>
         </Border>
 
-        <!-- Игры -->
         <TextBlock Style="{StaticResource SectionTitle}" Text="{x:Static res:Strings.GamesTitle}" />
         <TextBlock Style="{StaticResource Hint}" Text="{x:Static res:Strings.GamesHint}" Margin="0,0,0,6" />
         <TextBlock Style="{StaticResource EmptyHint}" Tag="{Binding Games}" Text="{x:Static res:Strings.NoGames}" />
@@ -183,7 +175,6 @@
           <TextBlock Style="{StaticResource Hint}" Text="{x:Static res:Strings.ExeExample}" Margin="8,0,0,0" VerticalAlignment="Center" />
         </StackPanel>
 
-        <!-- Действия -->
         <TextBlock Style="{StaticResource SectionTitle}" Text="{x:Static res:Strings.ActionsTitle}" />
         <ItemsControl ItemsSource="{Binding Actions}" Focusable="False">
           <ItemsControl.ItemTemplate>
@@ -223,7 +214,6 @@
           </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <!-- Фоновые приложения -->
         <TextBlock Style="{StaticResource SectionTitle}" Text="{x:Static res:Strings.BackgroundAppsTitle}" />
         <TextBlock Style="{StaticResource Hint}" Text="{x:Static res:Strings.BackgroundAppsCaption}" Margin="0,0,0,6" />
         <TextBlock Style="{StaticResource EmptyHint}" Tag="{Binding BackgroundApps}" Text="{x:Static res:Strings.NoBackgroundApps}" />
@@ -239,7 +229,6 @@
           </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <!-- Автозапуск и сохранение -->
         <CheckBox Content="{x:Static res:Strings.AutoStartLabel}" IsChecked="{Binding AutoStart}" Margin="0,16,0,0" />
         <TextBlock Style="{StaticResource Hint}" Text="{x:Static res:Strings.AutoStartHint}" Margin="20,2,0,0" />
         <WrapPanel Margin="0,16,0,0">

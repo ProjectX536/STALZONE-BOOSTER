@@ -11,10 +11,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.App.ViewModels;
 
-/// <summary>
-/// Настройки PresentMon и бенчмарка: путь к exe и длительность прогона по умолчанию. Сохраняются в пользовательский settings.json;
-/// изменённый путь действует сразу — поиск PresentMon читает его при каждом замере.
-/// </summary>
 public sealed partial class SettingsViewModel : ObservableObject, IPage
 {
     private readonly IBoosterConfiguration _config;
@@ -32,7 +28,6 @@ public sealed partial class SettingsViewModel : ObservableObject, IPage
         Load();
     }
 
-    /// <summary>Пусто — PresentMon ищется в папке инструментов Booster и рядом с Booster.exe.</summary>
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveCommand))]
     public partial string PresentMonPath { get; set; }
@@ -44,13 +39,11 @@ public sealed partial class SettingsViewModel : ObservableObject, IPage
     [ObservableProperty]
     public partial string? StatusMessage { get; private set; }
 
-    /// <summary>Замечания к конфигурации: исправленные значения, нечитаемые файлы.</summary>
     [ObservableProperty]
     public partial IReadOnlyList<string> Warnings { get; private set; } = [];
 
     public string SettingsFileText { get; }
 
-    /// <summary>Переход на экран не сбрасывает несохранённые правки; обновляются только замечания.</summary>
     public void Activate() => Warnings = FormatWarnings(_config.Current.Warnings);
 
     [RelayCommand]

@@ -11,16 +11,12 @@ public enum RegistryRoot
     CurrentUser,
 }
 
-/// <summary>Чтение реестра. Ключи открываются только на чтение; записи в Booster нет до появления обратимых действий.</summary>
 public interface IRegistryReader
 {
-    /// <summary>Нет ключа или значения → null.</summary>
     object? GetValue(RegistryRoot root, string subKey, string valueName);
 
-    /// <summary>Нет ключа → пустой список.</summary>
     IReadOnlyList<KeyValuePair<string, object?>> GetValues(RegistryRoot root, string subKey);
 
-    /// <summary>Время последней записи ключа в UTC; нет ключа → null.</summary>
     DateTimeOffset? GetLastWriteTime(RegistryRoot root, string subKey);
 }
 
@@ -55,7 +51,6 @@ public sealed class RegistryReader : IRegistryReader
         return new DateTimeOffset(DateTime.FromFileTimeUtc(fileTime), TimeSpan.Zero);
     }
 
-    // 64-битное представление: в нём лежат настройки драйверов и ОС, даже если процесс почему-то 32-битный.
     private static RegistryKey? OpenReadOnly(RegistryRoot root, string subKey)
     {
         ArgumentNullException.ThrowIfNull(subKey);

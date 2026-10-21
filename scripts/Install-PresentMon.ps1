@@ -3,18 +3,8 @@
 .SYNOPSIS
     Скачивает PresentMon 2.6.0 с официального релиза GitHub и проверяет SHA256.
 
-.DESCRIPTION
-    Версия и хеш закреплены: значение SHA256 взято из API релиза
-    https://api.github.com/repos/GameTechDev/PresentMon/releases/tags/v2.6.0 (поле digest).
-    Файл сначала скачивается во временный файл рядом с целевым и переименовывается только после
-    совпадения хеша, поэтому непроверенный exe под настоящим именем не появляется.
-    Скрипт ничего не меняет в системе: только создаёт каталог и файл в профиле пользователя.
-
 .PARAMETER Destination
     Каталог установки. По умолчанию — %LOCALAPPDATA%\Booster\tools\PresentMon (там его ищет Booster).
-
-.OUTPUTS
-    Полный путь к проверенному exe.
 #>
 [CmdletBinding()]
 param(
@@ -43,7 +33,7 @@ if ((Test-Path -LiteralPath $target -PathType Leaf) -and (Test-Sha256 $target)) 
 New-Item -ItemType Directory -Path $Destination -Force | Out-Null
 $partial = "$target.download"
 
-# Windows PowerShell 5.1 по умолчанию может не включать TLS 1.2, а GitHub принимает только его и новее.
+# Windows PowerShell 5.1 может не включать TLS 1.2, а GitHub требует его.
 [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 
 try {
@@ -58,7 +48,6 @@ try {
     Move-Item -LiteralPath $partial -Destination $target -Force
 }
 finally {
-    # Остаётся только при сбое: недокачанный или не прошедший проверку файл.
     if (Test-Path -LiteralPath $partial) {
         Remove-Item -LiteralPath $partial -Force
     }

@@ -2,10 +2,6 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Core.Sensors;
 
-/// <summary>
-/// Сливает телеметрию вендорского и общего провайдера поле за полем: известное значение вендора, иначе известное
-/// значение общего, иначе причина вендора (например, нужны права администратора), иначе — что сообщил общий.
-/// </summary>
 public static class GpuTelemetryMerger
 {
     public static GpuTelemetry Merge(GpuTelemetry vendor, GpuTelemetry generic)

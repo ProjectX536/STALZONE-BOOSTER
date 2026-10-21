@@ -16,7 +16,6 @@ public class OfficialSourceResolverTests
         ["nvidia.com", "msi.com", "microsoft.com"],
         [
             new VendorLinkRule("10DE", "NVIDIA — драйверы", NvidiaUrl),
-            // Хоста нет в allowedHosts: такая ссылка не должна дойти до пользователя.
             new VendorLinkRule("1002", "AMD — драйверы", "https://amd-drivers.example.com/download"),
             new VendorLinkRule("8086", "Intel — по http", "http://www.intel.com/"),
         ],
@@ -74,7 +73,6 @@ public class OfficialSourceResolverTests
     [Fact]
     public void Gpu_vendor_rule_needs_a_display_device_and_board_rule_a_system_device()
     {
-        // Аудиоконтроллер NVIDIA в классе System — не видеокарта: ссылка на плату, а не на драйвер GPU.
         var audio = Resolver().ForDevice(Device("System", @"PCI\VEN_10DE&DEV_228B&SUBSYS_C9721462&REV_A1"), Board("Micro-Star"));
         var network = Resolver().ForDevice(Device("Net", @"PCI\VEN_10EC&DEV_8125"), Board("Micro-Star"));
 

@@ -2,15 +2,10 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Platform.Windows.Monitoring;
 
-/// <summary>
-/// Память и ввод-вывод процессов по снимкам. Процесс узнаётся по паре PID + время запуска: PID переиспользуется.
-/// Idle не процесс, а учёт простоя, поэтому в списки не попадает.
-/// </summary>
 internal static class ProcessResourceCalculator
 {
     private const int IdleProcessId = 0;
 
-    /// <summary>Процессы с наибольшей частной памятью, по убыванию.</summary>
     public static IReadOnlyList<ProcessMemoryUsage> Memory(IReadOnlyList<ProcessTimes> snapshot, int topCount)
     {
         ArgumentNullException.ThrowIfNull(snapshot);
@@ -26,10 +21,6 @@ internal static class ProcessResourceCalculator
             .ToArray();
     }
 
-    /// <summary>
-    /// Скорости между снимками. Процессы без пары в прошлом снимке пропускаются: их счётчики накоплены с запуска.
-    /// Убывший счётчик считается нулём.
-    /// </summary>
     public static ProcessIoActivity Io(IReadOnlyList<ProcessTimes> previous, IReadOnlyList<ProcessTimes> current, TimeSpan elapsed,
         int topCount)
     {

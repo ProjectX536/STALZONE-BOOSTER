@@ -141,7 +141,6 @@ public sealed class ThermalThrottleDetectorTests
     {
         var first = Adapter("Intel(R) UHD Graphics", new AdapterLuid(0x0000A001, 0));
         var second = Adapter("NVIDIA GeForce RTX 3060 Ti", new AdapterLuid(0x0000C2A1, 0));
-        // Тот же адаптер под другим именем в одном из замеров — всё равно тот же LUID.
         var renamed = second with { Name = "NVIDIA GeForce RTX 3060 Ti (renamed)" };
         IReadOnlyList<SensorSnapshot> samples =
         [

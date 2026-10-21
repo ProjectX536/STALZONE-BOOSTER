@@ -2,14 +2,6 @@
 <#
 .SYNOPSIS
     Общие функции диагностических скриптов Booster (00–05, 07).
-
-.DESCRIPTION
-    Скрипты только читают систему. Каждый собирает документ
-    { schemaVersion, script, collectedAt, isElevated, sections } и выводит его как JSON в stdout или в файл.
-    Секция — { status, value } при успехе или { status, note } с причиной. Статусы совпадают с DataStatus
-    приложения: Available, RequiresAdmin, NotSupported, Failed, Unknown.
-    В вывод не попадают серийные номера, имя компьютера и имя пользователя: отчёт могут переслать для помощи.
-    Работает в Windows PowerShell 5.1 и PowerShell 7.
 #>
 
 Set-StrictMode -Version Latest
@@ -19,8 +11,6 @@ $ProgressPreference = 'SilentlyContinue'
 $script:Invariant = [Globalization.CultureInfo]::InvariantCulture
 $script:Utf8NoBom = New-Object Text.UTF8Encoding $false
 $script:ConfigDirectory = Join-Path (Split-Path $PSScriptRoot -Parent) 'config'
-
-#region Документ и секции
 
 function Test-BoosterElevated {
     [CmdletBinding()]
@@ -35,10 +25,6 @@ function Test-BoosterElevated {
     }
 }
 
-<#
-.SYNOPSIS
-    Get-CimInstance с таймаутом; сбой — исключение, которое New-BoosterSection превращает в статус Failed.
-#>
 function Invoke-BoosterCim {
     [CmdletBinding()]
     param(
@@ -54,14 +40,7 @@ function Invoke-BoosterCim {
     Get-CimInstance @query
 }
 
-<#
-.SYNOPSIS
-    Выполняет блок и возвращает секцию: { status: Available, value } или { status: Failed, note }.
-
-.DESCRIPTION
-    Блок возвращает одно значение: словарь, объект или массив. Массив возвращается через запятую (,@(...)),
-    иначе PowerShell развернёт его, а пустой превратит в $null. Другой статус блок задаёт через New-BoosterStatus.
-#>
+# Массив блок возвращает через запятую (,@(...)), иначе PowerShell его развернёт.
 function New-BoosterSection {
     [CmdletBinding()]
     param([Parameter(Mandatory)][scriptblock]$ScriptBlock)
@@ -74,7 +53,7 @@ function New-BoosterSection {
     if ($null -ne $value -and $value.PSObject.TypeNames -contains 'Booster.Status') {
         return [ordered]@{ status = $value.status; note = $value.note }
     }
-    # Массив из конвейера в 5.1 обёрнут в PSObject, и ConvertTo-Json пишет его как { value, Count }; @() снимает обёртку.
+    # В 5.1 массив из конвейера обёрнут в PSObject, @() снимает обёртку.
     if ($value -is [array]) {
         $value = @($value)
     }
@@ -105,14 +84,7 @@ function New-BoosterDocument {
     }
 }
 
-<#
-.SYNOPSIS
-    JSON глубиной 8; с -AsciiOnly символы вне ASCII записываются как \uXXXX.
-
-.DESCRIPTION
-    Кодировка консоли зависит от системы (в русской Windows — 866), поэтому в stdout идёт только ASCII:
-    его одинаково прочтёт любая программа. Кодировку консоли скрипт не меняет.
-#>
+# В stdout только ASCII: кодировка консоли зависит от системы.
 function ConvertTo-BoosterJson {
     [CmdletBinding()]
     param(
@@ -126,10 +98,6 @@ function ConvertTo-BoosterJson {
     $json
 }
 
-<#
-.SYNOPSIS
-    Документ — в файл (UTF-8 без BOM) или в stdout (ASCII).
-#>
 function Write-BoosterDocument {
     [CmdletBinding()]
     param(
@@ -144,24 +112,13 @@ function Write-BoosterDocument {
     }
 }
 
-#endregion
-
-#region Значения
-
-<#
-.SYNOPSIS
-    Путь относительно текущего каталога PowerShell. [IO.File] считает от каталога процесса, а он может отличаться.
-#>
+# [IO.File] считает пути от каталога процесса, а не PowerShell.
 function Resolve-BoosterPath {
     [CmdletBinding()]
     param([Parameter(Mandatory)][string]$Path)
     $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Path)
 }
 
-<#
-.SYNOPSIS
-    Путь внутри профиля пользователя записывается от %USERPROFILE%: в профиле есть имя пользователя.
-#>
 function ConvertTo-BoosterSafePath {
     [CmdletBinding()]
     param([AllowNull()][AllowEmptyString()][string]$Path)
@@ -172,10 +129,6 @@ function ConvertTo-BoosterSafePath {
     $Path
 }
 
-<#
-.SYNOPSIS
-    Строка без пробелов по краям; пустая — $null.
-#>
 function ConvertTo-BoosterText {
     [CmdletBinding()]
     param([AllowNull()]$Value)
@@ -184,14 +137,7 @@ function ConvertTo-BoosterText {
     if ($text) { $text } else { $null }
 }
 
-<#
-.SYNOPSIS
-    Дата CIM → ISO 8601 со смещением; с -DateOnly — yyyy-MM-dd.
-
-.DESCRIPTION
-    Даты драйверов и BIOS WMI хранит как полночь UTC, а Get-CimInstance переводит их в местное время.
-    Для -DateOnly дата берётся в UTC, иначе к западу от Гринвича она сдвинулась бы на день назад.
-#>
+# WMI хранит даты драйверов и BIOS как полночь UTC, Get-CimInstance переводит их в местное время.
 function ConvertTo-BoosterDate {
     [CmdletBinding()]
     param(
@@ -205,30 +151,17 @@ function ConvertTo-BoosterDate {
     ([DateTimeOffset]$Value).ToString('o', $script:Invariant)
 }
 
-#endregion
-
-#region Конфигурация
-
-<#
-.SYNOPSIS
-    Читает JSON из config/. Как и приложение, допускает комментарии // и /* */ и висячие запятые.
-#>
 function Read-BoosterConfig {
     [CmdletBinding()]
     param([Parameter(Mandatory)][string]$Path)
     $text = [IO.File]::ReadAllText((Resolve-BoosterPath $Path))
-    # Группа 1 — строка в кавычках: внутри неё // и запятые остаются как есть.
+    # Группа 1 — строка в кавычках, внутри неё // и запятые не трогаются.
     $string = '("(?:\\.|[^"\\])*")'
     $text = [regex]::Replace($text, "$string|//[^\r\n]*|/\*[\s\S]*?\*/", { param($m) $m.Groups[1].Value })
     $text = [regex]::Replace($text, "$string|,(?=\s*[}\]])", { param($m) $m.Groups[1].Value })
     ConvertFrom-Json -InputObject $text
 }
 
-<#
-.SYNOPSIS
-    Значение из файла config/ репозитория по пути через точку, например detectors.timeoutsMs.drivers.
-    Пользовательские файлы из %LOCALAPPDATA%\Booster\config не читаются: скрипты работают и без приложения.
-#>
 function Get-BoosterSetting {
     [CmdletBinding()]
     param(
@@ -246,23 +179,10 @@ function Get-BoosterSetting {
     $node
 }
 
-#endregion
-
-#region Драйверы и официальные ссылки
-
-<#
-.SYNOPSIS
-    Устройства и их драйверы — так же, как в приложении (DriverInventory): устройства из Win32_PnPEntity,
-    драйвер из Win32_PnPSignedDriver по DeviceID. Отсутствующие сейчас устройства (Present = false) пропускаются.
-
-.DESCRIPTION
-    DeviceID в вывод не попадает: в нём бывают серийные номера USB-устройств.
-    Состояние по ConfigManagerErrorCode: 0 — Ok, 22 — Disabled (отключено, не сбой), иначе Error; нет кода — $null.
-#>
+# DeviceID не выводится: в нём бывают серийные номера USB-устройств.
 function Get-BoosterDeviceInventory {
     [CmdletBinding()]
     param([int]$TimeoutSec = 90)
-    # По очереди, только нужные свойства: два тяжёлых перечисления сразу нагружают WMI.
     $entities = @(Invoke-BoosterCim -ClassName Win32_PnPEntity -TimeoutSec $TimeoutSec `
             -Property DeviceID, Name, PNPClass, HardwareID, ConfigManagerErrorCode, Present)
     $signed = @(Invoke-BoosterCim -ClassName Win32_PnPSignedDriver -TimeoutSec $TimeoutSec `
@@ -305,11 +225,6 @@ function Get-BoosterDeviceInventory {
     $devices | Sort-Object { $_.deviceClass }, { $_.name }
 }
 
-<#
-.SYNOPSIS
-    Повторяет OfficialSourceResolver.IsAllowed: https на разрешённом хосте или его поддомене, без имени пользователя
-    и нестандартного порта; либо ровно адрес Windows Update из конфигурации.
-#>
 function Test-BoosterAllowedUrl {
     [CmdletBinding()]
     [OutputType([bool])]
@@ -326,7 +241,7 @@ function Test-BoosterAllowedUrl {
             -and [string]::Equals($uri.AbsoluteUri, $windowsUpdate.AbsoluteUri, [StringComparison]::OrdinalIgnoreCase)) {
         return $true
     }
-    # Имя пользователя отсекает адреса вида https://www.nvidia.com@evil.io/, где настоящий хост — evil.io.
+    # Отсекает адреса вида https://www.nvidia.com@evil.io/
     if ($uri.Scheme -cne [Uri]::UriSchemeHttps -or $uri.UserInfo.Length -ne 0 -or -not $uri.IsDefaultPort) {
         return $false
     }
@@ -340,11 +255,6 @@ function Test-BoosterAllowedUrl {
     $false
 }
 
-<#
-.SYNOPSIS
-    Повторяет OfficialSourceResolver.ForDevice: видеоадаптер (Display) — сайт производителя GPU по PCI Vendor ID,
-    системное устройство (System) — сайт производителя платы; Windows Update — всегда последним.
-#>
 function Get-BoosterOfficialLinks {
     [CmdletBinding()]
     param(
@@ -372,7 +282,6 @@ function Get-BoosterOfficialLinks {
                 -not [string]::IsNullOrWhiteSpace($_.match) -and $BoardManufacturer.IndexOf($_.match, [StringComparison]::OrdinalIgnoreCase) -ge 0
             })
     }
-    # Правило с недопустимым адресом пропускается, как будто его нет.
     foreach ($rule in $rules) {
         if (Test-BoosterAllowedUrl -Url $rule.url -Sources $Sources) {
             [ordered]@{ title = $rule.title; url = ([Uri]$rule.url).AbsoluteUri }
@@ -385,20 +294,6 @@ function Get-BoosterOfficialLinks {
     }
 }
 
-#endregion
-
-#region PresentMon и метрики кадров
-
-<#
-.SYNOPSIS
-    CSV PresentMon → интервалы между кадрами одной swap chain одного процесса. Повторяет PresentMonCsvParser.
-
-.DESCRIPTION
-    Колонки ищутся без учёта регистра. Интервал — MsBetweenPresents, а в формате --v2_metrics — FrameTime.
-    NA, пустое, нечисловое и не больше нуля отбрасывается и считается. Из нескольких PID берётся процесс с
-    наибольшим числом годных кадров, из его swap chain — с наибольшим числом интервалов; при равенстве —
-    встреченный первым. Статусы: Completed, TargetNotFound, NoFrames, UnsupportedFormat.
-#>
 function Read-PresentMonCsv {
     [CmdletBinding(DefaultParameterSetName = 'Name')]
     param(
@@ -530,7 +425,6 @@ function Read-PresentMonCsv {
         $result.detail = "CSV has no rows for $target"
         return $result
     }
-    # Несколько PID — процесс перезапускался; несколько swap chain — оверлей или второе окно. Берётся основной поток кадров.
     $chosen = $processOrder[0]
     foreach ($candidate in $processOrder) {
         if ($candidate.ValidFrames -gt $chosen.ValidFrames) { $chosen = $candidate }
@@ -555,16 +449,6 @@ function Read-PresentMonCsv {
     $result
 }
 
-<#
-.SYNOPSIS
-    Метрики по интервалам между кадрами — как FrameMetricsCalculator (docs/ARCHITECTURE.md, раздел 10).
-
-.DESCRIPTION
-    Средний FPS = 1000·N / Σинтервалов; перцентили — по ближайшему рангу ⌈p·N/100⌉;
-    1% low = 1000 / среднее k = ⌈N/100⌉ самых долгих интервалов.
-    Интервалы ≤ 0, NaN и бесконечные отбрасываются и считаются в invalidIntervals.
-    При N < MinimumFrames — status InsufficientData и metrics = $null.
-#>
 function Get-BoosterFrameMetrics {
     [CmdletBinding()]
     param(
@@ -590,7 +474,7 @@ function Get-BoosterFrameMetrics {
         return $result
     }
 
-    # Суммы по возрастанию, как у приложения: порядок сложения влияет на последние знаки.
+    # По возрастанию, как в приложении: порядок сложения влияет на последние знаки.
     [Array]::Sort($sorted)
     $duration = 0.0
     foreach ($interval in $sorted) { $duration += $interval }
@@ -612,12 +496,10 @@ function Get-BoosterFrameMetrics {
 }
 
 function Get-NearestRank([double[]]$Sorted, [int]$Percent) {
-    # p·N считается в целых, чтобы 0,99·300 не превратилось в 297,000…1 и ранг не сдвинулся.
+    # В целых, чтобы 0,99·300 не стало 297,000…1.
     $rank = [int][Math]::Ceiling($Percent * [long]$Sorted.Length / 100.0)
     $Sorted[[Math]::Max($rank, 1) - 1]
 }
-
-#endregion
 
 Export-ModuleMember -Function Test-BoosterElevated, Invoke-BoosterCim, New-BoosterSection, New-BoosterStatus,
     New-BoosterDocument, ConvertTo-BoosterJson, Write-BoosterDocument, Resolve-BoosterPath, ConvertTo-BoosterSafePath,

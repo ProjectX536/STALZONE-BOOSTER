@@ -6,7 +6,6 @@ namespace Booster.Core.Tests.Reports;
 
 public class AdviceTextTests
 {
-    /// <summary>Сколько аргументов передаёт правило, выдающее рекомендацию: тексты обязаны их подставить.</summary>
     private static readonly Dictionary<AdviceId, int> ArgumentCount = new()
     {
         [AdviceId.PagefileDisabled] = 0,

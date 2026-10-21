@@ -28,7 +28,6 @@ public class PresentMonLocatorTests
     {
         _files.Add(InTools("PresentMon-2.5.0-x64.exe")).Add(InTools("PresentMon-2.6.0-x64.exe"));
 
-        // У PresentMon 2.6.0 нет ресурса версии, поэтому версия берётся из имени файла.
         Assert.Equal(new PresentMonLocation(InTools("PresentMon-2.6.0-x64.exe"), "2.6.0"), Locate(@"D:\Missing\pm.exe"));
     }
 

@@ -2,10 +2,8 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Platform.Windows.Common;
 
-/// <summary>Файлы состояния в <see cref="IAppPaths.State"/>; запись через <see cref="AtomicFile"/>.</summary>
 public sealed class StateFileStore(IAppPaths paths) : IStateFileStore
 {
-    /// <summary>Чтение не мешает замене файла записью Booster: доступ на запись и удаление разделяется.</summary>
     public async Task<string?> ReadAsync(string name, CancellationToken ct)
     {
         var path = PathOf(name);

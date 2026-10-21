@@ -9,11 +9,6 @@ using Booster.Core.Reports;
 
 namespace Booster.App.Views.Controls;
 
-/// <summary>
-/// Сортировка DataGrid щелчком по заголовку: по возрастанию, затем по убыванию. Значения сравнивает <see cref="TableOrder"/>:
-/// «512 МБ» раньше «1,2 ГБ», «Неизвестно» всегда в конце. Колонка сортирует по <c>SortMemberPath</c> (у текстовой колонки —
-/// путь привязки), колонка <see cref="ReportDataGrid"/> — по своей ячейке. Порядок сохраняется, когда строки заменяются новыми.
-/// </summary>
 public static class TableSorting
 {
     public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.RegisterAttached(
@@ -37,7 +32,6 @@ public static class TableSorting
         grid.SetValue(IsEnabledProperty, value);
     }
 
-    /// <summary>Щелчок по заголовку: та же колонка — смена направления, другая — по возрастанию.</summary>
     internal static void SortBy(DataGrid grid, DataGridColumn column)
     {
         var index = grid.Columns.IndexOf(column);
@@ -64,7 +58,6 @@ public static class TableSorting
 
         grid.CanUserSortColumns = true;
         grid.Sorting += OnSorting;
-        // Сброс приходит и при замене ItemsSource: у нового представления своего порядка ещё нет.
         NotifyCollectionChangedEventHandler handler = (_, args) =>
         {
             if (args.Action == NotifyCollectionChangedAction.Reset)
@@ -120,7 +113,6 @@ public static class TableSorting
             _ => Member(item, path),
         };
 
-        // Путь вида «Series.StartedAt»: свойства по цепочке; нет свойства — значение неизвестно.
         private static object? Member(object item, string path)
         {
             object? current = item;

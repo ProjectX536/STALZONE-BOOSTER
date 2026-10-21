@@ -52,7 +52,6 @@ public class BenchmarkJsonTests
     [Fact]
     public void Series_without_latency_fields_loads_as_unknown()
     {
-        // Файлы серий Этапа 4 записаны до счётчиков DPC: поля отсутствуют, а не равны нулю.
         string[] latencyFields = ["dpcTimeMedianPercent", "dpcTimePeakPercent", "interruptTimeMedianPercent", "interruptTimePeakPercent"];
         var document = System.Text.Json.Nodes.JsonNode.Parse(BenchmarkJson.Serialize(FullSeries()))!;
         var telemetry = document["series"]!["telemetry"]!.AsObject();

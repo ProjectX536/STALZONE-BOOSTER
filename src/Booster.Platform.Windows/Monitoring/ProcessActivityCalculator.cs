@@ -2,10 +2,6 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Platform.Windows.Monitoring;
 
-/// <summary>
-/// Загрузка CPU по двум снимкам процессов. Процесс узнаётся по паре PID + время запуска: PID переиспользуется.
-/// Поток — по ID внутри процесса; поток, появившийся за интервал, засчитывается всем своим временем.
-/// </summary>
 public static class ProcessActivityCalculator
 {
     public const string Source = "NtQuerySystemInformation(SystemProcessInformation)";
@@ -15,8 +11,6 @@ public static class ProcessActivityCalculator
     private const int IdleProcessId = 0;
     private const string ExeSuffix = ".exe";
 
-    /// <param name="elapsedTicks100ns">Время между снимками в тиках по 100 нс.</param>
-    /// <param name="processName">Имя цели без учёта регистра и «.exe»; из нескольких процессов — занявший больше CPU.</param>
     public static ProcessActivity Compute(IReadOnlyList<ProcessTimes>? previous, IReadOnlyList<ProcessTimes> current,
         long elapsedTicks100ns, int logicalProcessors, string? processName, int? processId, int topCount)
     {
@@ -64,7 +58,6 @@ public static class ProcessActivityCalculator
         return new ProcessActivity(systemReading, targetReading, others);
     }
 
-    /// <exception cref="ArgumentException">Заданы оба или ни одного.</exception>
     public static void RequireOneTarget(string? processName, int? processId)
     {
         if (string.IsNullOrWhiteSpace(processName) == processId is null)

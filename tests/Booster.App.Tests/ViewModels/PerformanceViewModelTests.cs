@@ -184,7 +184,6 @@ public sealed class PerformanceViewModelTests : IAsyncDisposable
         _screen.Time.Advance(TimeSpan.FromSeconds(10));
         await WaitForProgress(Strings.ProgressProcessing);
 
-        // Захват идёт ещё 2 с запаса на остановку ETW.
         _screen.Time.Advance(TimeSpan.FromSeconds(2));
         await start.WaitAsync(TimeSpan.FromSeconds(10), Ct);
         Assert.Null(_performance.ProgressText);
@@ -197,7 +196,6 @@ public sealed class PerformanceViewModelTests : IAsyncDisposable
 
         var start = _performance.StartCommand.ExecuteAsync(null);
         await ScreenSession.WaitUntilAsync(() => _capture.StartedAt is not null, "capture did not start");
-        // По секунде: один большой сдвиг теряется, если таймер задержки ещё не заведён.
         for (var step = 0; step < 10 && _cues.Events.Count == 0; step++)
         {
             _screen.Time.Advance(TimeSpan.FromSeconds(1));
@@ -251,7 +249,6 @@ public sealed class PerformanceViewModelTests : IAsyncDisposable
         _performance.SetBaselineCommand.Execute(null);
         Assert.Equal("a", _performance.Baseline?.Id);
 
-        // Сама база — сравнивать не с чем: она самая ранняя.
         Assert.Equal("a", _screen.Session.Benchmark?.Series.Id);
         Assert.Null(_screen.Session.Benchmark?.Comparison);
         Assert.Empty(_screen.Session.Benchmark!.Chain);
@@ -333,11 +330,6 @@ public sealed class PerformanceViewModelTests : IAsyncDisposable
         Assert.Equal(Strings.NoValue, empty.OnePercentLow);
     }
 
-    /// <summary>
-    /// Экран без запуска приложения: при старте Booster работают восстановление и наблюдение за играми, а проверка не
-    /// должна менять систему. XAML загружается с настоящими ресурсами и VM; сломанный ключ ресурса или привязка
-    /// шаблона роняют загрузку.
-    /// </summary>
     [Fact]
     public async Task View_loads_and_lays_out_with_history_and_delete_confirmation()
     {
@@ -357,7 +349,6 @@ public sealed class PerformanceViewModelTests : IAsyncDisposable
 
     private static string Text(int value) => value.ToString(CultureInfo.CurrentCulture);
 
-    /// <summary>Профиль cs2 с одним обратимым действием: без применимых действий сессия не начинается.</summary>
     private static FakeGaming GamingWithOneAction()
     {
         var state = new FakeSystemState { ["a"] = "orig" };
@@ -368,7 +359,6 @@ public sealed class PerformanceViewModelTests : IAsyncDisposable
 
     private static string Format(string format, params object[] args) => string.Format(CultureInfo.CurrentCulture, format, args);
 
-    /// <summary>Серия той же игры раньше начала теста на <paramref name="hours"/> ч.</summary>
     private static BenchmarkSeries Older(string id, int hours) =>
         SampleSeries.Full(id) with { StartedAt = SessionFactory.Start.AddHours(-hours) };
 
@@ -384,7 +374,6 @@ public sealed class PerformanceViewModelTests : IAsyncDisposable
     private Task WaitForProgress(string expected) =>
         ScreenSession.WaitUntilAsync(() => _performance.ProgressText == expected, $"progress is «{_performance.ProgressText}», expected «{expected}»");
 
-    /// <summary>Запускает серию и двигает время по секунде, пока она не закончится.</summary>
     private async Task RunAsync()
     {
         var start = _performance.StartCommand.ExecuteAsync(null);
@@ -398,7 +387,6 @@ public sealed class PerformanceViewModelTests : IAsyncDisposable
         await start.WaitAsync(TimeSpan.FromSeconds(10), Ct);
     }
 
-    /// <summary>601 кадр равномерно в окне каждого прогона: первый отбрасывается, остаётся 600.</summary>
     private FrameCaptureResult FramesInRuns(long startTimestamp)
     {
         var frames = _schedule.Windows(startTimestamp, _screen.Time.TimestampFrequency)

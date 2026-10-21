@@ -12,7 +12,6 @@ public class SystemAdvisorTests
     private static readonly Thresholds Thresholds = FakeConfiguration.DefaultThresholds;
     private static readonly SystemCatalog Catalog = FakeConfiguration.DefaultCatalog;
 
-    /// <summary>Подкачка отключена, автозапуск сторонней службы, BugCheck и сбой cs2.exe в журнале.</summary>
     private static SystemSnapshot Troubled()
     {
         var healthy = Healthy();
@@ -133,7 +132,6 @@ public class SystemAdvisorTests
     {
         var advice = SystemAdvisor.Advise(Healthy(), null, Thresholds, Catalog, ["cs2.exe"], SampleSeries.Full());
 
-        // В SampleSeries.Full пик DPC 2,4 % при пороге 2 %, пик прерываний неизвестен.
         var latency = Assert.Single(advice, a => a.Module == AdviceModule.Latency);
         Assert.Equal(AdviceId.DpcTimeHigh, latency.Id);
         Assert.Equal(AdviceModule.Latency, advice[^1].Module);
@@ -157,7 +155,6 @@ public class SystemAdvisorTests
         Assert.Empty(SystemAdvisor.Advise(unavailable, null, Thresholds, Catalog, [], null));
     }
 
-    /// <summary>Включённый элемент HKCU Run, процесс запущен и тяжелее порога.</summary>
     private static StartupItem HeavyUserItem(string name)
     {
         var path = $@"C:\Users\Player\AppData\Local\{name}\{name}.exe";

@@ -2,15 +2,10 @@ using System.Diagnostics;
 
 namespace Booster.Platform.Windows.Monitoring;
 
-/// <summary>Нагрузка, которую создаёт сам Booster: доля CPU всех логических процессоров и рабочий набор.</summary>
 public sealed record SelfUsageSample(double CpuPercent, long WorkingSetBytes);
 
 public static class SelfUsageCalculator
 {
-    /// <summary>
-    /// Доля времени CPU процесса от времени всех логических процессоров за интервал, 0–100.
-    /// Нет интервала или процессоров — 0.
-    /// </summary>
     public static double CpuPercent(TimeSpan cpuDelta, TimeSpan wallDelta, int processorCount)
     {
         if (wallDelta <= TimeSpan.Zero || processorCount <= 0)
@@ -21,10 +16,6 @@ public static class SelfUsageCalculator
     }
 }
 
-/// <summary>
-/// Замеры собственного процесса. CPU считается от предыдущего вызова <see cref="Sample"/>, а для первого вызова —
-/// от создания монитора, поэтому каждый замер покрывает реальный интервал.
-/// </summary>
 public sealed class SelfUsageMonitor : IDisposable
 {
     private readonly TimeProvider _time;

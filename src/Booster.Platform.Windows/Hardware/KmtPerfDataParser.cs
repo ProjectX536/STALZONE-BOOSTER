@@ -3,7 +3,6 @@ using Booster.Core.Resources;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>Разбор полей <c>D3DKMT_ADAPTER_PERFDATA</c>: ноль означает «драйвер не сообщает», а не реальный ноль.</summary>
 public static class KmtPerfDataParser
 {
     public const string Source = "d3dkmt.perfdata";
@@ -12,9 +11,6 @@ public static class KmtPerfDataParser
     private const double DeciPerUnit = 10;
     private const double HzPerMhz = 1e6;
 
-    /// <param name="temperatureDeciC">Десятые доли °C.</param>
-    /// <param name="poweredOn"><c>PowerStateOverride</c>: 1 — адаптер включён, 0 — в энергосбережении.</param>
-    /// <param name="caps">null — запрос CAPS не поддержан драйвером.</param>
     public static KmtPerfData Parse(ulong memoryFrequencyHz, uint fanRpm, uint temperatureDeciC, bool poweredOn,
         (uint TemperatureMaxDeciC, uint TemperatureWarningDeciC)? caps)
     {
@@ -41,7 +37,6 @@ public static class KmtPerfDataParser
         return new KmtPerfData(temperature, limit, fan, memory);
     }
 
-    /// <summary>Отказ вызова графического ядра: <c>STATUS_NOT_SUPPORTED</c> — <c>Unsupported</c>, иначе <c>Failure</c>.</summary>
     public static KmtPerfData FromStatus(string function, int status)
     {
         var note = $"{function} failed: NTSTATUS 0x{unchecked((uint)status):X8}";

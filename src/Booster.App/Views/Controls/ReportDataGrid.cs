@@ -5,10 +5,6 @@ using Booster.Core.Reports;
 
 namespace Booster.App.Views.Controls;
 
-/// <summary>
-/// Колонки DataGrid по заголовкам <see cref="ReportTable"/>: i-я колонка показывает <c>Cells[i]</c> строки
-/// <see cref="ReportRow"/> шаблоном ячейки из ресурсов, а копирует в буфер её текст.
-/// </summary>
 public static class ReportDataGrid
 {
     public static readonly DependencyProperty HeadersProperty = DependencyProperty.RegisterAttached(
@@ -47,7 +43,6 @@ public static class ReportDataGrid
                 Header = headers[i],
                 CellTemplate = new DataTemplate { VisualTree = presenter },
                 ClipboardContentBinding = new Binding($"{nameof(ReportRow.Cells)}[{i}].{nameof(ReportCell.Text)}"),
-                // Без пути колонка шаблона не сортируется; сами значения берёт TableSorting по номеру ячейки.
                 SortMemberPath = $"{nameof(ReportRow.Cells)}[{i}]",
             });
         }

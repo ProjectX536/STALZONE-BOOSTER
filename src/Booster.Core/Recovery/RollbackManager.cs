@@ -4,10 +4,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Core.Recovery;
 
-/// <summary>
-/// Восстановление по журналу (docs/PRINCIPLES.md, «Модель безопасности действий»): в обратном порядке, без перезаписи
-/// изменений пользователя, идемпотентно. Журнал сохраняется после каждого изменения.
-/// </summary>
 public sealed partial class RollbackManager(IEnumerable<IActionRestorer> restorers, IChangeJournal journal, TimeProvider time,
     ILogger<RollbackManager> logger)
 {
@@ -26,7 +22,6 @@ public sealed partial class RollbackManager(IEnumerable<IActionRestorer> restore
 
             ct.ThrowIfCancellationRequested();
             var (status, message) = await RestoreOneAsync(change, ct).ConfigureAwait(false);
-            // Прежняя ошибка отката устарела: её заменяет итог этого прохода.
             var carried = change.Status == ChangeStatus.RestoreFailed ? null : change.Detail;
             changes[i] = change with { Status = status, Detail = RecoveryText.Join(carried, message), UpdatedAt = time.GetUtcNow() };
             LogRestored(change.ActionId, status);
@@ -69,8 +64,6 @@ public sealed partial class RollbackManager(IEnumerable<IActionRestorer> restore
         }
     }
 
-    // Сбой записи журнала не останавливает возврат системы: следующий успешный SaveAsync запишет сессию целиком,
-    // а повторный проход по устаревшей записи идемпотентен.
     private async Task SaveAsync(SessionRecord session, CancellationToken ct)
     {
         try

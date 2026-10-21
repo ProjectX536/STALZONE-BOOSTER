@@ -12,11 +12,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.App.Services;
 
-/// <summary>
-/// Последний снимок системы, последняя серия бенчмарка, последний тест сети и состояние A/B-теста HAGS — общие данные всех
-/// экранов и экспорта.
-/// <see cref="Changed"/> приходит в том потоке, где завершилось изменение, а не обязательно в UI-потоке.
-/// </summary>
 public sealed partial class DiagnosticsSession(SnapshotCollector collector, HagsExperimentService hags, IProfileRepository profiles,
     IBoosterConfiguration config, TimeProvider time, ILogger<DiagnosticsSession> logger)
 {
@@ -41,10 +36,6 @@ public sealed partial class DiagnosticsSession(SnapshotCollector collector, Hags
 
     public HagsExperimentView? Hags => _hags;
 
-    /// <summary>
-    /// Собирает новый снимок и перечитывает A/B-тест HAGS: экран «Система» могли не открывать, а отчёт должен знать этап теста.
-    /// Одновременные вызовы выполняются по очереди.
-    /// </summary>
     public async Task RefreshAsync(CancellationToken ct)
     {
         await _refreshLock.WaitAsync(ct).ConfigureAwait(false);
@@ -77,7 +68,6 @@ public sealed partial class DiagnosticsSession(SnapshotCollector collector, Hags
         Changed?.Invoke(this, EventArgs.Empty);
     }
 
-    /// <summary>Вид, прочитанный панелью HAGS последним; приходит при каждом её обновлении.</summary>
     public void UpdateHags(HagsExperimentView view)
     {
         ArgumentNullException.ThrowIfNull(view);
@@ -85,10 +75,6 @@ public sealed partial class DiagnosticsSession(SnapshotCollector collector, Hags
         Changed?.Invoke(this, EventArgs.Empty);
     }
 
-    /// <summary>
-    /// Отчёт по текущему снимку; рекомендации и замечания строятся по действующим порогам, справочнику и предупреждениям
-    /// конфигурации, сбои игр — по играм из профилей.
-    /// </summary>
     public SystemReport BuildReport()
     {
         var snapshot = _snapshot ?? throw new InvalidOperationException("No snapshot yet: call RefreshAsync first");
@@ -104,7 +90,6 @@ public sealed partial class DiagnosticsSession(SnapshotCollector collector, Hags
         return new SystemReport(metadata, snapshot, findings, benchmark, advice, network, tweaks, _hags);
     }
 
-    /// <summary>Сбой чтения не мешает снимку; прежний вид мог устареть, поэтому отчёт получает «не прочитано», а не его.</summary>
     private async Task<HagsExperimentView?> ReadHagsAsync(CancellationToken ct)
     {
         try
@@ -118,7 +103,6 @@ public sealed partial class DiagnosticsSession(SnapshotCollector collector, Hags
         }
     }
 
-    /// <summary>Игры всех профилей. Профили не загрузились — сбои игр в рекомендациях не выделяются.</summary>
     private IReadOnlyList<string> GameExecutables()
     {
         try

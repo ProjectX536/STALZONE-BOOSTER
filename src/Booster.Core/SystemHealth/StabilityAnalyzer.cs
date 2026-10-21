@@ -4,14 +4,8 @@ using Booster.Core.Reports;
 
 namespace Booster.Core.SystemHealth;
 
-/// <param name="Last">Время самого нового события этого вида.</param>
-/// <param name="Subjects">До пяти самых частых значений Subject.</param>
 public sealed record StabilityKindSummary(StabilityEventKind Kind, int Count, DateTimeOffset Last, IReadOnlyList<string> Subjects);
 
-/// <summary>
-/// Сводка журнала стабильности и рекомендации. Всё — только вручную (L3): причины сбоев Booster не устраняет,
-/// а лишь показывает, что проверить.
-/// </summary>
 public static class StabilityAnalyzer
 {
     private const int TopSubjects = 5;
@@ -19,12 +13,10 @@ public static class StabilityAnalyzer
     private const string NoCodes = "—";
     private const string ExecutableExtension = ".exe";
 
-    /// <summary>По убыванию числа; Subjects — до 5 самых частых, без пустых.</summary>
     public static IReadOnlyList<StabilityKindSummary> Summarize(StabilityLog log)
     {
         ArgumentNullException.ThrowIfNull(log);
 
-        // OrderByDescending устойчива: при равном числе остаётся порядок появления (журнал — от новых к старым).
         return log.Events
             .GroupBy(e => e.Kind)
             .Select(g => new StabilityKindSummary(g.Key, g.Count(), g.Max(e => e.Time), TopOf(g)))
@@ -83,7 +75,6 @@ public static class StabilityAnalyzer
         advice.Add(Advice(AdviceId.GameCrashes, string.Join(ListSeparator, crashed), Count(crashes.Length)));
     }
 
-    /// <summary>«C:\Games\Game.EXE», «game.exe» и «game» дают один ключ «game» (сравнение — без учёта регистра).</summary>
     private static string ExecutableKey(string name)
     {
         var file = Path.GetFileName(name.Trim());

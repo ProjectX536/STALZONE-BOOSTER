@@ -13,10 +13,8 @@ namespace Booster.App.Tests.ViewModels;
 
 public sealed class LatencyViewModelTests
 {
-    /// <summary>После <see cref="FakeBootTimeSource.DefaultBoot"/>: маркер, записанный сейчас, — идущая запись.</summary>
     private static readonly DateTimeOffset Now = new(2026, 10, 21, 12, 30, 0, TimeSpan.Zero);
 
-    /// <summary>Имя трассы по местному времени <see cref="Now"/>; местное время FakeTimeProvider — UTC.</summary>
     private static readonly string TracePath = Path.Combine(FakeWprRunner.TracesFolder, "trace-20261021-123000.etl");
 
     private readonly FakeWprRunner _wpr = new();
@@ -39,7 +37,6 @@ public sealed class LatencyViewModelTests
         return latency;
     }
 
-    /// <summary>Рекомендация и советы отчёта ведут на эту панель: экран, панель и кнопка названы так, как они подписаны.</summary>
     [Fact]
     public void Report_advice_names_the_screen_panel_and_button_as_shown()
     {

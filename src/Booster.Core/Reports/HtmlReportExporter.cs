@@ -6,12 +6,6 @@ using Booster.Core.Resources;
 
 namespace Booster.Core.Reports;
 
-/// <summary>
-/// Отчёт одним HTML-файлом: встроенный CSS, без скриптов и внешних ресурсов. Раскладка — от
-/// <see cref="ReportDocumentBuilder"/>, здесь только разметка. Весь текст экранируется; ссылки наружу — только
-/// официальные источники драйверов. Content-Security-Policy запрещает скрипты и загрузки, даже если где-то
-/// экранирование пропущено. Числа и даты — в текущей культуре.
-/// </summary>
 public sealed class HtmlReportExporter(ReportDocumentBuilder documents) : IReportExporter
 {
     private const string Css = """

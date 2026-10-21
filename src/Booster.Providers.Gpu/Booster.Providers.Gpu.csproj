@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <!-- GPU-провайдеры (docs/ARCHITECTURE.md, раздел 4): общий на источниках Windows и вендорские (NVAPI, ADLX, IGCL) — Этап 3. -->
   <PropertyGroup>
     <TargetFramework>net10.0-windows</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -12,7 +11,6 @@
     <InternalsVisibleTo Include="Booster.Providers.Gpu.Tests" />
   </ItemGroup>
   <ItemGroup>
-    <!-- Класс ProviderStrings генерируется при сборке; в репозитории только .resx. -->
     <EmbeddedResource Update="Resources\ProviderStrings.resx" Generator="MSBuild:Compile"
                       StronglyTypedFileName="$(IntermediateOutputPath)ProviderStrings.Designer.cs" StronglyTypedLanguage="CSharp"
                       StronglyTypedNamespace="Booster.Providers.Gpu.Resources" StronglyTypedClassName="ProviderStrings" />

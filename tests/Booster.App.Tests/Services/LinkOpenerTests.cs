@@ -3,7 +3,6 @@ using Booster.App.Services;
 
 namespace Booster.App.Tests.Services;
 
-/// <summary>Проверяется только построение адреса и параметров запуска: тест не запускает процессы и не открывает окна.</summary>
 public sealed class LinkOpenerTests
 {
     [Theory]

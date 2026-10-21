@@ -131,7 +131,6 @@ public class ProfileRepositoryTests
     [Fact]
     public async Task Saving_over_a_user_file_with_cleaned_values_is_allowed()
     {
-        // Нормализатор поправил значение, но файл применён: сохранение его дополняет.
         _files.PutUser(FileName, """{ "schemaVersion": 1, "monitoring": { "sampleIntervalMs": 100 } }""");
         var repository = Repository();
 

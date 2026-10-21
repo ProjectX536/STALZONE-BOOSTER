@@ -4,10 +4,6 @@ using Booster.Platform.Windows.Providers;
 
 namespace Booster.Platform.Windows.Tests.Providers;
 
-/// <summary>
-/// Читают список процессов, время старта и приоритет; процессы не меняются, SetPriority не вызывается. Запускается только
-/// безвредный cmd /c exit 0 — чтобы получить завершённый процесс.
-/// </summary>
 [Trait("Category", "Host")]
 public class ProcessProviderHostTests
 {
@@ -57,15 +53,13 @@ public class ProcessProviderHostTests
     {
         using var own = Process.GetCurrentProcess();
 
-        // Только открытие дескриптора с PROCESS_SET_INFORMATION; SetPriority не вызывается.
+        // Только открытие дескриптора, SetPriority не вызывается.
         Assert.True(_provider.CanSetPriority(_provider.Identify(own.Id)!.Value));
     }
 
     [Fact]
     public void Exited_process_held_open_is_not_identified()
     {
-        // Единственный запуск в тестах — cmd, который сразу выходит. Объект Process держит его дескриптор, как лаунчер
-        // держит дескриптор игры: процесс завершён, но OpenProcess по его PID ещё удаётся.
         using var child = Process.Start(new ProcessStartInfo(Path.Combine(Environment.SystemDirectory, "cmd.exe"), "/c exit 0")
         {
             UseShellExecute = false,

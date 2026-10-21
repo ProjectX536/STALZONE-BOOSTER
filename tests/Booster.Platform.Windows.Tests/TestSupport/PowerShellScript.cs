@@ -6,17 +6,14 @@ namespace Booster.Platform.Windows.Tests.TestSupport;
 
 public sealed record ScriptRun(int ExitCode, string StdOut, string StdErr);
 
-/// <summary>Запуск скриптов из <c>scripts/</c> репозитория в Windows PowerShell 5.1, как их запускает пользователь.</summary>
 public static class PowerShellScript
 {
-    // 04 запускает все сборщики подряд, а Win32_PnPSignedDriver на части систем перечисляется десятки секунд.
     private static readonly TimeSpan Timeout = TimeSpan.FromMinutes(5);
 
     public static string ScriptsDirectory { get; } = Path.Combine(FindRepositoryRoot(), "scripts");
 
     public static async Task<ScriptRun> RunAsync(string script, params string[] arguments)
     {
-        // stdout скрипты пишут только в ASCII, а ошибки PowerShell — в кодировке консоли, то есть в OEM-кодовой странице (866 в русской Windows).
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         var info = new ProcessStartInfo("powershell.exe")
         {

@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Booster.Platform.Windows.Tests.Monitoring;
 
-/// <summary>Только на фейке <see cref="IProcessRunner"/>: wpr.exe на машине разработчика не запускается.</summary>
 public sealed class WprRunnerTests : IDisposable
 {
     private readonly string _root = Path.Combine(Path.GetTempPath(), "Booster.Tests", Guid.NewGuid().ToString("N"));

@@ -5,24 +5,16 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Core.Recovery;
 
-/// <summary>Изменение незавершённой сессии, которое могло остаться в системе.</summary>
-/// <param name="Observed">Текущее состояние; null — проверить нельзя (действие необратимо, нет восстановителя, ошибка чтения).</param>
 public sealed record RecoveryItem(string ActionId, string DisplayName, string Summary, ChangeStatus Status, ObservedState? Observed);
 
-/// <summary>Незавершённая сессия, восстановление которой ждёт кнопки «Восстановить».</summary>
 public sealed record PendingRecovery(SessionRecord Session, IReadOnlyList<RecoveryItem> Items);
 
-/// <param name="Problems">Файлы журнала, которые нельзя прочитать; они не удаляются.</param>
 public sealed record RecoveryReport(IReadOnlyList<SessionRecord> Recovered, IReadOnlyList<PendingRecovery> AwaitingUser,
     IReadOnlyList<JournalProblem> Problems)
 {
     public bool IsEmpty => Recovered.Count == 0 && AwaitingUser.Count == 0 && Problems.Count == 0;
 }
 
-/// <summary>
-/// Восстановление незавершённых сессий при старте (docs/ARCHITECTURE.md, раздел 6, «Окна сбоя»): Recovery →
-/// <see cref="RollbackManager"/> → Verify → итог <see cref="SessionOutcome.Recovered"/>. Повторный проход идемпотентен.
-/// </summary>
 public sealed partial class StartupRecovery(IChangeJournal journal, RollbackManager rollback, RecoveryValidator validator,
     IEnumerable<IActionRestorer> restorers, IProfileRepository profiles, IBoosterConfiguration config, TimeProvider time,
     ILogger<StartupRecovery> logger)
@@ -30,10 +22,6 @@ public sealed partial class StartupRecovery(IChangeJournal journal, RollbackMana
     private readonly Dictionary<string, IActionRestorer> _restorers = restorers.ToDictionary(r => r.ActionId, StringComparer.Ordinal);
     private readonly SemaphoreSlim _gate = new(1, 1);
 
-    /// <summary>
-    /// Незавершённые сессии: подготовка, обслуживание или recoverInterruptedSession профиля сессии (профиля нет — true) → восстановить;
-    /// иначе — в AwaitingUser с текущим состоянием изменений. Затем старые завершённые сессии удаляются.
-    /// </summary>
     public async Task<RecoveryReport> RunAsync(CancellationToken ct)
     {
         await _gate.WaitAsync(ct).ConfigureAwait(false);
@@ -44,14 +32,11 @@ public sealed partial class StartupRecovery(IChangeJournal journal, RollbackMana
             var awaiting = new List<PendingRecovery>();
             var problems = new List<JournalProblem>(contents.Problems);
 
-            // От новых к старым, как откат внутри сессии: поздняя сессия могла заново изменить то, что оставила ранняя.
-            // Сбой одной сессии не мешает восстановить остальные; она остаётся незавершённой до следующего запуска.
+            // От новых к старым: поздняя сессия могла заново изменить то, что оставила ранняя.
             foreach (var session in contents.Sessions.Where(s => !s.IsFinished))
             {
                 try
                 {
-                    // Подготовка содержит только необратимое: возвращать нечего, её завершение лишь помечает изменения для ручной проверки.
-                    // Незавершённое обслуживание — сбой посреди применения: пользователь не видел итога, профиля у сессии нет.
                     if (session.Kind is SessionKind.Preparation or SessionKind.Maintenance
                         || (profiles.Current.Find(session.ProfileId)?.Recovery.RecoverInterruptedSession ?? true))
                     {
@@ -79,7 +64,6 @@ public sealed partial class StartupRecovery(IChangeJournal journal, RollbackMana
         }
     }
 
-    /// <summary>Кнопка «Восстановить» для сессии из AwaitingUser. Уже завершённая сессия возвращается как есть.</summary>
     public async Task<SessionRecord> RecoverAsync(string sessionId, CancellationToken ct)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(sessionId);
@@ -97,8 +81,6 @@ public sealed partial class StartupRecovery(IChangeJournal journal, RollbackMana
         }
     }
 
-    // Сбой записи журнала не мешает вернуть систему: сессия останется незавершённой, и следующий старт
-    // повторит проход — восстановление идемпотентно.
     private async Task<SessionRecord> RecoverSessionAsync(SessionRecord session, CancellationToken ct)
     {
         LogRecovering(session.SessionId, session.State);

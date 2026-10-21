@@ -4,10 +4,6 @@ using Booster.Platform.Windows.Common;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>
-/// Службы через WMI, ServiceDll — из реестра, издатель — из ресурса версии файла. Только чтение.
-/// Сбой запроса зависимостей не глушится: без него служба выглядела бы независимой и попала бы в кандидаты.
-/// </summary>
 public sealed class ServiceInventorySource : IServiceInventorySource
 {
     private const string ServiceQuery =
@@ -52,7 +48,6 @@ public sealed class ServiceInventorySource : IServiceInventorySource
         }
         catch (Exception ex) when (ex is SecurityException or UnauthorizedAccessException or IOException)
         {
-            // Без ServiceDll издателем останется svchost (Microsoft) — служба не попадёт в кандидаты.
             return null;
         }
     }

@@ -33,7 +33,6 @@ public class GamePriorityActionTests
 
     private static ChangeEntry Entry(ActionSnapshot snapshot) => Change(ActionIds.GamePriority) with { Snapshot = snapshot };
 
-    /// <summary>Как ActionExecutor: проверка, снимок, применение.</summary>
     private static async Task<ActionSnapshot> ApplyAsync(GamePriorityAction action)
     {
         Assert.True((await action.CheckSupportAsync(Ct)).IsSupported);
@@ -78,7 +77,6 @@ public class GamePriorityActionTests
 
         var restored = await Rollback().RestoreAsync(Session(changes: [Entry(snapshot)]), Ct);
 
-        // Процесс есть в списке — значит, игра работает, а приоритет мог остаться повышенным.
         Assert.Equal(ChangeStatus.RestoreFailed, restored.Changes[0].Status);
         Assert.NotNull(restored.Changes[0].Detail);
         Assert.Single(_processes.PriorityCalls);
@@ -154,7 +152,6 @@ public class GamePriorityActionTests
     [Fact]
     public async Task Access_denied_is_reported_as_not_applied()
     {
-        // Доступ был при проверке, но пропал к моменту применения (античит снял права с процесса игры).
         var action = Action(StartGame());
         Assert.True((await action.CheckSupportAsync(Ct)).IsSupported);
         await action.CaptureAsync(Ct);

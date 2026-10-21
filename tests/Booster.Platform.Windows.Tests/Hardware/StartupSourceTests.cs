@@ -143,7 +143,6 @@ public class StartupSourceTests
         Assert.Throws<IOException>(() => Source().Read());
     }
 
-    /// <summary>Ярлык создаётся во временной папке теста — реестр и папки автозагрузки не трогаются.</summary>
     [Fact]
     [Trait("Category", "Host")]
     public void Shortcut_resolver_reads_target_of_real_shortcut()
@@ -167,7 +166,6 @@ public class StartupSourceTests
         }
     }
 
-    /// <summary>Только чтение: реестр открывается на чтение, ярлыки — с STGM_READ.</summary>
     [Fact]
     [Trait("Category", "Host")]
     public void Reads_real_startup_entries()

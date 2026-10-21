@@ -12,11 +12,9 @@ using Booster.Platform.Windows.Tests.TestSupport;
 
 namespace Booster.Platform.Windows.Tests.Scripts;
 
-/// <summary>Запускают диагностические скрипты на живой системе. Скрипты только читают её — это проверяет <see cref="ScriptSafetyTests"/>.</summary>
 [Trait("Category", "Host")]
 public class ScriptTests
 {
-    // Статусы секций — имена DataStatus, чтобы скрипты и приложение говорили на одном языке.
     private static readonly string[] SectionStatuses = Enum.GetNames<DataStatus>();
 
     public static TheoryData<string> Collectors =>
@@ -29,7 +27,6 @@ public class ScriptTests
         var run = await PowerShellScript.RunAsync(script);
 
         Assert.True(run.ExitCode == 0, run.StdErr);
-        // Кодировка консоли зависит от системы, поэтому не-ASCII в stdout экранируется как \uXXXX.
         Assert.All(run.StdOut, ch => Assert.True(char.IsAscii(ch)));
         using var doc = JsonDocument.Parse(run.StdOut);
         AssertDocument(doc.RootElement, script);
@@ -45,7 +42,6 @@ public class ScriptTests
         using var doc = JsonDocument.Parse(run.StdOut);
         var sections = doc.RootElement.GetProperty("sections");
         Assert.Equal(["cpu", "gpu", "memory", "board", "bios", "os"], sections.EnumerateObject().Select(s => s.Name));
-        // Процессор и ОС есть на любой машине: если их нет, сломан сам скрипт.
         Assert.Equal("Available", sections.GetProperty("cpu").GetProperty("status").GetString());
         Assert.Equal("Available", sections.GetProperty("os").GetProperty("status").GetString());
     }
@@ -95,7 +91,6 @@ public class ScriptTests
         using var doc = JsonDocument.Parse(run.StdOut);
         AssertDocument(doc.RootElement, "05-Run-Baseline.ps1");
         var metrics = Section(doc, "metrics");
-        // Порог по умолчанию — из config/thresholds.json, как у приложения.
         var minimumFrames = metrics.GetProperty("minimumFrames").GetInt32();
         Assert.Equal(300, minimumFrames);
         var expected = Calculate(csv, "firefox.exe", minimumFrames);
@@ -109,7 +104,6 @@ public class ScriptTests
         "pm-two-swapchains.synthetic.csv", "pm-header-only.csv", "pm-unknown-columns.synthetic.csv",
     ];
 
-    /// <summary>Разбор CSV в скрипте повторяет <see cref="PresentMonCsvParser"/>: выбор PID и swap chain, отброшенные строки, типы кадров.</summary>
     [Theory]
     [MemberData(nameof(CsvFixtures))]
     public async Task Baseline_parses_csv_like_the_application(string fixture)
@@ -182,7 +176,6 @@ public class ScriptTests
 
         Assert.True(run.ExitCode == 0, run.StdErr);
         using var doc = JsonDocument.Parse(run.StdOut);
-        // По умолчанию — самая новая сессия по имени файла.
         Assert.Equal("20261019-120000-0000000c", Section(doc, "session").GetProperty("sessionId").GetString());
         Assert.False(Section(doc, "changes")[0].GetProperty("matchesOriginal").GetBoolean());
         AssertSummary(doc, total: 1, matching: 0, differing: 1, notCheckable: 0);
@@ -217,7 +210,6 @@ public class ScriptTests
         Assert.True(run.ExitCode == 0, run.StdErr);
         using var doc = JsonDocument.Parse(run.StdOut);
         var changes = Section(doc, "changes").EnumerateArray().ToList();
-        // PID тот же, время старта другое — это другой процесс: приоритет игры умер вместе с ней.
         Assert.Equal(JsonValueKind.Null, changes[0].GetProperty("current").ValueKind);
         Assert.True(changes[0].GetProperty("matchesOriginal").GetBoolean());
         Assert.Equal(JsonValueKind.Null, changes[1].GetProperty("matchesOriginal").ValueKind);
@@ -281,7 +273,6 @@ public class ScriptTests
             DateTimeOffset.Now);
     }
 
-    /// <summary>Журнал во временном каталоге: настоящий %LOCALAPPDATA%\Booster не трогается.</summary>
     private sealed class TempJournal : IDisposable
     {
         public string Directory { get; } = System.IO.Directory.CreateDirectory(
@@ -330,7 +321,6 @@ public class ScriptTests
         Assert.Equal(m.FrameTimeP99Ms, metrics.GetProperty("frameTimeP99Ms").GetDouble(), 1e-9);
     }
 
-    /// <summary>Значение секции со статусом Available.</summary>
     private static JsonElement Section(JsonDocument doc, string name)
     {
         var section = doc.RootElement.GetProperty("sections").GetProperty(name);
@@ -350,12 +340,10 @@ public class ScriptTests
         {
             var status = section.Value.GetProperty("status").GetString();
             Assert.Contains(status, SectionStatuses);
-            // Available несёт value, остальные статусы — note с причиной.
             Assert.True(section.Value.TryGetProperty(status == "Available" ? "value" : "note", out _), section.Value.GetRawText());
         }
     }
 
-    /// <summary>Отчёт могут переслать для помощи — имени компьютера и пользователя в нём быть не должно.</summary>
     private static void AssertNoMachineOrUserName(JsonDocument doc)
     {
         var text = JsonSerializer.Serialize(doc.RootElement, new JsonSerializerOptions { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping });

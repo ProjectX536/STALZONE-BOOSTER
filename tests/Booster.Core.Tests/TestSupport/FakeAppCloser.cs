@@ -2,18 +2,14 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>Запросы на закрытие только запоминаются: настоящие приложения не закрываются.</summary>
 public sealed class FakeAppCloser : IAppCloser
 {
     private readonly List<(string Name, TimeSpan Timeout)> _requests = [];
 
-    /// <summary>Итог по имени; по умолчанию — <see cref="CloseRequestResult.Closed"/>.</summary>
     public Dictionary<string, CloseRequestResult> Results { get; } = new(StringComparer.OrdinalIgnoreCase);
 
-    /// <summary>Имена, запрос по которым бросает исключение.</summary>
     public HashSet<string> Failing { get; } = new(StringComparer.OrdinalIgnoreCase);
 
-    /// <summary>Вызывается в начале запроса.</summary>
     public Action<string>? OnRequest { get; set; }
 
     public IReadOnlyList<string> Requested

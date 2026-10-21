@@ -13,10 +13,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.App.ViewModels;
 
-/// <summary>Датчики на панели сессии: строки адаптеров и CPU, строка признаков ограничения, подсказка про охлаждение.</summary>
 internal sealed record SessionSensorsView(IReadOnlyList<string> Lines, string? ThrottleText, bool CoolingHint);
 
-/// <summary>Действие в панели подтверждения перед подготовкой сессии.</summary>
 public sealed partial class PreviewActionRow : ObservableObject
 {
     public PreviewActionRow(PlannedAction planned)
@@ -42,30 +40,21 @@ public sealed partial class PreviewActionRow : ObservableObject
 
     public string Undo { get; }
 
-    /// <summary>Почему действие не выполнится; null — выполнится.</summary>
     public string? Reason { get; }
 
-    /// <summary>Необратимое действие: выполняется сразу при подготовке, до запуска игры.</summary>
     public bool IsPreparation { get; }
 
-    /// <summary>Пользователь подтвердил действие; по умолчанию не подтверждено.</summary>
     [ObservableProperty]
     public partial bool IsConfirmed { get; set; }
 
-    /// <summary>Имя строки для экранного диктора.</summary>
     public override string ToString() => Name;
 }
 
-/// <summary>Изменение активной сессии.</summary>
 public sealed record SessionChangeRow(string Name, string Summary, string StatusText)
 {
     public override string ToString() => Name;
 }
 
-/// <summary>
-/// Панель сессии на экране профилей: подготовка с подтверждением, ожидание игры, ход сессии. События координатора
-/// приходят из фонового потока и переносятся в поток окна.
-/// </summary>
 public sealed partial class SessionViewModel : ObservableObject
 {
     private readonly GameSessionCoordinator _coordinator;
@@ -86,11 +75,9 @@ public sealed partial class SessionViewModel : ObservableObject
         ShowStatus();
     }
 
-    /// <summary>Выбранный профиль экрана; задаёт экран профилей.</summary>
     [ObservableProperty]
     public partial string? ProfileId { get; set; }
 
-    /// <summary>В сохранённом профиле есть игры: без них подготовить сессию нельзя.</summary>
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(PrepareCommand))]
     public partial bool HasGames { get; private set; }
@@ -110,21 +97,17 @@ public sealed partial class SessionViewModel : ObservableObject
     [ObservableProperty]
     public partial string? ArmedText { get; private set; }
 
-    /// <summary>Панель подтверждения открыта.</summary>
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(PrepareCommand), nameof(ArmCommand))]
     public partial bool IsPreviewing { get; private set; }
 
-    /// <summary>Идёт подготовка до игры (закрытие отмеченных программ).</summary>
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(PrepareCommand), nameof(ArmCommand), nameof(CancelPreviewCommand))]
     public partial bool IsPreparing { get; private set; }
 
-    /// <summary>Отмечено действие, которое выполнится сразу, до запуска игры: показать предупреждение.</summary>
     [ObservableProperty]
     public partial bool HasPreparationConfirmed { get; private set; }
 
-    /// <summary>Итог последней подготовки до игры; null — не было.</summary>
     [ObservableProperty]
     public partial string? PreparationText { get; private set; }
 
@@ -137,7 +120,6 @@ public sealed partial class SessionViewModel : ObservableObject
     [ObservableProperty]
     public partial IReadOnlyList<PreviewActionRow> SkippedActions { get; private set; } = [];
 
-    /// <summary>Ни одно действие не выполнится: подготовка бессмысленна, «Ждать запуска игры» недоступна.</summary>
     [ObservableProperty]
     public partial bool NothingToApply { get; private set; }
 
@@ -150,18 +132,15 @@ public sealed partial class SessionViewModel : ObservableObject
     [ObservableProperty]
     public partial string? LoadText { get; private set; }
 
-    /// <summary>По строке на адаптер (загрузка, температура с пределом, частота ядра) и CPU, если профиль собирает метрики CPU.</summary>
     [ObservableProperty]
     public partial IReadOnlyList<string> SensorLines { get; private set; } = [];
 
     [ObservableProperty]
     public partial string? ThrottleText { get; private set; }
 
-    /// <summary>Есть признаки ограничения — показать «Перегрев или снижение частот…».</summary>
     [ObservableProperty]
     public partial bool ShowCoolingHint { get; private set; }
 
-    /// <summary>Метрики кадров начала сессии (collectFrameMetrics) или почему их нет; null — замер не включён.</summary>
     [ObservableProperty]
     public partial string? FramesText { get; private set; }
 
@@ -173,7 +152,6 @@ public sealed partial class SessionViewModel : ObservableObject
 
     private bool CanPrepare() => ProfileId is not null && HasGames && IsIdle && !IsPreviewing && !IsPreparing;
 
-    /// <summary>План без игры — только чтение; затем панель подтверждения.</summary>
     [RelayCommand(CanExecute = nameof(CanPrepare))]
     private async Task PrepareAsync(CancellationToken ct)
     {
@@ -211,7 +189,6 @@ public sealed partial class SessionViewModel : ObservableObject
 
     private bool CanArm() => IsPreviewing && !NothingToApply && !IsPreparing;
 
-    /// <summary>Сначала подготовка до игры (отмеченные необратимые действия), затем ожидание запуска игры.</summary>
     [RelayCommand(CanExecute = nameof(CanArm))]
     private async Task ArmAsync(CancellationToken ct)
     {
@@ -284,7 +261,6 @@ public sealed partial class SessionViewModel : ObservableObject
         ArmCommand.NotifyCanExecuteChanged();
     }
 
-    /// <summary>Что сделано до игры: строка на действие, или почему подготовка пропущена.</summary>
     private static string? Describe(PreparationResult result)
     {
         if (result.SkippedReason is { } reason)
@@ -338,7 +314,6 @@ public sealed partial class SessionViewModel : ObservableObject
             ClosePreview();
     }
 
-    /// <summary>Тексты значений — как в отчёте: неизвестное показывается статусом, а не нулём.</summary>
     internal static SessionSensorsView DescribeSensors(SessionProgress? progress, bool collectCpu)
     {
         if (progress?.Sensors is not { } snapshot)
@@ -369,7 +344,6 @@ public sealed partial class SessionViewModel : ObservableObject
             : new SessionSensorsView(lines, string.Format(culture, Strings.SessionThrottleFormat, string.Join(ReportStrings.ListSeparator, signals)), true);
     }
 
-    /// <summary>Замер кадров на панели сессии; null — не включён в профиле или ещё проверяется PresentMon.</summary>
     internal static string? DescribeFrames(SessionFrameSummary? frames)
     {
         var culture = CultureInfo.CurrentCulture;
@@ -388,7 +362,6 @@ public sealed partial class SessionViewModel : ObservableObject
         };
     }
 
-    /// <summary>Длительность замера: целые минуты, короче минуты — секунды. Игра могла закрыться раньше запланированного.</summary>
     private static string Length(TimeSpan duration)
     {
         var culture = CultureInfo.CurrentCulture;

@@ -2,15 +2,6 @@
 .SYNOPSIS
     Записывает WMI-фикстуры для тестов Booster с текущей машины. Скрипт только читает.
 
-.DESCRIPTION
-    Запускается в Windows PowerShell 5.1: Get-WmiObject отдаёт даты в сыром DMTF — так же,
-    как System.Management в Booster.
-
-    Записываются только свойства, которые читает Booster. Серийные номера, имя компьютера и
-    пользователя, UUID, идентификаторы томов и метки дисков не выбираются. Идентификатор экземпляра
-    PnP, который задаёт само устройство (часто это серийный номер), заменяется на SANITIZED.
-    Устройства PnP ограничены шинами PCI, HDAUDIO и DISPLAY, а также устройствами с ошибкой.
-
 .EXAMPLE
     powershell.exe -NoProfile -ExecutionPolicy Bypass -File tests\Booster.Platform.Windows.Tests\Fixtures\record-wmi-fixtures.ps1 -Out tests\Booster.Platform.Windows.Tests\Fixtures\Wmi\desktop-nvidia
 #>
@@ -49,7 +40,6 @@ $classes = [ordered]@{
 
 function ConvertTo-PlainValue($value) {
     if ($null -eq $value) { return $null }
-    # DriveLetter приходит как [char]; символ 0 означает «буквы нет».
     if ($value -is [char]) {
         if ([int]$value -eq 0) { return $null }
         return [string]$value
@@ -64,14 +54,13 @@ function ConvertTo-PlainValue($value) {
 function Protect-InstanceId([string]$id) {
     if ([string]::IsNullOrEmpty($id)) { return $id }
     $parts = $id.Split('\')
-    # Сгенерированный Windows идентификатор экземпляра содержит '&' (4&12033776&0&0008); без '&' его задаёт устройство.
+    # Идентификатор от Windows содержит '&' (4&12033776&0&0008), без '&' его задаёт устройство.
     if ($parts.Count -ge 3 -and $parts[-1] -notmatch '&' -and $parts[0] -ne 'ROOT') {
         $parts[-1] = 'SANITIZED'
     }
     return $parts -join '\'
 }
 
-# Набор устройств PnP общий для обоих классов, чтобы фикстуры можно было объединять по DeviceID.
 $pnpProblemIds = @(Get-WmiObject -Namespace $cimv2 -Class Win32_PnPEntity -Property DeviceID, ConfigManagerErrorCode |
     Where-Object { $_.ConfigManagerErrorCode -ne 0 } | ForEach-Object { $_.DeviceID })
 

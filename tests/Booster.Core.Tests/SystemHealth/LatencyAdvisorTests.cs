@@ -44,7 +44,6 @@ public class LatencyAdvisorTests
         {
             var advice = Assert.Single(LatencyAdvisor.Advise(Telemetry(Percent(2.4), Reading<double>.Unknown()), Settings));
 
-            // Аргумент — в инвариантной культуре, а не «2,4».
             AssertWarning(advice, AdviceId.DpcTimeHigh, "2.4");
         }
         finally
@@ -58,7 +57,6 @@ public class LatencyAdvisorTests
     {
         var advice = Assert.Single(LatencyAdvisor.Advise(Telemetry(Percent(1), Percent(Settings.InterruptTimePercent)), Settings));
 
-        // Порог включается: пик, равный порогу, уже даёт рекомендацию.
         AssertWarning(advice, AdviceId.InterruptTimeHigh, "2");
 
         var both = LatencyAdvisor.Advise(Telemetry(Percent(5), Percent(3.26)), Settings);

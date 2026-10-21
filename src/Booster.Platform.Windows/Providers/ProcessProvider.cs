@@ -10,21 +10,14 @@ using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace Booster.Platform.Windows.Providers;
 
-/// <summary>
-/// Список процессов, опознание по PID и времени старта, приоритет, штатное закрытие. Меняют систему только
-/// <see cref="SetPriority"/> и <see cref="RequestCloseAsync"/>.
-/// </summary>
 public sealed class ProcessProvider : IProcessProvider, IProcessPriorityController, IAppCloser
 {
-    // PROCESS_QUERY_LIMITED_INFORMATION выдаётся и для чужих процессов того же пользователя; процесс только читается.
     private const PROCESS_ACCESS_RIGHTS QueryAccess = PROCESS_ACCESS_RIGHTS.PROCESS_QUERY_LIMITED_INFORMATION;
     private const PROCESS_ACCESS_RIGHTS SetAccess = PROCESS_ACCESS_RIGHTS.PROCESS_QUERY_LIMITED_INFORMATION | PROCESS_ACCESS_RIGHTS.PROCESS_SET_INFORMATION;
 
-    // STILL_ACTIVE (= STATUS_PENDING): код выхода, который GetExitCodeProcess возвращает для работающего процесса.
+    // STILL_ACTIVE
     private const uint StillActive = 259;
 
-    // Как часто проверяется, вышло ли закрываемое приложение: выход после WM_CLOSE занимает от долей секунды до нескольких
-    // секунд, а опрос списка процессов во время игры должен быть редким. 250 мс — задержка итога не больше четверти секунды.
     private static readonly TimeSpan ClosePollInterval = TimeSpan.FromMilliseconds(250);
 
     public IReadOnlyList<ProcessInfo> List()
@@ -37,12 +30,11 @@ public sealed class ProcessProvider : IProcessProvider, IProcessPriorityControll
             {
                 try
                 {
-                    // Id и ProcessName берутся из снимка списка процессов; сам процесс не открывается.
                     result.Add(new ProcessInfo(process.Id, process.ProcessName));
                 }
                 catch (Exception ex) when (ex is InvalidOperationException or Win32Exception or NotSupportedException)
                 {
-                    // Процесс завершился между перечислением и чтением свойств.
+                    // Процесс уже завершился.
                 }
             }
 
@@ -86,7 +78,7 @@ public sealed class ProcessProvider : IProcessProvider, IProcessPriorityControll
         if (process.ProcessId <= 0)
             throw new InvalidOperationException($"Process {process.ProcessId} does not exist.");
 
-        // Один дескриптор на сверку времени старта и на изменение: между ними PID не может достаться другому процессу.
+        // Один дескриптор на проверку и изменение: PID не успеет достаться другому процессу.
         using var handle = PInvoke.OpenProcess_SafeHandle(SetAccess, false, (uint)process.ProcessId);
         if (handle.IsInvalid)
             throw PriorityError(Marshal.GetLastPInvokeError());
@@ -98,7 +90,7 @@ public sealed class ProcessProvider : IProcessProvider, IProcessPriorityControll
 
     public async Task<CloseRequestResult> RequestCloseAsync(string processName, TimeSpan timeout, CancellationToken ct)
     {
-        // Повторяет отбор BackgroundAppsAction: даже при ошибке в Core защищённый процесс не получит WM_CLOSE.
+        // Дублирует проверку из Core на случай ошибки там.
         var name = ProcessNames.Normalize(processName) ?? throw new ArgumentException("Not a process name.", nameof(processName));
         if (ProtectedProcesses.IsProtected(name))
             throw new ArgumentException($"Process {name} is protected and is never closed.", nameof(processName));
@@ -111,7 +103,7 @@ public sealed class ProcessProvider : IProcessProvider, IProcessPriorityControll
         if (windows.Count == 0)
             return CloseRequestResult.NoWindow;
 
-        // Как кнопка «×»: приложение само решает, выйти ли (может спросить о несохранённом или свернуться в трей).
+        // Как кнопка «×»: приложение само решает, выходить ли.
         foreach (var window in windows)
             PInvoke.PostMessage(window, PInvoke.WM_CLOSE, default, default);
 
@@ -126,17 +118,12 @@ public sealed class ProcessProvider : IProcessProvider, IProcessPriorityControll
         return ProcessIds(name).Count == 0 ? CloseRequestResult.Closed : CloseRequestResult.StillRunning;
     }
 
-    /// <summary>
-    /// Отказ в доступе — <see cref="UnauthorizedAccessException"/> (контракт <see cref="IProcessPriorityController.SetPriority"/>):
-    /// действие пропускается, а не откатывает сессию. Остальные коды — <see cref="Win32Exception"/>.
-    /// </summary>
     internal static Exception PriorityError(int error)
     {
         var win32 = new Win32Exception(error);
         return error == (int)WIN32_ERROR.ERROR_ACCESS_DENIED ? new UnauthorizedAccessException(win32.Message, win32) : win32;
     }
 
-    /// <summary>PID процессов с этим именем, кроме собственного и защищённых (<see cref="CloseTargetFilter"/>).</summary>
     private static HashSet<uint> ProcessIds(string name)
     {
         var processes = Process.GetProcessesByName(name);
@@ -151,7 +138,7 @@ public sealed class ProcessProvider : IProcessProvider, IProcessPriorityControll
                 }
                 catch (Exception ex) when (ex is InvalidOperationException or Win32Exception or NotSupportedException)
                 {
-                    // Процесс завершился между перечислением и чтением свойств.
+                    // Процесс уже завершился.
                 }
             }
 
@@ -164,7 +151,6 @@ public sealed class ProcessProvider : IProcessProvider, IProcessPriorityControll
         }
     }
 
-    /// <summary>Видимые окна верхнего уровня без владельца — те, что пользователь закрывает кнопкой «×».</summary>
     private static List<HWND> MainWindows(HashSet<uint> processIds)
     {
         var windows = new List<HWND>();
@@ -178,7 +164,6 @@ public sealed class ProcessProvider : IProcessProvider, IProcessPriorityControll
         return windows;
     }
 
-    /// <returns>null — процесса нет, нет доступа или PID принадлежит другому процессу.</returns>
     private static SafeHandle? Open(ProcessIdentity process, PROCESS_ACCESS_RIGHTS access)
     {
         if (process.ProcessId <= 0)
@@ -190,8 +175,6 @@ public sealed class ProcessProvider : IProcessProvider, IProcessPriorityControll
         return null;
     }
 
-    // Завершённый процесс открывается по PID, пока кто-то держит его дескриптор (лаунчер — дескриптор игры).
-    // Процесс, сам вышедший с кодом 259, тоже сочтётся работающим — как и в GetExitCodeProcess.
     private static bool IsRunning(SafeHandle handle) => PInvoke.GetExitCodeProcess(handle, out var exitCode) && exitCode == StillActive;
 
     private static DateTimeOffset? StartTime(SafeHandle handle)

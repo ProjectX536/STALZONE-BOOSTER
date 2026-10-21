@@ -5,11 +5,6 @@ using Booster.Platform.Windows.Common;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>
-/// Накопители и тома. Основной путь — MSFT_PhysicalDisk и MSFT_Partition (Storage Management API): тип носителя,
-/// шина и состояние. Том привязывается к диску через номер диска раздела и букву. Буква, которую не удалось
-/// привязать к физическому диску, не теряется: такие тома собираются в отдельный накопитель с неизвестными свойствами.
-/// </summary>
 public static class StorageMapper
 {
     private const string PhysicalDisk = "WMI MSFT_PhysicalDisk";
@@ -20,7 +15,7 @@ public static class StorageMapper
     private const string NoLogicalDiskNote = "no Win32_LogicalDisk for this drive letter";
     private const string FallbackNote = @"root\Microsoft\Windows\Storage unavailable";
 
-    // Win32_LogicalDisk.DriveType: 4 — сетевой диск, 5 — оптический привод. Это не тома локальных накопителей.
+    // DriveType: 4 — сетевой диск, 5 — оптический привод.
     private static readonly HashSet<int> NonLocalDriveTypes = [4, 5];
 
     public static IReadOnlyList<StorageDeviceInfo> MapMsft(IReadOnlyList<CimRow> physicalDisks, IReadOnlyList<CimRow> partitions,
@@ -40,7 +35,6 @@ public static class StorageMapper
         foreach (var disk in physicalDisks)
         {
             var diskVolumes = new List<VolumeInfo>();
-            // DeviceId — строка с номером диска; у дисков Storage Spaces это GUID, и разделов по номеру у них нет.
             if (long.TryParse(disk.GetString("DeviceId"), NumberStyles.None, CultureInfo.InvariantCulture, out var number))
             {
                 foreach (var partition in partitions)
@@ -69,7 +63,6 @@ public static class StorageMapper
         return devices;
     }
 
-    /// <summary>Без Storage Management API: модели и размеры из Win32_DiskDrive, все тома — в накопитель с неизвестными свойствами.</summary>
     public static IReadOnlyList<StorageDeviceInfo> MapFallback(IReadOnlyList<CimRow> win32DiskDrive, IReadOnlyList<CimRow> logicalDisks)
     {
         ArgumentNullException.ThrowIfNull(win32DiskDrive);
@@ -98,7 +91,6 @@ public static class StorageMapper
             3 => Reading<StorageMediaKind>.Known(StorageMediaKind.Hdd, source),
             4 => Reading<StorageMediaKind>.Known(StorageMediaKind.Ssd, source),
             5 => Reading<StorageMediaKind>.Known(StorageMediaKind.Scm, source),
-            // 0 (Unspecified) — так отвечают флешки, виртуальные диски и часть RAID-контроллеров.
             null or 0 => Reading<StorageMediaKind>.Unknown(source, "media type not reported"),
             _ => Reading<StorageMediaKind>.Unknown(source, $"MediaType {mediaType}"),
         };
@@ -147,7 +139,6 @@ public static class StorageMapper
     private static void AddOrphans(List<StorageDeviceInfo> devices, IReadOnlyList<(string Letter, CimRow Row)> volumes,
         HashSet<string> claimed, string note)
     {
-        // Пустой картридер или привод без носителя размера не сообщает — показывать такой «том» незачем.
         var orphans = volumes
             .Where(v => !claimed.Contains(v.Letter) && v.Row.GetInt64("Size") > 0)
             .Select(v => Volume(v.Letter, v.Row))

@@ -19,7 +19,6 @@ public class GamingProfileManagerTests
 {
     private const int GamePid = 4242;
 
-    /// <summary>ProfileFactory: sampleIntervalMs = 2000.</summary>
     private static readonly TimeSpan Interval = TimeSpan.FromSeconds(2);
 
     private static readonly TimeSpan Wait = TimeSpan.FromSeconds(10);
@@ -47,7 +46,6 @@ public class GamingProfileManagerTests
 
     private static CancellationToken Ct => TestContext.Current.CancellationToken;
 
-    /// <summary>Создаётся при первом обращении, когда действия и восстановители уже добавлены.</summary>
     private GamingProfileManager Manager => _manager ??= CreateManager();
 
     private GamingProfileManager CreateManager()
@@ -70,7 +68,6 @@ public class GamingProfileManagerTests
         get { lock (_progress) return _progress.ToArray(); }
     }
 
-    /// <summary>Смены состояния по событиям ProgressChanged, без повторов подряд.</summary>
     private SessionState[] States()
     {
         var states = new List<SessionState>();
@@ -92,7 +89,6 @@ public class GamingProfileManagerTests
         return action;
     }
 
-    /// <summary>Необратимое действие с подтверждением, как закрытие фоновых приложений. Политика пустила бы его и в игре.</summary>
     private FakeAction Irreversible(string id)
     {
         _state[id] = "orig";
@@ -127,10 +123,6 @@ public class GamingProfileManagerTests
     private Task WaitForGaming(int events = 1) =>
         WaitFor(progress => progress.Count(p => p.State == SessionState.Gaming) >= events);
 
-    /// <summary>
-    /// Ещё <paramref name="ticks"/> замеров в Gaming. Время сдвигается на интервал только после события предыдущего замера:
-    /// PeriodicTimer сливает тики, пропущенные за один сдвиг.
-    /// </summary>
     private async Task Ticks(int ticks)
     {
         for (var i = 0; i < ticks; i++)
@@ -141,7 +133,6 @@ public class GamingProfileManagerTests
         }
     }
 
-    /// <summary>Сессия доходит до Gaming, затем «Завершить сессию».</summary>
     private async Task<SessionRecord?> RunAndStop(SessionPlan plan)
     {
         using var stop = new CancellationTokenSource();
@@ -197,7 +188,6 @@ public class GamingProfileManagerTests
         Assert.Equal(session, _journal.Last);
         Assert.Equal(["chrome", "Discord"], closer.Requested);
 
-        // Обратимые действия ждут игры: подготовка их не применяет.
         Assert.Equal("orig", _state["a"]);
         Assert.Equal(SessionState.Idle, Manager.State);
     }
@@ -228,7 +218,6 @@ public class GamingProfileManagerTests
 
         var session = await Manager.RunAsync(plan, Ct).WaitAsync(Wait, Ct);
 
-        // FakeAction записывает попытку apply:c до исключения; c не откатывается — его значение не менялось.
         Assert.Equal(["apply:a", "apply:b", "apply:c", "revert:b", "revert:a"], _state.Calls);
         Assert.NotNull(session);
         Assert.Equal(["a", "b", "c"], session.Changes.Select(change => change.ActionId));
@@ -252,7 +241,6 @@ public class GamingProfileManagerTests
 
         var session = await Manager.RunAsync(plan, stop.Token).WaitAsync(Wait, Ct);
 
-        // Начатое действие доводится до конца и восстанавливается; следующие не начинаются.
         Assert.Equal(["apply:a", "revert:a"], _state.Calls);
         Assert.NotNull(session);
         Assert.Equal(["a"], session.Changes.Select(change => change.ActionId));
@@ -714,8 +702,6 @@ public class GamingProfileManagerTests
         await WaitForGaming();
         _processes.Exit(GamePid);
 
-        // Выход подтверждается за gameExitConfirmationCount = 2 замера; зависшее чтение ограничено интервалом цикла.
-        // Сдвиг на интервал, затем пауза, чтобы цикл успел дойти до следующего ожидания.
         for (var i = 0; i < 6 && !run.IsCompleted; i++)
         {
             _time.Advance(Interval);
@@ -755,7 +741,6 @@ public class GamingProfileManagerTests
     public async Task Throttle_assessment_uses_the_session_window()
     {
         Action("a");
-        // Первые 5 замеров — с причиной «перегрев» от драйвера, следующие 30 — без причин: окно в 30 замеров её не видит.
         var reads = 0;
         _sensors.Sample = at => SensorSamples.Snapshot(0, SensorSamples.Telemetry(
             reasons: ++reads <= 5 ? GpuThrottleReasons.Thermal : GpuThrottleReasons.None)) with { TakenAt = at };
@@ -775,7 +760,6 @@ public class GamingProfileManagerTests
         Assert.Empty(last.Findings);
     }
 
-    /// <summary>Кадры игры: <paramref name="count"/> интервалов по <paramref name="intervalMs"/> мс.</summary>
     private static FrameCaptureResult Captured(int count, double intervalMs)
     {
         var frames = Enumerable.Range(0, count).Select(i => new FrameSample(i, intervalMs, 5, 6, 0)).ToArray();
@@ -792,7 +776,6 @@ public class GamingProfileManagerTests
             await Task.Delay(10, timeout.Token);
     }
 
-    /// <summary>Замеры, пока на панели не появится состояние замера кадров <paramref name="status"/>: оно приходит с шагом наблюдения.</summary>
     private async Task<SessionFrameSummary> TicksUntilFrames(SessionFrameStatus status)
     {
         for (var i = 0; i < 10 && !Progress.Any(p => p.Frames?.Status == status); i++)

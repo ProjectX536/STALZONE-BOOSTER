@@ -3,10 +3,8 @@ using Booster.Core.Profiles;
 
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>Профили для тестов; значения по умолчанию — как в поставляемом config/Profiles/Competitive.json.</summary>
 public static class ProfileFactory
 {
-    /// <summary>Встроенная схема Windows «Высокая производительность».</summary>
     public const string HighPerformance = "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c";
 
     public static IReadOnlyList<ProfileActionEntry> DefaultActions { get; } =
@@ -40,7 +38,6 @@ public static class ProfileFactory
             new BackgroundAppsSettings(closeTimeoutMs, userSelected ?? []),
             recovery ?? new ProfileRecovery(true, true, true, true));
 
-    /// <summary><see cref="DefaultActions"/> с заменой записи с тем же id.</summary>
     public static IReadOnlyList<ProfileActionEntry> ActionsWith(params ProfileActionEntry[] replacements) =>
         DefaultActions.Select(a => replacements.FirstOrDefault(r => r.Id == a.Id) ?? a).ToArray();
 }

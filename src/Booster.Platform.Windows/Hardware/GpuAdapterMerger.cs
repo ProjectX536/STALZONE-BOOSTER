@@ -4,11 +4,6 @@ using Booster.Platform.Windows.Common;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>
-/// Сводит видеоадаптеры из WMI, DXGI и D3DKMT. DXGI даёт LUID, видеопамять и порядок по производительности,
-/// WMI — имя и драйвер, D3DKMT — признаки гибридной графики. <c>Win32_VideoController.AdapterRAM</c> не используется:
-/// поле 32-битное и упирается в 4 ГБ.
-/// </summary>
 public static class GpuAdapterMerger
 {
     public const string OrderMatchNote = "сопоставлено по порядку";
@@ -110,7 +105,6 @@ public static class GpuAdapterMerger
             DriverVersion(entry.Row),
             DriverDate(entry.Row),
             Reading<int>.Unknown(RankSource, dxgiMissing),
-            // Без PCI-идентификатора это виртуальный или удалённый адаптер (RDP, IDD), а не GPU.
             IsSoftware: entry.Pci is null || entry.Pci.Value.VendorId == PciVendors.Microsoft,
             MatchNote: null);
     }

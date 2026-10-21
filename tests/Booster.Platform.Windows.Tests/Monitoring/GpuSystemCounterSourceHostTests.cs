@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Booster.Platform.Windows.Tests.Monitoring;
 
-/// <summary>Живая система, только чтение счётчиков «GPU Engine» и «GPU Adapter Memory».</summary>
 [Trait("Category", "Host")]
 public class GpuSystemCounterSourceHostTests
 {

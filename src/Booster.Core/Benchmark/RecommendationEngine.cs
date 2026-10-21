@@ -23,16 +23,13 @@ public enum RecommendationId
     RecordLatencyTrace,
 }
 
-/// <summary>Только совет: Booster ничего не меняет (L0, recommend-only). Arguments — подстановки в текст (имена процессов, числа).</summary>
 public sealed record Recommendation(RecommendationId Id, BottleneckClass? Because, AnalysisConfidence? Confidence, IReadOnlyList<string> Arguments);
 
 public sealed record RecommendationInput(BottleneckAssessment? Assessment, BenchmarkSummary? Summary, PowerSource PowerSource,
     Reading<bool> VrrEnabled, SeriesTelemetry Telemetry);
 
-/// <summary>Рекомендации по анализу серии. Правила — docs/ARCHITECTURE.md, раздел 10, «Анализ ограничений».</summary>
 public static class RecommendationEngine
 {
-    /// <summary>По уверенности причины (без причины — в конце), затем в порядке правил.</summary>
     public static IReadOnlyList<Recommendation> Recommend(RecommendationInput input, ComparisonSettings comparison,
         RecommendationSettings settings)
     {
@@ -82,7 +79,6 @@ public static class RecommendationEngine
             Add(RecommendationId.FreeMemory, memory);
         if (Found(BottleneckClass.Storage) is { } storage)
             Add(RecommendationId.CheckBackgroundDisk, storage);
-        // Без рывков высокий DPC остаётся находкой без совета: на играбельность он не повлиял.
         if (Found(BottleneckClass.DriverLatency) is { } latency)
             Add(RecommendationId.RecordLatencyTrace, latency);
         if (Found(BottleneckClass.FramePacing) is { } pacing)
@@ -93,11 +89,9 @@ public static class RecommendationEngine
         var enoughData = assessment is not null && input.Summary is { } valid && valid.ValidRuns >= comparison.MinimumRuns;
         if (!enoughData)
             Add(RecommendationId.NeedMoreData);
-        // «Менять нечего» — только когда сказать больше нечего: иначе совет и «всё хорошо» спорят друг с другом.
         else if (result.Count == 0 && !assessment!.Findings.Any(finding => finding.Confidence >= AnalysisConfidence.Medium))
             Add(RecommendationId.NoChangesNeeded);
 
-        // OrderByDescending устойчива: при равной уверенности остаётся порядок правил.
         return [.. result.OrderByDescending(recommendation => recommendation.Confidence is { } confidence ? (int)confidence : -1)];
     }
 }

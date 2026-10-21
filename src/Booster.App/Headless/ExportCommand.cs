@@ -3,10 +3,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.App.Headless;
 
-/// <summary>
-/// <c>Booster.App.exe --export [папка]</c>: свежий снимок, отчёт в JSON и HTML, выход без окна.
-/// Код выхода 0 — оба файла записаны, 1 — ошибка (подробности в журнале). Без папки — папка отчётов Booster.
-/// </summary>
 public sealed partial class ExportCommand(DiagnosticsSession session, ReportExportService export, ILogger<ExportCommand> logger)
 {
     public const string Switch = "--export";

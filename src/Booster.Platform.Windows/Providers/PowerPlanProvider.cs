@@ -7,7 +7,6 @@ using Windows.Win32.System.Registry;
 
 namespace Booster.Platform.Windows.Providers;
 
-/// <summary>Схемы питания через PowrProf. Меняет систему только <see cref="SetActiveScheme"/>.</summary>
 public sealed unsafe class PowerPlanProvider : IPowerPlanProvider
 {
     // SYSTEM_POWER_STATUS.BatteryFlag: батареи нет.
@@ -85,7 +84,6 @@ public sealed unsafe class PowerPlanProvider : IPowerPlanProvider
     }
 }
 
-/// <summary>Имя схемы для списка. Не прочиталось или пустое — показывается GUID: это настоящий идентификатор, а не выдумка.</summary>
 internal static class PowerSchemeNames
 {
     public static string Resolve(Guid id, Func<Guid, string> read)
@@ -97,7 +95,6 @@ internal static class PowerSchemeNames
         }
         catch (Win32Exception)
         {
-            // Одна схема с испорченным именем не прячет остальные.
             return id.ToString();
         }
     }

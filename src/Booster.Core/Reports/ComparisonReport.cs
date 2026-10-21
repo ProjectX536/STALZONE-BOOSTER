@@ -7,10 +7,6 @@ using static Booster.Core.Reports.ReportFormat;
 
 namespace Booster.Core.Reports;
 
-/// <summary>
-/// Раздел сравнения серий: итоговая фраза по вердиктам, метрики базы и серии, различия условий, оговорки и цепочка
-/// изменений. Фраза никогда не обещает прирост: эффект назван только при доказанном по повторным прогонам вердикте.
-/// </summary>
 internal static class ComparisonReport
 {
     public static ReportSection Build(BenchmarkComparison comparison, IReadOnlyList<BenchmarkComparison> chain, ComparisonSettings settings,
@@ -57,7 +53,6 @@ internal static class ComparisonReport
         return new ReportSection(ReportSectionIds.Comparison, ReportStrings.SectionComparison, null, writer.Blocks);
     }
 
-    /// <summary>Метрики базы и серии с изменением и вердиктом; общая с разделом A/B-теста HAGS.</summary>
     public static void Metrics(ReportBlockWriter writer, BenchmarkComparison comparison, CultureInfo culture)
     {
         if (comparison.Metrics.Count == 0)
@@ -86,10 +81,6 @@ internal static class ComparisonReport
             writer.Paragraph(Text(EnumText.Format(caveat)) with { Tone = CellTone.Note });
     }
 
-    /// <summary>
-    /// Итог одной фразой. Эффект называется только доказанным вердиктом; иначе — почему вывода нет: изменение меньше порога,
-    /// мало повторных прогонов или разница меньше разброса между прогонами.
-    /// </summary>
     public static string Sentence(BenchmarkComparison comparison, ComparisonSettings settings, CultureInfo culture)
     {
         if (!comparison.Comparable)
@@ -120,15 +111,12 @@ internal static class ComparisonReport
             ? Format(culture, ReportStrings.SignedPercentFormat, Signed(found.ChangePercent, culture))
             : ReportStrings.NotMeasured;
 
-    /// <summary>Изменение в процентах; у рывков — разница в рывках в минуту, без знака процента.</summary>
     private static string ChangeText(MetricComparison metric, CultureInfo culture) => metric.Metric == ComparedMetric.StuttersPerMinute
         ? Signed(metric.ChangePercent, culture)
         : Format(culture, ReportStrings.SignedPercentFormat, Signed(metric.ChangePercent, culture));
 
-    /// <summary>Знак всегда виден; минус — типографский. Около нуля — без знака.</summary>
     private static string Signed(double value, CultureInfo culture) => value.ToString("+0.0;−0.0;0.0", culture);
 
-    /// <summary>«медиана (мин–макс)».</summary>
     private static string WithRange(ComparedMetric metric, MetricSpread spread, CultureInfo culture) =>
         Format(culture, ReportStrings.SpreadWithMedianFormat, MetricNumber(metric, spread.Median, culture), Range(metric, spread, culture));
 
@@ -136,7 +124,6 @@ internal static class ComparisonReport
         ? Text(ReportStrings.ComparisonChangeNotDescribed) with { Tone = CellTone.Unavailable }
         : Text(change);
 
-    /// <summary>Сырые значения различий из <see cref="BenchmarkComparer"/> — в словах отчёта; null — значение неизвестно.</summary>
     private static ReportCell ConditionValue(string field, string? value, CultureInfo culture)
     {
         if (value is null)

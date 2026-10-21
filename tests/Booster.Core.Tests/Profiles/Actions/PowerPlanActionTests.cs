@@ -28,7 +28,6 @@ public class PowerPlanActionTests
 
     private static ChangeEntry Entry(ActionSnapshot snapshot) => Change(ActionIds.PowerPlan) with { Snapshot = snapshot };
 
-    /// <summary>Как ActionExecutor: проверка, снимок, применение.</summary>
     private static async Task<ActionSnapshot> ApplyAsync(PowerPlanAction action)
     {
         Assert.True((await action.CheckSupportAsync(Ct)).IsSupported);
@@ -78,7 +77,6 @@ public class PowerPlanActionTests
                 expected = ReportStrings.Skip_PowerSourceUnknown;
                 break;
             default:
-                // Активную схему не найти в списке — вернуть её потом было бы нечем.
                 power.Active = Guid.NewGuid();
                 expected = ReportStrings.Skip_ActiveSchemeUnknown;
                 break;
@@ -184,7 +182,6 @@ public class PowerPlanActionTests
         var rollback = new RollbackManager([new PowerPlanRestorer(power), new FakeRestorer(state, "other")], new RecordingJournal(), _time,
             NullLogger<RollbackManager>.Instance);
 
-        // Обратный порядок: схема восстанавливается первой, её сбой не мешает следующему.
         var restored = await rollback.RestoreAsync(Session(changes: [Change("other"), Entry(snapshot)]), Ct);
 
         Assert.Equal([ChangeStatus.Restored, ChangeStatus.RestoreFailed], restored.Changes.Select(c => c.Status));

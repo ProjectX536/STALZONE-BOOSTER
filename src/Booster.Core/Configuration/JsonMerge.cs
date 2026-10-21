@@ -4,11 +4,6 @@ namespace Booster.Core.Configuration;
 
 public static class JsonMerge
 {
-    /// <summary>
-    /// Накладывает <paramref name="overlay"/> на <paramref name="baseDoc"/> и возвращает новый документ.
-    /// Объекты сливаются рекурсивно; массивы, скаляры и null из overlay заменяют базовое значение целиком.
-    /// Входные документы не меняются.
-    /// </summary>
     public static JsonObject Merge(JsonObject baseDoc, JsonObject overlay)
     {
         ArgumentNullException.ThrowIfNull(baseDoc);
@@ -19,11 +14,6 @@ public static class JsonMerge
         return result;
     }
 
-    /// <summary>
-    /// Минимальный overlay, который <see cref="Merge"/> превращает из <paramref name="baseDoc"/> в <paramref name="target"/>:
-    /// только изменённые и новые свойства; вложенные объекты — рекурсивно, массивы и скаляры — целиком.
-    /// Свойства, которых нет в <paramref name="target"/>, overlay выразить не может, и они не попадают в результат.
-    /// </summary>
     public static JsonObject Diff(JsonObject baseDoc, JsonObject target)
     {
         ArgumentNullException.ThrowIfNull(baseDoc);

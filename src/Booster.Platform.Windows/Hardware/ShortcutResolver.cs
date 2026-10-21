@@ -5,16 +5,10 @@ using Windows.Win32.UI.Shell;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>
-/// Цель ярлыка .lnk через COM ShellLink. Только чтение: файл открывается с STGM_READ, а IShellLink.Resolve не вызывается —
-/// он ищет пропавшую цель и может переписать ярлык.
-/// </summary>
 internal static class ShortcutResolver
 {
-    // Длинные пути Windows — до 32 767 символов.
     private const int MaxPathLength = 32_767;
 
-    /// <summary>null — ярлык не прочитан или цели-файла нет (ярлык на объект оболочки, ярлык установщика MSI).</summary>
     public static unsafe string? Resolve(string path)
     {
         ArgumentNullException.ThrowIfNull(path);

@@ -269,7 +269,6 @@ public class SystemHealthReportTests
 
         Assert.Equal(DataStatus.Available, section.Status);
         var table = Table(section, ReportStrings.ColumnStartupItem);
-        // Сначала то, что можно отключить, затем по оценке.
         Assert.Equal(["Discord", "Tray", "Setup"], table.Rows.Select(r => r.Cells[0].Text));
         Assert.Equal(
         [
@@ -280,7 +279,6 @@ public class SystemHealthReportTests
         Assert.True(table.Rows[0].Flagged);
         Assert.Equal([ReportStrings.StartupNotRunning, ReportStrings.StartupVerdict_NotRunning], table.Rows[1].Cells.TakeLast(2).Select(c => c.Text));
         Assert.False(table.Rows[1].Flagged);
-        // Exe не определён: ни файл, ни память неизвестны, а не «не запущен».
         Assert.Equal(CellTone.Unavailable, table.Rows[2].Cells[3].Tone);
         Assert.Equal(CellTone.Unavailable, table.Rows[2].Cells[4].Tone);
         Assert.Equal(ReportStrings.StartupVerdict_Unknown, table.Rows[2].Cells[5].Text);

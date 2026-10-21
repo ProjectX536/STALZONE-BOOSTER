@@ -54,7 +54,6 @@ public sealed class ConfigFileSourceTests : IDisposable
     [Fact]
     public void Leftover_temp_file_is_ignored_and_removed()
     {
-        // Сбой между записью .tmp и переименованием: основной файл целиком старый.
         File.WriteAllText(UserFile("settings.json"), "old");
         File.WriteAllText(UserFile("settings.json.tmp"), "half-writ");
 

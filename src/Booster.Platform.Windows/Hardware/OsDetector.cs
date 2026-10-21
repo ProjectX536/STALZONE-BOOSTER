@@ -24,7 +24,6 @@ public sealed class OsDetector(ICimClient cim, IRegistryReader registry) : IInve
         }
         catch (Exception ex) when (ex is SecurityException or UnauthorizedAccessException or IOException)
         {
-            // Поля из WMI от реестра не зависят: отмечаем сбоем только то, что читалось из реестра.
             var note = $"{ex.GetType().Name}: {ex.Message}";
             return OsMapper.Map(rows.FirstOrDefault(), null, null) with
             {

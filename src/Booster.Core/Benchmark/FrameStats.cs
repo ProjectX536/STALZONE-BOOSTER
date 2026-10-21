@@ -2,11 +2,6 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Core.Benchmark;
 
-/// <summary>Медианы по кадрам. null — нужной колонки нет ни у одного кадра.</summary>
-/// <param name="GpuBusyShare">Медиана GpuBusy / интервал, не больше 1.</param>
-/// <param name="CpuBusyShare">Медиана CpuBusy / интервал, не больше 1. CpuBusy включает ожидание ограничителя FPS.</param>
-/// <param name="SyncedShare">Доля кадров с SyncInterval ≥ 1 среди кадров, где он известен.</param>
-/// <param name="TypicalSyncInterval">Самое частое значение SyncInterval; при равенстве — меньшее.</param>
 public sealed record FrameStats(int Frames, double? GpuBusyShare, double? CpuBusyShare, double? SyncedShare, int? TypicalSyncInterval);
 
 public static class FrameStatsCalculator

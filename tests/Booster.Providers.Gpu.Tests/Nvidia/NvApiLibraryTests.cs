@@ -24,7 +24,6 @@ public sealed class NvApiLibraryTests
     [Fact]
     public void Pci_identifiers_are_split_into_vendor_and_device()
     {
-        // NvAPI_GPU_GetPCIIdentifiers: pDeviceId = (DEV << 16) | VEN, pSubSystemId — как SUBSYS_ в Hardware ID.
         var pci = NvApiLibrary.ToPciId(deviceId: 0x248610DE, subSystemId: 0x40011458, revisionId: 0xA1);
 
         Assert.Equal("VEN_10DE&DEV_2486&SUBSYS_40011458&REV_A1", pci.ToString());

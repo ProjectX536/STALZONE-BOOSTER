@@ -7,22 +7,17 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.App.Services;
 
-/// <summary>Отчёт в двух файлах с общим именем: <c>booster-report-ГГГГММДД-ЧЧММСС.json</c> и <c>.html</c>.</summary>
 public sealed partial class ReportExportService(DiagnosticsSession session, IEnumerable<IReportExporter> exporters, IAppPaths paths,
     ILogger<ReportExportService> logger)
 {
     private const string JsonFormat = "json";
     private const string HtmlFormat = "html";
 
-    // HRESULT_FROM_WIN32(ERROR_FILE_EXISTS): чужой файл с тем же именем не удаляется.
+    // HRESULT_FROM_WIN32(ERROR_FILE_EXISTS)
     private const int ErrorFileExists = unchecked((int)0x80070050);
 
     private readonly IReadOnlyList<IReportExporter> _exporters = exporters.ToArray();
 
-    /// <summary>
-    /// <paramref name="directory"/> = null — папка отчётов Booster. Снимка ещё нет — сначала собирается он.
-    /// Файл, запись которого не завершилась, удаляется.
-    /// </summary>
     public async Task<(string JsonPath, string HtmlPath)> ExportAsync(string? directory, CancellationToken ct)
     {
         var json = Exporter(JsonFormat);
@@ -58,7 +53,6 @@ public sealed partial class ReportExportService(DiagnosticsSession session, IEnu
         _exporters.FirstOrDefault(e => string.Equals(e.Format, format, StringComparison.OrdinalIgnoreCase))
         ?? throw new InvalidOperationException($"No report exporter for format '{format}' is registered");
 
-    /// <summary>Два экспорта за одну секунду не перезаписывают друг друга: второй получает суффикс -2, -3, ...</summary>
     private static string FreeBaseName(string directory, string baseName)
     {
         var candidate = baseName;
@@ -93,7 +87,7 @@ public sealed partial class ReportExportService(DiagnosticsSession session, IEnu
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            // Недописанный файл остался; исходная ошибка важнее.
+            // Исходная ошибка важнее.
         }
     }
 

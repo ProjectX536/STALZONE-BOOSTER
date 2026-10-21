@@ -2,7 +2,6 @@ using Booster.Platform.Windows.Monitoring;
 
 namespace Booster.Platform.Windows.Tests.Monitoring;
 
-/// <summary>Живая система, только чтение.</summary>
 [Trait("Category", "Host")]
 public class MemoryStatusSourceHostTests
 {

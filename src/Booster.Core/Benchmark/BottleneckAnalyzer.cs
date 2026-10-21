@@ -3,17 +3,12 @@ using Booster.Core.Configuration;
 
 namespace Booster.Core.Benchmark;
 
-/// <summary>
-/// Класс ограничения по сигналам серии. Правила и уверенность — docs/ARCHITECTURE.md, раздел 10, «Анализ ограничений».
-/// В находку попадают только измеренные сигналы; не измеренные — в <see cref="BottleneckAssessment.MissingData"/>.
-/// </summary>
 public static class BottleneckAnalyzer
 {
     public const string FramesSource = "PresentMon frames";
     public const string LimiterDetail = "a frame rate limiter looks the same";
     public const string PeakDetail = "peak";
 
-    /// <summary>Находки — по убыванию уверенности, при равной — в порядке перечисления BottleneckClass.</summary>
     public static BottleneckAssessment Analyze(BottleneckInput input, BottleneckSettings settings)
     {
         ArgumentNullException.ThrowIfNull(input);
@@ -62,7 +57,6 @@ public static class BottleneckAnalyzer
         var systemHigh = AtLeast(s.SystemCpu, s.Settings.SystemCpuPercent);
         var cpuBusyHigh = AtLeast(s.CpuShare, s.Settings.CpuBoundFrameShare);
         var gpuKnown = s.GpuShare.IsAvailable || s.GpuUtilization.IsAvailable;
-        // Без данных о потоках полная доля CPU в кадре при свободном GPU бывает и у ограничителя FPS.
         var limiterLike = s.GpuUnderloaded && cpuBusyHigh && !s.BusiestThread.IsAvailable;
 
         AnalysisConfidence? confidence = (threadHigh || systemHigh) switch
@@ -133,7 +127,6 @@ public static class BottleneckAnalyzer
         var lowAvailable = AtMost(telemetry.AvailableMemoryMinPercent, s.Settings.AvailableMemoryPercent);
         var highCommit = AtLeast(telemetry.CommitPeakPercent, s.Settings.CommitPercent);
         var pageReads = AtLeast(telemetry.PageReadsPerSecond, s.Settings.PageReadsPerSecond);
-        // Чтения страниц без нехватки памяти — обычная подгрузка файлов, а не давление.
         AnalysisConfidence? confidence = (lowAvailable || highCommit) && pageReads ? AnalysisConfidence.High
             : lowAvailable && highCommit ? AnalysisConfidence.Medium
             : lowAvailable || highCommit ? AnalysisConfidence.Low
@@ -144,7 +137,6 @@ public static class BottleneckAnalyzer
             Signal(EvidenceKind.PageReads, telemetry.PageReadsPerSecond, s.Settings.PageReadsPerSecond, pageReads));
     }
 
-    /// <summary>Без привязки по времени к рывкам диск не выше Medium: совпадение по серии ещё не причина.</summary>
     private static BottleneckFinding? Storage(Signals s)
     {
         var telemetry = s.Input.Telemetry;
@@ -157,10 +149,6 @@ public static class BottleneckAnalyzer
             new Evidence(EvidenceKind.StutterRate, s.StutterRate, s.Settings.StuttersPerMinute, s.Stuttering));
     }
 
-    /// <summary>
-    /// Не выше Medium: счётчик _Total усреднён по всем логическим процессорам и по секунде, поэтому DPC на одном ядре
-    /// размывается, а совпадение с рывками по серии ещё не причина. Причину показывает только трасса.
-    /// </summary>
     private static BottleneckFinding? DriverLatency(Signals s)
     {
         var telemetry = s.Input.Telemetry;
@@ -216,7 +204,6 @@ public static class BottleneckAnalyzer
     private static BottleneckFinding? Finding(BottleneckClass bottleneck, AnalysisConfidence? confidence, params Evidence?[] evidence) =>
         confidence is { } known ? new BottleneckFinding(bottleneck, known, [.. evidence.OfType<Evidence>()]) : null;
 
-    /// <summary>Сигнал в находку, только если он измерен.</summary>
     private static Evidence? Signal(EvidenceKind kind, Reading<double> value, double threshold, bool supports, string? detail = null) =>
         value.IsAvailable ? new Evidence(kind, value, threshold, supports, detail) : null;
 
@@ -227,7 +214,6 @@ public static class BottleneckAnalyzer
     private static Reading<double> FrameValue(double? value, string note) =>
         value is { } known ? Reading<double>.Known(known, FramesSource) : Reading<double>.Unknown(FramesSource, note);
 
-    /// <summary>Сигналы серии в одном виде: доли кадра из CSV и телеметрия — как Reading.</summary>
     private sealed class Signals
     {
         public Signals(BottleneckInput input, BottleneckSettings settings)
@@ -249,7 +235,6 @@ public static class BottleneckAnalyzer
             StutterRate = Reading<double>.Known(input.Stutter.StuttersPerMinute, FramesSource);
             Stuttering = input.Stutter.StuttersPerMinute >= settings.StuttersPerMinute;
 
-            // GPU недогружен: известен хотя бы один GPU-сигнал, и ни один известный не выше порога простоя.
             var gpuIdle = new List<bool>();
             if (GpuShare.IsAvailable)
                 gpuIdle.Add(GpuShare.Value <= settings.GpuIdleFrameShare);

@@ -2,7 +2,6 @@ using Booster.Core.Configuration;
 
 namespace Booster.Platform.Windows.Common;
 
-/// <summary>Встроенные файлы — <see cref="IAppPaths.BuiltInConfig"/>, пользовательские — <see cref="IAppPaths.UserConfig"/>.</summary>
 public sealed class ConfigFileSource(IAppPaths paths) : IConfigFileSource
 {
     public string ReadBuiltIn(string fileName) => File.ReadAllText(Path.Combine(paths.BuiltInConfig, CheckName(fileName)));

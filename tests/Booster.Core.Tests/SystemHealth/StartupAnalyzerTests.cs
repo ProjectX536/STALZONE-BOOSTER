@@ -47,7 +47,6 @@ public class StartupAnalyzerTests
         Assert.Equal(StartupVerdict.Protected, Verdict(Item("SecurityHealth", StartupLocation.MachineRun)));
         Assert.Equal(StartupVerdict.Protected, Verdict(Item("Tray", command: @"""C:\Program Files\Kaspersky Lab\avpui.exe"" -tray")));
         Assert.Equal(StartupVerdict.Protected, Verdict(Item("FACEIT")));
-        // Ярлык с безобидным именем, цель которого — античит.
         Assert.Equal(StartupVerdict.Protected, Verdict(Item("Helper.lnk", StartupLocation.UserFolder,
             executable: @"C:\Program Files\EasyAntiCheat\launcher.exe", command: @"C:\Startup\Helper.lnk")));
     }
@@ -162,7 +161,6 @@ public class StartupAnalyzerTests
     {
         Assert.Equal(StartupDisableAvailability.Protected, Availability(Item("SecurityHealth", StartupLocation.MachineRun), isElevated: true));
         Assert.Equal(StartupDisableAvailability.Protected, Availability(Item("FACEIT", privateBytes: Mb), isElevated: true));
-        // Exe неизвестен (вердикт Unknown), но команда говорит о защите: проверка защиты от вердикта не зависит.
         var unknownExe = new StartupItem(new StartupEntry("Tray", StartupLocation.UserRun, @"""C:\Program Files\Kaspersky Lab\avpui.exe"" -tray",
             null, StartupState.Enabled), null);
         Assert.Equal(StartupDisableAvailability.Protected, Availability(unknownExe, isElevated: true));

@@ -5,7 +5,7 @@ namespace Booster.Providers.Gpu.Tests.Nvidia;
 
 public sealed class NvApiStructLayoutTests
 {
-    // Размеры и версии — из заголовков NVIDIA/nvapi (R560): версия = sizeof | (номер << 16).
+    // Размеры из заголовков NVIDIA/nvapi (R560).
     public static TheoryData<string, int, uint, int, uint> Layouts => new()
     {
         { "NV_GPU_DYNAMIC_PSTATES_INFO_EX", Unsafe.SizeOf<NvDynamicPstatesInfoEx>(), NvDynamicPstatesInfoEx.StructVersion, 72, 0x10048 },
@@ -42,7 +42,6 @@ public sealed class NvApiStructLayoutTests
     [Fact]
     public void Logical_gpu_data_offsets_match()
     {
-        // pack 8: указатель на буфер LUID выровнен по 8, массив дескрипторов начинается с 24.
         var data = default(NvLogicalGpuData);
         ref var start = ref Unsafe.As<NvLogicalGpuData, byte>(ref data);
 

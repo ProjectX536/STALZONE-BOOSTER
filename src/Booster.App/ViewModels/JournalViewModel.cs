@@ -11,16 +11,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.App.ViewModels;
 
-/// <summary>Сессия, которую восстановление при запуске оставило пользователю.</summary>
-/// <param name="Items">Параметры, которые могли остаться изменёнными: что и в каком состоянии сейчас.</param>
 public sealed record PendingSessionRow(string SessionId, string Title, IReadOnlyList<string> Items)
 {
-    /// <summary>Имя строки для экранного диктора.</summary>
     public override string ToString() => Title;
 }
 
-/// <summary>Сессия в списке журнала.</summary>
-/// <param name="KindText">«Игра», «Подготовка» (закрытие приложений до запуска игры) или «Обслуживание» (изменение по кнопке на экране «Система»).</param>
 public sealed record JournalSessionRow(SessionRecord Record, string DateText, string KindText, string ProfileName, string GameName,
     string OutcomeText)
 {
@@ -37,10 +32,6 @@ public sealed record JournalSkippedRow(string Name, string Reason)
     public override string ToString() => Name;
 }
 
-/// <summary>
-/// «Журнал и восстановление»: отчёт восстановления при запуске, сессии журнала от новых к старым и подробности
-/// выбранной. Обновляется при переходе на экран и после каждой завершённой сессии.
-/// </summary>
 public sealed partial class JournalViewModel : ObservableObject, IPage
 {
     private readonly IChangeJournal _journal;
@@ -127,7 +118,6 @@ public sealed partial class JournalViewModel : ObservableObject, IPage
         StatusMessage = Sessions.Count == 0 ? Strings.JournalEmpty : null;
     }
 
-    /// <summary>«Восстановить»: вернуть исходные значения сессии, которую восстановление при запуске не тронуло.</summary>
     [RelayCommand]
     private async Task RecoverAsync(PendingSessionRow? row, CancellationToken ct)
     {
@@ -152,10 +142,6 @@ public sealed partial class JournalViewModel : ObservableObject, IPage
         await LoadAsync(ct);
     }
 
-    /// <summary>
-    /// «Вернуть»: исходные значения сессии обслуживания (отключённая автозагрузка, настройка реестра). Изменённое пользователем
-    /// после Booster не перезаписывается — такое изменение получит RestoreConflict.
-    /// </summary>
     [RelayCommand(CanExecute = nameof(CanRevertMaintenance))]
     private async Task RevertMaintenanceAsync(CancellationToken ct)
     {
@@ -181,7 +167,6 @@ public sealed partial class JournalViewModel : ObservableObject, IPage
         StatusMessage = message;
     }
 
-    /// <summary>Сессия обслуживания, в которой есть что возвращать — те же статусы, что берёт <see cref="MaintenanceRunner.RevertAsync"/>.</summary>
     private bool CanRevertMaintenance() => SelectedSession?.Record is { Kind: SessionKind.Maintenance } session
         && session.Changes.Any(c => c.Status is ChangeStatus.Pending or ChangeStatus.Applied or ChangeStatus.RestoreFailed);
 
@@ -191,7 +176,6 @@ public sealed partial class JournalViewModel : ObservableObject, IPage
         SelectedSkipped = value is null ? [] : [.. value.Record.Skipped.Select(s => new JournalSkippedRow(s.DisplayName, s.Reason))];
     }
 
-    /// <summary>Отчёт показывается один раз: восстановленная вручную сессия из баннера не возвращается.</summary>
     private void ShowRecoveryReport()
     {
         var report = _lifecycle.LastRecovery;
@@ -208,7 +192,6 @@ public sealed partial class JournalViewModel : ObservableObject, IPage
         HasRecoveryReport = !report.IsEmpty;
     }
 
-    /// <summary>Сбой всего восстановления не относится к файлу журнала: строка без имени файла.</summary>
     private static string ProblemText(JournalProblem problem) => problem.Kind == JournalProblemKind.RecoveryFailed
         ? string.Format(CultureInfo.CurrentCulture, Strings.RecoveryFailedProblemFormat, problem.Detail)
         : string.Format(CultureInfo.CurrentCulture, Strings.JournalProblemFormat, problem.FileName, EnumText.Format(problem.Kind), problem.Detail);

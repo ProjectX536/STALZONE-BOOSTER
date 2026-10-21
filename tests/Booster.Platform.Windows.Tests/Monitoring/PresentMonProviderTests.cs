@@ -11,7 +11,7 @@ namespace Booster.Platform.Windows.Tests.Monitoring;
 
 public sealed class PresentMonProviderTests
 {
-    private const string Session = "BoosterCapture"; // FakeConfiguration: presentMon.sessionName
+    private const string Session = "BoosterCapture";
     private const int ErrorCancelled = 1223;
     private static readonly AdapterLuid Dgpu = new(0xC2A1, 0);
     private static readonly FrameCaptureRequest ByName = new("firefox.exe", null, TimeSpan.FromSeconds(60));
@@ -125,7 +125,7 @@ public sealed class PresentMonProviderTests
         var startedCalls = 0;
         _runner.OnRun = (launch, _) =>
         {
-            launch.Started?.Invoke(); // так делает ProcessRunner сразу после Process.Start
+            launch.Started?.Invoke();
             return WriteCsv(launch, "pm26-firefox.csv");
         };
 
@@ -173,7 +173,6 @@ public sealed class PresentMonProviderTests
     [Fact]
     public async Task No_csv_after_clean_exit_means_the_target_presented_no_frames()
     {
-        // PresentMon 2.6.0 на этой машине: цель без кадров → код 0 и CSV не создан.
         _runner.OnRun = (_, _) => Task.FromResult(0);
 
         var result = await Capture();

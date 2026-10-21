@@ -3,9 +3,6 @@ using Booster.Core.Configuration;
 
 namespace Booster.Core.SystemHealth;
 
-/// <summary>
-/// Тест сети по запросу пользователя: эхо-запросы к шлюзу и к узлу из настроек. Не работает в фоне и ничего не меняет.
-/// </summary>
 public sealed class NetworkTester(IPingSource ping, INetworkAdapterSource adapters, IBoosterConfiguration config, TimeProvider time)
 {
     private const string UtilizationSource = "NetworkInterface statistics";
@@ -18,7 +15,6 @@ public sealed class NetworkTester(IPingSource ping, INetworkAdapterSource adapte
         public string? Failure { get; set; }
     }
 
-    /// <summary>Progress — номер завершённого раунда (1..PingCount). Отмена — OperationCanceledException.</summary>
     public async Task<NetworkTestResult> RunAsync(IProgress<int>? progress, CancellationToken ct)
     {
         var settings = config.Current.Settings.Network;
@@ -57,7 +53,6 @@ public sealed class NetworkTester(IPingSource ping, INetworkAdapterSource adapte
         }
         catch (PingFailedException ex)
         {
-            // Узел недостижим в принципе (имя не разрешилось): дальше не опрашиваем, остальные цели — да.
             target.Failure = ex.Message;
         }
     }

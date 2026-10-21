@@ -5,7 +5,6 @@ using Booster.Core.Recovery;
 
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>Сессии и записи журнала для тестов; значения действий — строки JSON.</summary>
 public static class SessionFactory
 {
     public const string Id = "20261019-120000-0000000a";

@@ -4,9 +4,6 @@ using Windows.Win32;
 
 namespace Booster.Platform.Windows.Monitoring;
 
-/// <summary>
-/// Время CPU процессов и потоков через <c>NtQuerySystemInformation</c>: снимок всей системы, без открытия процессов.
-/// </summary>
 public sealed partial class ProcessActivitySource : IProcessActivitySource, IDisposable
 {
     private const ushort AllProcessorGroups = 0xFFFF;
@@ -28,7 +25,6 @@ public sealed partial class ProcessActivitySource : IProcessActivitySource, IDis
         ArgumentNullException.ThrowIfNull(logger);
         _time = time;
         _logger = logger;
-        // Все группы процессоров: доля простоя считается от них, а Environment.ProcessorCount учитывает привязку процесса.
         var active = (int)PInvoke.GetActiveProcessorCount(AllProcessorGroups);
         _logicalProcessors = active > 0 ? active : Environment.ProcessorCount;
     }

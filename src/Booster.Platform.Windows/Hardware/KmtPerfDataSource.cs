@@ -5,10 +5,6 @@ using Kmt = Windows.Wdk.PInvoke;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>
-/// Читает <c>KMTQAITYPE_ADAPTERPERFDATA</c> и <c>…_CAPS</c> физического адаптера 0. Только чтение;
-/// дескриптор из D3DKMTOpenAdapterFromLuid закрывается в любом случае.
-/// </summary>
 public sealed class KmtPerfDataSource : IKmtPerfDataSource
 {
     private const string OpenFunction = "D3DKMTOpenAdapterFromLuid";
@@ -28,7 +24,6 @@ public sealed class KmtPerfDataSource : IKmtPerfDataSource
             if (status < 0)
                 return KmtPerfDataParser.FromStatus(PerfDataFunction, status);
 
-            // Отказ CAPS не портит основные данные: без него неизвестен только предел температуры.
             D3DKMT_ADAPTER_PERFDATACAPS caps = default;
             var capsStatus = Query(open.hAdapter, KMTQUERYADAPTERINFOTYPE.KMTQAITYPE_ADAPTERPERFDATA_CAPS, &caps,
                 (uint)sizeof(D3DKMT_ADAPTER_PERFDATACAPS));
@@ -43,7 +38,6 @@ public sealed class KmtPerfDataSource : IKmtPerfDataSource
         }
     }
 
-    // PhysicalAdapterIndex у обеих структур — первое поле и остаётся 0: адаптер без связки (linked) имеет один физический.
     private static unsafe int Query(uint adapter, KMTQUERYADAPTERINFOTYPE type, void* buffer, uint size)
     {
         var query = new D3DKMT_QUERYADAPTERINFO

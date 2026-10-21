@@ -3,7 +3,6 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Platform.Windows.Providers;
 
-/// <summary>Эхо-запрос ICMP через <see cref="Ping"/>: 32 байта, как у ping.exe.</summary>
 public sealed class PingSource : IPingSource
 {
     private static readonly byte[] Payload = new byte[32];
@@ -19,7 +18,6 @@ public sealed class PingSource : IPingSource
         }
         catch (PingException ex)
         {
-            // Обычно внутри SocketException: имя не разрешилось или нет маршрута — повторять бессмысленно.
             throw new PingFailedException(ex.InnerException?.Message ?? ex.Message, ex);
         }
     }

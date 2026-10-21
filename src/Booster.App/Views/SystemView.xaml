@@ -25,7 +25,6 @@
 
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Padding="24,0,24,16">
       <StackPanel>
-        <!-- Фоновая активность: опрашивается, только пока экран открыт -->
         <TextBlock Style="{StaticResource SectionTitle}" Text="{x:Static res:Strings.SystemActivityTitle}" />
         <TextBlock Style="{StaticResource Hint}" Text="{x:Static res:Strings.SystemActivityHint}" />
         <ItemsControl ItemsSource="{Binding Pressure}" Focusable="False" Margin="0,4,0,8">
@@ -83,7 +82,6 @@
 
         <views:HagsPanel DataContext="{Binding Hags}" />
 
-        <!-- Тест сети: только по кнопке -->
         <TextBlock Style="{StaticResource SectionTitle}" Text="{x:Static res:Strings.SystemNetworkTitle}" />
         <TextBlock Style="{StaticResource Hint}" Text="{x:Static res:Strings.SystemNetworkHint}" />
         <WrapPanel Margin="0,4,0,4">
@@ -96,7 +94,6 @@
 
         <ItemsControl ItemsSource="{Binding Sections}" Focusable="False" />
 
-        <!-- Изменения по кнопке: проверка, подтверждение, сессия журнала -->
         <TextBlock Style="{StaticResource SectionTitle}" Text="{x:Static res:Strings.SystemMaintenanceTitle}" />
         <TextBlock Style="{StaticResource Hint}" Text="{x:Static res:Strings.SystemMaintenanceHint}" />
 

@@ -3,7 +3,6 @@ using Booster.Core.Profiles.Actions;
 
 namespace Booster.Core.Profiles;
 
-/// <summary>Реализованные действия профиля. Остальные записи профиля остаются рекомендациями.</summary>
 public sealed class ActionCatalog(IPowerPlanProvider power, IProcessPriorityController priorities, IProcessProvider processes,
     IAppCloser closer, TimeProvider time) : IActionCatalog
 {
@@ -12,7 +11,6 @@ public sealed class ActionCatalog(IPowerPlanProvider power, IProcessPriorityCont
         ArgumentException.ThrowIfNullOrWhiteSpace(actionId);
         ArgumentNullException.ThrowIfNull(profile);
 
-        // Значения уже проверены ProfileNormalizer; проверка здесь — на случай профиля, собранного в обход него.
         var entry = profile.FindAction(actionId);
         return actionId switch
         {
@@ -26,7 +24,6 @@ public sealed class ActionCatalog(IPowerPlanProvider power, IProcessPriorityCont
     private static Guid[] TargetSchemes(ProfileActionEntry? entry) =>
         (entry?.TargetSchemes ?? []).Select(s => Guid.TryParse(s, out var id) ? id : (Guid?)null).OfType<Guid>().ToArray();
 
-    /// <summary>Допустимы только AboveNormal (по умолчанию) и High.</summary>
     private static ProcessPriority? GamePriority(ProfileActionEntry? entry) => entry?.Value switch
     {
         null or nameof(ProcessPriority.AboveNormal) => ProcessPriority.AboveNormal,

@@ -6,7 +6,7 @@ namespace Booster.Platform.Windows.Tests.Monitoring;
 
 public class PresentMonCsvParserTests
 {
-    // Реальный захват PresentMon 2.6.0 на этой машине: firefox.exe, 400 кадров, одна swap chain.
+    // Реальный захват PresentMon 2.6.0 (firefox.exe, 400 кадров).
     private const string RealCapture = "pm26-firefox.csv";
 
     private static string FixturePath(string name) => Path.Combine(AppContext.BaseDirectory, "Fixtures", "PresentMon", name);
@@ -72,7 +72,6 @@ public class PresentMonCsvParserTests
             Assert.Equal(0, frame.SyncInterval);
         });
         Assert.All(capture.Frames.Zip(capture.Frames.Skip(1)), pair => Assert.True(pair.Second.PresentQpc > pair.First.PresentQpc));
-        // Первая строка файла: TimeInQPC, MsBetweenPresents, MsCPUBusy, MsGPUBusy, SyncInterval.
         Assert.Equal(new FrameSample(52702545723, 8.9277, 8.8497, 3.7114, 0), capture.Frames[0]);
         Assert.Equal(["Composed: Flip", "Hardware Composed: Independent Flip", "Hardware: Independent Flip"], capture.PresentModes);
     }

@@ -2,13 +2,11 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>Эхо-запросы по сценарию: ответ зависит от узла и номера попытки; узлы из Unresolvable не разрешаются.</summary>
 public sealed class FakePing : IPingSource
 {
     private readonly object _gate = new();
     private readonly List<string> _calls = [];
 
-    /// <summary>Ответ по номеру попытки (с нуля); узла нет в словаре — 10 мс.</summary>
     public Dictionary<string, Func<int, double?>> Replies { get; } = new(StringComparer.Ordinal);
 
     public HashSet<string> Unresolvable { get; } = new(StringComparer.Ordinal);
@@ -41,7 +39,6 @@ public sealed class FakePing : IPingSource
     }
 }
 
-/// <summary>Адаптеры из списка; трафик — очередь показаний, пустая очередь даёт Unknown.</summary>
 public sealed class FakeNetworkAdapters : INetworkAdapterSource
 {
     public List<NetworkAdapterInfo> Adapters { get; } = [];
@@ -58,7 +55,6 @@ public sealed class FakeNetworkAdapters : INetworkAdapterSource
         new(id, $"{id} name", $"{id} description", medium, speed, gateways);
 }
 
-/// <summary>Синхронный IProgress: Progress&lt;T&gt; отправлял бы отчёты в пул потоков.</summary>
 public sealed class RecordingProgress<T> : IProgress<T>
 {
     private readonly object _gate = new();

@@ -1,18 +1,10 @@
 namespace Booster.Core.SystemHealth;
 
-/// <summary>
-/// Строка UserGpuPreferences «Ключ=Значение;…»: порядок пар и чужие пары сохраняются. Ключи сравниваются без учёта регистра,
-/// пробелы вокруг пары не учитываются.
-/// </summary>
 public static class GpuPreferenceString
 {
     private const char PairSeparator = ';';
     private const char KeySeparator = '=';
 
-    /// <summary>
-    /// Заменяет пару с тем же ключом (повторы этого ключа убираются) или дописывает её в конец. Каждая пара заканчивается «;».
-    /// </summary>
-    /// <param name="pair">«Ключ=Значение» без «;».</param>
     public static string Set(string? current, string pair)
     {
         var key = Key(pair) ?? throw new ArgumentException($"'{pair}' is not a Key=Value pair", nameof(pair));
@@ -34,7 +26,6 @@ public static class GpuPreferenceString
         return string.Concat(pairs.Select(p => p + PairSeparator));
     }
 
-    /// <summary>Есть ли в строке ровно эта пара: ключ без учёта регистра, значение — точно.</summary>
     public static bool Contains(string? current, string pair)
     {
         var key = Key(pair);

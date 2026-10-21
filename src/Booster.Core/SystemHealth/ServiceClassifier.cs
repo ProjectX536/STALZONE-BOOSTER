@@ -5,7 +5,6 @@ using Booster.Core.Reports;
 
 namespace Booster.Core.SystemHealth;
 
-/// <summary>Назначение службы. Всё, кроме ThirdParty, Booster к проверке не предлагает.</summary>
 public enum ServiceCategory
 {
     SystemCritical,
@@ -17,13 +16,8 @@ public enum ServiceCategory
     Unknown,
 }
 
-/// <param name="ReviewCandidate">Сторонняя служба, которую пользователь может проверить сам. Booster её не трогает.</param>
 public sealed record ServiceAssessment(ServiceInfo Service, ServiceCategory Category, bool ReviewCandidate);
 
-/// <summary>
-/// Классификация служб по справочнику. Первое совпадение сверху вниз: справочник важнее издателя, а служба,
-/// чей издатель не прочитан, остаётся Unknown — неизвестное не предлагается к проверке.
-/// </summary>
 public static class ServiceClassifier
 {
     private const string MicrosoftPublisher = "Microsoft";

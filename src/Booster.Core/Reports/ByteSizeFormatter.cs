@@ -3,7 +3,6 @@ using Booster.Core.Resources;
 
 namespace Booster.Core.Reports;
 
-/// <summary>Размер с основанием 1024: «8 ГБ», «15,8 ГБ». Один знак после запятой, у целого — без дробной части.</summary>
 public static class ByteSizeFormatter
 {
     private const double Base = 1024;

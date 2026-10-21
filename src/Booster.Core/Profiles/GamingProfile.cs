@@ -3,7 +3,6 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Core.Profiles;
 
-/// <summary>Игровой профиль: <c>config/Profiles/*.json</c>. Значения и их обоснования — в самом файле.</summary>
 public sealed record GamingProfile(
     int SchemaVersion,
     string ProfileId,
@@ -30,9 +29,6 @@ public sealed record ProfileMonitoring(
     bool CollectMemoryMetrics,
     bool CollectGpuTelemetry);
 
-/// <param name="Reversible">Справочное поле: обратимость определяет <see cref="ActionDescriptor"/> в коде.</param>
-/// <param name="Value">Параметр действия (для <c>game-priority</c> — класс приоритета).</param>
-/// <param name="TargetSchemes">GUID схем питания для <c>power-plan</c>, по убыванию предпочтения.</param>
 public sealed record ProfileActionEntry(
     string Id,
     [property: JsonConverter(typeof(ActionModeJsonConverter))] ActionMode Mode,
@@ -48,7 +44,6 @@ public sealed record ProfileRecovery(
     bool RecoverInterruptedSession,
     bool VerifyAfterRestore);
 
-/// <summary>Выбор пользователя на экране профилей; остальное в профиле пользователь меняет только руками в файле.</summary>
 public sealed record ProfileUserChoices(
     IReadOnlyList<string> Games,
     bool AutoStart,

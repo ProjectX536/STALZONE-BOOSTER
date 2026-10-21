@@ -16,7 +16,6 @@ public sealed class GameSessionCoordinatorTests : IAsyncDisposable
     private const int GamePid = 4242;
     private const string ProfileId = "competitive";
 
-    /// <summary>FakeConfiguration: gameDetectionIntervalMs = 2000.</summary>
     private static readonly TimeSpan Interval = TimeSpan.FromSeconds(2);
 
     private static readonly TimeSpan Wait = TimeSpan.FromSeconds(10);
@@ -35,7 +34,6 @@ public sealed class GameSessionCoordinatorTests : IAsyncDisposable
 
     private static CancellationToken Ct => TestContext.Current.CancellationToken;
 
-    /// <summary>Создаётся при первом обращении, когда действия и восстановители уже добавлены.</summary>
     private GameSessionCoordinator Coordinator => _coordinator ??= CreateCoordinator();
 
     private CoordinatorStatus Status => Coordinator.Status;
@@ -59,7 +57,6 @@ public sealed class GameSessionCoordinatorTests : IAsyncDisposable
         return new GameSessionCoordinator(manager, _processes, _profiles, _config, _time, _log);
     }
 
-    /// <summary>Профиль с игрой cs2 и действиями id → режим; у каждого действия свой фейк и восстановитель.</summary>
     private void UseProfile(bool autoStart, params (string Id, ActionMode Mode)[] actions)
     {
         foreach (var (id, _) in actions)
@@ -79,7 +76,6 @@ public sealed class GameSessionCoordinatorTests : IAsyncDisposable
             []);
     }
 
-    /// <summary>Действие <paramref name="id"/> профиля становится необратимым, как закрытие фоновых приложений.</summary>
     private FakeAction Irreversible(string id)
     {
         var action = new FakeAction(_state, id)
@@ -106,7 +102,6 @@ public sealed class GameSessionCoordinatorTests : IAsyncDisposable
             await Task.Delay(10, timeout.Token);
     }
 
-    /// <summary>Двигает время по интервалу опроса, пока условие не выполнится.</summary>
     private async Task AdvanceUntil(Func<bool> condition)
     {
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(Ct);
@@ -118,14 +113,12 @@ public sealed class GameSessionCoordinatorTests : IAsyncDisposable
         }
     }
 
-    /// <summary>Ещё <paramref name="count"/> опросов списка процессов.</summary>
     private Task Polls(int count)
     {
         var target = _processes.ListCalls + count;
         return AdvanceUntil(() => _processes.ListCalls >= target);
     }
 
-    /// <summary>Время идёт <paramref name="intervals"/> интервалов; для проверок, что опроса нет.</summary>
     private async Task Idle(int intervals)
     {
         for (var i = 0; i < intervals; i++)
@@ -158,7 +151,6 @@ public sealed class GameSessionCoordinatorTests : IAsyncDisposable
         Assert.Equal(CoordinatorMode.Off, Status.Mode);
         Assert.Equal(0, Applies);
 
-        // Контроль: цикл жив и опрашивает, как только появляется профиль с автозапуском.
         UseProfile(autoStart: true, ("b", ActionMode.Allowed));
         await AdvanceUntil(() => _processes.ListCalls > 0);
     }
@@ -197,11 +189,9 @@ public sealed class GameSessionCoordinatorTests : IAsyncDisposable
 
         var result = await Coordinator.ArmAsync(ProfileId, Confirmed("a"), Ct);
 
-        // Время не двигается: подготовка будит опрос сразу.
         await WaitForGaming();
         Assert.Equal("boost", _state["a"]);
 
-        // Необратимых действий не подтверждали — и пропускать нечего.
         Assert.Equal(new PreparationResult(null, null), result);
     }
 
@@ -273,7 +263,6 @@ public sealed class GameSessionCoordinatorTests : IAsyncDisposable
         await Coordinator.StartAsync(Ct);
         await Coordinator.ArmAsync(ProfileId, Confirmed("a"), Ct);
 
-        // Профиль сохранён после подтверждения: изменения действуют со следующей подготовки.
         _profiles.Current = new ProfileSet(
             [ProfileFactory.Profile(games: ["cs2"], enabledOptional: ["b"],
                 actions: [new("a", ActionMode.AskFirst), new("b", ActionMode.Optional)])],
@@ -321,7 +310,6 @@ public sealed class GameSessionCoordinatorTests : IAsyncDisposable
         Assert.Equal(CoordinatorMode.Watching, Status.Mode);
         Assert.Equal("orig", _state["b"]);
 
-        // Тот же PID, но другое время старта — это новый запуск игры.
         _processes.Exit(GamePid);
         StartGame(GamePid, Start.AddMinutes(5));
         await AdvanceUntil(() => Status.Progress?.State == SessionState.Gaming);
@@ -343,7 +331,6 @@ public sealed class GameSessionCoordinatorTests : IAsyncDisposable
         await WaitForGaming();
         await StopAndWait();
 
-        // Первая игра завершена пользователем и продолжает работать: она не должна заслонять вторую.
         _processes.Start("other", 5151);
         await AdvanceUntil(() => Status.Progress?.State == SessionState.Gaming);
 
@@ -458,7 +445,6 @@ public sealed class GameSessionCoordinatorTests : IAsyncDisposable
         Assert.Null(Status.ArmedProfileId);
         Assert.Equal(0, Applies);
 
-        // Контроль: та же игра с новой подготовкой запускает сессию.
         await Coordinator.ArmAsync(ProfileId, Confirmed("a"), Ct);
         await WaitForGaming();
     }

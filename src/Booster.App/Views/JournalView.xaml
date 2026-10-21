@@ -7,7 +7,6 @@
 
     <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="24,0,24,16">
       <StackPanel MaxWidth="900" HorizontalAlignment="Left">
-        <!-- Отчёт восстановления при запуске -->
         <Border Style="{StaticResource Card}" Margin="0,4,0,0"
                 Visibility="{Binding HasRecoveryReport, Converter={StaticResource BooleanToVisibility}}">
           <StackPanel>
@@ -76,7 +75,6 @@
           </StackPanel>
         </Border>
 
-        <!-- Сессии -->
         <TextBlock Style="{StaticResource SectionTitle}" Text="{x:Static res:Strings.SessionsTitle}" />
         <WrapPanel>
           <Button Style="{StaticResource ToolbarButton}" Content="{x:Static res:Strings.Refresh}" Command="{Binding LoadCommand}" />
@@ -108,7 +106,6 @@
           </ListBox.ItemTemplate>
         </ListBox>
 
-        <!-- Выбранная сессия -->
         <StackPanel>
           <StackPanel.Style>
             <Style TargetType="StackPanel">

@@ -1,9 +1,5 @@
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>
-/// «Система» для фейковых действий: id действия → текущее значение. Нет ключа — объекта нет.
-/// <see cref="Calls"/> — общий журнал изменяющих вызовов всех фейков (<c>apply:a</c>, <c>revert:b</c>).
-/// </summary>
 public sealed class FakeSystemState
 {
     private readonly Dictionary<string, string> _values = new(StringComparer.Ordinal);

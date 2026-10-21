@@ -68,7 +68,6 @@ public sealed class GenericGpuProviderTests
     [Fact]
     public async Task Capabilities_follow_the_probe_read()
     {
-        // Первый снимок счётчиков: загрузки ещё нет, но адаптер в счётчиках есть — источник загрузки поддерживается.
         _counters.Next = new() { [Luid] = Counters(null, 1_000) };
         _kmt.Data[Luid] = Kmt(temperature: 50, fan: null, memoryClock: null);
 

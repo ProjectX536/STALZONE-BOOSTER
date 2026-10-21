@@ -17,13 +17,6 @@ namespace Booster.Core;
 
 public static class DependencyInjection
 {
-    /// <summary>
-    /// Службы Core. Регистрации через TryAdd: композиция или тест, зарегистрировавшие свою реализацию раньше,
-    /// её сохраняют. Источники данных (<see cref="IHardwareProvider"/>, <see cref="IDriverInventoryProvider"/>,
-    /// <see cref="IPrivilegeInfo"/>, конфигурацию, файлы журнала и профилей, процессы, нагрузку и схемы питания системы, датчики CPU,
-    /// детектор GPU и провайдеры GPU, память, подкачку, службы, журнал стабильности и сеть) и логирование подключают Platform,
-    /// Providers и App.
-    /// </summary>
     public static IServiceCollection AddBoosterCore(this IServiceCollection services)
     {
         ArgumentNullException.ThrowIfNull(services);

@@ -10,10 +10,6 @@ namespace Booster.Providers.Gpu;
 
 public static class GpuProvidersDependencyInjection
 {
-    /// <summary>
-    /// Провайдеры GPU для <c>SensorProvider</c>. Источники данных (<c>IGpuSystemCounterSource</c>, <c>IKmtPerfDataSource</c>,
-    /// <c>IFileProbe</c>) регистрирует <c>AddBoosterPlatformWindows</c>. TryAddEnumerable: повторный вызов не дублирует.
-    /// </summary>
     public static IServiceCollection AddBoosterGpuProviders(this IServiceCollection services)
     {
         ArgumentNullException.ThrowIfNull(services);

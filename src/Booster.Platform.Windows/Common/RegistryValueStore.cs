@@ -4,10 +4,6 @@ using Microsoft.Win32;
 
 namespace Booster.Platform.Windows.Common;
 
-/// <summary>
-/// Чтение и запись значений одного раздела реестра, только ключи из списка — защита в глубину поверх проверок действий: ключ вне
-/// списка отклоняется до открытия реестра. Точное совпадение без учёта регистра: вложенные ключи не разрешены.
-/// </summary>
 internal sealed class RegistryValueStore(string hiveName, IReadOnlyList<string> allowedKeys, Func<RegistryKey> openRoot) : IRegistryValues
 {
     public UserRegistryValue? Read(string subKey, string valueName)
@@ -18,7 +14,7 @@ internal sealed class RegistryValueStore(string hiveName, IReadOnlyList<string> 
         if (key?.GetValue(valueName, null, RegistryValueOptions.DoNotExpandEnvironmentNames) is not { } value)
             return null;
 
-        // REG_EXPAND_SZ и прочие типы Booster не пишет: прочитать их как строку значило бы при откате сменить тип значения.
+        // Другие типы не пишем: при откате тип значения поменялся бы.
         return key.GetValueKind(valueName) switch
         {
             RegistryValueKind.DWord => UserRegistryValue.FromDWord(unchecked((uint)(int)value)),

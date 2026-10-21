@@ -9,12 +9,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Core.Profiles;
 
-/// <summary>
-/// Автомат игровой сессии (docs/ARCHITECTURE.md, раздел 6): Snapshot → Apply → Gaming → Restore → Verify → Idle.
-/// Сбой Apply откатывает применённое в обратном порядке. Восстановление выполняется всегда и не отменяется.
-/// Необратимые действия в игровую сессию не попадают: их выполняет подготовка до запуска игры
-/// (Snapshot → Apply → Restore → Verify → Idle, без Gaming).
-/// </summary>
 public sealed partial class GamingProfileManager(
     IActionCatalog catalog,
     IActionPolicy policy,
@@ -35,10 +29,8 @@ public sealed partial class GamingProfileManager(
 
     public SessionState State => _state;
 
-    /// <summary>Вызывается из фонового потока. Исключение обработчика пишется в лог и не прерывает сессию.</summary>
     public event EventHandler<SessionProgress>? ProgressChanged;
 
-    /// <summary>Только чтение. <paramref name="game"/> == null — предварительный план до запуска игры (экран подтверждения).</summary>
     public async Task<SessionPlan> PreflightAsync(GamingProfile profile, GameProcess? game, ExecutionTrigger trigger,
         IReadOnlySet<string> confirmedActionIds, CancellationToken ct)
     {
@@ -52,12 +44,10 @@ public sealed partial class GamingProfileManager(
             if (catalog.Create(entry.Id, profile, game) is not { } action)
                 continue;
 
-            // Booster сам права не повышает: действие, которому нужен администратор, без них не выполняется.
             var context = new PolicyContext(trigger, IsGamingSessionActive: game is not null,
                 UserEnabled: profile.EnabledOptionalActions.Contains(entry.Id, StringComparer.OrdinalIgnoreCase),
                 UserConfirmed: confirmedActionIds.Contains(entry.Id), CanElevate: false);
 
-            // В активной игровой сессии допустимы только обратимые действия (docs/PRINCIPLES.md): необратимое не проверяется и не выполняется.
             var support = game is not null && !action.Descriptor.IsReversible
                 ? new ActionSupport(false, ReportStrings.Skip_OnlyBeforeGame, action.Descriptor.DisplayName)
                 : await CheckSupportAsync(action, ct).ConfigureAwait(false);
@@ -67,12 +57,6 @@ public sealed partial class GamingProfileManager(
         return new SessionPlan(profile, game, trigger, actions);
     }
 
-    /// <summary>
-    /// <paramref name="stopToken"/> завершает только Gaming: восстановление выполняется всегда, с <see cref="CancellationToken.None"/>.
-    /// Применять нечего — журнал не создаётся, результат null.
-    /// </summary>
-    /// <exception cref="ArgumentException">В плане нет игры.</exception>
-    /// <exception cref="InvalidOperationException">Другая сессия ещё идёт.</exception>
     public async Task<SessionRecord?> RunAsync(SessionPlan plan, CancellationToken stopToken)
     {
         ArgumentNullException.ThrowIfNull(plan);
@@ -98,12 +82,6 @@ public sealed partial class GamingProfileManager(
         }
     }
 
-    /// <summary>
-    /// Подготовка до запуска игры: выполняет только подтверждённые необратимые действия профиля и сразу завершается —
-    /// их изменения помечаются для ручной проверки. Обратимые действия ждут игровой сессии.
-    /// Подготавливать нечего — журнал не создаётся, результат null.
-    /// </summary>
-    /// <exception cref="InvalidOperationException">Другая сессия ещё идёт.</exception>
     public async Task<SessionRecord?> PrepareAsync(GamingProfile profile, IReadOnlySet<string> confirmedActionIds, CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(profile);
@@ -130,7 +108,6 @@ public sealed partial class GamingProfileManager(
         }
     }
 
-    /// <param name="game">null — подготовка: игры ещё нет, Gaming пропускается.</param>
     private async Task<SessionRecord> RunSessionAsync(SessionPlan plan, SessionKind kind, GameProcess? game, CancellationToken stopToken)
     {
         var profile = plan.Profile;
@@ -141,12 +118,10 @@ public sealed partial class GamingProfileManager(
             gameName, game?.Identity.ProcessId, plan.Trigger, now, SessionState.Snapshot, null, null, [], skipped, kind);
         LogStarted(session.SessionId, kind, profile.ProfileId, gameName, game?.Identity.ProcessId);
 
-        // До первого изменения сбой журнала прерывает сессию: без записи менять ничего нельзя.
         var gameRunning = game is not null;
         session = await EnterAsync(session, SessionState.Snapshot, gameRunning, required: true).ConfigureAwait(false);
         session = await EnterAsync(session, SessionState.Apply, gameRunning, required: true).ConfigureAwait(false);
 
-        // Начатое действие доводится до записи в журнал; после остановки следующие не начинаются и попадают в пропущенные.
         var failed = false;
         var toApply = plan.Actions.Where(a => a.WillApply).ToArray();
         for (var i = 0; i < toApply.Length; i++)
@@ -178,7 +153,6 @@ public sealed partial class GamingProfileManager(
 
             if (result.Status is ExecutionStatus.Refused or ExecutionStatus.NotApplied)
             {
-                // Ничего не изменено — действие пропускается, применённое до него остаётся до конца сессии.
                 var reason = result.Status == ExecutionStatus.Refused ? EnumText.Format(result.Decision.Reason) : result.Detail ?? "";
                 session = session with { Skipped = [.. session.Skipped, Skip(planned.Action, reason)] };
                 await SaveQuietlyAsync(session).ConfigureAwait(false);
@@ -202,10 +176,6 @@ public sealed partial class GamingProfileManager(
         return session;
     }
 
-    /// <summary>
-    /// Наблюдение за игрой до её выхода (если так задано в профиле) или до остановки. Игра считается завершённой после
-    /// monitoring.gameExitConfirmationCount замеров подряд без её процесса: один сбой чтения сессию не обрывает.
-    /// </summary>
     private async Task<(SessionRecord Session, bool GameRunning)> PlayAsync(SessionPlan plan, GameProcess game, SessionRecord session,
         CancellationToken stopToken)
     {
@@ -221,7 +191,6 @@ public sealed partial class GamingProfileManager(
         await using var frameRun = frames.Start(profile.Monitoring, game, stopToken);
         using var timer = new PeriodicTimer(interval, time);
 
-        // Нулевой замер задаёт начало интервала: первый же шаг покажет загрузку CPU.
         SampleLoad(profile.Monitoring);
         session = await EnterAsync(session, SessionState.Gaming, running, required: false).ConfigureAwait(false);
         try
@@ -259,23 +228,18 @@ public sealed partial class GamingProfileManager(
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
-            // Наблюдение сломалось — держать изменения без присмотра нельзя, сессия завершается восстановлением.
             LogGamingFailed(ex, session.SessionId);
         }
 
         return (session, running);
     }
 
-    /// <summary>
-    /// Замер датчиков не дольше интервала цикла: зависший драйвер не должен задержать проверку игры и восстановление.
-    /// Таймаут или ошибка — замер пропускается с записью в лог, чтение отменяется.
-    /// </summary>
     private async Task<SensorSnapshot?> ReadSensorsAsync(string sessionId, TimeSpan limit, CancellationToken stopToken)
     {
         using var abandon = CancellationTokenSource.CreateLinkedTokenSource(stopToken);
         try
         {
-            // Task.Run: нативный вызов провайдера может зависнуть синхронно, до возврата задачи, — таймаут должен его покрывать.
+            // Task.Run: нативный вызов может зависнуть синхронно, таймаут должен это покрывать.
             return await Task.Run(() => sensors.ReadAsync(abandon.Token), abandon.Token).WaitAsync(limit, time, stopToken).ConfigureAwait(false);
         }
         catch (TimeoutException)
@@ -317,7 +281,6 @@ public sealed partial class GamingProfileManager(
         }
     }
 
-    /// <param name="required">Сбой записи пробрасывается — только пока ничего не изменено.</param>
     private async Task<SessionRecord> EnterAsync(SessionRecord session, SessionState state, bool gameRunning, bool required)
     {
         session = session with { State = state };
@@ -330,8 +293,6 @@ public sealed partial class GamingProfileManager(
         return session;
     }
 
-    // После первого изменения сбой журнала не останавливает восстановление: снимки уже на диске,
-    // следующая удачная запись перепишет файл сессии целиком.
     private async Task SaveQuietlyAsync(SessionRecord session)
     {
         try

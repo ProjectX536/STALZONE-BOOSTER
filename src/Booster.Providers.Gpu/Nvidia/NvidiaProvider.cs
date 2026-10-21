@@ -7,11 +7,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Providers.Gpu.Nvidia;
 
-/// <summary>
-/// NVIDIA через NVAPI: загрузка, температура, частоты, вентилятор и причины снижения частоты; параметры драйвера (DRS)
-/// только для чтения. <see cref="INvApi"/> создаётся один раз и лениво; неудача создания запоминается до перезапуска.
-/// HANDLE_INVALIDATED (сброс драйвера) — библиотека пересоздаётся при следующем чтении. Методы не бросают исключений.
-/// </summary>
 internal sealed class NvidiaProvider(INvApiFactory factory, ILogger<NvidiaProvider> logger) : IGpuProvider
 {
     public const string Id = "providers.gpu.nvidia";
@@ -59,10 +54,6 @@ internal sealed class NvidiaProvider(INvApiFactory factory, ILogger<NvidiaProvid
         }, ex => new GpuSettingsResult(Id, application, null,
             Reading<IReadOnlyList<GpuSetting>>.Failure(NvTelemetryMapper.Source, FailedNote(ex))), "ReadSettings"));
 
-    /// <summary>
-    /// Адаптер — область адаптера: <c>gpu.vendor-api</c> и поля телеметрии по пробному чтению. Система —
-    /// <c>gpu.settings.read</c> по чтению глобального профиля DRS.
-    /// </summary>
     private IReadOnlyList<CapabilityReport> Capabilities(GpuAdapterInfo adapter)
     {
         var reports = new List<CapabilityReport>();
@@ -124,7 +115,6 @@ internal sealed class NvidiaProvider(INvApiFactory factory, ILogger<NvidiaProvid
         return drs;
     }
 
-    /// <summary>GPU NVAPI для адаптера Windows; note — почему не найден.</summary>
     private (INvApi? Api, NvPhysicalGpu? Gpu, string Note) Resolve(GpuAdapterInfo adapter)
     {
         var api = Api(out var note);
@@ -147,10 +137,6 @@ internal sealed class NvidiaProvider(INvApiFactory factory, ILogger<NvidiaProvid
         return (api, gpu, gpu is null ? ProviderStrings.NvidiaNoAdapterMatch : string.Empty);
     }
 
-    /// <summary>
-    /// По LUID; если LUID адаптера или GPU NVAPI неизвестен — по PCI (DeviceId и SubsystemId), только среди GPU без
-    /// LUID и только когда кандидат ровно один. Порядок перечисления NVAPI и DXGI не совпадает, по нему не сопоставляем.
-    /// </summary>
     internal static NvPhysicalGpu? Match(GpuAdapterInfo adapter, IReadOnlyList<NvPhysicalGpu> gpus)
     {
         if (adapter.Luid is { IsAvailable: true, Value: var luid } && gpus.FirstOrDefault(g => g.Luid is { IsAvailable: true } l && l.Value == luid) is { } byLuid)
@@ -182,7 +168,6 @@ internal sealed class NvidiaProvider(INvApiFactory factory, ILogger<NvidiaProvid
         return _api;
     }
 
-    /// <summary>Дескрипторы недействительны: библиотека освобождается и создаётся заново при следующем чтении.</summary>
     private void Reset()
     {
         logger.LogInformation("NVAPI: HANDLE_INVALIDATED, библиотека будет создана заново");
@@ -193,7 +178,6 @@ internal sealed class NvidiaProvider(INvApiFactory factory, ILogger<NvidiaProvid
 
     private T Guard<T>(Func<T> body, T fallback, string operation) => Guard(body, _ => fallback, operation);
 
-    /// <summary>Под одной блокировкой; исключение — в журнал и показания-ошибки, а не наружу.</summary>
     private T Guard<T>(Func<T> body, Func<Exception, T> fallback, string operation)
     {
         lock (_lock)

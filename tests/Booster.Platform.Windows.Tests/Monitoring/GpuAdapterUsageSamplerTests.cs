@@ -12,7 +12,7 @@ public sealed class GpuAdapterUsageSamplerTests
 {
     private static readonly AdapterLuid Igpu = new(0xA, 0);
     private static readonly AdapterLuid Dgpu = new(0xB, 0);
-    private static readonly TimeSpan Interval = TimeSpan.FromMilliseconds(2000); // FakeConfiguration: gpuEngineSampleIntervalMs
+    private static readonly TimeSpan Interval = TimeSpan.FromMilliseconds(2000);
 
     private readonly FakeTimeProvider _time = new();
     private readonly FakeCounterSource _source = new();
@@ -24,7 +24,6 @@ public sealed class GpuAdapterUsageSamplerTests
     [Fact]
     public async Task Samples_every_interval_until_cancelled_and_returns_dominant_adapter()
     {
-        // Первый опрос счётчиков всегда даёт нули: PerformanceCounter считает разность между двумя чтениями.
         _source.Results.Enqueue([new GpuEngineSample(Dgpu, "3D", 0)]);
         _source.Results.Enqueue([new GpuEngineSample(Igpu, "3D", 30), new GpuEngineSample(Dgpu, "3D", 70)]);
         _source.Results.Enqueue([new GpuEngineSample(Dgpu, "3D", 80)]);

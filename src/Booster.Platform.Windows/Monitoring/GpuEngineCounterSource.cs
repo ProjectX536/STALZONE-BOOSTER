@@ -3,10 +3,6 @@ using System.Globalization;
 
 namespace Booster.Platform.Windows.Monitoring;
 
-/// <summary>
-/// Счётчики «GPU Engine\Utilization Percentage», только чтение. Объекты счётчиков живут между вызовами:
-/// процент считается по разности двух чтений, поэтому первое чтение нового экземпляра всегда 0 и отбрасывается.
-/// </summary>
 public sealed class GpuEngineCounterSource : IGpuEngineCounterSource, IDisposable
 {
     public const string Category = "GPU Engine";
@@ -27,7 +23,6 @@ public sealed class GpuEngineCounterSource : IGpuEngineCounterSource, IDisposabl
         {
             ObjectDisposedException.ThrowIf(_disposed, this);
 
-            // Исчезнувшие экземпляры и экземпляры других процессов больше не нужны.
             foreach (var stale in _counters.Keys.Where(name => !current.Contains(name)).ToArray())
                 Drop(stale);
 
@@ -51,7 +46,6 @@ public sealed class GpuEngineCounterSource : IGpuEngineCounterSource, IDisposabl
                 }
                 catch (InvalidOperationException)
                 {
-                    // Экземпляр исчез между перечислением и чтением: процесс освободил контекст на этом движке.
                     Drop(name);
                 }
             }

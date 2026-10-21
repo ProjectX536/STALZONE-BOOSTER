@@ -5,10 +5,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>
-/// Дисплеи из активных путей вывода. Результат — сам <see cref="Reading{T}"/>: «активных путей нет» (RDP) —
-/// это Unknown с причиной, а не сбой секции, и его нужно донести до отчёта как есть.
-/// </summary>
 public sealed partial class DisplayDetector(IDisplayConfigSource source, ICapabilityRegistry capabilities, ILogger<DisplayDetector> logger)
     : IInventoryDetector<Reading<IReadOnlyList<DisplayInfo>>>
 {
@@ -21,7 +17,6 @@ public sealed partial class DisplayDetector(IDisplayConfigSource source, ICapabi
         IReadOnlyList<DisplayPathRecord> paths;
         try
         {
-            // Вызов синхронный и при смене режима дисплея может надолго зависнуть; в пуле он не держит остальные секции.
             paths = await Task.Run(source.QueryActivePaths, ct).ConfigureAwait(false);
         }
         catch (Exception ex) when (ex is not OperationCanceledException)

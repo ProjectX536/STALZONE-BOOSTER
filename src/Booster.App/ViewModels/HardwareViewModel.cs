@@ -11,16 +11,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.App.ViewModels;
 
-/// <summary>Строка живых датчиков: устройство, показатель, значение или статус, источник.</summary>
 public sealed record SensorRow(string Device, string Metric, string Value, string Source);
 
-/// <summary>
-/// Оборудование: разделы отчёта с подсказкой-источником у каждого значения и живые датчики, которые опрашиваются
-/// раз в monitoring.sensorIntervalMs, только пока экран открыт.
-/// </summary>
 public sealed partial class HardwareViewModel : ObservableObject, IPage
 {
-    /// <summary>Гибридная графика, настройки GPU для приложений и параметры драйвера — в разделе видеоадаптеров.</summary>
     private static readonly string[] SectionIds =
     [
         ReportSectionIds.Cpu, ReportSectionIds.Gpu, ReportSectionIds.Memory, ReportSectionIds.Board, ReportSectionIds.Os,
@@ -55,18 +49,15 @@ public sealed partial class HardwareViewModel : ObservableObject, IPage
     [ObservableProperty]
     public partial bool HasData { get; private set; }
 
-    /// <summary>Последний замер датчиков; пусто, пока первый замер не пришёл.</summary>
     [ObservableProperty]
     public partial IReadOnlyList<SensorRow> Sensors { get; private set; } = [];
 
-    /// <summary>Запускает опрос датчиков; повторный вызов без <see cref="Deactivate"/> второго цикла не создаёт.</summary>
     public void Activate()
     {
         if (_loop is not null)
             return;
 
         _loop = new CancellationTokenSource();
-        // Вне UI-потока: замер — синхронные нативные вызовы, первый из них иначе выполнился бы в диспетчере.
         var token = _loop.Token;
         _ = Task.Run(() => PollAsync(token), token);
     }
@@ -81,7 +72,6 @@ public sealed partial class HardwareViewModel : ObservableObject, IPage
         _loop = null;
     }
 
-    /// <summary>Первый замер сразу, далее по таймеру. Ошибка замера пропускается с записью в лог, цикл продолжается.</summary>
     private async Task PollAsync(CancellationToken ct)
     {
         try

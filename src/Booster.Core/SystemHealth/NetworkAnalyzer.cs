@@ -11,20 +11,12 @@ public enum NetworkTargetKind
     Host,
 }
 
-/// <param name="Sent">Отправлено эхо-запросов.</param>
-/// <param name="Received">Получено ответов.</param>
 public sealed record NetworkTargetResult(NetworkTargetKind Kind, string Address, int Sent, int Received,
     Reading<double> MedianMs, Reading<double> JitterMs, Reading<double> LossPercent);
 
-/// <param name="Adapter">Адаптер со шлюзом; null — такого нет.</param>
-/// <param name="AdapterUtilizationPercent">Загрузка адаптера всем трафиком за время теста.</param>
 public sealed record NetworkTestResult(DateTimeOffset StartedAt, TimeSpan Duration, NetworkAdapterInfo? Adapter,
     IReadOnlyList<NetworkTargetResult> Targets, Reading<double> AdapterUtilizationPercent);
 
-/// <summary>
-/// Задержка, джиттер и потери по ответам ICMP и рекомендации. Сеть влияет на отклик в сетевых играх, а не на FPS;
-/// все рекомендации — только вручную (L3).
-/// </summary>
 public static class NetworkAnalyzer
 {
     public const string Source = "ICMP echo";
@@ -38,7 +30,7 @@ public static class NetworkAnalyzer
         var received = replies.OfType<double>().ToArray();
         if (received.Length == 0)
         {
-            // Молчание узла — не 100% потерь: многие узлы и роутеры просто не отвечают на ICMP.
+            // Многие роутеры просто не отвечают на ICMP, это не потери.
             var unknown = Reading<double>.Unknown(Source, NoRepliesNote);
             return new NetworkTargetResult(kind, address, replies.Count, 0, unknown, unknown, unknown);
         }
@@ -68,7 +60,6 @@ public static class NetworkAnalyzer
                 advice.Add(Warning(AdviceId.NetworkLoss, target.Address, Whole(target.LossPercent.Value)));
         }
 
-        // Wi-Fi — не проблема сам по себе; упоминается только как возможная причина найденного.
         if (advice.Count > 0 && result.Adapter?.Medium == NetworkMedium.Wireless)
             advice.Add(new SystemAdvice(AdviceId.NetworkWireless, AdviceModule.Network, FindingSeverity.Info, SafetyLevel.L3ManualOnly, []));
         return advice;

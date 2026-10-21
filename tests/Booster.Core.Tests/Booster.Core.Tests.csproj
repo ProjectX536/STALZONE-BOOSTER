@@ -13,7 +13,6 @@
     <ProjectReference Include="..\..\src\Booster.Core\Booster.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <!-- ShippedConfigTests проверяют ровно те файлы, что поставляются рядом с Booster.App.exe. -->
     <None Include="..\..\config\**" Link="config\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>

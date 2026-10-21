@@ -4,16 +4,8 @@ using Booster.Core.Inventory;
 
 namespace Booster.Core.SystemHealth;
 
-/// <summary>
-/// Все рекомендации системной диагностики по снимку, тесту сети и серии бенчмарка. Несобранная секция рекомендаций не даёт: неизвестное —
-/// не повод советовать.
-/// </summary>
 public static class SystemAdvisor
 {
-    /// <summary>По модулю (в порядке <see cref="AdviceModule"/>), внутри модуля — как вернули советчики.</summary>
-    /// <param name="network">Тест сети запускает пользователь; null — теста не было, сетевых рекомендаций нет.</param>
-    /// <param name="gameExecutables">Игры из профилей: их сбои в журнале дают отдельную рекомендацию.</param>
-    /// <param name="series">Серия бенчмарка текущей сессии: по ней проверяются правила видеокарты и показа кадров и время DPC.</param>
     public static IReadOnlyList<SystemAdvice> Advise(SystemSnapshot snapshot, NetworkTestResult? network, Thresholds thresholds,
         SystemCatalog catalog, IReadOnlyList<string> gameExecutables, BenchmarkSeries? series)
     {
@@ -38,7 +30,6 @@ public static class SystemAdvisor
         advice.AddRange(TweakAdvisor.Advise(TweakAdvisor.Propose(snapshot, series, gameExecutables, catalog.RegistryTweaks)));
         advice.AddRange(LatencyAdvisor.Advise(series?.Telemetry, thresholds.Bottleneck));
 
-        // OrderBy устойчива: порядок внутри модуля сохраняется.
         return advice.OrderBy(a => a.Module).ToArray();
     }
 }

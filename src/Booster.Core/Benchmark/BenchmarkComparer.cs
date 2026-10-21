@@ -31,29 +31,17 @@ public enum ComparisonCaveat
     NoValidRuns,
 }
 
-/// <param name="ChangePercent">(кандидат − база) / база × 100; для рывков — разница в рывках в минуту.</param>
 public sealed record MetricComparison(ComparedMetric Metric, MetricSpread Baseline, MetricSpread Candidate, double ChangePercent,
     ChangeVerdict Verdict);
 
-/// <param name="Field">Ключ строки ReportStrings — константы <c>BenchmarkComparer.*Field</c>.</param>
 public sealed record ConditionDifference(string Field, string? Baseline, string? Candidate);
 
-/// <param name="BaselineStartedAt">Начало базовой серии: даты шагов в цепочке изменений.</param>
-/// <param name="Comparable">false — разные игры; метрики не сравниваются.</param>
 public sealed record BenchmarkComparison(string BaselineId, string CandidateId, DateTimeOffset BaselineStartedAt,
     DateTimeOffset CandidateStartedAt, string? Change, bool Comparable, IReadOnlyList<MetricComparison> Metrics, IReadOnlyList<ConditionDifference> Differences, IReadOnlyList<ComparisonCaveat> Caveats, ChangeVerdict AverageFpsVerdict, ChangeVerdict OnePercentLowVerdict);
 
-/// <summary>
-/// Серия в отчёте и на экране: сама серия, сравнение с базой и цепочка изменений одной игры. <see cref="Settings"/> — пороги,
-/// по которым вынесены вердикты: отчёт называет их в оговорках.
-/// </summary>
 public sealed record BenchmarkReport(BenchmarkSeries Series, BenchmarkComparison? Comparison, IReadOnlyList<BenchmarkComparison> Chain,
     ComparisonSettings Settings);
 
-/// <summary>
-/// Сравнение серий только по повторным прогонам: изменение засчитывается, если оно больше порога и диапазоны прогонов
-/// не перекрываются. Никаких обещаний прироста — только вердикт с оговорками.
-/// </summary>
 public static class BenchmarkComparer
 {
     public const string RenderAdapterField = "BenchmarkConditionRenderAdapter";
@@ -70,12 +58,10 @@ public static class BenchmarkComparer
     public const string WindowModeField = "BenchmarkConditionWindowMode";
     public const string PresentModesField = "BenchmarkConditionPresentModes";
 
-    /// <summary>Значения различий HDR и VRR.</summary>
     public const string FlagOn = "on";
 
     public const string FlagOff = "off";
 
-    /// <summary>Все ключи различий: для проверки, что у каждого есть строка в ReportStrings.</summary>
     public static IReadOnlyList<string> ConditionFields { get; } =
     [
         RenderAdapterField, DriverField, ResolutionField, RefreshRateField, HdrField, VrrField, PowerPlanField, PowerSourceField, ProfileField,
@@ -129,10 +115,6 @@ public static class BenchmarkComparer
             differences, caveats, VerdictOf(ComparedMetric.AverageFps), VerdictOf(ComparedMetric.OnePercentLowFps));
     }
 
-    /// <summary>
-    /// Попарно соседние серии той же игры по времени: эффект каждого изменения по шагам. Серии без годных прогонов пропускаются.
-    /// Порядок — по времени серии-кандидата.
-    /// </summary>
     public static IReadOnlyList<BenchmarkComparison> Chain(IReadOnlyList<BenchmarkSeries> series, ComparisonSettings settings)
     {
         ArgumentNullException.ThrowIfNull(series);
@@ -175,10 +157,6 @@ public static class BenchmarkComparer
         return new MetricComparison(metric, baseline, candidate, change, verdict);
     }
 
-    /// <summary>
-    /// Измеренные условия различаются, только если известны с обеих сторон. Профиль Booster: «нет» — тоже значение.
-    /// Пометки пользователя — только если заполнены в обеих сериях.
-    /// </summary>
     private static IReadOnlyList<ConditionDifference> Differences(BenchmarkConditions baseline, BenchmarkConditions candidate)
     {
         var differences = new List<ConditionDifference>();

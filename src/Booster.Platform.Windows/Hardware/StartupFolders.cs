@@ -2,13 +2,10 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Platform.Windows.Hardware;
 
-/// <summary>Папки «Автозагрузка» пользователя и всех пользователей.</summary>
 public interface IStartupFolders
 {
-    /// <summary>Файлы папки <see cref="StartupLocation.UserFolder"/> или <see cref="StartupLocation.CommonFolder"/>; нет папки — пусто.</summary>
     IReadOnlyList<string> List(StartupLocation location);
 
-    /// <summary>Цель ярлыка; null — ярлык не прочитан или цели-файла нет.</summary>
     string? ResolveShortcut(string path);
 }
 

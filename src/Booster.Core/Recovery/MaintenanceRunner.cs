@@ -10,44 +10,26 @@ public enum MaintenanceStatus
 {
     Applied,
 
-    /// <summary>Действие сообщило, что применить его нельзя (элемент исчез, значение уже такое); журнала нет.</summary>
     NotSupported,
 
-    /// <summary>Политика не разрешила: нет подтверждения, идёт игра; журнала нет.</summary>
     Refused,
 
-    /// <summary>Действие ничего не изменило; сессия записана с пропуском.</summary>
     NotApplied,
 
-    /// <summary>Сбой: если изменение успело попасть в журнал, оно откатано.</summary>
     Failed,
 }
 
-/// <param name="Session">null — журнал не создавался (NotSupported, Refused, сбой до записи исходного значения).</param>
-/// <param name="Detail">Причина для пользователя.</param>
 public sealed record MaintenanceResult(MaintenanceStatus Status, SessionRecord? Session, string? Detail);
 
-/// <summary>
-/// Постоянные изменения по кнопке пользователя: одно действие — одна сессия журнала вида
-/// <see cref="SessionKind.Maintenance"/>. Изменение остаётся Applied, пока его не вернут с экрана журнала; правила возврата те же,
-/// что у игровой сессии. Применение и возврат идут по очереди. Действие с правами администратора политика пропускает, только если
-/// сам Booster запущен с ними: отдельного повышения на одно действие нет.
-/// </summary>
 public sealed partial class MaintenanceRunner(ActionExecutor executor, RollbackManager rollback, RecoveryValidator validator,
     IChangeJournal journal, IPrivilegeInfo privileges, TimeProvider time, ILogger<MaintenanceRunner> logger)
 {
-    /// <summary>Режим всех действий обслуживания: подтверждение каждый раз.</summary>
     public const ActionMode Mode = ActionMode.AskFirst;
 
-    /// <summary>ProfileId сессий обслуживания: профиля у них нет.</summary>
     public const string ProfileId = "maintenance";
 
     private readonly SemaphoreSlim _gate = new(1, 1);
 
-    /// <summary>
-    /// Проверка поддержки → решение политики и запись в журнал через <see cref="ActionExecutor"/> → завершённая сессия.
-    /// Начатое изменение доводится до журнала без отмены: отменить можно только ожидание очереди и проверку.
-    /// </summary>
     public async Task<MaintenanceResult> ApplyAsync(IReversibleAction action, bool userConfirmed, bool gamingSessionActive,
         CancellationToken ct)
     {
@@ -88,7 +70,6 @@ public sealed partial class MaintenanceRunner(ActionExecutor executor, RollbackM
 
                 default:
                     var detail = result.Error?.Message;
-                    // Без записи в журнале исходное значение не сохранено, и Apply не вызывался: возвращать нечего.
                     if (result.Session.Changes.Count == 0)
                         return new MaintenanceResult(MaintenanceStatus.Failed, null, detail);
 
@@ -104,10 +85,6 @@ public sealed partial class MaintenanceRunner(ActionExecutor executor, RollbackM
         }
     }
 
-    /// <summary>
-    /// Кнопка «Вернуть» на экране журнала. Нет такой сессии или она не обслуживание — ArgumentException. Возвращать нечего —
-    /// сессия как есть. Итог сессии не меняется: возврат — отдельное действие пользователя, видное по статусам изменений.
-    /// </summary>
     public async Task<SessionRecord> RevertAsync(string sessionId, CancellationToken ct)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(sessionId);
@@ -155,8 +132,6 @@ public sealed partial class MaintenanceRunner(ActionExecutor executor, RollbackM
         return await validator.VerifyAsync(session with { State = SessionState.Verify }, CancellationToken.None).ConfigureAwait(false);
     }
 
-    // Сбой последней записи оставляет сессию незавершённой: при следующем запуске StartupRecovery вернёт изменение — система
-    // окажется в исходном состоянии, а не в неизвестном.
     private async Task<SessionRecord> FinishAsync(SessionRecord session, SessionOutcome outcome)
     {
         session = session with { State = SessionState.Idle, Outcome = outcome, FinishedAt = time.GetUtcNow() };

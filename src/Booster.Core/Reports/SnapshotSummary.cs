@@ -5,10 +5,6 @@ using Booster.Core.Resources;
 
 namespace Booster.Core.Reports;
 
-/// <summary>
-/// Сводка снимка для экрана обзора: по строке на секцию, подпись — название секции, подсказка — источник.
-/// Секция без данных показывает свой статус, а не догадку.
-/// </summary>
 public static class SnapshotSummary
 {
     private const string ListSeparator = "; ";
@@ -52,14 +48,12 @@ public static class SnapshotSummary
         return new ReportField(title, cell with { Tooltip = cell.Tooltip ?? source });
     }
 
-    /// <summary>Производитель и модель платы; если о плате ничего не известно — системы (у ноутбуков так бывает).</summary>
     private static ReportCell Board(SystemBoardInfo board)
     {
         var text = Join([Known(board.BoardManufacturer), Known(board.BoardProduct)], " ");
         return Text(text.Length > 0 ? text : Join([Known(board.SystemManufacturer), Known(board.SystemModel)], " "));
     }
 
-    /// <summary>Название, версия и сборка — то, что известно. Номер сборки не локализуется.</summary>
     private static ReportCell Os(OsInfo os)
     {
         var build = os.BuildNumber is { IsAvailable: true, Value: var number }

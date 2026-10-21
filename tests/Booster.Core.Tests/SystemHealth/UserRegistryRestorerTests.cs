@@ -51,7 +51,6 @@ public class UserRegistryRestorerTests
     [Fact]
     public async Task Value_of_another_type_is_other_not_failure()
     {
-        // Пользователь заменил значение значением другого типа: это его изменение, а не сбой Booster.
         _registry.ReadFailure = new InvalidDataException("REG_QWORD");
 
         Assert.Equal(ObservedState.Other, await new TestRestorer(_registry).InspectAsync(Snapshot(Zero, One), Ct));
@@ -88,7 +87,6 @@ public class UserRegistryRestorerTests
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() => restorer.RevertAsync(evil, Ct));
         Assert.Equal((0, 0, 0), (_registry.Reads, _registry.Writes, _registry.Deletes));
 
-        // Журнал подделан: применённое значение указывает на другой ключ.
         var mixed = evil with { OriginalValue = new UserRegistrySnapshot(Allowed, Name, null).ToJson() };
         await Assert.ThrowsAsync<UnauthorizedAccessException>(() => restorer.RevertAsync(mixed, Ct));
 

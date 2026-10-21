@@ -4,10 +4,6 @@ using Microsoft.Win32;
 
 namespace Booster.Platform.Windows.Tests.Common;
 
-/// <summary>
-/// Запись в настоящий реестр не проверяется (docs/PRINCIPLES.md, «Безопасность машины разработчика»). Тесты отказа подменяют открытие HKCU:
-/// даже ошибочная реализация, открывшая ключ до проверки, получит исключение вместо реестра и ничего не запишет.
-/// </summary>
 public class UserRegistryTests
 {
     private const string NotAllowed = @"Software\Booster-Test-Not-Allowed";
@@ -50,7 +46,6 @@ public class UserRegistryTests
     [Fact]
     public void Allowed_key_reaches_the_registry()
     {
-        // Обратная сторона проверки: разрешённый ключ (в другом регистре) доходит до открытия HKCU.
         Assert.Throws<InvalidOperationException>(() => Guarded().Write(@"SOFTWARE\Microsoft\GameBar", "x", UserRegistryValue.FromDWord(1)));
         Assert.Equal(1, _opened);
     }
@@ -68,7 +63,6 @@ public class UserRegistryTests
             UserRegistry.AllowedKeys);
     }
 
-    /// <summary>Только чтение: значения может не быть, но открыть разрешённый ключ и прочитать тип нужно без ошибок.</summary>
     [Fact]
     [Trait("Category", "Host")]
     public void Reads_allowed_keys_on_host()

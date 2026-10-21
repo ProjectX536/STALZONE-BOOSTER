@@ -8,22 +8,14 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.Core.Engine;
 
-/// <summary>
-/// Снимок системы: оборудование, драйверы и готовность замера кадров собираются параллельно. Перечисление драйверов —
-/// самая долгая секция, поэтому у него свой таймаут из settings.json; его сбой или зависание не мешают построить снимок.
-/// Датчики опрашиваются после оборудования: им нужен список адаптеров. Системная диагностика собирается параллельно со всем.
-/// </summary>
 public sealed partial class SnapshotCollector(IHardwareProvider hardware, IDriverInventoryProvider drivers, IFrameCaptureProvider frameCapture,
     ISensorProvider sensors, SystemDiagnosticsCollector system, IProfileRepository profiles, IPrivilegeInfo privileges,
     ICapabilityRegistry capabilities, SectionRunner runner, IBoosterConfiguration config, TimeProvider time, ILogger<SnapshotCollector> logger)
 {
-    /// <summary>Ключ таймаута драйверов в settings.json и имя секции в логах и отчёте.</summary>
     public const string DriversSectionId = "drivers";
 
-    /// <summary>Имя проверки PresentMon в логах; таймаут — общий для детекторов.</summary>
     public const string FrameCaptureSectionId = "frameCapture";
 
-    /// <summary>Ключ таймаута опроса датчиков и параметров драйвера в settings.json и имя секции в логах и отчёте.</summary>
     public const string SensorsSectionId = "sensors";
 
     public async Task<SystemSnapshot> CollectAsync(CancellationToken ct)
@@ -34,15 +26,12 @@ public sealed partial class SnapshotCollector(IHardwareProvider hardware, IDrive
 
         var hardwareTask = hardware.ScanAsync(ct);
         var driversTask = runner.RunAsync(DriversSectionId, drivers.ScanAsync, detectors.TimeoutFor(DriversSectionId), ct);
-        // Результат не нужен: проверка сообщает в реестр возможность monitoring.frame-capture. Без неё отчёт,
-        // собранный до открытия экрана производительности (в том числе --export), не знал бы, доступен ли замер кадров.
         var frameCaptureTask = runner.RunAsync(FrameCaptureSectionId, frameCapture.CheckAvailabilityAsync,
             detectors.TimeoutFor(FrameCaptureSectionId), ct);
         var sensorsTask = SurveySensorsAsync(hardwareTask, detectors, ct);
         var systemTask = system.CollectAsync(ct);
         await Task.WhenAll(hardwareTask, driversTask, frameCaptureTask, sensorsTask, systemTask).ConfigureAwait(false);
 
-        // Возможности читаются после сбора: о них сообщают сами детекторы и провайдеры во время сканирования.
         return new SystemSnapshot(takenAt, privilegeState, await hardwareTask.ConfigureAwait(false),
             await driversTask.ConfigureAwait(false), capabilities.All(), await sensorsTask.ConfigureAwait(false),
             await systemTask.ConfigureAwait(false));
@@ -58,7 +47,6 @@ public sealed partial class SnapshotCollector(IHardwareProvider hardware, IDrive
             detectors.TimeoutFor(SensorsSectionId), ct).ConfigureAwait(false);
     }
 
-    /// <summary>Игры всех профилей: для них читаются параметры драйвера. Профили не загрузились — только глобальные.</summary>
     private IReadOnlyList<string> GameApplications()
     {
         try

@@ -4,10 +4,6 @@ using Booster.Core.Sensors;
 
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>
-/// Провайдер GPU в памяти: тест задаёт доступность, возможности и телеметрию, фейк запоминает, о каком адаптере
-/// и приложении его спрашивали. <see cref="Failure"/> бросается из чтения возможностей, телеметрии и параметров.
-/// </summary>
 public sealed class FakeGpuProvider(string providerId, GpuVendor? vendor = null) : IGpuProvider
 {
     public const string NvidiaId = "providers.gpu.nvidia";
@@ -65,7 +61,6 @@ public sealed class FakeGpuProvider(string providerId, GpuVendor? vendor = null)
     }
 }
 
-/// <summary>Датчики CPU в памяти: считает замеры, <see cref="Failure"/> бросается из <see cref="Sample"/>.</summary>
 public sealed class FakeCpuSensorSource : ICpuSensorSource
 {
     private int _samples;
@@ -87,7 +82,6 @@ public sealed class FakeCpuSensorSource : ICpuSensorSource
     public IReadOnlyList<CapabilityReport> DescribeCapabilities() => Capabilities;
 }
 
-/// <summary>Детектор GPU с готовым списком адаптеров; считает вызовы.</summary>
 public sealed class FakeGpuDetector(params GpuAdapterInfo[] adapters) : IInventoryDetector<GpuInventory>
 {
     private int _calls;

@@ -7,13 +7,10 @@ namespace Booster.Core.SystemHealth;
 
 public enum StartupVerdict
 {
-    /// <summary>HKCU Run или папка пользователя, включён, процесс запущен и тяжелее порога — можно отключить с подтверждением.</summary>
     Candidate,
 
-    /// <summary>Тяжёлый, но HKLM или общая папка: отключить можно только в Booster с правами администратора.</summary>
     NeedsAdmin,
 
-    /// <summary>Защитное ПО или античит по ключевым словам каталога служб — не предлагается.</summary>
     Protected,
 
     Light,
@@ -22,35 +19,26 @@ public enum StartupVerdict
 
     Disabled,
 
-    /// <summary>RunOnce, exe неизвестен или состояние Unknown.</summary>
     Unknown,
 }
 
 public sealed record StartupAssessment(StartupItem Item, StartupVerdict Verdict);
 
-/// <summary>Можно ли отключить элемент кнопкой. Вес элемента не важен: решает пользователь, Booster только подсказывает тяжёлые.</summary>
 public enum StartupDisableAvailability
 {
     Available,
 
     AlreadyDisabled,
 
-    /// <summary>RunOnce выполняется один раз и удаляется самой Windows: отключать нечего.</summary>
     RunOnce,
 
     StateUnknown,
 
-    /// <summary>Защитное ПО или античит — кнопки нет даже с правами администратора.</summary>
     Protected,
 
-    /// <summary>HKLM или общая папка, а Booster запущен без прав администратора.</summary>
     NeedsAdmin,
 }
 
-/// <summary>
-/// Оценка элементов автозагрузки. Первое совпадение сверху вниз: защита проверяется раньше памяти, поэтому тяжёлый антивирус
-/// не предлагается никогда, а элемент, о котором нельзя сказать надёжно, остаётся Unknown.
-/// </summary>
 public static class StartupAnalyzer
 {
     private const double BytesPerMb = 1024 * 1024;
@@ -66,7 +54,6 @@ public static class StartupAnalyzer
         return items.Select(item => new StartupAssessment(item, Verdict(item, thresholds, catalog))).ToArray();
     }
 
-    /// <summary>Candidate → HeavyStartupItems (Info, L2); NeedsAdmin → HeavyMachineStartupItems (Info, L2); аргументы — имена через «, ».</summary>
     public static IReadOnlyList<SystemAdvice> Advise(IReadOnlyList<StartupAssessment> assessments)
     {
         ArgumentNullException.ThrowIfNull(assessments);
@@ -84,10 +71,6 @@ public static class StartupAnalyzer
         }
     }
 
-    /// <summary>
-    /// Первое совпадение сверху вниз. Защита проверяется по имени, команде и пути независимо от вердикта: exe может быть не найден,
-    /// а команда всё равно говорит об антивирусе.
-    /// </summary>
     public static StartupDisableAvailability DisableAvailability(StartupEntry entry, ServiceCatalog catalog, bool isElevated)
     {
         ArgumentNullException.ThrowIfNull(entry);
@@ -127,7 +110,6 @@ public static class StartupAnalyzer
     private static bool IsMachine(StartupLocation location) =>
         location is StartupLocation.MachineRun or StartupLocation.MachineRun32 or StartupLocation.CommonFolder;
 
-    // Цель ярлыка тоже проверяется: имя ярлыка в папке «Автозагрузка» выбирает установщик и может ничего не говорить.
     private static bool IsProtected(StartupEntry entry, ServiceCatalog catalog) =>
         catalog.SecurityKeywords.Concat(catalog.AntiCheatKeywords).Any(keyword =>
             entry.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase)

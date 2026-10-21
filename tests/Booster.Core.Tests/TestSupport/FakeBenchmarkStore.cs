@@ -4,16 +4,13 @@ using Booster.Core.Benchmark;
 
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>История серий в памяти: те же правила Id и порядка, что у файлового хранилища, без диска.</summary>
 public sealed class FakeBenchmarkStore(params BenchmarkSeries[] initial) : IBenchmarkStore
 {
     private readonly Lock _lock = new();
     private readonly List<BenchmarkSeries> _series = [.. initial];
 
-    /// <summary>Запись бросает <see cref="IOException"/> — как переполненный диск.</summary>
     public bool FailSave { get; set; }
 
-    /// <summary>Новые первыми.</summary>
     public IReadOnlyList<BenchmarkSeries> Series
     {
         get

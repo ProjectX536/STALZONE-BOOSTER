@@ -19,7 +19,6 @@ public class BenchmarkSeriesBuilderTests
     private static RunWindow[] Windows(int count) =>
         [.. Enumerable.Range(0, count).Select(i => new RunWindow(i, i * 2 * WindowTicks, i * 2 * WindowTicks + WindowTicks))];
 
-    /// <summary>601 кадр с 16,7 мс в окне: первый отбрасывается, остаётся 600.</summary>
     private static IEnumerable<FrameSample> FramesIn(RunWindow window) =>
         Enumerable.Range(0, 601).Select(k => new FrameSample(window.StartQpc + k * 100, 16.7, 8, 12, 0));
 

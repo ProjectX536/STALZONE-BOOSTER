@@ -6,7 +6,7 @@ namespace Booster.Platform.Windows.Tests.Monitoring;
 public class ProcessActivityCalculatorTests
 {
     private const double Tolerance = 1e-9;
-    private const long Second = 10_000_000; // тиков по 100 нс
+    private const long Second = 10_000_000;
     private const int Cpus = 8;
 
     private static ProcessTimes Idle(double seconds) => new(0, "Idle", 0, (long)(seconds * Second), [], ProcessCounters.Zero);
@@ -139,7 +139,6 @@ public class ProcessActivityCalculatorTests
             name: "Game", pid: null);
 
         Assert.Equal(11, activity.Target.Value!.ProcessId);
-        // Второй экземпляр с тем же именем — посторонний процесс.
         Assert.Equal([new ProcessCpuUsage("GAME.EXE", 10, 12.5)], activity.TopOthers);
     }
 

@@ -2,7 +2,6 @@ using Booster.Core.Abstractions;
 
 namespace Booster.Core.Tests.TestSupport;
 
-/// <summary>Схемы питания в памяти. <see cref="SetActiveScheme"/> только запоминается: настоящая схема не меняется.</summary>
 public sealed class FakePowerPlanProvider : IPowerPlanProvider
 {
     public static readonly PowerScheme Balanced = new(Guid.Parse("381b4222-f694-41f0-9685-ff5bb260df2e"), "Сбалансированная");
@@ -14,7 +13,6 @@ public sealed class FakePowerPlanProvider : IPowerPlanProvider
     private readonly List<PowerScheme> _schemes;
     private readonly List<Guid> _setCalls = [];
 
-    /// <param name="schemes">Без схем — «Сбалансированная» и «Высокая производительность». Активна первая.</param>
     public FakePowerPlanProvider(params PowerScheme[] schemes)
     {
         _schemes = schemes.Length == 0 ? [Balanced, HighPerformance] : [.. schemes];
@@ -27,7 +25,6 @@ public sealed class FakePowerPlanProvider : IPowerPlanProvider
 
     public IReadOnlyList<Guid> SetCalls => _setCalls.ToArray();
 
-    /// <summary>Пользователь удалил схему.</summary>
     public void Remove(Guid schemeId) => _schemes.RemoveAll(s => s.Id == schemeId);
 
     public IReadOnlyList<PowerScheme> ListSchemes() => _schemes.ToArray();

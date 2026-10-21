@@ -5,7 +5,6 @@ namespace Booster.Providers.Gpu.Tests.Nvidia;
 
 public sealed class NvApiFunctionIdsTests
 {
-    // Белый список: только чтение. Идентификаторы — nvapi_interface.h (R560).
     private static readonly Dictionary<string, uint> Whitelist = new()
     {
         ["Initialize"] = 0x0150E828,

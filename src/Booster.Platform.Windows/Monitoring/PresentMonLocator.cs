@@ -6,10 +6,6 @@ namespace Booster.Platform.Windows.Monitoring;
 
 public sealed record PresentMonLocation(string ExecutablePath, string? Version);
 
-/// <summary>
-/// Поиск PresentMon: путь из настроек → <c>tools\PresentMon</c> в данных Booster (туда ставит scripts/Install-PresentMon.ps1)
-/// → каталог exe. В каталогах берётся <c>PresentMon-X.Y.Z-x64.exe</c> с наибольшей версией.
-/// </summary>
 public sealed partial class PresentMonLocator(IFileProbe files, IBoosterConfiguration config, IAppPaths paths)
 {
     private const string FileMask = "PresentMon-*-x64.exe";

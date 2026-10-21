@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <!-- Только read-only тесты и разбор данных (docs/PRINCIPLES.md, «Безопасность машины разработчика»). Тесты на живой системе помечены Category=Host. -->
+  <!-- Только read-only тесты; тесты на живой системе помечены Category=Host. -->
   <PropertyGroup>
     <TargetFramework>net10.0-windows</TargetFramework>
     <OutputType>Exe</OutputType>
@@ -14,7 +14,6 @@
     <ProjectReference Include="..\..\src\Booster.Platform.Windows\Booster.Platform.Windows.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <!-- Один ListLogger на оба тестовых проекта. -->
     <Compile Include="..\Booster.Core.Tests\TestSupport\ListLogger.cs" Link="TestSupport\ListLogger.cs" />
     <Compile Include="..\Booster.Core.Tests\TestSupport\FakeConfiguration.cs" Link="TestSupport\FakeConfiguration.cs" />
     <Compile Include="..\Booster.Core.Tests\TestSupport\SampleSeries.cs" Link="TestSupport\SampleSeries.cs" />

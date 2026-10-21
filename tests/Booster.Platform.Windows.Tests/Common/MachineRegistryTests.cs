@@ -3,10 +3,7 @@ using Booster.Platform.Windows.Common;
 
 namespace Booster.Platform.Windows.Tests.Common;
 
-/// <summary>
-/// Запись в настоящий реестр не проверяется (docs/PRINCIPLES.md, «Безопасность машины разработчика»). Тесты отказа подменяют открытие HKLM:
-/// даже ошибочная реализация, открывшая ключ до проверки, получит исключение вместо реестра и ничего не запишет.
-/// </summary>
+// В настоящий реестр не пишем: открытие HKLM подменено и бросает исключение.
 public class MachineRegistryTests
 {
     private int _opened;
@@ -23,7 +20,6 @@ public class MachineRegistryTests
         @"Software\Microsoft\Windows\CurrentVersion\Run",
         @"Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run\Nested",
         @"\Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run",
-        // Ключи HKCU-твиков в HKLM не разрешены: Booster меняет там только автозагрузку.
         @"Software\Microsoft\GameBar",
         @"Software\Microsoft\DirectX\UserGpuPreferences",
     ];
@@ -43,7 +39,6 @@ public class MachineRegistryTests
     [Fact]
     public void Allowed_key_reaches_the_registry()
     {
-        // Обратная сторона проверки: разрешённый ключ (в другом регистре) доходит до открытия HKLM.
         Assert.Throws<InvalidOperationException>(() => Guarded().Write(StartupApprovedKeys.Run32.ToUpperInvariant(), "x",
             UserRegistryValue.FromBinary(new byte[12])));
         Assert.Equal(1, _opened);
@@ -55,7 +50,6 @@ public class MachineRegistryTests
         Assert.Equal([StartupApprovedKeys.Run, StartupApprovedKeys.Run32, StartupApprovedKeys.StartupFolder], MachineRegistry.AllowedKeys);
     }
 
-    /// <summary>Только чтение: HKLM читается без прав администратора, отсутствующее значение — null.</summary>
     [Fact]
     [Trait("Category", "Host")]
     public void Reads_allowed_keys_on_host()

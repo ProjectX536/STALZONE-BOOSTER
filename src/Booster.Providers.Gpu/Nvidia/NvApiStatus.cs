@@ -2,7 +2,6 @@ using System.Globalization;
 
 namespace Booster.Providers.Gpu.Nvidia;
 
-/// <summary>Коды <c>NvAPI_Status</c>, которые Booster различает.</summary>
 internal static class NvApiStatus
 {
     // nvapi_lite_common.h (NVIDIA/nvapi, R560): enum _NvAPI_Status.
@@ -22,7 +21,6 @@ internal static class NvApiStatus
     public const int ProfileNotFound = -163;
     public const int ExecutableNotFound = -166;
 
-    /// <summary>"NVAPI_NOT_SUPPORTED (-104)"; код, которого нет в списке, — "NVAPI status -999".</summary>
     public static string Name(int status)
     {
         var name = status switch

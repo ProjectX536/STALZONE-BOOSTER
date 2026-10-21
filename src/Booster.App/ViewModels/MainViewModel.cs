@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Booster.App.ViewModels;
 
-/// <summary>Разделы окна в порядке навигации.</summary>
 public enum AppPage
 {
     Overview,
@@ -19,18 +18,15 @@ public enum AppPage
     Settings,
 }
 
-/// <summary>Экран, которому нужно знать о переходе на него и с него: например, чтобы обновить список процессов.</summary>
 public interface IPage
 {
     void Activate();
 
-    /// <summary>Уход с экрана: остановить то, что нужно только пока он открыт (например, живые датчики).</summary>
     void Deactivate()
     {
     }
 }
 
-/// <summary><see cref="Content"/> — ViewModel экрана; представление подбирается по её типу (DataTemplate в MainWindow).</summary>
 public sealed record NavigationItem(AppPage Page, string Title, object Content);
 
 public sealed partial class MainViewModel : ObservableObject
@@ -74,11 +70,6 @@ public sealed partial class MainViewModel : ObservableObject
 
     public StatusBarViewModel StatusBar { get; }
 
-    /// <summary>
-    /// Вызывается, когда окно показано: строка состояния начинает замеры, обзор — первый сбор данных, затем
-    /// восстановление незавершённых сессий и наблюдение за играми. Есть что сообщить о восстановлении — открывается журнал,
-    /// иначе незавершённая запись трассы WPR открывает «Систему» с напоминанием.
-    /// </summary>
     public void Start()
     {
         StatusBar.Start();
@@ -87,7 +78,6 @@ public sealed partial class MainViewModel : ObservableObject
         _ = StartGamingAsync();
     }
 
-    /// <summary>Журнал важнее трассы: восстановление касается изменений системы, а запись WPR только занимает память.</summary>
     internal async Task StartGamingAsync()
     {
         var report = await _gaming.StartAsync();
@@ -111,7 +101,6 @@ public sealed partial class MainViewModel : ObservableObject
         }
     }
 
-    /// <summary>Уже открытый экран обновляется, как при переходе на него.</summary>
     private void Open(AppPage page)
     {
         var item = Pages.First(p => p.Page == page);
@@ -121,7 +110,6 @@ public sealed partial class MainViewModel : ObservableObject
             SelectedPage = item;
     }
 
-    /// <remarks>При первом выборе <paramref name="oldValue"/> — null, хотя тип свойства его не допускает.</remarks>
     partial void OnSelectedPageChanged(NavigationItem oldValue, NavigationItem newValue)
     {
         if (oldValue?.Content is IPage left)

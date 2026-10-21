@@ -9,10 +9,6 @@ public enum DeviceState
     Disabled,
 }
 
-/// <summary>
-/// Устройство и его драйвер. Устройство без установленного драйвера (код 28) тоже попадает в список:
-/// поля драйвера у него Unknown. <see cref="ProblemCode"/> — ConfigManagerErrorCode.
-/// </summary>
 public sealed record DeviceDriverInfo(
     string DeviceInstanceId,
     Reading<string> DeviceName,
