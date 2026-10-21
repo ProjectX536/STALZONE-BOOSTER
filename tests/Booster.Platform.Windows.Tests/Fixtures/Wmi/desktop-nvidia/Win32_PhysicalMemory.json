@@ -1,0 +1,24 @@
+[
+    {
+        "Capacity":  8589934592,
+        "SMBIOSMemoryType":  26,
+        "ConfiguredClockSpeed":  2667,
+        "Speed":  2667,
+        "Manufacturer":  "Patriot Memory (PDP Systems)",
+        "PartNumber":  "PSD48G266681        ",
+        "DeviceLocator":  "Controller0-DIMMA1",
+        "BankLabel":  "BANK 0",
+        "FormFactor":  8
+    },
+    {
+        "Capacity":  8589934592,
+        "SMBIOSMemoryType":  26,
+        "ConfiguredClockSpeed":  2667,
+        "Speed":  2667,
+        "Manufacturer":  "Patriot Memory (PDP Systems)",
+        "PartNumber":  "PSD48G266681        ",
+        "DeviceLocator":  "Controller1-DIMMB1",
+        "BankLabel":  "BANK 0",
+        "FormFactor":  8
+    }
+]

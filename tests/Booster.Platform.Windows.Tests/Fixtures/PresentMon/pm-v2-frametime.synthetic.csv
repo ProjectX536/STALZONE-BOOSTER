@@ -1,0 +1,9 @@
+﻿Application,ProcessID,SwapChainAddress,PresentRuntime,SyncInterval,PresentFlags,AllowsTearing,PresentMode,FrameType,CPUStartTime,FrameTime,CPUBusy,CPUWait,GPULatency,GPUTime,GPUBusy,GPUWait,DisplayLatency,DisplayedTime,AnimationError,AnimationTime,MsFlipDelay,AllInputToPhotonLatency,ClickToPhotonLatency
+game.exe,5151,0x20A1B2C3E00,DXGI,0,512,1,Hardware: Independent Flip,Application,58.3000,8.3000,7.1000,1.2000,0.9000,6.5000,6.6000,1.7000,18.2000,8.3000,NA,58.3000,NA,NA,NA
+game.exe,5151,0x20A1B2C3E00,DXGI,0,512,1,Hardware: Independent Flip,Intel XeSS-FG,66.7000,8.4000,7.1000,1.2000,0.9000,6.5000,6.6000,1.7000,18.2000,8.4000,NA,66.7000,NA,NA,NA
+game.exe,5151,0x20A1B2C3E00,DXGI,0,512,1,Hardware: Independent Flip,Application,74.9000,8.2000,7.1000,1.2000,0.9000,6.5000,6.6000,1.7000,18.2000,8.2000,NA,74.9000,NA,NA,NA
+game.exe,5151,0x20A1B2C3E00,DXGI,0,512,1,Hardware: Independent Flip,Intel XeSS-FG,83.4000,8.5000,7.1000,1.2000,0.9000,6.5000,6.6000,1.7000,18.2000,8.5000,NA,83.4000,NA,NA,NA
+game.exe,5151,0x20A1B2C3E00,DXGI,0,512,1,Hardware: Independent Flip,Application,91.7000,8.3000,7.1000,1.2000,0.9000,6.5000,6.6000,1.7000,18.2000,8.3000,NA,91.7000,NA,NA,NA
+game.exe,5151,0x20A1B2C3E00,DXGI,0,512,1,Hardware: Independent Flip,Intel XeSS-FG,100.1000,8.4000,7.1000,1.2000,0.9000,6.5000,6.6000,1.7000,18.2000,8.4000,NA,100.1000,NA,NA,NA
+game.exe,5151,0x20A1B2C3E00,DXGI,0,512,1,Hardware: Independent Flip,Application,108.2000,8.1000,7.1000,1.2000,0.9000,6.5000,6.6000,1.7000,18.2000,8.1000,NA,108.2000,NA,NA,NA
+game.exe,5151,0x20A1B2C3E00,DXGI,0,512,1,Hardware: Independent Flip,Intel XeSS-FG,116.8000,8.6000,7.1000,1.2000,0.9000,6.5000,6.6000,1.7000,18.2000,8.6000,NA,116.8000,NA,NA,NA

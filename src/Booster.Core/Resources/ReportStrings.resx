@@ -1,0 +1,2673 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WindowsUpdateLinkTitle" xml:space="preserve">
+    <value>Центр обновления Windows</value>
+    <comment>Ссылка ms-settings:windowsupdate у каждого устройства в списке драйверов.</comment>
+  </data>
+  <data name="HtmlLanguage" xml:space="preserve">
+    <value>ru</value>
+    <comment>Атрибут lang HTML-отчёта; меняется вместе с переводом.</comment>
+  </data>
+  <data name="ReportTitle" xml:space="preserve">
+    <value>Отчёт Booster о системе</value>
+  </data>
+  <data name="ReportFooter" xml:space="preserve">
+    <value>Значения, которые не удалось получить надёжно, показаны статусом, а не догадкой. Источник значения — во всплывающей подсказке.</value>
+  </data>
+  <data name="DataStatus_Available" xml:space="preserve">
+    <value>Получено</value>
+  </data>
+  <data name="DataStatus_Unknown" xml:space="preserve">
+    <value>Неизвестно</value>
+    <comment>Статус значения: ARCHITECTURE.md, раздел 3.</comment>
+  </data>
+  <data name="DataStatus_RequiresAdmin" xml:space="preserve">
+    <value>Нужны права администратора</value>
+  </data>
+  <data name="DataStatus_NotSupported" xml:space="preserve">
+    <value>Не поддерживается</value>
+  </data>
+  <data name="DataStatus_Failed" xml:space="preserve">
+    <value>Не удалось получить</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Да</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="ByteUnitB" xml:space="preserve">
+    <value>Б</value>
+  </data>
+  <data name="ByteUnitKB" xml:space="preserve">
+    <value>КБ</value>
+  </data>
+  <data name="ByteUnitMB" xml:space="preserve">
+    <value>МБ</value>
+  </data>
+  <data name="ByteUnitGB" xml:space="preserve">
+    <value>ГБ</value>
+  </data>
+  <data name="ByteUnitTB" xml:space="preserve">
+    <value>ТБ</value>
+  </data>
+  <data name="UnitMhz" xml:space="preserve">
+    <value>{0} МГц</value>
+  </data>
+  <data name="UnitMts" xml:space="preserve">
+    <value>{0} МТ/с</value>
+  </data>
+  <data name="UnitHz" xml:space="preserve">
+    <value>{0} Гц</value>
+  </data>
+  <data name="UnitMs" xml:space="preserve">
+    <value>{0} мс</value>
+  </data>
+  <data name="ResolutionFormat" xml:space="preserve">
+    <value>{0} × {1}</value>
+    <comment>Ширина × высота в пикселях.</comment>
+  </data>
+  <data name="FreeSpaceFormat" xml:space="preserve">
+    <value>{0} ({1})</value>
+    <comment>Свободный объём и его доля от тома.</comment>
+  </data>
+  <data name="EmptyList" xml:space="preserve">
+    <value>Список пуст</value>
+  </data>
+  <data name="SectionHeader" xml:space="preserve">
+    <value>Общие сведения</value>
+  </data>
+  <data name="SectionFindings" xml:space="preserve">
+    <value>Замечания</value>
+  </data>
+  <data name="SectionCpu" xml:space="preserve">
+    <value>Процессор</value>
+  </data>
+  <data name="SectionGpu" xml:space="preserve">
+    <value>Видеоадаптеры</value>
+  </data>
+  <data name="SectionMemory" xml:space="preserve">
+    <value>Оперативная память</value>
+  </data>
+  <data name="SectionBoard" xml:space="preserve">
+    <value>Компьютер, плата и BIOS</value>
+  </data>
+  <data name="SectionOs" xml:space="preserve">
+    <value>Windows</value>
+  </data>
+  <data name="SectionStorage" xml:space="preserve">
+    <value>Накопители</value>
+  </data>
+  <data name="SectionDisplays" xml:space="preserve">
+    <value>Дисплеи</value>
+  </data>
+  <data name="SectionDrivers" xml:space="preserve">
+    <value>Драйверы и устройства</value>
+  </data>
+  <data name="SectionCapabilities" xml:space="preserve">
+    <value>Возможности</value>
+  </data>
+  <data name="GeneratedAt" xml:space="preserve">
+    <value>Отчёт сформирован</value>
+  </data>
+  <data name="SnapshotTakenAt" xml:space="preserve">
+    <value>Снимок системы сделан</value>
+  </data>
+  <data name="AppVersion" xml:space="preserve">
+    <value>Версия Booster</value>
+  </data>
+  <data name="Privileges" xml:space="preserve">
+    <value>Права Booster</value>
+  </data>
+  <data name="PrivilegesElevated" xml:space="preserve">
+    <value>повышенные</value>
+  </data>
+  <data name="PrivilegesStandard" xml:space="preserve">
+    <value>обычные</value>
+  </data>
+  <data name="PerformanceLogUser" xml:space="preserve">
+    <value>В группе Performance Log Users</value>
+  </data>
+  <data name="NoFindings" xml:space="preserve">
+    <value>Замечаний нет.</value>
+  </data>
+  <data name="ColumnSeverity" xml:space="preserve">
+    <value>Важность</value>
+  </data>
+  <data name="ColumnFinding" xml:space="preserve">
+    <value>Замечание</value>
+  </data>
+  <data name="ColumnSubject" xml:space="preserve">
+    <value>Объект</value>
+  </data>
+  <data name="ColumnDetail" xml:space="preserve">
+    <value>Подробности</value>
+  </data>
+  <data name="CpuModel" xml:space="preserve">
+    <value>Модель</value>
+  </data>
+  <data name="CpuManufacturer" xml:space="preserve">
+    <value>Производитель</value>
+  </data>
+  <data name="CpuCores" xml:space="preserve">
+    <value>Ядер</value>
+  </data>
+  <data name="CpuLogicalProcessors" xml:space="preserve">
+    <value>Логических процессоров</value>
+  </data>
+  <data name="CpuBaseClock" xml:space="preserve">
+    <value>Базовая частота</value>
+  </data>
+  <data name="CpuTopology" xml:space="preserve">
+    <value>Ядра по типам</value>
+  </data>
+  <data name="CpuTopologyFormat" xml:space="preserve">
+    <value>производительных: {0}, энергоэффективных: {1}</value>
+  </data>
+  <data name="CpuHybrid" xml:space="preserve">
+    <value>Гибридная архитектура</value>
+  </data>
+  <data name="GpuVendor" xml:space="preserve">
+    <value>Производитель</value>
+  </data>
+  <data name="GpuKind" xml:space="preserve">
+    <value>Тип</value>
+  </data>
+  <data name="GpuPci" xml:space="preserve">
+    <value>PCI ID</value>
+  </data>
+  <data name="GpuLuid" xml:space="preserve">
+    <value>LUID</value>
+  </data>
+  <data name="GpuDedicatedMemory" xml:space="preserve">
+    <value>Видеопамять</value>
+  </data>
+  <data name="GpuSharedMemory" xml:space="preserve">
+    <value>Общая системная память</value>
+  </data>
+  <data name="GpuDriverVersion" xml:space="preserve">
+    <value>Версия драйвера</value>
+  </data>
+  <data name="GpuDriverDate" xml:space="preserve">
+    <value>Дата драйвера</value>
+  </data>
+  <data name="GpuHighPerformanceRank" xml:space="preserve">
+    <value>Место в порядке «высокая производительность»</value>
+  </data>
+  <data name="GpuSoftware" xml:space="preserve">
+    <value>Программный адаптер</value>
+  </data>
+  <data name="GpuMatchNote" xml:space="preserve">
+    <value>Сопоставление источников</value>
+  </data>
+  <data name="GpuIsHybrid" xml:space="preserve">
+    <value>Гибридная графика</value>
+  </data>
+  <data name="GpuAppPreferences" xml:space="preserve">
+    <value>Выбор GPU для приложений (Параметры → Дисплей → Графика)</value>
+  </data>
+  <data name="ColumnApplication" xml:space="preserve">
+    <value>Приложение</value>
+  </data>
+  <data name="ColumnPreference" xml:space="preserve">
+    <value>Выбор</value>
+  </data>
+  <data name="MemoryTotal" xml:space="preserve">
+    <value>Всего</value>
+  </data>
+  <data name="MemorySlots" xml:space="preserve">
+    <value>Слотов на плате</value>
+  </data>
+  <data name="MemoryDualChannel" xml:space="preserve">
+    <value>Двухканальный режим</value>
+  </data>
+  <data name="MemoryChannelHint" xml:space="preserve">
+    <value>Подсказка по меткам слотов</value>
+  </data>
+  <data name="ColumnSlot" xml:space="preserve">
+    <value>Слот</value>
+  </data>
+  <data name="ColumnBank" xml:space="preserve">
+    <value>Банк</value>
+  </data>
+  <data name="ColumnCapacity" xml:space="preserve">
+    <value>Объём</value>
+  </data>
+  <data name="ColumnMemoryType" xml:space="preserve">
+    <value>Тип</value>
+  </data>
+  <data name="ColumnRatedSpeed" xml:space="preserve">
+    <value>Номинальная скорость</value>
+  </data>
+  <data name="ColumnConfiguredSpeed" xml:space="preserve">
+    <value>Заданная скорость</value>
+  </data>
+  <data name="ColumnManufacturer" xml:space="preserve">
+    <value>Производитель</value>
+  </data>
+  <data name="ColumnPartNumber" xml:space="preserve">
+    <value>Модель</value>
+  </data>
+  <data name="BoardSystemManufacturer" xml:space="preserve">
+    <value>Производитель ПК</value>
+  </data>
+  <data name="BoardSystemModel" xml:space="preserve">
+    <value>Модель ПК</value>
+  </data>
+  <data name="BoardFormFactor" xml:space="preserve">
+    <value>Тип ПК</value>
+  </data>
+  <data name="BoardManufacturer" xml:space="preserve">
+    <value>Производитель платы</value>
+  </data>
+  <data name="BoardProduct" xml:space="preserve">
+    <value>Модель платы</value>
+  </data>
+  <data name="BiosVendor" xml:space="preserve">
+    <value>BIOS: производитель</value>
+  </data>
+  <data name="BiosVersion" xml:space="preserve">
+    <value>BIOS: версия</value>
+  </data>
+  <data name="BiosReleaseDate" xml:space="preserve">
+    <value>BIOS: дата</value>
+  </data>
+  <data name="Firmware" xml:space="preserve">
+    <value>Прошивка</value>
+  </data>
+  <data name="OsCaption" xml:space="preserve">
+    <value>Система</value>
+  </data>
+  <data name="OsVersion" xml:space="preserve">
+    <value>Версия</value>
+  </data>
+  <data name="OsBuild" xml:space="preserve">
+    <value>Сборка</value>
+  </data>
+  <data name="OsUbr" xml:space="preserve">
+    <value>Накопительное обновление (UBR)</value>
+  </data>
+  <data name="OsDisplayVersion" xml:space="preserve">
+    <value>Выпуск</value>
+  </data>
+  <data name="OsArchitecture" xml:space="preserve">
+    <value>Архитектура</value>
+  </data>
+  <data name="OsLastBoot" xml:space="preserve">
+    <value>Последняя загрузка</value>
+  </data>
+  <data name="ColumnDisk" xml:space="preserve">
+    <value>Накопитель</value>
+  </data>
+  <data name="ColumnMedia" xml:space="preserve">
+    <value>Тип</value>
+  </data>
+  <data name="ColumnBus" xml:space="preserve">
+    <value>Шина</value>
+  </data>
+  <data name="ColumnSize" xml:space="preserve">
+    <value>Объём</value>
+  </data>
+  <data name="ColumnHealth" xml:space="preserve">
+    <value>Состояние</value>
+  </data>
+  <data name="ColumnVolume" xml:space="preserve">
+    <value>Том</value>
+  </data>
+  <data name="ColumnFileSystem" xml:space="preserve">
+    <value>Файловая система</value>
+  </data>
+  <data name="ColumnFree" xml:space="preserve">
+    <value>Свободно</value>
+  </data>
+  <data name="ColumnMonitor" xml:space="preserve">
+    <value>Монитор</value>
+  </data>
+  <data name="ColumnResolution" xml:space="preserve">
+    <value>Разрешение</value>
+  </data>
+  <data name="ColumnRefreshRate" xml:space="preserve">
+    <value>Частота</value>
+  </data>
+  <data name="ColumnHdrSupported" xml:space="preserve">
+    <value>HDR поддерживается</value>
+  </data>
+  <data name="ColumnHdrEnabled" xml:space="preserve">
+    <value>HDR включён</value>
+  </data>
+  <data name="ColumnVrr" xml:space="preserve">
+    <value>VRR</value>
+  </data>
+  <data name="ColumnAdapter" xml:space="preserve">
+    <value>Видеоадаптер</value>
+  </data>
+  <data name="ColumnPrimary" xml:space="preserve">
+    <value>Основной</value>
+  </data>
+  <data name="ColumnDevice" xml:space="preserve">
+    <value>Устройство</value>
+  </data>
+  <data name="ColumnClass" xml:space="preserve">
+    <value>Класс</value>
+  </data>
+  <data name="ColumnProvider" xml:space="preserve">
+    <value>Поставщик драйвера</value>
+  </data>
+  <data name="ColumnVersion" xml:space="preserve">
+    <value>Версия</value>
+  </data>
+  <data name="ColumnDate" xml:space="preserve">
+    <value>Дата</value>
+  </data>
+  <data name="ColumnSigned" xml:space="preserve">
+    <value>Подпись</value>
+  </data>
+  <data name="ColumnState" xml:space="preserve">
+    <value>Состояние</value>
+  </data>
+  <data name="ColumnLinks" xml:space="preserve">
+    <value>Где обновить</value>
+  </data>
+  <data name="DeviceStateWithCode" xml:space="preserve">
+    <value>{0} (код {1})</value>
+    <comment>Состояние устройства и ConfigManagerErrorCode.</comment>
+  </data>
+  <data name="MetricsAverageFps" xml:space="preserve">
+    <value>Средний FPS</value>
+  </data>
+  <data name="MetricsOnePercentLow" xml:space="preserve">
+    <value>1% low FPS</value>
+  </data>
+  <data name="MetricsP50" xml:space="preserve">
+    <value>Время кадра P50</value>
+  </data>
+  <data name="MetricsP95" xml:space="preserve">
+    <value>Время кадра P95</value>
+  </data>
+  <data name="MetricsP99" xml:space="preserve">
+    <value>Время кадра P99</value>
+  </data>
+  <data name="NoCapabilities" xml:space="preserve">
+    <value>Провайдеры не сообщили о возможностях.</value>
+  </data>
+  <data name="ColumnCapability" xml:space="preserve">
+    <value>Возможность</value>
+  </data>
+  <data name="ColumnScope" xml:space="preserve">
+    <value>Область</value>
+  </data>
+  <data name="ColumnCapabilityProvider" xml:space="preserve">
+    <value>Источник</value>
+  </data>
+  <data name="ColumnNote" xml:space="preserve">
+    <value>Примечание</value>
+  </data>
+  <data name="GpuVendor_Unknown" xml:space="preserve">
+    <value>Неизвестен</value>
+  </data>
+  <data name="GpuVendor_Nvidia" xml:space="preserve">
+    <value>NVIDIA</value>
+  </data>
+  <data name="GpuVendor_Amd" xml:space="preserve">
+    <value>AMD</value>
+  </data>
+  <data name="GpuVendor_Intel" xml:space="preserve">
+    <value>Intel</value>
+  </data>
+  <data name="GpuVendor_Microsoft" xml:space="preserve">
+    <value>Microsoft</value>
+  </data>
+  <data name="GpuVendor_Other" xml:space="preserve">
+    <value>Другой</value>
+  </data>
+  <data name="GpuAdapterKind_Integrated" xml:space="preserve">
+    <value>Встроенный</value>
+  </data>
+  <data name="GpuAdapterKind_Discrete" xml:space="preserve">
+    <value>Дискретный</value>
+  </data>
+  <data name="AppGpuPreferenceKind_SystemDefault" xml:space="preserve">
+    <value>Решает Windows</value>
+  </data>
+  <data name="AppGpuPreferenceKind_PowerSaving" xml:space="preserve">
+    <value>Энергосбережение</value>
+  </data>
+  <data name="AppGpuPreferenceKind_HighPerformance" xml:space="preserve">
+    <value>Высокая производительность</value>
+  </data>
+  <data name="ChannelLabelHint_None" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="ChannelLabelHint_DifferentChannelsByLabel" xml:space="preserve">
+    <value>По меткам модули в разных каналах</value>
+  </data>
+  <data name="ChannelLabelHint_SameChannelByLabel" xml:space="preserve">
+    <value>По меткам модули в одном канале</value>
+  </data>
+  <data name="StorageMediaKind_Hdd" xml:space="preserve">
+    <value>HDD</value>
+  </data>
+  <data name="StorageMediaKind_Ssd" xml:space="preserve">
+    <value>SSD</value>
+  </data>
+  <data name="StorageMediaKind_Scm" xml:space="preserve">
+    <value>SCM</value>
+  </data>
+  <data name="StorageBusKind_Nvme" xml:space="preserve">
+    <value>NVMe</value>
+  </data>
+  <data name="StorageBusKind_Sata" xml:space="preserve">
+    <value>SATA</value>
+  </data>
+  <data name="StorageBusKind_Sas" xml:space="preserve">
+    <value>SAS</value>
+  </data>
+  <data name="StorageBusKind_Usb" xml:space="preserve">
+    <value>USB</value>
+  </data>
+  <data name="StorageBusKind_Raid" xml:space="preserve">
+    <value>RAID</value>
+  </data>
+  <data name="StorageBusKind_Virtual" xml:space="preserve">
+    <value>Виртуальная</value>
+  </data>
+  <data name="StorageBusKind_Other" xml:space="preserve">
+    <value>Другая</value>
+  </data>
+  <data name="StorageHealth_Healthy" xml:space="preserve">
+    <value>Исправен</value>
+  </data>
+  <data name="StorageHealth_Warning" xml:space="preserve">
+    <value>Есть предупреждения</value>
+  </data>
+  <data name="StorageHealth_Unhealthy" xml:space="preserve">
+    <value>Неисправен</value>
+  </data>
+  <data name="PcFormFactor_Desktop" xml:space="preserve">
+    <value>Настольный</value>
+  </data>
+  <data name="PcFormFactor_Laptop" xml:space="preserve">
+    <value>Ноутбук</value>
+  </data>
+  <data name="PcFormFactor_Other" xml:space="preserve">
+    <value>Другой</value>
+  </data>
+  <data name="FirmwareKind_Uefi" xml:space="preserve">
+    <value>UEFI</value>
+  </data>
+  <data name="FirmwareKind_LegacyBios" xml:space="preserve">
+    <value>Legacy BIOS</value>
+  </data>
+  <data name="DeviceState_Ok" xml:space="preserve">
+    <value>Работает</value>
+  </data>
+  <data name="DeviceState_Error" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="DeviceState_Disabled" xml:space="preserve">
+    <value>Отключено</value>
+  </data>
+  <data name="CapabilityStatus_Supported" xml:space="preserve">
+    <value>Доступно</value>
+  </data>
+  <data name="CapabilityStatus_NotSupported" xml:space="preserve">
+    <value>Не поддерживается</value>
+  </data>
+  <data name="CapabilityStatus_RequiresAdmin" xml:space="preserve">
+    <value>Нужны права администратора</value>
+  </data>
+  <data name="CapabilityStatus_Unknown" xml:space="preserve">
+    <value>Неизвестно</value>
+  </data>
+  <data name="FindingKind_DeviceError" xml:space="preserve">
+    <value>Ошибка устройства</value>
+  </data>
+  <data name="FindingKind_DeviceDisabled" xml:space="preserve">
+    <value>Устройство отключено</value>
+  </data>
+  <data name="FindingKind_UnsignedDriver" xml:space="preserve">
+    <value>Драйвер без цифровой подписи</value>
+  </data>
+  <data name="FindingKind_LowDiskSpace" xml:space="preserve">
+    <value>Мало свободного места</value>
+  </data>
+  <data name="FindingKind_SectionFailed" xml:space="preserve">
+    <value>Сведения не получены</value>
+  </data>
+  <data name="FindingKind_SectionRequiresAdmin" xml:space="preserve">
+    <value>Для сведений нужны права администратора</value>
+  </data>
+  <data name="FindingKind_FrameCaptureNeedsElevation" xml:space="preserve">
+    <value>Замер FPS запросит подтверждение UAC</value>
+  </data>
+  <data name="FindingKind_ConfigWarning" xml:space="preserve">
+    <value>Замечание к настройкам</value>
+  </data>
+  <data name="FindingSeverity_Info" xml:space="preserve">
+    <value>Информация</value>
+  </data>
+  <data name="FindingSeverity_Warning" xml:space="preserve">
+    <value>Предупреждение</value>
+  </data>
+  <data name="FrameCaptureStatus_Completed" xml:space="preserve">
+    <value>Завершён</value>
+  </data>
+  <data name="FrameCaptureStatus_NotInstalled" xml:space="preserve">
+    <value>PresentMon не установлен</value>
+  </data>
+  <data name="FrameCaptureStatus_ElevationDeclined" xml:space="preserve">
+    <value>Подтверждение UAC отклонено</value>
+  </data>
+  <data name="FrameCaptureStatus_TargetNotFound" xml:space="preserve">
+    <value>Процесс не найден или не показал ни одного кадра</value>
+  </data>
+  <data name="FrameCaptureStatus_NoFrames" xml:space="preserve">
+    <value>Нет пригодных кадров</value>
+  </data>
+  <data name="FrameCaptureStatus_UnsupportedFormat" xml:space="preserve">
+    <value>Неизвестный формат CSV</value>
+  </data>
+  <data name="FrameCaptureStatus_Failed" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="FrameCaptureStatus_Cancelled" xml:space="preserve">
+    <value>Отменён</value>
+  </data>
+  <data name="FrameMetricsStatus_Ok" xml:space="preserve">
+    <value>Рассчитаны</value>
+  </data>
+  <data name="FrameMetricsStatus_InsufficientData" xml:space="preserve">
+    <value>Недостаточно данных</value>
+  </data>
+  <data name="SummaryStorage" xml:space="preserve">
+    <value>Дисков: {0}, томов: {1}</value>
+  </data>
+  <data name="SummaryDrivers" xml:space="preserve">
+    <value>Устройств: {0}, с замечаниями: {1}</value>
+  </data>
+  <data name="ConfigWarningKind_InvalidJson" xml:space="preserve">
+    <value>не JSON или значения не подходят по типу; файл пропущен, действуют встроенные значения</value>
+  </data>
+  <data name="ConfigWarningKind_MissingSchemaVersion" xml:space="preserve">
+    <value>нет номера версии схемы; файл пропущен, действуют встроенные значения</value>
+  </data>
+  <data name="ConfigWarningKind_NewerSchemaVersion" xml:space="preserve">
+    <value>файл от более новой версии Booster; он пропущен, действуют встроенные значения</value>
+  </data>
+  <data name="ConfigWarningKind_MigrationFailed" xml:space="preserve">
+    <value>не удалось перевести файл на текущую версию схемы; он пропущен, действуют встроенные значения</value>
+  </data>
+  <data name="ConfigWarningKind_ValueClamped" xml:space="preserve">
+    <value>значение вне допустимых пределов и исправлено</value>
+  </data>
+  <data name="ConfigWarningKind_Unreadable" xml:space="preserve">
+    <value>файл не удалось прочитать (занят или нет доступа); действуют встроенные значения</value>
+  </data>
+  <data name="ChangeStatus_Pending" xml:space="preserve">
+    <value>применение не подтверждено</value>
+  </data>
+  <data name="ChangeStatus_Applied" xml:space="preserve">
+    <value>применено</value>
+  </data>
+  <data name="ChangeStatus_Restored" xml:space="preserve">
+    <value>восстановлено</value>
+  </data>
+  <data name="ChangeStatus_RestoreConflict" xml:space="preserve">
+    <value>не восстановлено: значение изменено пользователем или другой программой</value>
+  </data>
+  <data name="ChangeStatus_RestoreFailed" xml:space="preserve">
+    <value>ошибка восстановления</value>
+  </data>
+  <data name="ChangeStatus_NeedsReboot" xml:space="preserve">
+    <value>восстановлено, нужна перезагрузка</value>
+  </data>
+  <data name="ChangeStatus_NeedsManualCheck" xml:space="preserve">
+    <value>нужна ручная проверка</value>
+  </data>
+  <data name="ObservedState_Original" xml:space="preserve">
+    <value>исходное значение</value>
+  </data>
+  <data name="ObservedState_Applied" xml:space="preserve">
+    <value>значение, установленное Booster</value>
+  </data>
+  <data name="ObservedState_Other" xml:space="preserve">
+    <value>изменено пользователем или другой программой</value>
+  </data>
+  <data name="ObservedState_Gone" xml:space="preserve">
+    <value>объекта больше нет</value>
+  </data>
+  <data name="SessionState_Idle" xml:space="preserve">
+    <value>нет сессии</value>
+  </data>
+  <data name="SessionState_Preflight" xml:space="preserve">
+    <value>проверка перед запуском</value>
+  </data>
+  <data name="SessionState_Snapshot" xml:space="preserve">
+    <value>сохранение исходного состояния</value>
+  </data>
+  <data name="SessionState_Apply" xml:space="preserve">
+    <value>применение</value>
+  </data>
+  <data name="SessionState_Gaming" xml:space="preserve">
+    <value>игра</value>
+  </data>
+  <data name="SessionState_Restore" xml:space="preserve">
+    <value>восстановление</value>
+  </data>
+  <data name="SessionState_Verify" xml:space="preserve">
+    <value>проверка восстановления</value>
+  </data>
+  <data name="SessionState_Recovery" xml:space="preserve">
+    <value>восстановление после сбоя</value>
+  </data>
+  <data name="SessionOutcome_Completed" xml:space="preserve">
+    <value>завершена</value>
+  </data>
+  <data name="SessionOutcome_RolledBack" xml:space="preserve">
+    <value>отменена: ошибка при применении, изменения откатаны</value>
+  </data>
+  <data name="SessionOutcome_Recovered" xml:space="preserve">
+    <value>восстановлена после аварийного завершения</value>
+  </data>
+  <data name="SessionKind_Game" xml:space="preserve">
+    <value>Игра</value>
+  </data>
+  <data name="SessionKind_Preparation" xml:space="preserve">
+    <value>Подготовка</value>
+  </data>
+  <data name="SessionKind_Maintenance" xml:space="preserve">
+    <value>Обслуживание</value>
+  </data>
+  <data name="JournalProblemKind_InvalidJson" xml:space="preserve">
+    <value>файл журнала повреждён</value>
+  </data>
+  <data name="JournalProblemKind_NewerSchemaVersion" xml:space="preserve">
+    <value>файл журнала от более новой версии Booster</value>
+  </data>
+  <data name="JournalProblemKind_Unreadable" xml:space="preserve">
+    <value>файл журнала не удалось прочитать</value>
+  </data>
+  <data name="JournalProblemKind_RecoveryFailed" xml:space="preserve">
+    <value>восстановление при запуске не выполнено</value>
+  </data>
+  <data name="ConfigWarningKind_InvalidValue" xml:space="preserve">
+    <value>недопустимое значение удалено</value>
+  </data>
+  <data name="ConfigWarningKind_UserFileIgnored" xml:space="preserve">
+    <value>пользовательский файл не применяется: действуют встроенные значения</value>
+  </data>
+  <data name="Restore_Irreversible" xml:space="preserve">
+    <value>необратимое действие: Booster его не отменяет, проверьте вручную</value>
+  </data>
+  <data name="Restore_NoRestorer" xml:space="preserve">
+    <value>эта версия Booster не умеет отменять это действие, проверьте вручную</value>
+  </data>
+  <data name="Restore_NewerSnapshot" xml:space="preserve">
+    <value>снимок записан более новой версией Booster, проверьте вручную</value>
+  </data>
+  <data name="Restore_StillNotOriginal" xml:space="preserve">
+    <value>после возврата значение не стало исходным</value>
+  </data>
+  <data name="Verify_ChangedAgain" xml:space="preserve">
+    <value>при повторной проверке значение снова отличается от исходного</value>
+  </data>
+  <data name="Verify_NoRestorer" xml:space="preserve">
+    <value>проверить нечем: эта версия Booster не умеет проверять это действие</value>
+  </data>
+  <data name="PolicyVerdict_Allow" xml:space="preserve">
+    <value>будет выполнено</value>
+  </data>
+  <data name="PolicyVerdict_RequireConfirmation" xml:space="preserve">
+    <value>нужно подтверждение</value>
+  </data>
+  <data name="PolicyVerdict_RecommendOnly" xml:space="preserve">
+    <value>только рекомендация</value>
+  </data>
+  <data name="PolicyVerdict_NotEnabled" xml:space="preserve">
+    <value>не включено</value>
+  </data>
+  <data name="PolicyVerdict_Deny" xml:space="preserve">
+    <value>запрещено</value>
+  </data>
+  <data name="PolicyReason_Allowed" xml:space="preserve">
+    <value>разрешено</value>
+  </data>
+  <data name="PolicyReason_UnknownAction" xml:space="preserve">
+    <value>действие не описано в профиле — только рекомендация</value>
+  </data>
+  <data name="PolicyReason_Forbidden" xml:space="preserve">
+    <value>запрещено в профиле</value>
+  </data>
+  <data name="PolicyReason_ManualOnlyLevel" xml:space="preserve">
+    <value>выполняется только вручную</value>
+  </data>
+  <data name="PolicyReason_RecommendOnlyMode" xml:space="preserve">
+    <value>в профиле — только рекомендация</value>
+  </data>
+  <data name="PolicyReason_NotDuringGaming" xml:space="preserve">
+    <value>недопустимо во время игры</value>
+  </data>
+  <data name="PolicyReason_RequiresAdmin" xml:space="preserve">
+    <value>нужны права администратора</value>
+  </data>
+  <data name="PolicyReason_OptionalNotEnabled" xml:space="preserve">
+    <value>необязательное действие не включено</value>
+  </data>
+  <data name="PolicyReason_ConfirmationRequired" xml:space="preserve">
+    <value>нужно подтверждение пользователя</value>
+  </data>
+  <data name="PolicyReason_Irreversible" xml:space="preserve">
+    <value>необратимое действие выполняется только с подтверждением</value>
+  </data>
+  <data name="PolicyReason_NotVerifiedForAutomatic" xml:space="preserve">
+    <value>не проверено для автоматического выполнения</value>
+  </data>
+  <data name="Skip_NotSupported" xml:space="preserve">
+    <value>не поддерживается на этом компьютере</value>
+  </data>
+  <data name="Skip_SessionStopped" xml:space="preserve">
+    <value>сессия остановлена до применения</value>
+  </data>
+  <data name="Skip_NotAttemptedAfterFailure" xml:space="preserve">
+    <value>не применялось: предыдущее действие завершилось ошибкой</value>
+  </data>
+  <data name="Skip_OnlyBeforeGame" xml:space="preserve">
+    <value>выполняется только до запуска игры</value>
+    <comment>Необратимое действие (закрытие приложений) — только при подготовке сессии</comment>
+  </data>
+  <data name="Action_PowerPlan" xml:space="preserve">
+    <value>Схема питания</value>
+  </data>
+  <data name="PowerPlanSummaryFormat" xml:space="preserve">
+    <value>«{0}» → «{1}»</value>
+  </data>
+  <data name="Skip_OnBattery" xml:space="preserve">
+    <value>работает от батареи</value>
+  </data>
+  <data name="Skip_PowerSourceUnknown" xml:space="preserve">
+    <value>не удалось определить источник питания</value>
+  </data>
+  <data name="Skip_NoSuitableScheme" xml:space="preserve">
+    <value>на этом ПК нет подходящей схемы</value>
+  </data>
+  <data name="Skip_SchemeAlreadyActive" xml:space="preserve">
+    <value>схема уже активна</value>
+  </data>
+  <data name="Skip_ActiveSchemeUnknown" xml:space="preserve">
+    <value>текущей схемы нет в списке схем: вернуть её после игры было бы нечем</value>
+  </data>
+  <data name="Restore_OriginalSchemeDeletedFormat" xml:space="preserve">
+    <value>исходная схема «{0}» удалена: выберите схему питания вручную</value>
+  </data>
+  <data name="Restore_PriorityUnreadableFormat" xml:space="preserve">
+    <value>{0} работает, но его приоритет недоступен для чтения: проверьте приоритет в диспетчере задач</value>
+  </data>
+  <data name="Action_GamePriority" xml:space="preserve">
+    <value>Приоритет игры</value>
+  </data>
+  <data name="GamePrioritySummaryFormat" xml:space="preserve">
+    <value>{0}: {1} → {2}</value>
+  </data>
+  <data name="GamePriorityPendingSummaryFormat" xml:space="preserve">
+    <value>Приоритет игры → {0} (проверяется при запуске)</value>
+  </data>
+  <data name="Skip_GameUnavailable" xml:space="preserve">
+    <value>процесс игры недоступен</value>
+  </data>
+  <data name="Skip_NoAccessToGame" xml:space="preserve">
+    <value>нет доступа к процессу игры (возможно, защищён античитом или запущен от администратора)</value>
+  </data>
+  <data name="Action_StartupItem" xml:space="preserve">
+    <value>Элемент автозагрузки</value>
+  </data>
+  <data name="StartupItemSummaryFormat" xml:space="preserve">
+    <value>{0}: отключить автозапуск (со следующего входа в Windows)</value>
+    <comment>{0} — имя элемента автозагрузки.</comment>
+  </data>
+  <data name="Skip_StartupItemAlreadyDisabled" xml:space="preserve">
+    <value>автозапуск уже отключён</value>
+  </data>
+  <data name="Skip_StartupItemStateUnknown" xml:space="preserve">
+    <value>состояние автозапуска не удалось прочитать: менять его вслепую нельзя</value>
+  </data>
+  <data name="Skip_StartupItemNotUser" xml:space="preserve">
+    <value>Booster отключает только автозагрузку текущего пользователя; этот элемент общий для всех пользователей или однократный</value>
+  </data>
+  <data name="Action_RegistryTweak_GameMode" xml:space="preserve">
+    <value>Игровой режим Windows</value>
+  </data>
+  <data name="Action_RegistryTweak_GpuHighPerformance" xml:space="preserve">
+    <value>Высокая производительность GPU для игры</value>
+  </data>
+  <data name="Action_RegistryTweak_WindowedFlipModel" xml:space="preserve">
+    <value>Оптимизация для игр в оконном режиме</value>
+  </data>
+  <data name="RegistryTweakSummaryFormat" xml:space="preserve">
+    <value>{0}: {1} → {2}</value>
+    <comment>{0} — название настройки, {1} — текущее значение в реестре или «нет», {2} — значение после изменения.</comment>
+  </data>
+  <data name="RegistryTweakValueAbsent" xml:space="preserve">
+    <value>нет</value>
+  </data>
+  <data name="Skip_RegistryTweakAlreadyEnabled" xml:space="preserve">
+    <value>уже включено</value>
+  </data>
+  <data name="Skip_RegistryTweakAlreadySet" xml:space="preserve">
+    <value>уже задано</value>
+  </data>
+  <data name="Skip_RegistryTweakUnexpectedType" xml:space="preserve">
+    <value>в реестре значение неожиданного типа: менять его вслепую нельзя</value>
+  </data>
+  <data name="Skip_PriorityAlreadyFormat" xml:space="preserve">
+    <value>приоритет уже {0}</value>
+  </data>
+  <data name="ProcessPriority_Idle" xml:space="preserve">
+    <value>низкий</value>
+  </data>
+  <data name="ProcessPriority_BelowNormal" xml:space="preserve">
+    <value>ниже среднего</value>
+  </data>
+  <data name="ProcessPriority_Normal" xml:space="preserve">
+    <value>обычный</value>
+  </data>
+  <data name="ProcessPriority_AboveNormal" xml:space="preserve">
+    <value>выше среднего</value>
+  </data>
+  <data name="ProcessPriority_High" xml:space="preserve">
+    <value>высокий</value>
+  </data>
+  <data name="ProcessPriority_RealTime" xml:space="preserve">
+    <value>реального времени</value>
+  </data>
+  <data name="Action_BackgroundApps" xml:space="preserve">
+    <value>Фоновые приложения</value>
+  </data>
+  <data name="BackgroundAppsSummaryFormat" xml:space="preserve">
+    <value>Закрыть: {0}</value>
+    <comment>{0} — имена приложений через запятую</comment>
+  </data>
+  <data name="BackgroundAppsDetailFormat" xml:space="preserve">
+    <value>Закрыто: {0}; не закрылось: {1}. Закрытые приложения не перезапускаются</value>
+    <comment>{0}, {1} — имена приложений через запятую или «—»</comment>
+  </data>
+  <data name="Skip_NoAppsSelected" xml:space="preserve">
+    <value>приложения для закрытия не выбраны</value>
+  </data>
+  <data name="Skip_NoSelectedAppRunning" xml:space="preserve">
+    <value>ни одно из выбранных приложений не запущено</value>
+  </data>
+  <data name="ActionMode_Allowed" xml:space="preserve">
+    <value>автоматически</value>
+  </data>
+  <data name="ActionMode_Optional" xml:space="preserve">
+    <value>по выбору: включается вручную</value>
+  </data>
+  <data name="ActionMode_AskFirst" xml:space="preserve">
+    <value>с подтверждением каждый раз</value>
+  </data>
+  <data name="ActionMode_RecommendOnly" xml:space="preserve">
+    <value>только рекомендация</value>
+  </data>
+  <data name="ActionMode_Forbidden" xml:space="preserve">
+    <value>запрещено</value>
+  </data>
+  <data name="SafetyLevel_L0ReadOnly" xml:space="preserve">
+    <value>L0: только чтение</value>
+  </data>
+  <data name="SafetyLevel_L1Reversible" xml:space="preserve">
+    <value>L1: обратимое на время игры</value>
+  </data>
+  <data name="SafetyLevel_L2Confirmed" xml:space="preserve">
+    <value>L2: с подтверждением</value>
+  </data>
+  <data name="SafetyLevel_L3ManualOnly" xml:space="preserve">
+    <value>L3: только вручную</value>
+  </data>
+  <data name="CpuTemperatureNoSource" xml:space="preserve">
+    <value>нет надёжного источника без драйвера ядра</value>
+  </data>
+  <data name="SensorProviderFailedFormat" xml:space="preserve">
+    <value>ошибка провайдера: {0}</value>
+    <comment>{0} — тип исключения</comment>
+  </data>
+  <data name="SensorNoProvider" xml:space="preserve">
+    <value>нет провайдера датчиков для этого адаптера</value>
+  </data>
+  <data name="KmtTemperatureNotReported" xml:space="preserve">
+    <value>драйвер не сообщает температуру</value>
+  </data>
+  <data name="KmtAdapterPoweredDown" xml:space="preserve">
+    <value>адаптер в режиме энергосбережения</value>
+  </data>
+  <data name="KmtTemperatureLimitNotReported" xml:space="preserve">
+    <value>драйвер не сообщает предел температуры</value>
+  </data>
+  <data name="KmtFanZeroRpm" xml:space="preserve">
+    <value>0 об/мин: вентилятор остановлен или драйвер не сообщает</value>
+  </data>
+  <data name="KmtMemoryClockNotReported" xml:space="preserve">
+    <value>драйвер не сообщает частоту памяти</value>
+  </data>
+  <data name="SensorsAtSnapshot" xml:space="preserve">
+    <value>Датчики на момент снимка</value>
+  </data>
+  <data name="SensorUtilization" xml:space="preserve">
+    <value>Загрузка</value>
+  </data>
+  <data name="SensorTemperature" xml:space="preserve">
+    <value>Температура</value>
+  </data>
+  <data name="SensorCoreClock" xml:space="preserve">
+    <value>Частота ядра</value>
+  </data>
+  <data name="SensorMemoryClock" xml:space="preserve">
+    <value>Частота памяти</value>
+  </data>
+  <data name="SensorVram" xml:space="preserve">
+    <value>Видеопамять занято / всего</value>
+  </data>
+  <data name="SensorFan" xml:space="preserve">
+    <value>Вентилятор</value>
+  </data>
+  <data name="SensorPower" xml:space="preserve">
+    <value>Мощность</value>
+  </data>
+  <data name="SensorThrottleReasons" xml:space="preserve">
+    <value>Причины снижения частоты</value>
+  </data>
+  <data name="SensorProvider" xml:space="preserve">
+    <value>Источник</value>
+  </data>
+  <data name="SensorsNoAdapterReading" xml:space="preserve">
+    <value>датчики этого адаптера не опрошены</value>
+  </data>
+  <data name="UnitPercent" xml:space="preserve">
+    <value>{0} %</value>
+    <comment>{0} — число</comment>
+  </data>
+  <data name="UnitCelsius" xml:space="preserve">
+    <value>{0} °C</value>
+    <comment>{0} — температура</comment>
+  </data>
+  <data name="UnitRpm" xml:space="preserve">
+    <value>{0} об/мин</value>
+    <comment>{0} — обороты вентилятора</comment>
+  </data>
+  <data name="UnitWatts" xml:space="preserve">
+    <value>{0} Вт</value>
+    <comment>{0} — мощность</comment>
+  </data>
+  <data name="TemperatureWithLimitFormat" xml:space="preserve">
+    <value>{0} (предел {1})</value>
+    <comment>{0} — температура, {1} — предел от драйвера; обе с единицами</comment>
+  </data>
+  <data name="VramUsageFormat" xml:space="preserve">
+    <value>{0} из {1}</value>
+    <comment>{0} — занято, {1} — всего</comment>
+  </data>
+  <data name="GpuSettingsGlobal" xml:space="preserve">
+    <value>Параметры драйвера (глобальный профиль)</value>
+  </data>
+  <data name="GpuSettingsApplicationFormat" xml:space="preserve">
+    <value>Профиль приложения {0}</value>
+    <comment>{0} — имя exe</comment>
+  </data>
+  <data name="GpuSettingsProfileFormat" xml:space="preserve">
+    <value>Профиль драйвера: {0}</value>
+    <comment>{0} — имя профиля DRS</comment>
+  </data>
+  <data name="GpuSettingsNoProfile" xml:space="preserve">
+    <value>своего профиля нет — действуют глобальные значения</value>
+  </data>
+  <data name="ColumnSetting" xml:space="preserve">
+    <value>Параметр</value>
+  </data>
+  <data name="ColumnValue" xml:space="preserve">
+    <value>Значение</value>
+  </data>
+  <data name="ColumnOrigin" xml:space="preserve">
+    <value>Откуда</value>
+  </data>
+  <data name="GpuSettingOrigin_DriverDefault" xml:space="preserve">
+    <value>по умолчанию</value>
+  </data>
+  <data name="GpuSettingOrigin_UserChanged" xml:space="preserve">
+    <value>изменён</value>
+  </data>
+  <data name="GpuSettingOrigin_NotSet" xml:space="preserve">
+    <value>не задан</value>
+  </data>
+  <data name="GpuSettingOrigin_Unknown" xml:space="preserve">
+    <value>неизвестно</value>
+  </data>
+  <data name="GpuThrottleReasons_None" xml:space="preserve">
+    <value>нет</value>
+  </data>
+  <data name="GpuThrottleReasons_Thermal" xml:space="preserve">
+    <value>температура</value>
+  </data>
+  <data name="GpuThrottleReasons_PowerLimit" xml:space="preserve">
+    <value>предел мощности</value>
+  </data>
+  <data name="GpuThrottleReasons_PowerSource" xml:space="preserve">
+    <value>источник питания</value>
+  </data>
+  <data name="GpuThrottleReasons_ApiTriggered" xml:space="preserve">
+    <value>запрос приложения через API</value>
+  </data>
+  <data name="GpuThrottleReasons_InsufficientPower" xml:space="preserve">
+    <value>недостаточно питания</value>
+  </data>
+  <data name="GpuThrottleReasons_Other" xml:space="preserve">
+    <value>иная причина</value>
+  </data>
+  <data name="ListSeparator" xml:space="preserve">
+    <value>, </value>
+    <comment>Разделитель перечня</comment>
+  </data>
+  <data name="CpuEffectiveFrequency" xml:space="preserve">
+    <value>Эффективная частота</value>
+  </data>
+  <data name="CpuNominalFrequency" xml:space="preserve">
+    <value>Номинальная частота</value>
+  </data>
+  <data name="CpuPerformanceLimit" xml:space="preserve">
+    <value>Ограничение производительности</value>
+  </data>
+  <data name="CpuSensorTemperature" xml:space="preserve">
+    <value>Температура</value>
+  </data>
+  <data name="ThrottleHeading" xml:space="preserve">
+    <value>Признаки ограничения производительности</value>
+  </data>
+  <data name="ColumnSignal" xml:space="preserve">
+    <value>Сигнал</value>
+  </data>
+  <data name="ColumnConfidence" xml:space="preserve">
+    <value>Уверенность</value>
+  </data>
+  <data name="ColumnSamples" xml:space="preserve">
+    <value>Замеры</value>
+  </data>
+  <data name="ColumnPeak" xml:space="preserve">
+    <value>Пик</value>
+  </data>
+  <data name="ThrottleSamplesFormat" xml:space="preserve">
+    <value>в {0} из {1} замеров</value>
+    <comment>{0} — замеры с признаком, {1} — все замеры</comment>
+  </data>
+  <data name="ThrottleCpuSubject" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="ThrottleNoneFound" xml:space="preserve">
+    <value>Признаков не найдено — менять ничего не нужно</value>
+  </data>
+  <data name="ThrottleTooFewSamplesFormat" xml:space="preserve">
+    <value>Мало замеров ({0} из нужных {1}) — о частотах вывод не делается</value>
+    <comment>{0} — замеров сделано, {1} — нужно</comment>
+  </data>
+  <data name="ThrottleSignal_GpuDriverThermal" xml:space="preserve">
+    <value>драйвер GPU: тепловое ограничение</value>
+  </data>
+  <data name="ThrottleSignal_GpuDriverPowerLimit" xml:space="preserve">
+    <value>драйвер GPU: ограничение по мощности</value>
+  </data>
+  <data name="ThrottleSignal_GpuDriverOther" xml:space="preserve">
+    <value>драйвер GPU: иная причина снижения частоты</value>
+  </data>
+  <data name="ThrottleSignal_GpuTemperatureAtLimit" xml:space="preserve">
+    <value>температура GPU у предела драйвера</value>
+  </data>
+  <data name="ThrottleSignal_GpuClockDropUnderLoad" xml:space="preserve">
+    <value>частота ядра GPU падает под нагрузкой</value>
+  </data>
+  <data name="ThrottleSignal_CpuPerformanceLimited" xml:space="preserve">
+    <value>Windows ограничивает производительность CPU</value>
+  </data>
+  <data name="ThrottleConfidence_Low" xml:space="preserve">
+    <value>низкая</value>
+  </data>
+  <data name="ThrottleConfidence_Medium" xml:space="preserve">
+    <value>средняя</value>
+  </data>
+  <data name="ThrottleConfidence_High" xml:space="preserve">
+    <value>высокая</value>
+  </data>
+  <data name="FindingKind_ThrottlingDetected" xml:space="preserve">
+    <value>Признаки ограничения производительности в серии бенчмарка</value>
+  </data>
+  <data name="FindingKind_SystemAdvice" xml:space="preserve">
+    <value>Рекомендация системной диагностики</value>
+  </data>
+  <data name="SectionBenchmark" xml:space="preserve">
+    <value>Бенчмарк FPS</value>
+  </data>
+  <data name="SectionComparison" xml:space="preserve">
+    <value>Сравнение серий</value>
+  </data>
+  <data name="BenchmarkNoSeries" xml:space="preserve">
+    <value>Серий бенчмарка ещё не было: запустите серию на экране «Производительность».</value>
+  </data>
+  <data name="BenchmarkStatus" xml:space="preserve">
+    <value>Статус захвата</value>
+  </data>
+  <data name="BenchmarkTarget" xml:space="preserve">
+    <value>Игра</value>
+  </data>
+  <data name="BenchmarkStartedAt" xml:space="preserve">
+    <value>Начало серии</value>
+  </data>
+  <data name="BenchmarkSchedule" xml:space="preserve">
+    <value>Расписание</value>
+  </data>
+  <data name="BenchmarkScheduleFormat" xml:space="preserve">
+    <value>{0} × {1} с, пауза {2} с, задержка старта {3} с</value>
+  </data>
+  <data name="BenchmarkDetail" xml:space="preserve">
+    <value>Подробности</value>
+  </data>
+  <data name="BenchmarkCsv" xml:space="preserve">
+    <value>Файл кадров (CSV)</value>
+  </data>
+  <data name="BenchmarkConditionsHeading" xml:space="preserve">
+    <value>Условия теста</value>
+  </data>
+  <data name="BenchmarkConditionRenderAdapter" xml:space="preserve">
+    <value>Видеоадаптер рендера</value>
+  </data>
+  <data name="BenchmarkConditionDriver" xml:space="preserve">
+    <value>Версия драйвера</value>
+  </data>
+  <data name="BenchmarkConditionResolution" xml:space="preserve">
+    <value>Разрешение</value>
+  </data>
+  <data name="BenchmarkConditionRefreshRate" xml:space="preserve">
+    <value>Частота обновления</value>
+  </data>
+  <data name="BenchmarkConditionHdr" xml:space="preserve">
+    <value>HDR</value>
+  </data>
+  <data name="BenchmarkConditionVrr" xml:space="preserve">
+    <value>VRR (G-SYNC / FreeSync)</value>
+  </data>
+  <data name="BenchmarkConditionPowerPlan" xml:space="preserve">
+    <value>Схема питания</value>
+  </data>
+  <data name="BenchmarkConditionPowerSource" xml:space="preserve">
+    <value>Питание</value>
+  </data>
+  <data name="BenchmarkConditionProfile" xml:space="preserve">
+    <value>Профиль Booster</value>
+  </data>
+  <data name="BenchmarkConditionGraphicsProfile" xml:space="preserve">
+    <value>Настройки графики</value>
+  </data>
+  <data name="BenchmarkConditionScene" xml:space="preserve">
+    <value>Сцена</value>
+  </data>
+  <data name="BenchmarkConditionWindowMode" xml:space="preserve">
+    <value>Режим окна</value>
+  </data>
+  <data name="BenchmarkConditionPresentModes" xml:space="preserve">
+    <value>Режим вывода кадров</value>
+  </data>
+  <data name="BenchmarkMonitor" xml:space="preserve">
+    <value>Монитор</value>
+  </data>
+  <data name="BenchmarkChange" xml:space="preserve">
+    <value>Изменение перед серией</value>
+  </data>
+  <data name="BenchmarkNoProfile" xml:space="preserve">
+    <value>нет</value>
+  </data>
+  <data name="BenchmarkNotNoted" xml:space="preserve">
+    <value>не указано</value>
+  </data>
+  <data name="BenchmarkBackground" xml:space="preserve">
+    <value>Фоновые процессы</value>
+  </data>
+  <data name="BenchmarkBackgroundFormat" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="BenchmarkNoBackground" xml:space="preserve">
+    <value>заметных нет</value>
+  </data>
+  <data name="BenchmarkNetwork" xml:space="preserve">
+    <value>Сеть</value>
+  </data>
+  <data name="BenchmarkNetworkNotMeasured" xml:space="preserve">
+    <value>не измеряется в этой версии</value>
+  </data>
+  <data name="BenchmarkRunsHeading" xml:space="preserve">
+    <value>Прогоны</value>
+  </data>
+  <data name="BenchmarkNoRuns" xml:space="preserve">
+    <value>Ни один прогон не записан.</value>
+  </data>
+  <data name="ColumnRun" xml:space="preserve">
+    <value>№</value>
+  </data>
+  <data name="ColumnFrames" xml:space="preserve">
+    <value>Кадров</value>
+  </data>
+  <data name="ColumnStuttersPerMinute" xml:space="preserve">
+    <value>Рывков в минуту</value>
+  </data>
+  <data name="ColumnStatus" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="NotMeasured" xml:space="preserve">
+    <value>—</value>
+  </data>
+  <data name="BenchmarkSummaryHeading" xml:space="preserve">
+    <value>Итог по прогонам</value>
+  </data>
+  <data name="BenchmarkValidRuns" xml:space="preserve">
+    <value>Годных прогонов</value>
+  </data>
+  <data name="BenchmarkValidRunsFormat" xml:space="preserve">
+    <value>{0} из {1}</value>
+  </data>
+  <data name="BenchmarkVariation" xml:space="preserve">
+    <value>Разброс среднего FPS между прогонами</value>
+  </data>
+  <data name="ColumnMetric" xml:space="preserve">
+    <value>Метрика</value>
+  </data>
+  <data name="ColumnMedian" xml:space="preserve">
+    <value>Медиана</value>
+  </data>
+  <data name="ColumnMinMax" xml:space="preserve">
+    <value>Мин–макс</value>
+  </data>
+  <data name="SpreadFormat" xml:space="preserve">
+    <value>{0}–{1}</value>
+  </data>
+  <data name="BenchmarkNoValidRuns" xml:space="preserve">
+    <value>Годных прогонов нет — итог и анализ не строятся.</value>
+  </data>
+  <data name="BenchmarkTooFewRunsFormat" xml:space="preserve">
+    <value>Годных прогонов: {0}, для выводов нужно не меньше {1}. Один короткий прогон недостаточен — повторите серию.</value>
+  </data>
+  <data name="BenchmarkPresentationHeading" xml:space="preserve">
+    <value>Вывод кадров</value>
+  </data>
+  <data name="BenchmarkSyncedShare" xml:space="preserve">
+    <value>Кадров с вертикальной синхронизацией</value>
+  </data>
+  <data name="BenchmarkGpuBusyShare" xml:space="preserve">
+    <value>Занятость GPU в кадре</value>
+  </data>
+  <data name="BenchmarkCpuBusyShare" xml:space="preserve">
+    <value>Занятость CPU в кадре</value>
+  </data>
+  <data name="BenchmarkSyncInterval" xml:space="preserve">
+    <value>Типичный SyncInterval</value>
+  </data>
+  <data name="BenchmarkBottleneckHeading" xml:space="preserve">
+    <value>Ограничения</value>
+  </data>
+  <data name="BenchmarkGpuLoad" xml:space="preserve">
+    <value>Нагрузка на GPU</value>
+  </data>
+  <data name="BenchmarkFindingFormat" xml:space="preserve">
+    <value>{0} — уверенность: {1}</value>
+  </data>
+  <data name="ColumnEvidence" xml:space="preserve">
+    <value>Показатель</value>
+  </data>
+  <data name="ColumnThreshold" xml:space="preserve">
+    <value>Порог</value>
+  </data>
+  <data name="ColumnSupports" xml:space="preserve">
+    <value>За / против</value>
+  </data>
+  <data name="EvidenceFor" xml:space="preserve">
+    <value>за</value>
+  </data>
+  <data name="EvidenceAgainst" xml:space="preserve">
+    <value>против</value>
+  </data>
+  <data name="EvidenceDetailFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+  </data>
+  <data name="EvidencePeak" xml:space="preserve">
+    <value>пик</value>
+  </data>
+  <data name="EvidenceLimiterNote" xml:space="preserve">
+    <value>Ограничитель FPS даёт такую же картину — это не обязательно нехватка ресурсов.</value>
+  </data>
+  <data name="BenchmarkNoBottleneck" xml:space="preserve">
+    <value>Явного ограничения не найдено.</value>
+  </data>
+  <data name="BenchmarkMissingData" xml:space="preserve">
+    <value>Недостающие данные</value>
+  </data>
+  <data name="BenchmarkNoAnalysis" xml:space="preserve">
+    <value>Анализ не проводился: нет годных прогонов.</value>
+  </data>
+  <data name="UnitPerSecond" xml:space="preserve">
+    <value>{0} в с</value>
+  </data>
+  <data name="UnitPerMinute" xml:space="preserve">
+    <value>{0} в мин</value>
+  </data>
+  <data name="BenchmarkRecommendationsHeading" xml:space="preserve">
+    <value>Рекомендации</value>
+  </data>
+  <data name="ColumnRecommendation" xml:space="preserve">
+    <value>Совет</value>
+  </data>
+  <data name="ColumnBasis" xml:space="preserve">
+    <value>Основание</value>
+  </data>
+  <data name="BenchmarkBasisFormat" xml:space="preserve">
+    <value>{0}, уверенность: {1}</value>
+  </data>
+  <data name="BenchmarkRecommendationsNote" xml:space="preserve">
+    <value>Booster ничего не меняет сам: это советы, решение за вами.</value>
+  </data>
+  <data name="BenchmarkNoRecommendations" xml:space="preserve">
+    <value>Рекомендаций нет.</value>
+  </data>
+  <data name="BenchmarkTelemetryHeading" xml:space="preserve">
+    <value>Сигналы во время серии</value>
+  </data>
+  <data name="BenchmarkSampleCount" xml:space="preserve">
+    <value>Замеров датчиков</value>
+  </data>
+  <data name="BenchmarkGpuUtilization" xml:space="preserve">
+    <value>Загрузка GPU (медиана)</value>
+  </data>
+  <data name="BenchmarkVramMedian" xml:space="preserve">
+    <value>Видеопамять занята (медиана)</value>
+  </data>
+  <data name="BenchmarkVramPeak" xml:space="preserve">
+    <value>Видеопамять занята (пик)</value>
+  </data>
+  <data name="BenchmarkGpuTemperaturePeak" xml:space="preserve">
+    <value>Температура GPU (пик)</value>
+  </data>
+  <data name="BenchmarkBusiestThread" xml:space="preserve">
+    <value>Самый загруженный поток (медиана)</value>
+  </data>
+  <data name="BenchmarkTargetCpu" xml:space="preserve">
+    <value>CPU игры (медиана)</value>
+  </data>
+  <data name="BenchmarkSystemCpu" xml:space="preserve">
+    <value>CPU системы (медиана)</value>
+  </data>
+  <data name="BenchmarkAvailableMemoryMin" xml:space="preserve">
+    <value>Свободная память (минимум)</value>
+  </data>
+  <data name="BenchmarkCommitPeak" xml:space="preserve">
+    <value>Выделенная память от предела (пик)</value>
+  </data>
+  <data name="BenchmarkPageReads" xml:space="preserve">
+    <value>Чтение страниц с диска (медиана)</value>
+  </data>
+  <data name="BenchmarkDiskBusy" xml:space="preserve">
+    <value>Занятость диска (медиана)</value>
+  </data>
+  <data name="BenchmarkDiskLatency" xml:space="preserve">
+    <value>Задержка диска (медиана)</value>
+  </data>
+  <data name="BenchmarkDpcTimeMedian" xml:space="preserve">
+    <value>Время DPC, все CPU (медиана)</value>
+  </data>
+  <data name="BenchmarkDpcTimePeak" xml:space="preserve">
+    <value>Время DPC, все CPU (пик)</value>
+  </data>
+  <data name="BenchmarkInterruptTimeMedian" xml:space="preserve">
+    <value>Время прерываний, все CPU (медиана)</value>
+  </data>
+  <data name="BenchmarkInterruptTimePeak" xml:space="preserve">
+    <value>Время прерываний, все CPU (пик)</value>
+  </data>
+  <data name="BenchmarkNoSensorSamples" xml:space="preserve">
+    <value>Внутри прогонов нет ни одного замера датчиков — признаки ограничения не оцениваются.</value>
+  </data>
+  <data name="ComparisonBaseline" xml:space="preserve">
+    <value>База</value>
+  </data>
+  <data name="ComparisonCandidate" xml:space="preserve">
+    <value>Серия</value>
+  </data>
+  <data name="ComparisonChange" xml:space="preserve">
+    <value>Изменение</value>
+  </data>
+  <data name="ComparisonChangeNotDescribed" xml:space="preserve">
+    <value>не описано</value>
+  </data>
+  <data name="ComparisonImprovedFormat" xml:space="preserve">
+    <value>Средний FPS выше в повторных тестах ({0}), 1% low без ухудшения.</value>
+  </data>
+  <data name="ComparisonImprovedLowWorseFormat" xml:space="preserve">
+    <value>Средний FPS выше в повторных тестах ({0}), но 1% low ниже ({1}): плавность могла ухудшиться.</value>
+  </data>
+  <data name="ComparisonImprovedLowUnclearFormat" xml:space="preserve">
+    <value>Средний FPS выше в повторных тестах ({0}), изменение 1% low не доказано.</value>
+  </data>
+  <data name="ComparisonWorsenedFormat" xml:space="preserve">
+    <value>Средний FPS ниже в повторных тестах ({0}).</value>
+  </data>
+  <data name="ComparisonLowWorsenedFormat" xml:space="preserve">
+    <value>1% low ниже в повторных тестах ({0}): плавность могла ухудшиться.</value>
+  </data>
+  <data name="ComparisonLowImprovedFormat" xml:space="preserve">
+    <value>1% low выше в повторных тестах ({0}), изменение среднего FPS не доказано.</value>
+  </data>
+  <data name="ComparisonNoChangeFormat" xml:space="preserve">
+    <value>Изменение не дало измеримого эффекта (разница меньше {0}%).</value>
+  </data>
+  <data name="ComparisonWithinSpread" xml:space="preserve">
+    <value>Разница меньше разброса между прогонами — эффект не доказан.</value>
+  </data>
+  <data name="ComparisonTooFewRunsFormat" xml:space="preserve">
+    <value>Повторных прогонов меньше {0} — эффект не доказан, повторите серию.</value>
+  </data>
+  <data name="ComparisonDifferentGames" xml:space="preserve">
+    <value>Серии разных игр — метрики не сравниваются.</value>
+  </data>
+  <data name="ComparisonNoMetrics" xml:space="preserve">
+    <value>В одной из серий нет годных прогонов — метрики не сравниваются.</value>
+  </data>
+  <data name="SignedPercentFormat" xml:space="preserve">
+    <value>{0}%</value>
+  </data>
+  <data name="SpreadWithMedianFormat" xml:space="preserve">
+    <value>{0} ({1})</value>
+  </data>
+  <data name="ColumnBaseline" xml:space="preserve">
+    <value>База</value>
+  </data>
+  <data name="ColumnCandidate" xml:space="preserve">
+    <value>Серия</value>
+  </data>
+  <data name="ColumnChange" xml:space="preserve">
+    <value>Изменение</value>
+  </data>
+  <data name="ColumnVerdict" xml:space="preserve">
+    <value>Вывод</value>
+  </data>
+  <data name="ColumnCondition" xml:space="preserve">
+    <value>Условие</value>
+  </data>
+  <data name="ColumnResult" xml:space="preserve">
+    <value>Итог</value>
+  </data>
+  <data name="ComparisonDifferencesHeading" xml:space="preserve">
+    <value>Условия различаются</value>
+  </data>
+  <data name="ComparisonCaveatsHeading" xml:space="preserve">
+    <value>Оговорки</value>
+  </data>
+  <data name="ComparisonChainHeading" xml:space="preserve">
+    <value>Изменения по шагам</value>
+  </data>
+  <data name="PowerSource_AcPower" xml:space="preserve">
+    <value>от сети</value>
+  </data>
+  <data name="PowerSource_Battery" xml:space="preserve">
+    <value>от батареи</value>
+  </data>
+  <data name="PowerSource_Unknown" xml:space="preserve">
+    <value>неизвестно</value>
+  </data>
+  <data name="BottleneckClass_CpuLimited" xml:space="preserve">
+    <value>Упор в процессор</value>
+  </data>
+  <data name="BottleneckClass_GpuLimited" xml:space="preserve">
+    <value>Упор в видеокарту</value>
+  </data>
+  <data name="BottleneckClass_VideoMemoryPressure" xml:space="preserve">
+    <value>Нехватка видеопамяти</value>
+  </data>
+  <data name="BottleneckClass_MemoryPressure" xml:space="preserve">
+    <value>Нехватка оперативной памяти</value>
+  </data>
+  <data name="BottleneckClass_ThermalThrottling" xml:space="preserve">
+    <value>Ограничение по температуре или мощности</value>
+  </data>
+  <data name="BottleneckClass_Storage" xml:space="preserve">
+    <value>Задержки накопителя</value>
+  </data>
+  <data name="BottleneckClass_DriverLatency" xml:space="preserve">
+    <value>Задержки драйверов (DPC и прерывания)</value>
+  </data>
+  <data name="BottleneckClass_FramePacing" xml:space="preserve">
+    <value>Неровная подача кадров</value>
+  </data>
+  <data name="BottleneckClass_ExternalLimit" xml:space="preserve">
+    <value>Ограничитель FPS или вертикальная синхронизация</value>
+  </data>
+  <data name="AnalysisConfidence_Low" xml:space="preserve">
+    <value>низкая</value>
+  </data>
+  <data name="AnalysisConfidence_Medium" xml:space="preserve">
+    <value>средняя</value>
+  </data>
+  <data name="AnalysisConfidence_High" xml:space="preserve">
+    <value>высокая</value>
+  </data>
+  <data name="EvidenceKind_GpuBusyFrameShare" xml:space="preserve">
+    <value>Занятость GPU в кадре</value>
+  </data>
+  <data name="EvidenceKind_GpuUtilization" xml:space="preserve">
+    <value>Загрузка GPU</value>
+  </data>
+  <data name="EvidenceKind_BusiestThread" xml:space="preserve">
+    <value>Самый загруженный поток</value>
+  </data>
+  <data name="EvidenceKind_SystemCpu" xml:space="preserve">
+    <value>Загрузка CPU системой</value>
+  </data>
+  <data name="EvidenceKind_CpuBusyFrameShare" xml:space="preserve">
+    <value>Занятость CPU в кадре</value>
+  </data>
+  <data name="EvidenceKind_FpsAtRefreshRate" xml:space="preserve">
+    <value>FPS у частоты обновления</value>
+  </data>
+  <data name="EvidenceKind_SyncedFrames" xml:space="preserve">
+    <value>Кадры с вертикальной синхронизацией</value>
+  </data>
+  <data name="EvidenceKind_UniformFrameTimes" xml:space="preserve">
+    <value>Отношение P95 к P50 времени кадра</value>
+  </data>
+  <data name="EvidenceKind_VramUsage" xml:space="preserve">
+    <value>Занятость видеопамяти</value>
+  </data>
+  <data name="EvidenceKind_AvailableMemory" xml:space="preserve">
+    <value>Свободная оперативная память</value>
+  </data>
+  <data name="EvidenceKind_CommitCharge" xml:space="preserve">
+    <value>Выделенная память от предела</value>
+  </data>
+  <data name="EvidenceKind_PageReads" xml:space="preserve">
+    <value>Чтение страниц с диска</value>
+  </data>
+  <data name="EvidenceKind_DiskBusy" xml:space="preserve">
+    <value>Занятость диска</value>
+  </data>
+  <data name="EvidenceKind_DiskLatency" xml:space="preserve">
+    <value>Задержка диска</value>
+  </data>
+  <data name="EvidenceKind_Throttle" xml:space="preserve">
+    <value>Признак ограничения</value>
+  </data>
+  <data name="EvidenceKind_StutterRate" xml:space="preserve">
+    <value>Частота рывков</value>
+  </data>
+  <data name="EvidenceKind_PercentileRatio" xml:space="preserve">
+    <value>Отношение P99 к P50 времени кадра</value>
+  </data>
+  <data name="EvidenceKind_DpcTime" xml:space="preserve">
+    <value>Время DPC, все CPU</value>
+  </data>
+  <data name="EvidenceKind_InterruptTime" xml:space="preserve">
+    <value>Время прерываний, все CPU</value>
+  </data>
+  <data name="GpuLoadState_Unknown" xml:space="preserve">
+    <value>неизвестно</value>
+  </data>
+  <data name="GpuLoadState_Saturated" xml:space="preserve">
+    <value>загружен полностью</value>
+  </data>
+  <data name="GpuLoadState_Underloaded" xml:space="preserve">
+    <value>недогружен</value>
+  </data>
+  <data name="GpuLoadState_Normal" xml:space="preserve">
+    <value>обычная</value>
+  </data>
+  <data name="RecommendationId_ReduceGpuLoad" xml:space="preserve">
+    <value>Снизьте нагрузку на видеокарту в настройках игры: разрешение, тени, сглаживание — или включите апскейлер (DLSS, FSR, XeSS).</value>
+  </data>
+  <data name="RecommendationId_ReduceCpuLoad" xml:space="preserve">
+    <value>Процессор не успевает готовить кадры: снизьте настройки, нагружающие CPU (дальность прорисовки, плотность объектов, физика).</value>
+  </data>
+  <data name="RecommendationId_InvestigateGpuUnderload" xml:space="preserve">
+    <value>Видеокарта недогружена, а явного упора в процессор нет: проверьте ограничитель FPS в игре и драйвере и схему питания.</value>
+  </data>
+  <data name="RecommendationId_FrameCapReached" xml:space="preserve">
+    <value>FPS упирается в ограничитель или вертикальную синхронизацию — это заданный предел, а не проблема. Менять что-то стоит, только если нужен FPS выше этого предела.</value>
+  </data>
+  <data name="RecommendationId_ConsiderVrr" xml:space="preserve">
+    <value>Если монитор поддерживает VRR (G-SYNC / FreeSync), включите его в настройках Windows и драйвера: кадры будут выводиться без ожидания vsync.</value>
+  </data>
+  <data name="RecommendationId_ReduceVideoMemory" xml:space="preserve">
+    <value>Видеопамять почти заполнена: снизьте качество текстур или разрешение.</value>
+  </data>
+  <data name="RecommendationId_CheckCooling" xml:space="preserve">
+    <value>Есть признаки ограничения по температуре или мощности: проверьте охлаждение и чистоту радиаторов. Лимиты мощности и вентиляторы Booster не меняет.</value>
+  </data>
+  <data name="RecommendationId_ConnectPower" xml:space="preserve">
+    <value>Ноутбук работает от батареи: подключите зарядное устройство — от батареи производительность обычно ограничена.</value>
+  </data>
+  <data name="RecommendationId_FreeMemory" xml:space="preserve">
+    <value>Оперативной памяти не хватает: закройте ненужные программы перед игрой.</value>
+  </data>
+  <data name="RecommendationId_CheckBackgroundDisk" xml:space="preserve">
+    <value>Накопитель занят во время игры: проверьте фоновые загрузки и обновления; игру лучше держать на SSD.</value>
+  </data>
+  <data name="RecommendationId_StabilizeFramePacing" xml:space="preserve">
+    <value>Время кадра неровное: попробуйте ограничить FPS чуть ниже среднего значения — подача кадров станет ровнее.</value>
+  </data>
+  <data name="RecommendationId_CloseBackgroundApps" xml:space="preserve">
+    <value>Во время игры процессор нагружали: {0}. Закройте их перед игрой, если они не нужны.</value>
+  </data>
+  <data name="RecommendationId_RepeatInconsistentRuns" xml:space="preserve">
+    <value>Прогоны заметно отличаются друг от друга — повторите серию в одинаковых условиях.</value>
+  </data>
+  <data name="RecommendationId_NeedMoreData" xml:space="preserve">
+    <value>Данных для выводов мало — повторите серию из нескольких прогонов.</value>
+  </data>
+  <data name="RecommendationId_NoChangesNeeded" xml:space="preserve">
+    <value>Явных ограничений нет — менять ничего не нужно.</value>
+  </data>
+  <data name="RecommendationId_RecordLatencyTrace" xml:space="preserve">
+    <value>Драйверы подолгу занимали процессор (DPC и прерывания), и в серии были рывки. Запишите трассу: «Система → Задержки драйверов: трасса WPR → Начать запись», дождитесь рывка, остановите запись и откройте файл в Windows Performance Analyzer. Частые причины — драйверы сети, звука, накопителей и USB. Драйверы Booster не меняет.</value>
+  </data>
+  <data name="ComparedMetric_AverageFps" xml:space="preserve">
+    <value>Средний FPS</value>
+  </data>
+  <data name="ComparedMetric_OnePercentLowFps" xml:space="preserve">
+    <value>1% low FPS</value>
+  </data>
+  <data name="ComparedMetric_FrameTimeP95Ms" xml:space="preserve">
+    <value>Время кадра P95, мс</value>
+  </data>
+  <data name="ComparedMetric_FrameTimeP99Ms" xml:space="preserve">
+    <value>Время кадра P99, мс</value>
+  </data>
+  <data name="ComparedMetric_StuttersPerMinute" xml:space="preserve">
+    <value>Рывков в минуту</value>
+  </data>
+  <data name="ChangeVerdict_Improved" xml:space="preserve">
+    <value>лучше</value>
+  </data>
+  <data name="ChangeVerdict_Worsened" xml:space="preserve">
+    <value>хуже</value>
+  </data>
+  <data name="ChangeVerdict_NoChange" xml:space="preserve">
+    <value>без изменений</value>
+  </data>
+  <data name="ChangeVerdict_Inconclusive" xml:space="preserve">
+    <value>не доказано</value>
+  </data>
+  <data name="ComparisonCaveat_TooFewRuns" xml:space="preserve">
+    <value>Годных прогонов меньше нужного — вывод о разнице ненадёжен.</value>
+  </data>
+  <data name="ComparisonCaveat_ConditionsDiffer" xml:space="preserve">
+    <value>Условия теста различаются — разница может быть вызвана ими, а не изменением.</value>
+  </data>
+  <data name="ComparisonCaveat_ChangeNotDescribed" xml:space="preserve">
+    <value>Изменение между сериями не описано.</value>
+  </data>
+  <data name="ComparisonCaveat_ThrottlingInSeries" xml:space="preserve">
+    <value>В одной из серий есть признаки ограничения по температуре или мощности.</value>
+  </data>
+  <data name="ComparisonCaveat_HighRunVariation" xml:space="preserve">
+    <value>Прогоны внутри серии сильно различаются — небольшая разница не доказывает эффект.</value>
+  </data>
+  <data name="ComparisonCaveat_NoValidRuns" xml:space="preserve">
+    <value>В одной из серий нет годных прогонов.</value>
+  </data>
+  <data name="AdviceModule_Memory" xml:space="preserve">
+    <value>Память и файл подкачки</value>
+  </data>
+  <data name="AdviceModule_Services" xml:space="preserve">
+    <value>Службы</value>
+  </data>
+  <data name="AdviceModule_Stability" xml:space="preserve">
+    <value>Стабильность</value>
+  </data>
+  <data name="AdviceModule_Network" xml:space="preserve">
+    <value>Сеть</value>
+  </data>
+  <data name="AdviceModule_Startup" xml:space="preserve">
+    <value>Автозагрузка и фоновые программы</value>
+  </data>
+  <data name="AdviceModule_Tweaks" xml:space="preserve">
+    <value>Игровые настройки Windows</value>
+  </data>
+  <data name="AdviceModule_Latency" xml:space="preserve">
+    <value>Задержки DPC</value>
+  </data>
+  <data name="PagefileMode_SystemManaged" xml:space="preserve">
+    <value>Размер выбирает система</value>
+  </data>
+  <data name="PagefileMode_SystemManagedSize" xml:space="preserve">
+    <value>Файлы выбраны вручную, размер выбирает система</value>
+  </data>
+  <data name="PagefileMode_Manual" xml:space="preserve">
+    <value>Размер задан вручную</value>
+  </data>
+  <data name="PagefileMode_Disabled" xml:space="preserve">
+    <value>Файл подкачки отключён</value>
+  </data>
+  <data name="AdviceId_PagefileDisabled" xml:space="preserve">
+    <value>Файл подкачки отключён</value>
+  </data>
+  <data name="AdviceText_PagefileDisabled" xml:space="preserve">
+    <value>Файл подкачки отключён. Когда выделенная память дойдёт до объёма RAM, программы и игры начнут завершаться с ошибкой нехватки памяти, а при сбое система не сохранит дамп.</value>
+  </data>
+  <data name="AdviceAction_PagefileDisabled" xml:space="preserve">
+    <value>Включите автоматический размер вручную: Win+R → SystemPropertiesPerformance → Дополнительно → Виртуальная память → Изменить → Автоматически выбирать объём файла подкачки. Нужна перезагрузка.</value>
+  </data>
+  <data name="AdviceRisk_PagefileDisabled" xml:space="preserve">
+    <value>Файл подкачки займёт место на системном томе. Вернуть прежнее состояние можно в том же окне, выбрав «Без файла подкачки». Booster эту настройку не меняет.</value>
+  </data>
+  <data name="AdviceId_PagefileManual" xml:space="preserve">
+    <value>Размер файла подкачки задан вручную</value>
+  </data>
+  <data name="AdviceText_PagefileManual" xml:space="preserve">
+    <value>Размер файла подкачки задан вручную: {0}. Если предел мал, при пиковой нагрузке программы могут завершаться из-за нехватки памяти. Если таких сбоев нет, менять ничего не нужно.</value>
+    <comment>{0} — пути файлов подкачки через запятую.</comment>
+  </data>
+  <data name="AdviceAction_PagefileManual" xml:space="preserve">
+    <value>Если были ошибки нехватки памяти, верните автоматический размер вручную: Win+R → SystemPropertiesPerformance → Дополнительно → Виртуальная память → Изменить → Автоматически выбирать объём файла подкачки.</value>
+  </data>
+  <data name="AdviceRisk_PagefileManual" xml:space="preserve">
+    <value>Система будет сама увеличивать файл, и он может занять больше места на диске. Прежние размеры можно задать в том же окне. Booster эту настройку не меняет.</value>
+  </data>
+  <data name="AdviceId_CommitNearLimit" xml:space="preserve">
+    <value>Выделенная память близка к пределу</value>
+  </data>
+  <data name="AdviceText_CommitNearLimit" xml:space="preserve">
+    <value>Выделено {0}% от предела памяти (RAM + файл подкачки). Новые программы могут не запуститься, а работающие — завершиться из-за нехватки памяти.</value>
+    <comment>{0} — целый процент.</comment>
+  </data>
+  <data name="AdviceAction_CommitNearLimit" xml:space="preserve">
+    <value>Закройте ненужные программы. Если так бывает регулярно, проверьте, что файл подкачки включён и его размер выбирает система: Win+R → SystemPropertiesPerformance → Дополнительно → Виртуальная память.</value>
+  </data>
+  <data name="AdviceRisk_CommitNearLimit" xml:space="preserve">
+    <value>При закрытии программ теряются несохранённые данные — сохраните их заранее. Изменение файла подкачки требует перезагрузки и возвращается в том же окне.</value>
+  </data>
+  <data name="AdviceId_CommitPeakNearLimit" xml:space="preserve">
+    <value>Пик выделенной памяти был близок к пределу</value>
+  </data>
+  <data name="AdviceText_CommitPeakNearLimit" xml:space="preserve">
+    <value>С момента загрузки выделенная память доходила до {0}% от текущего предела. Сейчас запас есть, но при похожей нагрузке он может закончиться.</value>
+    <comment>{0} — целый процент.</comment>
+  </data>
+  <data name="AdviceAction_CommitPeakNearLimit" xml:space="preserve">
+    <value>Если в это время были вылеты или ошибки нехватки памяти, проверьте, что размер файла подкачки выбирает система: Win+R → SystemPropertiesPerformance → Дополнительно → Виртуальная память → Изменить → Автоматически выбирать объём файла подкачки.</value>
+  </data>
+  <data name="AdviceRisk_CommitPeakNearLimit" xml:space="preserve">
+    <value>Это только проверка. Изменение файла подкачки требует перезагрузки и возвращается в том же окне.</value>
+  </data>
+  <data name="AdviceId_PagefileVolumeLowSpace" xml:space="preserve">
+    <value>Мало места на томе файла подкачки</value>
+  </data>
+  <data name="AdviceText_PagefileVolumeLowSpace" xml:space="preserve">
+    <value>На томе {0}, где лежит файл подкачки, мало свободного места. Когда памяти не хватит, система не сможет увеличить файл подкачки.</value>
+    <comment>{0} — буква тома, например C:.</comment>
+  </data>
+  <data name="AdviceAction_PagefileVolumeLowSpace" xml:space="preserve">
+    <value>Освободите место на этом томе: удалите ненужные файлы или перенесите их на другой диск.</value>
+  </data>
+  <data name="AdviceRisk_PagefileVolumeLowSpace" xml:space="preserve">
+    <value>Перед удалением убедитесь, что файлы не нужны: после очистки корзины их не вернуть.</value>
+  </data>
+  <data name="AdviceId_PagefileOnHdd" xml:space="preserve">
+    <value>Файл подкачки на жёстком диске</value>
+  </data>
+  <data name="AdviceText_PagefileOnHdd" xml:space="preserve">
+    <value>Файл подкачки лежит на томе {0} жёсткого диска (HDD), хотя в системе есть SSD. Обращения к нему на HDD медленнее, но заметно это только при нехватке RAM.</value>
+    <comment>{0} — буква тома, например D:.</comment>
+  </data>
+  <data name="AdviceAction_PagefileOnHdd" xml:space="preserve">
+    <value>По желанию перенесите файл подкачки на SSD вручную: Win+R → SystemPropertiesPerformance → Дополнительно → Виртуальная память → Изменить. Выберите том SSD с размером по выбору системы и уберите файл с HDD. Нужна перезагрузка.</value>
+  </data>
+  <data name="AdviceRisk_PagefileOnHdd" xml:space="preserve">
+    <value>Файл подкачки займёт место на SSD. Прежнее расположение возвращается в том же окне. Booster эту настройку не меняет.</value>
+  </data>
+  <data name="AdviceId_MemoryBelowRatedSpeed" xml:space="preserve">
+    <value>Память работает ниже номинальной частоты</value>
+  </data>
+  <data name="AdviceText_MemoryBelowRatedSpeed" xml:space="preserve">
+    <value>Память работает на {0} МТ/с, номинал модуля — {1} МТ/с. Частоту задаёт BIOS/UEFI; часто это стандартный режим без профиля XMP/EXPO.</value>
+    <comment>{0} — текущая частота, {1} — номинальная, МТ/с.</comment>
+  </data>
+  <data name="AdviceAction_MemoryBelowRatedSpeed" xml:space="preserve">
+    <value>Проверьте вручную в BIOS/UEFI профиль памяти (XMP/EXPO) и список совместимой памяти для платы и процессора. Booster эти настройки не меняет.</value>
+  </data>
+  <data name="AdviceRisk_MemoryBelowRatedSpeed" xml:space="preserve">
+    <value>Профиль XMP/EXPO — это разгон относительно стандарта: возможны нестабильность и проблемы с загрузкой. Вернуть можно сбросом настроек BIOS/UEFI по умолчанию. Включайте, только если понимаете последствия.</value>
+  </data>
+  <data name="AdviceId_SingleMemoryModule" xml:space="preserve">
+    <value>Установлен один модуль памяти</value>
+  </data>
+  <data name="AdviceText_SingleMemoryModule" xml:space="preserve">
+    <value>Установлен один модуль памяти. На большинстве плат два одинаковых модуля в рекомендованных слотах работают в двухканальном режиме с большей пропускной способностью. Режим каналов Booster не измеряет.</value>
+  </data>
+  <data name="AdviceAction_SingleMemoryModule" xml:space="preserve">
+    <value>Если планируете апгрейд, добавьте такой же модуль в слот, который рекомендует руководство к плате.</value>
+  </data>
+  <data name="AdviceRisk_SingleMemoryModule" xml:space="preserve">
+    <value>Это только рекомендация. Перед установкой выключите ПК и отключите питание; несовместимый модуль может не заработать.</value>
+  </data>
+  <data name="AdviceId_MixedMemoryModules" xml:space="preserve">
+    <value>Модули памяти разные</value>
+  </data>
+  <data name="AdviceText_MixedMemoryModules" xml:space="preserve">
+    <value>Установлены модули памяти разного объёма или разных моделей. Такие наборы часто работают на частоте самого медленного модуля или без двухканального режима. Режим каналов Booster не измеряет.</value>
+  </data>
+  <data name="AdviceAction_MixedMemoryModules" xml:space="preserve">
+    <value>При апгрейде ставьте одинаковые модули, лучше из одного комплекта. Частоту памяти проверьте в BIOS/UEFI.</value>
+  </data>
+  <data name="AdviceRisk_MixedMemoryModules" xml:space="preserve">
+    <value>Это только рекомендация. Замена модулей — работа с железом: выключите ПК и отключите питание.</value>
+  </data>
+  <data name="AdviceId_ThirdPartyServicesAutostart" xml:space="preserve">
+    <value>Сторонние службы в автозапуске</value>
+  </data>
+  <data name="AdviceText_ThirdPartyServicesAutostart" xml:space="preserve">
+    <value>Сторонних служб с автоматическим запуском: {0}. Часть из них может быть не нужна, но Booster не знает их назначения и ничего не отключает.</value>
+    <comment>{0} — число служб.</comment>
+  </data>
+  <data name="AdviceAction_ThirdPartyServicesAutostart" xml:space="preserve">
+    <value>Просмотрите список. Если служба осталась от удалённой или ненужной программы, удалите программу или отключите автозапуск в её настройках. Службы защиты, античита и драйверов не трогайте.</value>
+  </data>
+  <data name="AdviceRisk_ThirdPartyServicesAutostart" xml:space="preserve">
+    <value>Отключение нужной службы может сломать программу, устройство или античит игры. Изменение в оснастке «Службы» (services.msc) возвращается там же — запишите исходный тип запуска.</value>
+  </data>
+  <data name="AdviceId_UnexpectedShutdowns" xml:space="preserve">
+    <value>Неожиданные выключения</value>
+  </data>
+  <data name="AdviceText_UnexpectedShutdowns" xml:space="preserve">
+    <value>Неожиданных выключений за период проверки: {0}. Система выключалась без штатного завершения — из-за питания, перегрева, сбоя или зависания.</value>
+    <comment>{0} — число событий.</comment>
+  </data>
+  <data name="AdviceAction_UnexpectedShutdowns" xml:space="preserve">
+    <value>Проверьте блок питания и его подключение, температуры под нагрузкой и разгон (если он есть, верните настройки по умолчанию). Сопоставьте время событий в «Просмотре событий» (eventvwr.msc) с тем, что происходило.</value>
+  </data>
+  <data name="AdviceRisk_UnexpectedShutdowns" xml:space="preserve">
+    <value>Это только проверка. Сброшенный разгон возвращается повторной настройкой в BIOS/UEFI.</value>
+  </data>
+  <data name="AdviceId_BugChecks" xml:space="preserve">
+    <value>Критические ошибки (синий экран)</value>
+  </data>
+  <data name="AdviceText_BugChecks" xml:space="preserve">
+    <value>Критических ошибок системы (синий экран): {0}. Коды: {1}.</value>
+    <comment>{0} — число событий, {1} — коды ошибок через запятую.</comment>
+  </data>
+  <data name="AdviceAction_BugChecks" xml:space="preserve">
+    <value>Найдите коды в документации Microsoft по кодам проверки ошибок, обновите драйверы с сайтов производителей устройств и проверьте память средством диагностики памяти Windows (mdsched.exe).</value>
+  </data>
+  <data name="AdviceRisk_BugChecks" xml:space="preserve">
+    <value>Обновлённый драйвер откатывается в «Диспетчере устройств»: свойства устройства → Драйвер → Откатить. Проверка памяти требует перезагрузки.</value>
+  </data>
+  <data name="AdviceId_DisplayDriverResets" xml:space="preserve">
+    <value>Сбросы видеодрайвера</value>
+  </data>
+  <data name="AdviceText_DisplayDriverResets" xml:space="preserve">
+    <value>Перезапусков видеодрайвера после зависания: {0}. В играх это выглядит как чёрный экран или вылет.</value>
+    <comment>{0} — число событий.</comment>
+  </data>
+  <data name="AdviceAction_DisplayDriverResets" xml:space="preserve">
+    <value>Обновите или переустановите драйвер видеокарты с сайта производителя, верните частоты GPU к заводским, если меняли их, проверьте температуру и питание видеокарты.</value>
+  </data>
+  <data name="AdviceRisk_DisplayDriverResets" xml:space="preserve">
+    <value>Новый драйвер откатывается в «Диспетчере устройств». Сброшенный разгон возвращается повторной настройкой в утилите производителя.</value>
+  </data>
+  <data name="AdviceId_HardwareErrors" xml:space="preserve">
+    <value>Аппаратные ошибки (WHEA)</value>
+  </data>
+  <data name="AdviceText_HardwareErrors" xml:space="preserve">
+    <value>Аппаратных ошибок WHEA: {0}. Их сообщают процессор, память, шина PCIe или чипсет; частые ошибки говорят о нестабильности железа.</value>
+    <comment>{0} — число событий.</comment>
+  </data>
+  <data name="AdviceAction_HardwareErrors" xml:space="preserve">
+    <value>Если меняли разгон или напряжения, верните значения по умолчанию. Проверьте температуры. Обновление BIOS/UEFI — только вручную, по инструкции производителя платы.</value>
+  </data>
+  <data name="AdviceRisk_HardwareErrors" xml:space="preserve">
+    <value>Сбой питания во время обновления BIOS/UEFI может повредить плату. Booster не меняет разгон, напряжения и прошивку.</value>
+  </data>
+  <data name="AdviceId_DiskErrors" xml:space="preserve">
+    <value>Ошибки диска и файловой системы</value>
+  </data>
+  <data name="AdviceText_DiskErrors" xml:space="preserve">
+    <value>Ошибок диска и файловой системы: {0}. Возможны повреждение данных или неисправность накопителя, кабеля или контроллера.</value>
+    <comment>{0} — число событий.</comment>
+  </data>
+  <data name="AdviceAction_DiskErrors" xml:space="preserve">
+    <value>Сделайте резервную копию важных данных. Проверьте состояние диска утилитой производителя, а файловую систему — командой chkdsk без ключей (только чтение).</value>
+  </data>
+  <data name="AdviceRisk_DiskErrors" xml:space="preserve">
+    <value>Проверка без ключей ничего не меняет. Исправление (chkdsk /f) требует перезагрузки и выполняется только вручную.</value>
+  </data>
+  <data name="AdviceId_GameCrashes" xml:space="preserve">
+    <value>Вылеты игр</value>
+  </data>
+  <data name="AdviceText_GameCrashes" xml:space="preserve">
+    <value>Вылетов и зависаний игр из профилей: {1} ({0}).</value>
+    <comment>{0} — имена игр через запятую, {1} — число событий.</comment>
+  </data>
+  <data name="AdviceAction_GameCrashes" xml:space="preserve">
+    <value>Проверьте целостность файлов игры в лаунчере, обновите видеодрайвер, отключите оверлеи и разгон. Подробности — в «Просмотре событий»: Журналы Windows → Приложение.</value>
+  </data>
+  <data name="AdviceRisk_GameCrashes" xml:space="preserve">
+    <value>Проверка файлов может заново скачать повреждённые файлы игры. Отключённые оверлеи включаются в их настройках.</value>
+  </data>
+  <data name="AdviceId_NetworkHighLatency" xml:space="preserve">
+    <value>Высокая задержка сети</value>
+  </data>
+  <data name="AdviceText_NetworkHighLatency" xml:space="preserve">
+    <value>Медианная задержка до {0} — {1} мс. Это влияет на отклик в сетевых играх, но не на FPS.</value>
+    <comment>{0} — адрес, {1} — медиана, целые мс.</comment>
+  </data>
+  <data name="AdviceAction_NetworkHighLatency" xml:space="preserve">
+    <value>Проверьте, не качает ли кто-то файлы и не смотрит ли видео в той же сети; перезагрузите роутер; подключите ПК кабелем. Если задержка высокая уже до шлюза — причина в домашней сети, если только до внешнего узла — у провайдера.</value>
+  </data>
+  <data name="AdviceRisk_NetworkHighLatency" xml:space="preserve">
+    <value>Это только проверка. Перезагрузка роутера ненадолго прервёт связь.</value>
+  </data>
+  <data name="AdviceId_NetworkJitter" xml:space="preserve">
+    <value>Нестабильная задержка (джиттер)</value>
+  </data>
+  <data name="AdviceText_NetworkJitter" xml:space="preserve">
+    <value>Задержка до {0} скачет: в среднем {1} мс между соседними ответами. В сетевых играх это ощущается как рывки и «телепорты», но на FPS не влияет.</value>
+    <comment>{0} — адрес, {1} — джиттер, мс.</comment>
+  </data>
+  <data name="AdviceAction_NetworkJitter" xml:space="preserve">
+    <value>Подключите ПК кабелем вместо Wi-Fi, проверьте, не загружена ли сеть другими устройствами, перезагрузите роутер.</value>
+  </data>
+  <data name="AdviceRisk_NetworkJitter" xml:space="preserve">
+    <value>Это только проверка. Перезагрузка роутера ненадолго прервёт связь.</value>
+  </data>
+  <data name="AdviceId_NetworkLoss" xml:space="preserve">
+    <value>Потери пакетов</value>
+  </data>
+  <data name="AdviceText_NetworkLoss" xml:space="preserve">
+    <value>До {0} теряется {1}% запросов. Потери дают рассинхронизацию в сетевых играх, но FPS от них не меняется.</value>
+    <comment>{0} — адрес, {1} — процент потерь.</comment>
+  </data>
+  <data name="AdviceAction_NetworkLoss" xml:space="preserve">
+    <value>Проверьте кабель и разъёмы, подключите ПК кабелем вместо Wi-Fi, перезагрузите роутер. Если потери только до внешнего узла, обратитесь к провайдеру.</value>
+  </data>
+  <data name="AdviceRisk_NetworkLoss" xml:space="preserve">
+    <value>Это только проверка. Перезагрузка роутера ненадолго прервёт связь.</value>
+  </data>
+  <data name="AdviceId_NetworkWireless" xml:space="preserve">
+    <value>Подключение по Wi-Fi</value>
+  </data>
+  <data name="AdviceText_NetworkWireless" xml:space="preserve">
+    <value>ПК подключён по Wi-Fi. Беспроводная сеть чаще даёт скачки задержки и потери; на FPS это не влияет.</value>
+  </data>
+  <data name="AdviceAction_NetworkWireless" xml:space="preserve">
+    <value>Если возможно, подключите ПК кабелем. Иначе поставьте ПК ближе к роутеру или используйте диапазон 5 ГГц.</value>
+  </data>
+  <data name="AdviceRisk_NetworkWireless" xml:space="preserve">
+    <value>Это только рекомендация.</value>
+  </data>
+  <data name="AdviceId_HeavyStartupItems" xml:space="preserve">
+    <value>Тяжёлые программы в автозагрузке</value>
+  </data>
+  <data name="AdviceText_HeavyStartupItems" xml:space="preserve">
+    <value>Запускаются при входе в Windows и сейчас занимают заметный объём памяти: {0}. Если они не нужны вам постоянно, их автозапуск можно отключить; на FPS это может и не повлиять.</value>
+    <comment>{0} — имена элементов автозагрузки через запятую.</comment>
+  </data>
+  <data name="AdviceAction_HeavyStartupItems" xml:space="preserve">
+    <value>Выберите элемент на экране «Система» и подтвердите отключение. Booster запишет то же, что переключатель в диспетчере задач; программа перестанет запускаться со следующего входа в Windows, уже запущенная не закрывается.</value>
+  </data>
+  <data name="AdviceRisk_HeavyStartupItems" xml:space="preserve">
+    <value>Программа не запустится сама: уведомления, синхронизация или фоновая работа начнутся только после ручного запуска. Изменение возвращается кнопкой на экране «Журнал» или переключателем в диспетчере задач.</value>
+  </data>
+  <data name="AdviceId_HeavyMachineStartupItems" xml:space="preserve">
+    <value>Тяжёлые программы в автозагрузке для всех пользователей</value>
+  </data>
+  <data name="AdviceText_HeavyMachineStartupItems" xml:space="preserve">
+    <value>Запускаются при входе любого пользователя и сейчас занимают заметный объём памяти: {0}. Отключение требует прав администратора, поэтому Booster его не выполняет.</value>
+    <comment>{0} — имена элементов автозагрузки через запятую.</comment>
+  </data>
+  <data name="AdviceAction_HeavyMachineStartupItems" xml:space="preserve">
+    <value>Если программа не нужна постоянно, отключите её на вкладке «Автозагрузка» диспетчера задач или в её собственных настройках. Драйверы, панели устройств, защиту и античит не трогайте.</value>
+  </data>
+  <data name="AdviceRisk_HeavyMachineStartupItems" xml:space="preserve">
+    <value>Это только рекомендация. Отключённая программа не запустится сама ни у одного пользователя; изменение возвращается тем же переключателем.</value>
+  </data>
+  <data name="AdviceId_OverlaysRunning" xml:space="preserve">
+    <value>Программы с внутриигровым оверлеем</value>
+  </data>
+  <data name="AdviceText_OverlaysRunning" xml:space="preserve">
+    <value>Запущены программы, у которых есть внутриигровой оверлей: {0}. Включён ли оверлей, видно только в их настройках. Оверлей иногда мешает захвату кадров или стабильности игры; влияние на FPS не гарантировано.</value>
+    <comment>{0} — названия программ через запятую.</comment>
+  </data>
+  <data name="AdviceAction_OverlaysRunning" xml:space="preserve">
+    <value>Если оверлей не нужен, выключите его в настройках программы. Если есть подозрение на проблему, сравните серии бенчмарка с оверлеем и без него.</value>
+  </data>
+  <data name="AdviceRisk_OverlaysRunning" xml:space="preserve">
+    <value>Это только рекомендация: Booster не закрывает программы и не меняет их настройки. Выключенный оверлей включается там же.</value>
+  </data>
+  <data name="AdviceId_BackgroundRecordingOn" xml:space="preserve">
+    <value>Фоновая запись игр включена</value>
+  </data>
+  <data name="AdviceText_BackgroundRecordingOn" xml:space="preserve">
+    <value>Windows постоянно записывает последние минуты игры («Записать то, что произошло»). Запись расходует ресурсы видеокарты и диска; насколько это заметно, зависит от системы.</value>
+  </data>
+  <data name="AdviceAction_BackgroundRecordingOn" xml:space="preserve">
+    <value>Если запись не нужна, выключите её: Параметры → Игры → Записи (ms-settings:gaming-gamedvr). Эффект проверьте сравнением серий бенчмарка.</value>
+  </data>
+  <data name="AdviceRisk_BackgroundRecordingOn" xml:space="preserve">
+    <value>Это только рекомендация: Booster эту настройку не меняет. Без фоновой записи нельзя сохранить уже произошедший момент игры; включается там же.</value>
+  </data>
+  <data name="AdviceId_GameModeOff" xml:space="preserve">
+    <value>Игровой режим Windows выключен</value>
+  </data>
+  <data name="AdviceText_GameModeOff" xml:space="preserve">
+    <value>Игровой режим (Game Mode) выключен. Пока идёт игра, он отдаёт ей приоритет и откладывает часть фоновой работы Windows, например установку обновлений. Насколько это заметно, зависит от системы; прирост FPS не гарантирован.</value>
+  </data>
+  <data name="AdviceAction_GameModeOff" xml:space="preserve">
+    <value>Включите его на экране «Система» (Booster попросит подтверждение) или сами: Параметры → Игры → Игровой режим (ms-settings:gaming-gamemode). На старых сборках Windows Booster только советует. Эффект проверьте сравнением серий бенчмарка.</value>
+  </data>
+  <data name="AdviceRisk_GameModeOff" xml:space="preserve">
+    <value>Изредка игровой режим мешает программам, которые работают одновременно с игрой, например записи или трансляции. Изменение возвращается кнопкой на экране «Журнал» или тем же переключателем в параметрах.</value>
+  </data>
+  <data name="AdviceId_GpuOnIntegrated" xml:space="preserve">
+    <value>Игра работает на встроенной видеокарте</value>
+  </data>
+  <data name="AdviceText_GpuOnIntegrated" xml:space="preserve">
+    <value>В последней серии бенчмарка {0} выводила кадры через встроенную видеокарту {1}, хотя в системе есть дискретная. Обычно дискретная видеокарта быстрее, но выигрыш нужно подтвердить повторной серией.</value>
+    <comment>{0} — имя процесса игры, {1} — название встроенной видеокарты.</comment>
+  </data>
+  <data name="AdviceAction_GpuOnIntegrated" xml:space="preserve">
+    <value>Выберите для игры «Высокая производительность»: на экране «Система» (Booster попросит подтверждение и, если путь неизвестен, файл игры) или сами: Параметры → Система → Дисплей → Графика (ms-settings:display-advancedgraphics). Затем перезапустите игру и повторите серию бенчмарка.</value>
+  </data>
+  <data name="AdviceRisk_GpuOnIntegrated" xml:space="preserve">
+    <value>Дискретная видеокарта потребляет больше энергии: на ноутбуке от батареи он проработает меньше. Явный выбор «Энергосбережение» Booster не перебивает. Изменение возвращается кнопкой на экране «Журнал» или там же в параметрах графики.</value>
+  </data>
+  <data name="AdviceId_LegacyWindowedPresent" xml:space="preserve">
+    <value>Устаревший способ показа кадров в окне</value>
+  </data>
+  <data name="AdviceText_LegacyWindowedPresent" xml:space="preserve">
+    <value>В последней серии бенчмарка {0} показывала кадры копированием через композитор Windows ({1}). В оконном режиме такой способ добавляет задержку и может ограничивать частоту кадров.</value>
+    <comment>{0} — имя процесса игры, {1} — режим показа по данным PresentMon.</comment>
+  </data>
+  <data name="AdviceAction_LegacyWindowedPresent" xml:space="preserve">
+    <value>Включите для игры оптимизацию для игр в оконном режиме: на экране «Система» (Booster попросит подтверждение) или сами: Параметры → Система → Дисплей → Графика (ms-settings:display-advancedgraphics). Полноэкранный режим в самой игре тоже может помочь. Перезапустите игру и повторите серию бенчмарка.</value>
+  </data>
+  <data name="AdviceRisk_LegacyWindowedPresent" xml:space="preserve">
+    <value>Редкие старые игры работают с этой оптимизацией хуже или с ошибками изображения. Изменение возвращается кнопкой на экране «Журнал» или там же в параметрах графики.</value>
+  </data>
+  <data name="AdviceId_DpcTimeHigh" xml:space="preserve">
+    <value>Драйверы подолгу заняты обработкой DPC</value>
+  </data>
+  <data name="AdviceText_DpcTimeHigh" xml:space="preserve">
+    <value>В последней серии бенчмарка время DPC по всем CPU доходило до {0} %. Так процессор занимают драйверы устройств; из-за этого бывают рывки и треск звука, даже когда FPS в среднем высокий.</value>
+    <comment>{0} — пик, проценты в инвариантной культуре.</comment>
+  </data>
+  <data name="AdviceAction_DpcTimeHigh" xml:space="preserve">
+    <value>Запишите трассу: «Система → Задержки драйверов: трасса WPR → Начать запись», дождитесь рывка, остановите запись и откройте файл в Windows Performance Analyzer — там видно, какой драйвер занимал процессор. Частые причины — драйверы сети, звука, накопителей и USB: обновите драйвер этого устройства с сайта производителя устройства или компьютера и повторите серию бенчмарка.</value>
+  </data>
+  <data name="AdviceRisk_DpcTimeHigh" xml:space="preserve">
+    <value>Это только проверка. Для записи трассы Windows попросит права администратора, а файл трассы занимает место на диске. Драйверы Booster не меняет.</value>
+  </data>
+  <data name="AdviceId_InterruptTimeHigh" xml:space="preserve">
+    <value>Много времени уходит на прерывания</value>
+  </data>
+  <data name="AdviceText_InterruptTimeHigh" xml:space="preserve">
+    <value>В последней серии бенчмарка время прерываний по всем CPU доходило до {0} %. Прерывания обрабатывают драйверы устройств; когда их много, игре достаётся меньше процессора и бывают рывки.</value>
+    <comment>{0} — пик, проценты в инвариантной культуре.</comment>
+  </data>
+  <data name="AdviceAction_InterruptTimeHigh" xml:space="preserve">
+    <value>Запишите трассу: «Система → Задержки драйверов: трасса WPR → Начать запись», дождитесь рывка, остановите запись и откройте файл в Windows Performance Analyzer — там видно, какой драйвер занимал процессор. Частые причины — драйверы сети, звука, накопителей и USB: обновите драйвер этого устройства с сайта производителя устройства или компьютера и повторите серию бенчмарка.</value>
+  </data>
+  <data name="AdviceRisk_InterruptTimeHigh" xml:space="preserve">
+    <value>Это только проверка. Для записи трассы Windows попросит права администратора, а файл трассы занимает место на диске. Драйверы Booster не меняет.</value>
+  </data>
+  <data name="AdviceHeading" xml:space="preserve">
+    <value>Рекомендации</value>
+  </data>
+  <data name="AdviceNone" xml:space="preserve">
+    <value>Замечаний нет: менять ничего не нужно.</value>
+  </data>
+  <data name="AdviceNotAssessed" xml:space="preserve">
+    <value>Рекомендаций нет: данных для проверки недостаточно.</value>
+  </data>
+  <data name="AdviceCellFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+    <comment>{0} — название рекомендации, {1} — её текст.</comment>
+  </data>
+  <data name="ColumnAdviceAction" xml:space="preserve">
+    <value>Что сделать</value>
+  </data>
+  <data name="ColumnAdviceRisk" xml:space="preserve">
+    <value>Риск и как вернуть</value>
+  </data>
+  <data name="ColumnLevel" xml:space="preserve">
+    <value>Уровень</value>
+  </data>
+  <data name="SystemPhysicalMemory" xml:space="preserve">
+    <value>Физическая память</value>
+  </data>
+  <data name="SystemPhysicalMemoryFormat" xml:space="preserve">
+    <value>{0}, доступно {1} ({2})</value>
+    <comment>{0} — всего, {1} — доступно, {2} — доля доступной.</comment>
+  </data>
+  <data name="SystemCommit" xml:space="preserve">
+    <value>Выделено (commit)</value>
+  </data>
+  <data name="SystemCommitFormat" xml:space="preserve">
+    <value>{0} из {1} ({2})</value>
+    <comment>{0} — выделено, {1} — предел выделения, {2} — доля от предела.</comment>
+  </data>
+  <data name="SystemCommitPeak" xml:space="preserve">
+    <value>Пик выделения с загрузки</value>
+  </data>
+  <data name="SystemCache" xml:space="preserve">
+    <value>Системный кэш</value>
+  </data>
+  <data name="SystemKernelPaged" xml:space="preserve">
+    <value>Выгружаемый пул ядра</value>
+  </data>
+  <data name="SystemKernelNonPaged" xml:space="preserve">
+    <value>Невыгружаемый пул ядра</value>
+  </data>
+  <data name="SystemCounts" xml:space="preserve">
+    <value>Процессы / потоки / дескрипторы</value>
+  </data>
+  <data name="SystemCountsFormat" xml:space="preserve">
+    <value>{0} / {1} / {2}</value>
+  </data>
+  <data name="SystemPagefileMode" xml:space="preserve">
+    <value>Файл подкачки</value>
+  </data>
+  <data name="PagefileHeading" xml:space="preserve">
+    <value>Файлы подкачки</value>
+  </data>
+  <data name="ColumnPath" xml:space="preserve">
+    <value>Путь</value>
+  </data>
+  <data name="ColumnPagefileConfigured" xml:space="preserve">
+    <value>Задано</value>
+  </data>
+  <data name="ColumnUsed" xml:space="preserve">
+    <value>Используется</value>
+  </data>
+  <data name="ColumnFreeOnVolume" xml:space="preserve">
+    <value>Свободно на томе</value>
+  </data>
+  <data name="PagefileSizeBySystem" xml:space="preserve">
+    <value>системой</value>
+  </data>
+  <data name="PagefileSizeRangeFormat" xml:space="preserve">
+    <value>{0}–{1} МБ</value>
+    <comment>{0} — начальный размер, {1} — максимальный, МБ.</comment>
+  </data>
+  <data name="PagefileNoFile" xml:space="preserve">
+    <value>файла сейчас нет</value>
+  </data>
+  <data name="TopProcessesHeading" xml:space="preserve">
+    <value>Процессы с наибольшей памятью</value>
+  </data>
+  <data name="ColumnProcess" xml:space="preserve">
+    <value>Процесс</value>
+  </data>
+  <data name="ColumnPid" xml:space="preserve">
+    <value>PID</value>
+  </data>
+  <data name="ColumnPrivateBytes" xml:space="preserve">
+    <value>Частная память</value>
+  </data>
+  <data name="ColumnWorkingSet" xml:space="preserve">
+    <value>Рабочий набор</value>
+  </data>
+  <data name="ServicesTotal" xml:space="preserve">
+    <value>Всего служб</value>
+  </data>
+  <data name="ServicesNotMicrosoftHeading" xml:space="preserve">
+    <value>Службы не Microsoft</value>
+  </data>
+  <data name="ColumnServiceName" xml:space="preserve">
+    <value>Служба</value>
+  </data>
+  <data name="ColumnDisplayName" xml:space="preserve">
+    <value>Отображаемое имя</value>
+  </data>
+  <data name="ColumnPublisher" xml:space="preserve">
+    <value>Издатель</value>
+  </data>
+  <data name="ColumnCategory" xml:space="preserve">
+    <value>Категория</value>
+  </data>
+  <data name="ColumnStartMode" xml:space="preserve">
+    <value>Запуск</value>
+  </data>
+  <data name="ColumnDependents" xml:space="preserve">
+    <value>Зависимых служб</value>
+  </data>
+  <data name="ServiceDelayedStartFormat" xml:space="preserve">
+    <value>{0}, отложенный</value>
+    <comment>{0} — тип запуска.</comment>
+  </data>
+  <data name="ServicesCaveat" xml:space="preserve">
+    <value>Booster не останавливает и не перенастраивает службы. Службы защиты и античита не трогайте: без них система становится уязвимой, а игры могут не запуститься. Отмеченные службы можно проверить вручную — список только для сведения.</value>
+  </data>
+  <data name="StabilityPeriod" xml:space="preserve">
+    <value>Период</value>
+  </data>
+  <data name="StabilityPeriodFormat" xml:space="preserve">
+    <value>с {0}</value>
+    <comment>{0} — дата начала периода.</comment>
+  </data>
+  <data name="ColumnEventKind" xml:space="preserve">
+    <value>Событие</value>
+  </data>
+  <data name="ColumnCount" xml:space="preserve">
+    <value>Число</value>
+  </data>
+  <data name="ColumnLast" xml:space="preserve">
+    <value>Последнее</value>
+  </data>
+  <data name="ColumnStabilitySubjects" xml:space="preserve">
+    <value>Приложения, коды, устройства</value>
+  </data>
+  <data name="StabilityNoEvents" xml:space="preserve">
+    <value>За период событий нестабильности нет.</value>
+  </data>
+  <data name="StabilityTruncatedFormat" xml:space="preserve">
+    <value>Событий больше предела: показаны последние {0}.</value>
+    <comment>{0} — число показанных событий.</comment>
+  </data>
+  <data name="NetworkAdaptersHeading" xml:space="preserve">
+    <value>Сетевые адаптеры</value>
+  </data>
+  <data name="ColumnNetworkAdapter" xml:space="preserve">
+    <value>Адаптер</value>
+  </data>
+  <data name="ColumnMedium" xml:space="preserve">
+    <value>Подключение</value>
+  </data>
+  <data name="ColumnSpeed" xml:space="preserve">
+    <value>Скорость</value>
+  </data>
+  <data name="ColumnGateways" xml:space="preserve">
+    <value>Шлюзы</value>
+  </data>
+  <data name="NetworkNoGateway" xml:space="preserve">
+    <value>нет</value>
+  </data>
+  <data name="UnitGbps" xml:space="preserve">
+    <value>{0} Гбит/с</value>
+  </data>
+  <data name="UnitMbps" xml:space="preserve">
+    <value>{0} Мбит/с</value>
+  </data>
+  <data name="UnitKbps" xml:space="preserve">
+    <value>{0} кбит/с</value>
+  </data>
+  <data name="UnitSeconds" xml:space="preserve">
+    <value>{0} с</value>
+  </data>
+  <data name="NetworkTestHeading" xml:space="preserve">
+    <value>Тест сети</value>
+  </data>
+  <data name="NetworkTestStartedAt" xml:space="preserve">
+    <value>Начат</value>
+  </data>
+  <data name="NetworkTestDuration" xml:space="preserve">
+    <value>Длительность</value>
+  </data>
+  <data name="NetworkTestAdapter" xml:space="preserve">
+    <value>Адаптер</value>
+  </data>
+  <data name="NetworkTestNoAdapter" xml:space="preserve">
+    <value>адаптер со шлюзом не найден</value>
+  </data>
+  <data name="NetworkUtilization" xml:space="preserve">
+    <value>Загрузка адаптера за тест</value>
+  </data>
+  <data name="ColumnTarget" xml:space="preserve">
+    <value>Цель</value>
+  </data>
+  <data name="ColumnAddress" xml:space="preserve">
+    <value>Адрес</value>
+  </data>
+  <data name="ColumnLatencyMedian" xml:space="preserve">
+    <value>Задержка (медиана)</value>
+  </data>
+  <data name="ColumnJitter" xml:space="preserve">
+    <value>Джиттер</value>
+  </data>
+  <data name="ColumnLoss" xml:space="preserve">
+    <value>Потери</value>
+  </data>
+  <data name="ColumnReplies" xml:space="preserve">
+    <value>Ответов</value>
+  </data>
+  <data name="NetworkRepliesFormat" xml:space="preserve">
+    <value>{0} из {1}</value>
+    <comment>{0} — получено ответов, {1} — отправлено запросов.</comment>
+  </data>
+  <data name="NetworkNotTested" xml:space="preserve">
+    <value>Тест сети не запускался: его можно запустить на экране «Система».</value>
+  </data>
+  <data name="NetworkCaveat" xml:space="preserve">
+    <value>Сеть не влияет на FPS: задержка и потери в сетевых играх выглядят как рывки и «телепорты», но кадров от этого меньше не становится.</value>
+  </data>
+  <data name="ServiceCategory_SystemCritical" xml:space="preserve">
+    <value>Системная</value>
+  </data>
+  <data name="ServiceCategory_Security" xml:space="preserve">
+    <value>Защита</value>
+  </data>
+  <data name="ServiceCategory_AntiCheat" xml:space="preserve">
+    <value>Античит</value>
+  </data>
+  <data name="ServiceCategory_DeviceOrNetwork" xml:space="preserve">
+    <value>Устройства и сеть</value>
+  </data>
+  <data name="ServiceCategory_Microsoft" xml:space="preserve">
+    <value>Microsoft</value>
+  </data>
+  <data name="ServiceCategory_ThirdParty" xml:space="preserve">
+    <value>Сторонняя</value>
+  </data>
+  <data name="ServiceCategory_Unknown" xml:space="preserve">
+    <value>Не определена</value>
+  </data>
+  <data name="ServiceRunState_Running" xml:space="preserve">
+    <value>Работает</value>
+  </data>
+  <data name="ServiceRunState_Stopped" xml:space="preserve">
+    <value>Остановлена</value>
+  </data>
+  <data name="ServiceRunState_Paused" xml:space="preserve">
+    <value>Приостановлена</value>
+  </data>
+  <data name="ServiceRunState_Pending" xml:space="preserve">
+    <value>Меняет состояние</value>
+  </data>
+  <data name="ServiceRunState_Unknown" xml:space="preserve">
+    <value>Неизвестно</value>
+  </data>
+  <data name="ServiceStartMode_Boot" xml:space="preserve">
+    <value>При загрузке (драйвер)</value>
+  </data>
+  <data name="ServiceStartMode_System" xml:space="preserve">
+    <value>Системой (драйвер)</value>
+  </data>
+  <data name="ServiceStartMode_Automatic" xml:space="preserve">
+    <value>Автоматически</value>
+  </data>
+  <data name="ServiceStartMode_Manual" xml:space="preserve">
+    <value>Вручную</value>
+  </data>
+  <data name="ServiceStartMode_Disabled" xml:space="preserve">
+    <value>Отключена</value>
+  </data>
+  <data name="ServiceStartMode_Unknown" xml:space="preserve">
+    <value>Неизвестно</value>
+  </data>
+  <data name="StabilityEventKind_UnexpectedShutdown" xml:space="preserve">
+    <value>Неожиданное выключение</value>
+  </data>
+  <data name="StabilityEventKind_BugCheck" xml:space="preserve">
+    <value>Синий экран (BugCheck)</value>
+  </data>
+  <data name="StabilityEventKind_DisplayDriverReset" xml:space="preserve">
+    <value>Сброс видеодрайвера</value>
+  </data>
+  <data name="StabilityEventKind_HardwareError" xml:space="preserve">
+    <value>Аппаратная ошибка (WHEA)</value>
+  </data>
+  <data name="StabilityEventKind_DiskError" xml:space="preserve">
+    <value>Ошибка диска</value>
+  </data>
+  <data name="StabilityEventKind_FileSystemError" xml:space="preserve">
+    <value>Ошибка файловой системы</value>
+  </data>
+  <data name="StabilityEventKind_ApplicationCrash" xml:space="preserve">
+    <value>Сбой приложения</value>
+  </data>
+  <data name="StabilityEventKind_ApplicationHang" xml:space="preserve">
+    <value>Зависание приложения</value>
+  </data>
+  <data name="NetworkMedium_Ethernet" xml:space="preserve">
+    <value>Кабель (Ethernet)</value>
+  </data>
+  <data name="NetworkMedium_Wireless" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="NetworkMedium_Other" xml:space="preserve">
+    <value>Другое</value>
+  </data>
+  <data name="NetworkTargetKind_Gateway" xml:space="preserve">
+    <value>Шлюз (роутер)</value>
+  </data>
+  <data name="NetworkTargetKind_Host" xml:space="preserve">
+    <value>Внешний узел</value>
+  </data>
+  <data name="ColumnStartupItem" xml:space="preserve">
+    <value>Элемент</value>
+  </data>
+  <data name="ColumnStartupLocation" xml:space="preserve">
+    <value>Где записан</value>
+  </data>
+  <data name="ColumnExecutable" xml:space="preserve">
+    <value>Исполняемый файл</value>
+  </data>
+  <data name="StartupNotRunning" xml:space="preserve">
+    <value>не запущен</value>
+  </data>
+  <data name="StartupCaveat" xml:space="preserve">
+    <value>Память — частная память запущенных процессов с тем же exe в момент снимка. Отключённый элемент перестаёт запускаться со следующего входа в Windows. Booster отключает только элементы текущего пользователя и только после подтверждения; элементы компьютера (HKLM, общая папка) и RunOnce — только рекомендация.</value>
+  </data>
+  <data name="OverlaysHeading" xml:space="preserve">
+    <value>Программы с внутриигровым оверлеем</value>
+  </data>
+  <data name="ColumnOverlayProgram" xml:space="preserve">
+    <value>Программа</value>
+  </data>
+  <data name="OverlaysNone" xml:space="preserve">
+    <value>Программы с оверлеем из справочника не запущены.</value>
+  </data>
+  <data name="OverlaysCaveat" xml:space="preserve">
+    <value>Запущенная программа ещё не значит, что её оверлей включён: это видно только в настройках самой программы. Booster программы не закрывает и их настройки не меняет.</value>
+  </data>
+  <data name="StartupLocation_UserRun" xml:space="preserve">
+    <value>Реестр пользователя (Run)</value>
+  </data>
+  <data name="StartupLocation_UserRunOnce" xml:space="preserve">
+    <value>Реестр пользователя (RunOnce)</value>
+  </data>
+  <data name="StartupLocation_MachineRun" xml:space="preserve">
+    <value>Реестр компьютера (Run)</value>
+  </data>
+  <data name="StartupLocation_MachineRun32" xml:space="preserve">
+    <value>Реестр компьютера, 32-битные программы (Run)</value>
+  </data>
+  <data name="StartupLocation_MachineRunOnce" xml:space="preserve">
+    <value>Реестр компьютера (RunOnce)</value>
+  </data>
+  <data name="StartupLocation_UserFolder" xml:space="preserve">
+    <value>Папка «Автозагрузка» пользователя</value>
+  </data>
+  <data name="StartupLocation_CommonFolder" xml:space="preserve">
+    <value>Общая папка «Автозагрузка»</value>
+  </data>
+  <data name="StartupState_Enabled" xml:space="preserve">
+    <value>Включён</value>
+  </data>
+  <data name="StartupState_Disabled" xml:space="preserve">
+    <value>Отключён</value>
+  </data>
+  <data name="StartupState_Unknown" xml:space="preserve">
+    <value>Неизвестно</value>
+  </data>
+  <data name="StartupVerdict_Candidate" xml:space="preserve">
+    <value>Можно отключить с подтверждением</value>
+  </data>
+  <data name="StartupVerdict_NeedsAdmin" xml:space="preserve">
+    <value>Тяжёлый, нужны права администратора — только рекомендация</value>
+  </data>
+  <data name="StartupVerdict_Protected" xml:space="preserve">
+    <value>Защита или античит — не предлагается</value>
+  </data>
+  <data name="StartupVerdict_Light" xml:space="preserve">
+    <value>Лёгкий</value>
+  </data>
+  <data name="StartupVerdict_NotRunning" xml:space="preserve">
+    <value>Не запущен</value>
+  </data>
+  <data name="StartupVerdict_Disabled" xml:space="preserve">
+    <value>Уже отключён</value>
+  </data>
+  <data name="StartupVerdict_Unknown" xml:space="preserve">
+    <value>Нельзя оценить надёжно</value>
+  </data>
+  <data name="GamingGameMode" xml:space="preserve">
+    <value>Игровой режим (Game Mode)</value>
+  </data>
+  <data name="GamingBackgroundRecording" xml:space="preserve">
+    <value>Фоновая запись игр (Xbox Game Bar)</value>
+  </data>
+  <data name="TweaksHeading" xml:space="preserve">
+    <value>Настройки, которые Booster может изменить</value>
+  </data>
+  <data name="ColumnTweak" xml:space="preserve">
+    <value>Настройка</value>
+  </data>
+  <data name="ColumnTweakBasis" xml:space="preserve">
+    <value>Основание</value>
+  </data>
+  <data name="TweakLocationFormat" xml:space="preserve">
+    <value>HKCU\{0} → {1}</value>
+    <comment>{0} — раздел реестра, {1} — имя значения или TweakValueByGame</comment>
+  </data>
+  <data name="TweakValueByGame" xml:space="preserve">
+    <value>путь к exe игры</value>
+  </data>
+  <data name="TweakState_Proposed" xml:space="preserve">
+    <value>Предлагается, с подтверждением</value>
+  </data>
+  <data name="TweakState_ManualOnly" xml:space="preserve">
+    <value>Только вручную: сборка Windows не подходит или неизвестна</value>
+  </data>
+  <data name="TweakState_NotNeeded" xml:space="preserve">
+    <value>Не требуется</value>
+  </data>
+  <data name="TweakNoEvidence" xml:space="preserve">
+    <value>Признака, который исправляет эта настройка, нет</value>
+  </data>
+  <data name="TweakEvidence_GameMode" xml:space="preserve">
+    <value>Игровой режим выключен</value>
+  </data>
+  <data name="TweakEvidence_GpuHighPerformance" xml:space="preserve">
+    <value>{0} выводила кадры через встроенную видеокарту {1}</value>
+    <comment>{0} — процесс игры, {1} — видеокарта из серии бенчмарка</comment>
+  </data>
+  <data name="TweakEvidence_WindowedFlipModel" xml:space="preserve">
+    <value>{0} показывала кадры способом «{1}»</value>
+    <comment>{0} — процесс игры, {1} — режим показа по PresentMon</comment>
+  </data>
+  <data name="TweaksCaveat" xml:space="preserve">
+    <value>Правила видеокарты и способа показа кадров проверяются только по последней серии бенчмарка игры из профиля. Booster меняет эти настройки только для текущего пользователя, после подтверждения и с возможностью отката. Прирост FPS не гарантирован: эффект проверяется повторной серией.</value>
+  </data>
+  <data name="LatencySeries" xml:space="preserve">
+    <value>Серия бенчмарка</value>
+  </data>
+  <data name="LatencySeriesFormat" xml:space="preserve">
+    <value>{0}, {1}</value>
+    <comment>{0} — процесс игры, {1} — начало серии.</comment>
+  </data>
+  <data name="LatencyNotAssessed" xml:space="preserve">
+    <value>Время DPC и прерываний не оценивалось: в этой сессии нет серии бенчмарка. Запишите серию игры на экране «Производительность» — время DPC и прерываний замеряется во время серии. Живые значения и запись трассы WPR — на экране «Система».</value>
+  </data>
+  <data name="LatencyCaveat" xml:space="preserve">
+    <value>Время DPC и прерываний — доля времени всех логических CPU по счётчикам Windows: долгая обработка на одном ядре в ней сильно разбавлена. Порог — эвристика: какой драйвер виноват, показывает только трасса WPR. Драйверы Booster не меняет, а трасса в отчёт не попадает.</value>
+  </data>
+  <data name="SectionHags" xml:space="preserve">
+    <value>Планирование GPU (HAGS)</value>
+  </data>
+  <data name="HagsCurrent" xml:space="preserve">
+    <value>Сейчас в реестре</value>
+  </data>
+  <data name="HagsStage" xml:space="preserve">
+    <value>A/B-тест</value>
+  </data>
+  <data name="HagsTarget" xml:space="preserve">
+    <value>Игра</value>
+  </data>
+  <data name="HagsBaselineValue" xml:space="preserve">
+    <value>HAGS во время базовой серии</value>
+  </data>
+  <data name="HagsCandidateValue" xml:space="preserve">
+    <value>HAGS во время серии-кандидата</value>
+  </data>
+  <data name="HagsEnabled" xml:space="preserve">
+    <value>включено</value>
+  </data>
+  <data name="HagsDisabled" xml:space="preserve">
+    <value>выключено</value>
+  </data>
+  <data name="HagsVerdictHeading" xml:space="preserve">
+    <value>Вердикт</value>
+  </data>
+  <data name="HagsNotStarted" xml:space="preserve">
+    <value>A/B-тест не начат. HAGS одной игре помогает, другой мешает — проверить можно только замером. Запишите серию бенчмарка игры на экране «Производительность» и нажмите «Начать тест» на экране «Система»; затем переключите HAGS в «Параметрах», перезагрузите компьютер, запишите вторую серию той же игры и нажмите «Взять серию» — Booster сравнит серии и подскажет, оставить значение или вернуть.</value>
+  </data>
+  <data name="HagsManualStep" xml:space="preserve">
+    <value>Переключить HAGS можно только вручную: Параметры → Система → Дисплей → Графика (ms-settings:display-advancedgraphics), «Планирование графического процессора с аппаратным ускорением». Новое значение действует после перезагрузки: Пуск → «Перезагрузка».</value>
+  </data>
+  <data name="HagsCaveat" xml:space="preserve">
+    <value>Booster HAGS не переключает: значение меняет пользователь в «Параметрах», а Booster только читает его из реестра (HwSchMode) и сравнивает две серии бенчмарка одной игры — до и после перезагрузки. Вывод относится только к этим сериям и не обещает прироста в других играх и сценах.</value>
+  </data>
+  <data name="HagsCheck_NotStarted" xml:space="preserve">
+    <value>Не начат</value>
+  </data>
+  <data name="HagsCheck_Unreadable" xml:space="preserve">
+    <value>Файл теста повреждён или создан более новой версией Booster: тест нужно сбросить на экране «Система»</value>
+  </data>
+  <data name="HagsCheck_StateUnknown" xml:space="preserve">
+    <value>Вывода нет: значение HAGS, время его изменения или время загрузки Windows не прочиталось</value>
+  </data>
+  <data name="HagsCheck_WaitingForSwitch" xml:space="preserve">
+    <value>Базовая серия записана; ждёт, пока пользователь переключит HAGS и перезагрузит компьютер</value>
+  </data>
+  <data name="HagsCheck_NeedsRestart" xml:space="preserve">
+    <value>Значение в реестре уже другое, но компьютер не перезагружался: новое значение ещё не действует</value>
+  </data>
+  <data name="HagsCheck_ReadyForCandidate" xml:space="preserve">
+    <value>Новое значение действует: нужна серия-кандидат той же игры</value>
+  </data>
+  <data name="HagsCheck_SwitchedBack" xml:space="preserve">
+    <value>HAGS вернули к значению базовой серии до серии-кандидата: сравнивать нечего</value>
+  </data>
+  <data name="HagsCheck_BaselineMissing" xml:space="preserve">
+    <value>Базовая серия удалена из истории: сравнивать не с чем</value>
+  </data>
+  <data name="HagsCheck_CandidateMissing" xml:space="preserve">
+    <value>Серия-кандидат удалена из истории: вердикта нет</value>
+  </data>
+  <data name="HagsCheck_Completed" xml:space="preserve">
+    <value>Завершён</value>
+  </data>
+  <data name="HagsVerdict_Keep" xml:space="preserve">
+    <value>По этим двум сериям игра идёт лучше, когда HAGS {0}: можно оставить это значение. Прирост в других играх и сценах не обещается.</value>
+    <comment>{0} — значение серии-кандидата, {1} — базовой серии.</comment>
+  </data>
+  <data name="HagsVerdict_Revert" xml:space="preserve">
+    <value>По этим двум сериям игре хуже, когда HAGS {0}: верните прежнее значение ({1}) вручную в «Параметрах» и перезагрузите компьютер.</value>
+    <comment>{0} — значение серии-кандидата, {1} — базовой серии.</comment>
+  </data>
+  <data name="HagsVerdict_NoDifference" xml:space="preserve">
+    <value>По этим двум сериям разница меньше порога: на эту игру значение HAGS заметно не влияет, можно оставить любое.</value>
+  </data>
+  <data name="HagsVerdict_Inconclusive" xml:space="preserve">
+    <value>По этим двум сериям вывода нет: разница не доказана или средний FPS и 1% low противоречат друг другу. Запишите серии с большим числом прогонов в одинаковых условиях и повторите тест.</value>
+  </data>
+</root>

@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- ViewModel и корень композиции на фейках Core; система не меняется, окно не создаётся. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <UseWPF>true</UseWPF>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.TimeProvider.Testing" />
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Booster.App\Booster.App.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Фейки Core — общие с Booster.Core.Tests. -->
+    <Compile Include="..\Booster.Core.Tests\TestSupport\*.cs" LinkBase="TestSupport" />
+    <None Include="..\..\config\**" Link="config\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
+    <!-- UseWPF убирает System.IO из неявных using, а общие фейки Core на него рассчитывают. -->
+    <Using Include="System.IO" />
+  </ItemGroup>
+</Project>

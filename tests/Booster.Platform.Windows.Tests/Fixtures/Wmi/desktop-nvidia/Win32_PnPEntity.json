@@ -1,0 +1,547 @@
+[
+    {
+        "DeviceID":  "DISPLAY\\AUS242A\\5\u002618049A20\u00260\u0026UID4355",
+        "Name":  "Generic Monitor (ASUS VG249Q1A)",
+        "PNPClass":  "Monitor",
+        "Manufacturer":  "(Стандартные мониторы)",
+        "HardwareID":  [
+                           "MONITOR\\AUS242A"
+                       ],
+        "CompatibleID":  [
+                             "*PNP09FF"
+                         ],
+        "ConfigManagerErrorCode":  0,
+        "Status":  "OK",
+        "Present":  true
+    },
+    {
+        "DeviceID":  "HDAUDIO\\FUNC_01\u0026VEN_10DE\u0026DEV_009E\u0026SUBSYS_1462C972\u0026REV_1001\\5\u00261D1EC01D\u00260\u00260001",
+        "Name":  "NVIDIA High Definition Audio",
+        "PNPClass":  "MEDIA",
+        "Manufacturer":  "NVIDIA",
+        "HardwareID":  [
+                           "HDAUDIO\\FUNC_01\u0026VEN_10DE\u0026DEV_009E\u0026SUBSYS_1462C972\u0026REV_1001",
+                           "HDAUDIO\\FUNC_01\u0026VEN_10DE\u0026DEV_009E\u0026SUBSYS_1462C972"
+                       ],
+        "CompatibleID":  [
+                             "HDAUDIO\\FUNC_01\u0026CTLR_VEN_10DE\u0026CTLR_DEV_228B\u0026VEN_10DE\u0026DEV_009E\u0026REV_1001",
+                             "HDAUDIO\\FUNC_01\u0026CTLR_VEN_10DE\u0026VEN_10DE\u0026DEV_009E\u0026REV_1001",
+                             "HDAUDIO\\FUNC_01\u0026VEN_10DE\u0026DEV_009E\u0026REV_1001",
+                             "HDAUDIO\\FUNC_01\u0026CTLR_VEN_10DE\u0026CTLR_DEV_228B\u0026VEN_10DE\u0026DEV_009E",
+                             "HDAUDIO\\FUNC_01\u0026CTLR_VEN_10DE\u0026VEN_10DE\u0026DEV_009E",
+                             "HDAUDIO\\FUNC_01\u0026VEN_10DE\u0026DEV_009E",
+                             "HDAUDIO\\FUNC_01\u0026CTLR_VEN_10DE\u0026CTLR_DEV_228B\u0026VEN_10DE",
+                             "HDAUDIO\\FUNC_01\u0026CTLR_VEN_10DE\u0026VEN_10DE",
+                             "HDAUDIO\\FUNC_01\u0026VEN_10DE",
+                             "HDAUDIO\\FUNC_01\u0026CTLR_VEN_10DE\u0026CTLR_DEV_228B",
+                             "HDAUDIO\\FUNC_01\u0026CTLR_VEN_10DE",
+                             "HDAUDIO\\FUNC_01\u0026GF\u0026VEN_10DE\u0026DEV_009E\u0026SUBSYS_1462C972\u0026REV_1001",
+                             "HDAUDIO\\FUNC_01"
+                         ],
+        "ConfigManagerErrorCode":  0,
+        "Status":  "OK",
+        "Present":  true
+    },
+    {
+        "DeviceID":  "HDAUDIO\\FUNC_01\u0026VEN_10EC\u0026DEV_0897\u0026SUBSYS_14629D48\u0026REV_1005\\4\u00264F2E594\u00260\u00260001",
+        "Name":  "Realtek(R) Audio",
+        "PNPClass":  "MEDIA",
+        "Manufacturer":  "Realtek",
+        "HardwareID":  [
+                           "HDAUDIO\\FUNC_01\u0026VEN_10EC\u0026DEV_0897\u0026SUBSYS_14629D48\u0026REV_1005",
+                           "HDAUDIO\\FUNC_01\u0026VEN_10EC\u0026DEV_0897\u0026SUBSYS_14629D48"
+                       ],
+        "CompatibleID":  [
+                             "HDAUDIO\\FUNC_01\u0026CTLR_VEN_8086\u0026CTLR_DEV_7A50\u0026VEN_10EC\u0026DEV_0897\u0026REV_1005",
+                             "HDAUDIO\\FUNC_01\u0026CTLR_VEN_8086\u0026VEN_10EC\u0026DEV_0897\u0026REV_1005",
+                             "HDAUDIO\\FUNC_01\u0026VEN_10EC\u0026DEV_0897\u0026REV_1005",
+                             "HDAUDIO\\FUNC_01\u0026CTLR_VEN_8086\u0026CTLR_DEV_7A50\u0026VEN_10EC\u0026DEV_0897",
+                             "HDAUDIO\\FUNC_01\u0026CTLR_VEN_8086\u0026VEN_10EC\u0026DEV_0897",
+                             "HDAUDIO\\FUNC_01\u0026VEN_10EC\u0026DEV_0897",
+                             "HDAUDIO\\FUNC_01\u0026CTLR_VEN_8086\u0026CTLR_DEV_7A50\u0026VEN_10EC",
+                             "HDAUDIO\\FUNC_01\u0026CTLR_VEN_8086\u0026VEN_10EC",
+                             "HDAUDIO\\FUNC_01\u0026VEN_10EC",
+                             "HDAUDIO\\FUNC_01\u0026CTLR_VEN_8086\u0026CTLR_DEV_7A50",
+                             "HDAUDIO\\FUNC_01\u0026CTLR_VEN_8086",
+                             "HDAUDIO\\FUNC_01\u0026GF\u0026VEN_10EC\u0026DEV_0897\u0026SUBSYS_14629D48\u0026REV_1005",
+                             "HDAUDIO\\FUNC_01"
+                         ],
+        "ConfigManagerErrorCode":  0,
+        "Status":  "OK",
+        "Present":  true
+    },
+    {
+        "DeviceID":  "PCI\\VEN_10DE\u0026DEV_228B\u0026SUBSYS_C9721462\u0026REV_A1\\4\u002612033776\u00260\u00260108",
+        "Name":  "Контроллер High Definition Audio (Microsoft)",
+        "PNPClass":  "System",
+        "Manufacturer":  "Microsoft",
+        "HardwareID":  [
+                           "PCI\\VEN_10DE\u0026DEV_228B\u0026SUBSYS_C9721462\u0026REV_A1",
+                           "PCI\\VEN_10DE\u0026DEV_228B\u0026SUBSYS_C9721462",
+                           "PCI\\VEN_10DE\u0026DEV_228B\u0026CC_040300",
+                           "PCI\\VEN_10DE\u0026DEV_228B\u0026CC_0403"
+                       ],
+        "CompatibleID":  [
+                             "PCI\\VEN_10DE\u0026DEV_228B\u0026REV_A1",
+                             "PCI\\VEN_10DE\u0026DEV_228B",
+                             "PCI\\VEN_10DE\u0026CC_040300",
+                             "PCI\\VEN_10DE\u0026CC_0403",
+                             "PCI\\VEN_10DE",
+                             "PCI\\CC_040300\u0026DT_0",
+                             "PCI\\CC_040300",
+                             "PCI\\CC_0403\u0026DT_0",
+                             "PCI\\CC_0403"
+                         ],
+        "ConfigManagerErrorCode":  0,
+        "Status":  "OK",
+        "Present":  true
+    },
+    {
+        "DeviceID":  "PCI\\VEN_10DE\u0026DEV_2489\u0026SUBSYS_C9721462\u0026REV_A1\\4\u002612033776\u00260\u00260008",
+        "Name":  "NVIDIA GeForce RTX 3060 Ti",
+        "PNPClass":  "Display",
+        "Manufacturer":  "NVIDIA",
+        "HardwareID":  [
+                           "PCI\\VEN_10DE\u0026DEV_2489\u0026SUBSYS_C9721462\u0026REV_A1",
+                           "PCI\\VEN_10DE\u0026DEV_2489\u0026SUBSYS_C9721462",
+                           "PCI\\VEN_10DE\u0026DEV_2489\u0026CC_030000",
+                           "PCI\\VEN_10DE\u0026DEV_2489\u0026CC_0300"
+                       ],
+        "CompatibleID":  [
+                             "PCI\\VEN_10DE\u0026DEV_2489\u0026REV_A1",
+                             "PCI\\VEN_10DE\u0026DEV_2489",
+                             "PCI\\VEN_10DE\u0026CC_030000",
+                             "PCI\\VEN_10DE\u0026CC_0300",
+                             "PCI\\VEN_10DE",
+                             "PCI\\CC_030000\u0026DT_1",
+                             "PCI\\CC_030000",
+                             "PCI\\CC_0300\u0026DT_1",
+                             "PCI\\CC_0300"
+                         ],
+        "ConfigManagerErrorCode":  0,
+        "Status":  "OK",
+        "Present":  true
+    },
+    {
+        "DeviceID":  "PCI\\VEN_10EC\u0026DEV_8168\u0026SUBSYS_7D481462\u0026REV_15\\SANITIZED",
+        "Name":  "Realtek PCIe GbE Family Controller",
+        "PNPClass":  "Net",
+        "Manufacturer":  "Realtek",
+        "HardwareID":  [
+                           "PCI\\VEN_10EC\u0026DEV_8168\u0026SUBSYS_7D481462\u0026REV_15",
+                           "PCI\\VEN_10EC\u0026DEV_8168\u0026SUBSYS_7D481462",
+                           "PCI\\VEN_10EC\u0026DEV_8168\u0026CC_020000",
+                           "PCI\\VEN_10EC\u0026DEV_8168\u0026CC_0200"
+                       ],
+        "CompatibleID":  [
+                             "PCI\\VEN_10EC\u0026DEV_8168\u0026REV_15",
+                             "PCI\\VEN_10EC\u0026DEV_8168",
+                             "PCI\\VEN_10EC\u0026CC_020000",
+                             "PCI\\VEN_10EC\u0026CC_0200",
+                             "PCI\\VEN_10EC",
+                             "PCI\\CC_020000\u0026DT_0",
+                             "PCI\\CC_020000",
+                             "PCI\\CC_0200\u0026DT_0",
+                             "PCI\\CC_0200"
+                         ],
+        "ConfigManagerErrorCode":  0,
+        "Status":  "OK",
+        "Present":  true
+    },
+    {
+        "DeviceID":  "PCI\\VEN_1E4B\u0026DEV_1202\u0026SUBSYS_12021E4B\u0026REV_01\\4\u00262441FBC7\u00260\u002600E4",
+        "Name":  "Стандартный контроллер NVM Express",
+        "PNPClass":  "SCSIAdapter",
+        "Manufacturer":  "Стандартный контроллер NVM Express",
+        "HardwareID":  [
+                           "PCI\\VEN_1E4B\u0026DEV_1202\u0026SUBSYS_12021E4B\u0026REV_01",
+                           "PCI\\VEN_1E4B\u0026DEV_1202\u0026SUBSYS_12021E4B",
+                           "PCI\\VEN_1E4B\u0026DEV_1202\u0026CC_010802",
+                           "PCI\\VEN_1E4B\u0026DEV_1202\u0026CC_0108"
+                       ],
+        "CompatibleID":  [
+                             "PCI\\VEN_1E4B\u0026DEV_1202\u0026REV_01",
+                             "PCI\\VEN_1E4B\u0026DEV_1202",
+                             "PCI\\VEN_1E4B\u0026CC_010802",
+                             "PCI\\VEN_1E4B\u0026CC_0108",
+                             "PCI\\VEN_1E4B",
+                             "PCI\\CC_010802\u0026DT_0",
+                             "PCI\\CC_010802",
+                             "PCI\\CC_0108\u0026DT_0",
+                             "PCI\\CC_0108"
+                         ],
+        "ConfigManagerErrorCode":  0,
+        "Status":  "OK",
+        "Present":  true
+    },
+    {
+        "DeviceID":  "PCI\\VEN_8086\u0026DEV_7A06\u0026SUBSYS_7D481462\u0026REV_11\\3\u002611583659\u00260\u0026F8",
+        "Name":  "Intel(R) LPC Controller/eSPI Controller - 7A06",
+        "PNPClass":  "System",
+        "Manufacturer":  "INTEL",
+        "HardwareID":  [
+                           "PCI\\VEN_8086\u0026DEV_7A06\u0026SUBSYS_7D481462\u0026REV_11",
+                           "PCI\\VEN_8086\u0026DEV_7A06\u0026SUBSYS_7D481462",
+                           "PCI\\VEN_8086\u0026DEV_7A06\u0026CC_060100",
+                           "PCI\\VEN_8086\u0026DEV_7A06\u0026CC_0601"
+                       ],
+        "CompatibleID":  [
+                             "PCI\\VEN_8086\u0026DEV_7A06\u0026REV_11",
+                             "PCI\\VEN_8086\u0026DEV_7A06",
+                             "PCI\\VEN_8086\u0026CC_060100",
+                             "PCI\\VEN_8086\u0026CC_0601",
+                             "PCI\\VEN_8086",
+                             "PCI\\CC_060100",
+                             "PCI\\CC_0601"
+                         ],
+        "ConfigManagerErrorCode":  0,
+        "Status":  "OK",
+        "Present":  true
+    },
+    {
+        "DeviceID":  "PCI\\VEN_8086\u0026DEV_7A23\u0026SUBSYS_7D481462\u0026REV_11\\3\u002611583659\u00260\u0026FC",
+        "Name":  "Intel(R) SMBus - 7A23",
+        "PNPClass":  "System",
+        "Manufacturer":  "INTEL",
+        "HardwareID":  [
+                           "PCI\\VEN_8086\u0026DEV_7A23\u0026SUBSYS_7D481462\u0026REV_11",
+                           "PCI\\VEN_8086\u0026DEV_7A23\u0026SUBSYS_7D481462",
+                           "PCI\\VEN_8086\u0026DEV_7A23\u0026CC_0C0500",
+                           "PCI\\VEN_8086\u0026DEV_7A23\u0026CC_0C05"
+                       ],
+        "CompatibleID":  [
+                             "PCI\\VEN_8086\u0026DEV_7A23\u0026REV_11",
+                             "PCI\\VEN_8086\u0026DEV_7A23",
+                             "PCI\\VEN_8086\u0026CC_0C0500",
+                             "PCI\\VEN_8086\u0026CC_0C05",
+                             "PCI\\VEN_8086",
+                             "PCI\\CC_0C0500",
+                             "PCI\\CC_0C05"
+                         ],
+        "ConfigManagerErrorCode":  0,
+        "Status":  "OK",
+        "Present":  true
+    },
+    {
+        "DeviceID":  "PCI\\VEN_8086\u0026DEV_7A24\u0026SUBSYS_7D481462\u0026REV_11\\3\u002611583659\u00260\u0026FD",
+        "Name":  "Intel(R) SPI (flash) Controller - 7A24",
+        "PNPClass":  "System",
+        "Manufacturer":  "INTEL",
+        "HardwareID":  [
+                           "PCI\\VEN_8086\u0026DEV_7A24\u0026SUBSYS_7D481462\u0026REV_11",
+                           "PCI\\VEN_8086\u0026DEV_7A24\u0026SUBSYS_7D481462",
+                           "PCI\\VEN_8086\u0026DEV_7A24\u0026CC_0C8000",
+                           "PCI\\VEN_8086\u0026DEV_7A24\u0026CC_0C80"
+                       ],
+        "CompatibleID":  [
+                             "PCI\\VEN_8086\u0026DEV_7A24\u0026REV_11",
+                             "PCI\\VEN_8086\u0026DEV_7A24",
+                             "PCI\\VEN_8086\u0026CC_0C8000",
+                             "PCI\\VEN_8086\u0026CC_0C80",
+                             "PCI\\VEN_8086",
+                             "PCI\\CC_0C8000",
+                             "PCI\\CC_0C80"
+                         ],
+        "ConfigManagerErrorCode":  0,
+        "Status":  "OK",
+        "Present":  true
+    },
+    {
+        "DeviceID":  "PCI\\VEN_8086\u0026DEV_7A27\u0026SUBSYS_00000000\u0026REV_11\\3\u002611583659\u00260\u0026A2",
+        "Name":  "Intel(R) Shared SRAM - 7A27",
+        "PNPClass":  "System",
+        "Manufacturer":  "INTEL",
+        "HardwareID":  [
+                           "PCI\\VEN_8086\u0026DEV_7A27\u0026SUBSYS_00000000\u0026REV_11",
+                           "PCI\\VEN_8086\u0026DEV_7A27\u0026SUBSYS_00000000",
+                           "PCI\\VEN_8086\u0026DEV_7A27\u0026REV_11",
+                           "PCI\\VEN_8086\u0026DEV_7A27",
+                           "PCI\\VEN_8086\u0026DEV_7A27\u0026CC_050000",
+                           "PCI\\VEN_8086\u0026DEV_7A27\u0026CC_0500"
+                       ],
+        "CompatibleID":  [
+                             "PCI\\VEN_8086\u0026CC_050000",
+                             "PCI\\VEN_8086\u0026CC_0500",
+                             "PCI\\VEN_8086",
+                             "PCI\\CC_050000",
+                             "PCI\\CC_0500"
+                         ],
+        "ConfigManagerErrorCode":  0,
+        "Status":  "OK",
+        "Present":  true
+    },
+    {
+        "DeviceID":  "PCI\\VEN_8086\u0026DEV_7A38\u0026SUBSYS_00000000\u0026REV_11\\3\u002611583659\u00260\u0026E0",
+        "Name":  "Intel(R) PCI Express Root Port #1 - 7A38",
+        "PNPClass":  "System",
+        "Manufacturer":  "INTEL",
+        "HardwareID":  [
+                           "PCI\\VEN_8086\u0026DEV_7A38\u0026SUBSYS_00000000\u0026REV_11",
+                           "PCI\\VEN_8086\u0026DEV_7A38\u0026SUBSYS_00000000",
+                           "PCI\\VEN_8086\u0026DEV_7A38\u0026REV_11",
+                           "PCI\\VEN_8086\u0026DEV_7A38",
+                           "PCI\\VEN_8086\u0026DEV_7A38\u0026CC_060400",
+                           "PCI\\VEN_8086\u0026DEV_7A38\u0026CC_0604"
+                       ],
+        "CompatibleID":  [
+                             "PCI\\VEN_8086\u0026CC_060400",
+                             "PCI\\VEN_8086\u0026CC_0604",
+                             "PCI\\VEN_8086",
+                             "PCI\\CC_060400\u0026DT_4",
+                             "PCI\\CC_060400",
+                             "PCI\\CC_0604\u0026DT_4",
+                             "PCI\\CC_0604"
+                         ],
+        "ConfigManagerErrorCode":  0,
+        "Status":  "OK",
+        "Present":  true
+    },
+    {
+        "DeviceID":  "PCI\\VEN_8086\u0026DEV_7A3B\u0026SUBSYS_7D481462\u0026REV_11\\3\u002611583659\u00260\u0026E3",
+        "Name":  "Intel(R) PCI Express Root Port #4 - 7A3B",
+        "PNPClass":  "System",
+        "Manufacturer":  "INTEL",
+        "HardwareID":  [
+                           "PCI\\VEN_8086\u0026DEV_7A3B\u0026SUBSYS_7D481462\u0026REV_11",
+                           "PCI\\VEN_8086\u0026DEV_7A3B\u0026SUBSYS_7D481462",
+                           "PCI\\VEN_8086\u0026DEV_7A3B\u0026CC_060400",
+                           "PCI\\VEN_8086\u0026DEV_7A3B\u0026CC_0604"
+                       ],
+        "CompatibleID":  [
+                             "PCI\\VEN_8086\u0026DEV_7A3B\u0026REV_11",
+                             "PCI\\VEN_8086\u0026DEV_7A3B",
+                             "PCI\\VEN_8086\u0026CC_060400",
+                             "PCI\\VEN_8086\u0026CC_0604",
+                             "PCI\\VEN_8086",
+                             "PCI\\CC_060400\u0026DT_4",
+                             "PCI\\CC_060400",
+                             "PCI\\CC_0604\u0026DT_4",
+                             "PCI\\CC_0604"
+                         ],
+        "ConfigManagerErrorCode":  0,
+        "Status":  "OK",
+        "Present":  true
+    },
+    {
+        "DeviceID":  "PCI\\VEN_8086\u0026DEV_7A3C\u0026SUBSYS_7D481462\u0026REV_11\\3\u002611583659\u00260\u0026E4",
+        "Name":  "Intel(R) PCI Express Root Port #5 - 7A3C",
+        "PNPClass":  "System",
+        "Manufacturer":  "INTEL",
+        "HardwareID":  [
+                           "PCI\\VEN_8086\u0026DEV_7A3C\u0026SUBSYS_7D481462\u0026REV_11",
+                           "PCI\\VEN_8086\u0026DEV_7A3C\u0026SUBSYS_7D481462",
+                           "PCI\\VEN_8086\u0026DEV_7A3C\u0026CC_060400",
+                           "PCI\\VEN_8086\u0026DEV_7A3C\u0026CC_0604"
+                       ],
+        "CompatibleID":  [
+                             "PCI\\VEN_8086\u0026DEV_7A3C\u0026REV_11",
+                             "PCI\\VEN_8086\u0026DEV_7A3C",
+                             "PCI\\VEN_8086\u0026CC_060400",
+                             "PCI\\VEN_8086\u0026CC_0604",
+                             "PCI\\VEN_8086",
+                             "PCI\\CC_060400\u0026DT_4",
+                             "PCI\\CC_060400",
+                             "PCI\\CC_0604\u0026DT_4",
+                             "PCI\\CC_0604"
+                         ],
+        "ConfigManagerErrorCode":  0,
+        "Status":  "OK",
+        "Present":  true
+    },
+    {
+        "DeviceID":  "PCI\\VEN_8086\u0026DEV_7A50\u0026SUBSYS_9D481462\u0026REV_11\\3\u002611583659\u00260\u0026FB",
+        "Name":  "Контроллер High Definition Audio (Microsoft)",
+        "PNPClass":  "System",
+        "Manufacturer":  "Microsoft",
+        "HardwareID":  [
+                           "PCI\\VEN_8086\u0026DEV_7A50\u0026SUBSYS_9D481462\u0026REV_11",
+                           "PCI\\VEN_8086\u0026DEV_7A50\u0026SUBSYS_9D481462",
+                           "PCI\\VEN_8086\u0026DEV_7A50\u0026CC_040300",
+                           "PCI\\VEN_8086\u0026DEV_7A50\u0026CC_0403"
+                       ],
+        "CompatibleID":  [
+                             "PCI\\VEN_8086\u0026DEV_7A50\u0026REV_11",
+                             "PCI\\VEN_8086\u0026DEV_7A50",
+                             "PCI\\VEN_8086\u0026CC_040300",
+                             "PCI\\VEN_8086\u0026CC_0403",
+                             "PCI\\VEN_8086",
+                             "PCI\\CC_040300",
+                             "PCI\\CC_0403"
+                         ],
+        "ConfigManagerErrorCode":  0,
+        "Status":  "OK",
+        "Present":  true
+    },
+    {
+        "DeviceID":  "PCI\\VEN_8086\u0026DEV_7A60\u0026SUBSYS_7D481462\u0026REV_11\\3\u002611583659\u00260\u0026A0",
+        "Name":  "Расширяемый хост-контроллер Intel(R) USB 3.20 — 1.20 (Майкрософт)",
+        "PNPClass":  "USB",
+        "Manufacturer":  "Универсальный хост-контроллер USB xHCI",
+        "HardwareID":  [
+                           "PCI\\VEN_8086\u0026DEV_7A60\u0026SUBSYS_7D481462\u0026REV_11",
+                           "PCI\\VEN_8086\u0026DEV_7A60\u0026SUBSYS_7D481462",
+                           "PCI\\VEN_8086\u0026DEV_7A60\u0026CC_0C0330",
+                           "PCI\\VEN_8086\u0026DEV_7A60\u0026CC_0C03"
+                       ],
+        "CompatibleID":  [
+                             "PCI\\VEN_8086\u0026DEV_7A60\u0026REV_11",
+                             "PCI\\VEN_8086\u0026DEV_7A60",
+                             "PCI\\VEN_8086\u0026CC_0C0330",
+                             "PCI\\VEN_8086\u0026CC_0C03",
+                             "PCI\\VEN_8086",
+                             "PCI\\CC_0C0330",
+                             "PCI\\CC_0C03"
+                         ],
+        "ConfigManagerErrorCode":  0,
+        "Status":  "OK",
+        "Present":  true
+    },
+    {
+        "DeviceID":  "PCI\\VEN_8086\u0026DEV_7A62\u0026SUBSYS_7D481462\u0026REV_11\\3\u002611583659\u00260\u0026B8",
+        "Name":  "Стандартный контроллер SATA AHCI",
+        "PNPClass":  "HDC",
+        "Manufacturer":  "Стандартный контроллер SATA AHCI",
+        "HardwareID":  [
+                           "PCI\\VEN_8086\u0026DEV_7A62\u0026SUBSYS_7D481462\u0026REV_11",
+                           "PCI\\VEN_8086\u0026DEV_7A62\u0026SUBSYS_7D481462",
+                           "PCI\\VEN_8086\u0026DEV_7A62\u0026CC_010601",
+                           "PCI\\VEN_8086\u0026DEV_7A62\u0026CC_0106"
+                       ],
+        "CompatibleID":  [
+                             "PCI\\VEN_8086\u0026DEV_7A62\u0026REV_11",
+                             "PCI\\VEN_8086\u0026DEV_7A62",
+                             "PCI\\VEN_8086\u0026CC_010601",
+                             "PCI\\VEN_8086\u0026CC_0106",
+                             "PCI\\VEN_8086",
+                             "PCI\\CC_010601",
+                             "PCI\\CC_0106"
+                         ],
+        "ConfigManagerErrorCode":  0,
+        "Status":  "OK",
+        "Present":  true
+    },
+    {
+        "DeviceID":  "PCI\\VEN_8086\u0026DEV_7A68\u0026SUBSYS_7D481462\u0026REV_11\\3\u002611583659\u00260\u0026B0",
+        "Name":  "Intel(R) Management Engine Interface #1",
+        "PNPClass":  "System",
+        "Manufacturer":  "Intel",
+        "HardwareID":  [
+                           "PCI\\VEN_8086\u0026DEV_7A68\u0026SUBSYS_7D481462\u0026REV_11",
+                           "PCI\\VEN_8086\u0026DEV_7A68\u0026SUBSYS_7D481462",
+                           "PCI\\VEN_8086\u0026DEV_7A68\u0026CC_078000",
+                           "PCI\\VEN_8086\u0026DEV_7A68\u0026CC_0780"
+                       ],
+        "CompatibleID":  [
+                             "PCI\\VEN_8086\u0026DEV_7A68\u0026REV_11",
+                             "PCI\\VEN_8086\u0026DEV_7A68",
+                             "PCI\\VEN_8086\u0026CC_078000",
+                             "PCI\\VEN_8086\u0026CC_0780",
+                             "PCI\\VEN_8086",
+                             "PCI\\CC_078000",
+                             "PCI\\CC_0780"
+                         ],
+        "ConfigManagerErrorCode":  0,
+        "Status":  "OK",
+        "Present":  true
+    },
+    {
+        "DeviceID":  "PCI\\VEN_8086\u0026DEV_A705\u0026SUBSYS_7D481462\u0026REV_01\\3\u002611583659\u00260\u002600",
+        "Name":  "Стандартный главный мост PCI — ЦП",
+        "PNPClass":  "System",
+        "Manufacturer":  "(Стандартные системные устройства)",
+        "HardwareID":  [
+                           "PCI\\VEN_8086\u0026DEV_A705\u0026SUBSYS_7D481462\u0026REV_01",
+                           "PCI\\VEN_8086\u0026DEV_A705\u0026SUBSYS_7D481462",
+                           "PCI\\VEN_8086\u0026DEV_A705\u0026CC_060000",
+                           "PCI\\VEN_8086\u0026DEV_A705\u0026CC_0600"
+                       ],
+        "CompatibleID":  [
+                             "PCI\\VEN_8086\u0026DEV_A705\u0026REV_01",
+                             "PCI\\VEN_8086\u0026DEV_A705",
+                             "PCI\\VEN_8086\u0026CC_060000",
+                             "PCI\\VEN_8086\u0026CC_0600",
+                             "PCI\\VEN_8086",
+                             "PCI\\CC_060000",
+                             "PCI\\CC_0600"
+                         ],
+        "ConfigManagerErrorCode":  0,
+        "Status":  "OK",
+        "Present":  true
+    },
+    {
+        "DeviceID":  "PCI\\VEN_8086\u0026DEV_A70D\u0026SUBSYS_7D481462\u0026REV_01\\3\u002611583659\u00260\u002608",
+        "Name":  "Intel(R) PCIe RC 010 G5 - A70D",
+        "PNPClass":  "System",
+        "Manufacturer":  "INTEL",
+        "HardwareID":  [
+                           "PCI\\VEN_8086\u0026DEV_A70D\u0026SUBSYS_7D481462\u0026REV_01",
+                           "PCI\\VEN_8086\u0026DEV_A70D\u0026SUBSYS_7D481462",
+                           "PCI\\VEN_8086\u0026DEV_A70D\u0026CC_060400",
+                           "PCI\\VEN_8086\u0026DEV_A70D\u0026CC_0604"
+                       ],
+        "CompatibleID":  [
+                             "PCI\\VEN_8086\u0026DEV_A70D\u0026REV_01",
+                             "PCI\\VEN_8086\u0026DEV_A70D",
+                             "PCI\\VEN_8086\u0026CC_060400",
+                             "PCI\\VEN_8086\u0026CC_0604",
+                             "PCI\\VEN_8086",
+                             "PCI\\CC_060400\u0026DT_4",
+                             "PCI\\CC_060400",
+                             "PCI\\CC_0604\u0026DT_4",
+                             "PCI\\CC_0604"
+                         ],
+        "ConfigManagerErrorCode":  0,
+        "Status":  "OK",
+        "Present":  true
+    },
+    {
+        "DeviceID":  "PCI\\VEN_8086\u0026DEV_A74F\u0026SUBSYS_7D481462\u0026REV_01\\3\u002611583659\u00260\u002640",
+        "Name":  "Intel(R) GNA Scoring Accelerator module",
+        "PNPClass":  "System",
+        "Manufacturer":  "Intel Corporation",
+        "HardwareID":  [
+                           "PCI\\VEN_8086\u0026DEV_A74F\u0026SUBSYS_7D481462\u0026REV_01",
+                           "PCI\\VEN_8086\u0026DEV_A74F\u0026SUBSYS_7D481462",
+                           "PCI\\VEN_8086\u0026DEV_A74F\u0026CC_088000",
+                           "PCI\\VEN_8086\u0026DEV_A74F\u0026CC_0880"
+                       ],
+        "CompatibleID":  [
+                             "PCI\\VEN_8086\u0026DEV_A74F\u0026REV_01",
+                             "PCI\\VEN_8086\u0026DEV_A74F",
+                             "PCI\\VEN_8086\u0026CC_088000",
+                             "PCI\\VEN_8086\u0026CC_0880",
+                             "PCI\\VEN_8086",
+                             "PCI\\CC_088000",
+                             "PCI\\CC_0880"
+                         ],
+        "ConfigManagerErrorCode":  0,
+        "Status":  "OK",
+        "Present":  true
+    },
+    {
+        "DeviceID":  "PCI\\VEN_8086\u0026DEV_A77D\u0026SUBSYS_00000000\u0026REV_01\\3\u002611583659\u00260\u002650",
+        "Name":  "Драйвер технологии мониторинга платформы Intel(R)",
+        "PNPClass":  "System",
+        "Manufacturer":  "Устройство технологии мониторинга платформы Intel(R)",
+        "HardwareID":  [
+                           "PCI\\VEN_8086\u0026DEV_A77D\u0026SUBSYS_00000000\u0026REV_01",
+                           "PCI\\VEN_8086\u0026DEV_A77D\u0026SUBSYS_00000000",
+                           "PCI\\VEN_8086\u0026DEV_A77D\u0026REV_01",
+                           "PCI\\VEN_8086\u0026DEV_A77D",
+                           "PCI\\VEN_8086\u0026DEV_A77D\u0026CC_118000",
+                           "PCI\\VEN_8086\u0026DEV_A77D\u0026CC_1180"
+                       ],
+        "CompatibleID":  [
+                             "PCI\\VEN_8086\u0026CC_118000",
+                             "PCI\\VEN_8086\u0026CC_1180",
+                             "PCI\\VEN_8086",
+                             "PCI\\CC_118000\u0026DT_9",
+                             "PCI\\CC_118000",
+                             "PCI\\CC_1180\u0026DT_9",
+                             "PCI\\CC_1180"
+                         ],
+        "ConfigManagerErrorCode":  0,
+        "Status":  "OK",
+        "Present":  true
+    }
+]

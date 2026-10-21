@@ -1,0 +1,12 @@
+[
+    {
+        "Name":  "NVIDIA GeForce RTX 3060 Ti",
+        "PNPDeviceID":  "PCI\\VEN_10DE\u0026DEV_2489\u0026SUBSYS_C9721462\u0026REV_A1\\4\u002612033776\u00260\u00260008",
+        "AdapterCompatibility":  "NVIDIA",
+        "DriverVersion":  "32.0.15.6094",
+        "DriverDate":  "20240814000000.000000-000",
+        "AdapterRAM":  4293918720,
+        "VideoProcessor":  "NVIDIA GeForce RTX 3060 Ti",
+        "Status":  "OK"
+    }
+]

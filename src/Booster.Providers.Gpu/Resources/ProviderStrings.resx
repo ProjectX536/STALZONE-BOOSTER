@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="GenericCoreClockUnavailable" xml:space="preserve">
+    <value>Windows не сообщает частоту ядра GPU</value>
+  </data>
+  <data name="GenericPowerUnavailable" xml:space="preserve">
+    <value>нет источника мощности в ваттах</value>
+  </data>
+  <data name="GenericThrottleReasonsVendorOnly" xml:space="preserve">
+    <value>причины сообщает только вендорский API</value>
+  </data>
+  <data name="GenericNoCounterEntry" xml:space="preserve">
+    <value>адаптера нет в счётчиках производительности GPU</value>
+  </data>
+  <data name="GenericNoLuid" xml:space="preserve">
+    <value>LUID адаптера неизвестен</value>
+  </data>
+  <data name="AmdLicenseNote" xml:space="preserve">
+    <value>ADLX не подключён: условия лицензии ADLX требуют отдельного соглашения с пользователем; данные — средствами Windows</value>
+  </data>
+  <data name="IntelLicenseNote" xml:space="preserve">
+    <value>IGCL не подключён: условия лицензии Intel; данные — средствами Windows</value>
+  </data>
+  <data name="IntelHybridSeeInventory" xml:space="preserve">
+    <value>гибридные флаги адаптера и выбор GPU для приложений показывает инвентаризация, раздел «Оборудование»</value>
+  </data>
+  <data name="VendorLibraryInstalledFormat" xml:space="preserve">
+    <value>{0} установлена в System32, но Booster её не загружает</value>
+    <comment>{0} — имя DLL вендора</comment>
+  </data>
+  <data name="VendorLibraryMissingFormat" xml:space="preserve">
+    <value>{0} в System32 не найдена</value>
+    <comment>{0} — имя DLL вендора</comment>
+  </data>
+  <data name="NvidiaVendorApiFormat" xml:space="preserve">
+    <value>NVAPI, драйвер {0}</value>
+    <comment>{0} — версия драйвера NVIDIA, например 560.94</comment>
+  </data>
+  <data name="NvidiaVendorApiUnavailableFormat" xml:space="preserve">
+    <value>NVAPI недоступен: {0}</value>
+    <comment>{0} — код NVAPI, например NVAPI_LIBRARY_NOT_FOUND</comment>
+  </data>
+  <data name="NvidiaNoAdapterMatch" xml:space="preserve">
+    <value>не удалось сопоставить GPU NVAPI с адаптером Windows</value>
+  </data>
+  <data name="NvidiaDomainNotPresent" xml:space="preserve">
+    <value>драйвер не сообщает загрузку домена GPU</value>
+  </data>
+  <data name="NvidiaNoGpuSensor" xml:space="preserve">
+    <value>у адаптера нет датчика температуры GPU</value>
+  </data>
+  <data name="NvidiaNoClock" xml:space="preserve">
+    <value>драйвер не сообщает частоту</value>
+  </data>
+  <data name="NvidiaReadFailedFormat" xml:space="preserve">
+    <value>ошибка чтения NVAPI: {0}</value>
+    <comment>{0} — текст исключения</comment>
+  </data>
+  <data name="NvDrsNotSet" xml:space="preserve">
+    <value>не задан — действует значение драйвера по умолчанию</value>
+  </data>
+  <data name="NvDrsUnknownValueFormat" xml:space="preserve">
+    <value>значение 0x{0:X8}</value>
+    <comment>{0} — значение параметра DRS (uint)</comment>
+  </data>
+  <data name="NvDrsFpsFormat" xml:space="preserve">
+    <value>{0} кадр/с</value>
+    <comment>{0} — предел частоты кадров</comment>
+  </data>
+  <data name="NvDrsPowerMode" xml:space="preserve">
+    <value>Режим управления электропитанием</value>
+  </data>
+  <data name="NvDrsPowerAdaptive" xml:space="preserve">
+    <value>адаптивный</value>
+  </data>
+  <data name="NvDrsPowerMaximum" xml:space="preserve">
+    <value>максимальная производительность</value>
+  </data>
+  <data name="NvDrsPowerDriverControlled" xml:space="preserve">
+    <value>управляет драйвер</value>
+  </data>
+  <data name="NvDrsPowerConsistent" xml:space="preserve">
+    <value>стабильная производительность</value>
+  </data>
+  <data name="NvDrsPowerMinimum" xml:space="preserve">
+    <value>минимальное энергопотребление</value>
+  </data>
+  <data name="NvDrsPowerOptimal" xml:space="preserve">
+    <value>оптимальное энергопотребление</value>
+  </data>
+  <data name="NvDrsFrameLimit" xml:space="preserve">
+    <value>Ограничение частоты кадров</value>
+  </data>
+  <data name="NvDrsOff" xml:space="preserve">
+    <value>выключено</value>
+  </data>
+  <data name="NvDrsOn" xml:space="preserve">
+    <value>включено</value>
+  </data>
+  <data name="NvDrsPrerenderedFrames" xml:space="preserve">
+    <value>Заранее подготовленные кадры</value>
+  </data>
+  <data name="NvDrsApplicationControlled" xml:space="preserve">
+    <value>определяет приложение</value>
+  </data>
+  <data name="NvDrsVSync" xml:space="preserve">
+    <value>Вертикальная синхронизация</value>
+  </data>
+  <data name="NvDrsVSyncHalf" xml:space="preserve">
+    <value>каждый 2-й кадр</value>
+  </data>
+  <data name="NvDrsVSyncThird" xml:space="preserve">
+    <value>каждый 3-й кадр</value>
+  </data>
+  <data name="NvDrsVSyncQuarter" xml:space="preserve">
+    <value>каждый 4-й кадр</value>
+  </data>
+  <data name="NvDrsVSyncFast" xml:space="preserve">
+    <value>быстрая</value>
+  </data>
+  <data name="NvDrsVrrMode" xml:space="preserve">
+    <value>Режим VRR (G-SYNC)</value>
+  </data>
+  <data name="NvDrsVrrOff" xml:space="preserve">
+    <value>выключен</value>
+  </data>
+  <data name="NvDrsVrrFullscreen" xml:space="preserve">
+    <value>только полноэкранный</value>
+  </data>
+  <data name="NvDrsVrrFullscreenAndWindowed" xml:space="preserve">
+    <value>полноэкранный и оконный</value>
+  </data>
+  <data name="NvDrsTextureQuality" xml:space="preserve">
+    <value>Качество фильтрации текстур</value>
+  </data>
+  <data name="NvDrsTextureHighQuality" xml:space="preserve">
+    <value>высокое качество</value>
+  </data>
+  <data name="NvDrsTextureQualityValue" xml:space="preserve">
+    <value>качество</value>
+  </data>
+  <data name="NvDrsTexturePerformance" xml:space="preserve">
+    <value>производительность</value>
+  </data>
+  <data name="NvDrsTextureHighPerformance" xml:space="preserve">
+    <value>высокая производительность</value>
+  </data>
+  <data name="NoteJoinFormat" xml:space="preserve">
+    <value>{0}. {1}</value>
+    <comment>Два предложения примечания подряд</comment>
+  </data>
+</root>

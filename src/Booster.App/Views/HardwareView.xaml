@@ -1,0 +1,43 @@
+<UserControl x:Class="Booster.App.Views.HardwareView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:res="clr-namespace:Booster.App.Resources">
+  <DockPanel>
+    <StackPanel DockPanel.Dock="Top" Margin="24,16,24,4">
+      <TextBlock Style="{StaticResource PageTitle}" Text="{x:Static res:Strings.NavHardware}" />
+      <TextBlock Style="{StaticResource Hint}" Text="{x:Static res:Strings.SourceHint}" />
+      <TextBlock Text="{x:Static res:Strings.Collecting}" Margin="0,8,0,0">
+        <TextBlock.Style>
+          <Style TargetType="TextBlock">
+            <Style.Triggers>
+              <DataTrigger Binding="{Binding HasData}" Value="True">
+                <Setter Property="Visibility" Value="Collapsed" />
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </TextBlock.Style>
+      </TextBlock>
+    </StackPanel>
+
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Padding="24,0,24,16">
+      <StackPanel>
+        <!-- Живые датчики: опрашиваются, только пока экран открыт -->
+        <TextBlock Style="{StaticResource SectionTitle}" Text="{x:Static res:Strings.LiveSensorsTitle}" />
+        <TextBlock Style="{StaticResource Hint}" Text="{x:Static res:Strings.LiveSensorsHint}" />
+        <TextBlock Style="{StaticResource EmptyHint}" Tag="{Binding Sensors}" Text="{x:Static res:Strings.LiveSensorsWaiting}" />
+        <DataGrid ItemsSource="{Binding Sensors}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column"
+                  CanUserSortColumns="False" CanUserReorderColumns="False" GridLinesVisibility="Horizontal"
+                  HorizontalAlignment="Left" Margin="0,4,0,16">
+          <DataGrid.Columns>
+            <DataGridTextColumn Header="{x:Static res:Strings.ColumnDevice}" Binding="{Binding Device}" />
+            <DataGridTextColumn Header="{x:Static res:Strings.ColumnMetric}" Binding="{Binding Metric}" />
+            <DataGridTextColumn Header="{x:Static res:Strings.ColumnValue}" Binding="{Binding Value}" />
+            <DataGridTextColumn Header="{x:Static res:Strings.ColumnSource}" Binding="{Binding Source}" />
+          </DataGrid.Columns>
+        </DataGrid>
+
+        <ItemsControl ItemsSource="{Binding Sections}" Focusable="False" />
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</UserControl>

@@ -1,0 +1,12 @@
+[
+    {
+        "Manufacturer":  "Contoso",
+        "Model":  "Contoso Laptop 16 G5",
+        "SystemFamily":  "Contoso Laptop",
+        "PCSystemType":  2,
+        "TotalPhysicalMemory":  33754644480,
+        "NumberOfProcessors":  1,
+        "NumberOfLogicalProcessors":  20,
+        "HypervisorPresent":  false
+    }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "DeviceID": "PCI\\VEN_8086&DEV_A0F0&SUBSYS_00748086&REV_20\\3&11583659&0&A3",
+    "Name": "Network Controller",
+    "PNPClass": null,
+    "HardwareID": ["PCI\\VEN_8086&DEV_A0F0&SUBSYS_00748086&REV_20", "PCI\\VEN_8086&DEV_A0F0&SUBSYS_00748086"],
+    "CompatibleID": ["PCI\\VEN_8086&DEV_A0F0&REV_20", "PCI\\VEN_8086&DEV_A0F0", "PCI\\VEN_8086&CC_028000", "PCI\\CC_0280"],
+    "ConfigManagerErrorCode": 28,
+    "Status": "Error",
+    "Present": true
+  },
+  {
+    "DeviceID": "HID\\VID_046D&PID_C52B&MI_02&COL01\\8&2A4F1C3B&0&0000",
+    "Name": "HID-compliant consumer control device",
+    "PNPClass": "HIDClass",
+    "HardwareID": ["HID\\VID_046D&PID_C52B&MI_02&COL01", "HID_DEVICE_UP:000C_U:0001"],
+    "CompatibleID": ["HID_DEVICE_SYSTEM_CONSUMER", "HID_DEVICE"],
+    "ConfigManagerErrorCode": 22,
+    "Status": "Error",
+    "Present": true
+  },
+  {
+    "DeviceID": "PCI\\VEN_10DE&DEV_1C82&SUBSYS_8C971462&REV_A1\\4&1A2B3C4D&0&0008",
+    "Name": "NVIDIA GeForce GTX 1050 Ti",
+    "PNPClass": "Display",
+    "HardwareID": ["PCI\\VEN_10DE&DEV_1C82&SUBSYS_8C971462&REV_A1", "PCI\\VEN_10DE&DEV_1C82&SUBSYS_8C971462"],
+    "CompatibleID": ["PCI\\VEN_10DE&DEV_1C82&REV_A1", "PCI\\VEN_10DE&DEV_1C82", "PCI\\VEN_10DE&CC_030000", "PCI\\CC_0300"],
+    "ConfigManagerErrorCode": 43,
+    "Status": "Error",
+    "Present": true
+  },
+  {
+    "DeviceID": "USBSTOR\\DISK&VEN_SYNTH&PROD_FLASH&REV_1.00\\7&1F2E3D4C&0&1",
+    "Name": "SYNTH Flash USB Device",
+    "PNPClass": "DiskDrive",
+    "HardwareID": ["USBSTOR\\DiskSYNTH___FLASH___________1.00", "GenDisk"],
+    "CompatibleID": ["USBSTOR\\Disk", "USBSTOR\\RAW"],
+    "ConfigManagerErrorCode": 45,
+    "Status": "Unknown",
+    "Present": false
+  }
+]

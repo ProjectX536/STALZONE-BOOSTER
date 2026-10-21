@@ -1,0 +1,24 @@
+[
+    {
+        "Capacity":  17179869184,
+        "SMBIOSMemoryType":  34,
+        "ConfiguredClockSpeed":  5600,
+        "Speed":  5600,
+        "Manufacturer":  "Unknown",
+        "PartNumber":  "EXAMPLE-DDR5-16G    ",
+        "DeviceLocator":  "Controller0-ChannelA-DIMM0",
+        "BankLabel":  "BANK 0",
+        "FormFactor":  12
+    },
+    {
+        "Capacity":  17179869184,
+        "SMBIOSMemoryType":  34,
+        "ConfiguredClockSpeed":  5600,
+        "Speed":  5600,
+        "Manufacturer":  "Unknown",
+        "PartNumber":  "EXAMPLE-DDR5-16G    ",
+        "DeviceLocator":  "Controller1-ChannelA-DIMM0",
+        "BankLabel":  "BANK 0",
+        "FormFactor":  12
+    }
+]

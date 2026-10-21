@@ -1,0 +1,3 @@
+﻿Application,ProcessID,SwapChainAddress,PresentRuntime,TimeInMs,MsSomethingElse
+game.exe,4242,0xA,DXGI,116.6,16.6
+game.exe,4242,0xA,DXGI,133.3,16.7

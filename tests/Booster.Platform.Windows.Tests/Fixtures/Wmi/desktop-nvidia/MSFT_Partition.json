@@ -1,0 +1,50 @@
+[
+    {
+        "DiskNumber":  1,
+        "PartitionNumber":  1,
+        "DriveLetter":  null,
+        "Size":  104857600,
+        "IsBoot":  false,
+        "IsSystem":  true
+    },
+    {
+        "DiskNumber":  1,
+        "PartitionNumber":  2,
+        "DriveLetter":  null,
+        "Size":  16777216,
+        "IsBoot":  false,
+        "IsSystem":  false
+    },
+    {
+        "DiskNumber":  1,
+        "PartitionNumber":  3,
+        "DriveLetter":  "C",
+        "Size":  213088317952,
+        "IsBoot":  true,
+        "IsSystem":  false
+    },
+    {
+        "DiskNumber":  1,
+        "PartitionNumber":  4,
+        "DriveLetter":  null,
+        "Size":  973078528,
+        "IsBoot":  false,
+        "IsSystem":  false
+    },
+    {
+        "DiskNumber":  1,
+        "PartitionNumber":  5,
+        "DriveLetter":  "E",
+        "Size":  297151758336,
+        "IsBoot":  false,
+        "IsSystem":  false
+    },
+    {
+        "DiskNumber":  0,
+        "PartitionNumber":  1,
+        "DriveLetter":  "D",
+        "Size":  512107741184,
+        "IsBoot":  false,
+        "IsSystem":  false
+    }
+]

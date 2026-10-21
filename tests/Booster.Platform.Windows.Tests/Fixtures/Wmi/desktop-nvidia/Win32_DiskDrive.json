@@ -1,0 +1,16 @@
+[
+    {
+        "Index":  0,
+        "Model":  "SPCC Solid State Disk",
+        "Size":  512105932800,
+        "InterfaceType":  "IDE",
+        "MediaType":  "Fixed hard disk media"
+    },
+    {
+        "Index":  1,
+        "Model":  "Patriot M.2 P300 512GB",
+        "Size":  512105932800,
+        "InterfaceType":  "SCSI",
+        "MediaType":  "Fixed hard disk media"
+    }
+]

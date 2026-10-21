@@ -1,0 +1,1130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppTitle" xml:space="preserve">
+    <value>Booster</value>
+  </data>
+  <data name="NavigationLabel" xml:space="preserve">
+    <value>Разделы</value>
+    <comment>Имя списка разделов для экранного диктора.</comment>
+  </data>
+  <data name="NavOverview" xml:space="preserve">
+    <value>Обзор</value>
+  </data>
+  <data name="NavHardware" xml:space="preserve">
+    <value>Оборудование</value>
+  </data>
+  <data name="NavDrivers" xml:space="preserve">
+    <value>Драйверы</value>
+  </data>
+  <data name="NavPerformance" xml:space="preserve">
+    <value>Производительность</value>
+  </data>
+  <data name="NavSettings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="NavProfiles" xml:space="preserve">
+    <value>Игровые профили</value>
+  </data>
+  <data name="NavJournal" xml:space="preserve">
+    <value>Журнал и восстановление</value>
+  </data>
+  <data name="StatusPrivileges" xml:space="preserve">
+    <value>Права: {0}</value>
+    <comment>{0} — PrivilegesElevated или PrivilegesStandard, возможно с PrivilegesWithPerfLogUsers.</comment>
+  </data>
+  <data name="PrivilegesElevated" xml:space="preserve">
+    <value>повышенные</value>
+  </data>
+  <data name="PrivilegesStandard" xml:space="preserve">
+    <value>обычные</value>
+  </data>
+  <data name="PrivilegesWithPerfLogUsers" xml:space="preserve">
+    <value>{0}, Performance Log Users</value>
+    <comment>Название группы Windows не переводится: под этим именем её ищут в «Управлении компьютером».</comment>
+  </data>
+  <data name="StatusSelfUsage" xml:space="preserve">
+    <value>Booster: CPU {0}, RAM {1}</value>
+    <comment>Нагрузка самого Booster. {0} — PercentFormat, {1} — размер рабочего набора.</comment>
+  </data>
+  <data name="StatusSelfUsagePending" xml:space="preserve">
+    <value>Booster: CPU —, RAM —</value>
+    <comment>До первого замера нагрузки.</comment>
+  </data>
+  <data name="PercentFormat" xml:space="preserve">
+    <value>{0:0.0} %</value>
+  </data>
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>Booster — ошибка</value>
+  </data>
+  <data name="AlreadyRunning" xml:space="preserve">
+    <value>Booster уже запущен. Переключитесь на открытое окно: второе окно не открывается, чтобы не мешать игровой сессии первого.</value>
+  </data>
+  <data name="UnexpectedError" xml:space="preserve">
+    <value>Произошла непредвиденная ошибка. Подробности записаны в журнал:
+{0}</value>
+    <comment>{0} — папка журналов.</comment>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Обновить</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Отменить</value>
+  </data>
+  <data name="CancelRefresh" xml:space="preserve">
+    <value>Отменить сбор данных</value>
+    <comment>Имя кнопки «Отмена» для экранного диктора.</comment>
+  </data>
+  <data name="CancelExport" xml:space="preserve">
+    <value>Отменить экспорт отчёта</value>
+    <comment>Имя кнопки «Отмена» для экранного диктора.</comment>
+  </data>
+  <data name="ExportReport" xml:space="preserve">
+    <value>Экспорт отчёта</value>
+  </data>
+  <data name="SnapshotPending" xml:space="preserve">
+    <value>Снимок системы ещё не собран.</value>
+  </data>
+  <data name="SnapshotTakenAt" xml:space="preserve">
+    <value>Снимок системы: {0}</value>
+    <comment>{0} — местное время снимка.</comment>
+  </data>
+  <data name="Collecting" xml:space="preserve">
+    <value>Собираются данные о системе…</value>
+  </data>
+  <data name="RefreshCancelled" xml:space="preserve">
+    <value>Сбор данных отменён.</value>
+  </data>
+  <data name="RefreshFailed" xml:space="preserve">
+    <value>Не удалось собрать данные о системе. Подробности записаны в журнал.</value>
+  </data>
+  <data name="Exporting" xml:space="preserve">
+    <value>Отчёт сохраняется…</value>
+  </data>
+  <data name="ExportDone" xml:space="preserve">
+    <value>Отчёт сохранён в {0}</value>
+    <comment>{0} — папка с отчётом; она открывается в Проводнике.</comment>
+  </data>
+  <data name="ExportCancelled" xml:space="preserve">
+    <value>Сохранение отчёта отменено.</value>
+  </data>
+  <data name="ExportFailed" xml:space="preserve">
+    <value>Не удалось сохранить отчёт. Подробности записаны в журнал.</value>
+  </data>
+  <data name="SummaryTitle" xml:space="preserve">
+    <value>Кратко о системе</value>
+  </data>
+  <data name="SourceHint" xml:space="preserve">
+    <value>Откуда получено значение, видно во всплывающей подсказке. Что не удалось узнать надёжно, показано серым курсивом.</value>
+  </data>
+  <data name="DriversHint" xml:space="preserve">
+    <value>Выделены устройства с замечаниями: ошибка, отключено, драйвер без подписи. Ссылки ведут только на официальные сайты.</value>
+  </data>
+  <data name="ProblemsOnly" xml:space="preserve">
+    <value>Только с замечаниями</value>
+  </data>
+  <data name="DriversShown" xml:space="preserve">
+    <value>Показано: {0} из {1}</value>
+    <comment>{0} — строк после фильтра, {1} — всего устройств.</comment>
+  </data>
+  <data name="PresentMonTitle" xml:space="preserve">
+    <value>PresentMon</value>
+  </data>
+  <data name="ReadinessChecking" xml:space="preserve">
+    <value>Проверяется PresentMon…</value>
+  </data>
+  <data name="ReadinessNotInstalled" xml:space="preserve">
+    <value>PresentMon не найден — как установить:</value>
+  </data>
+  <data name="ReadinessNeedsElevation" xml:space="preserve">
+    <value>Потребуется подтверждение UAC: у Booster нет прав администратора и он не в группе Performance Log Users.</value>
+  </data>
+  <data name="ReadinessReady" xml:space="preserve">
+    <value>Готово</value>
+  </data>
+  <data name="ReadinessCheckFailed" xml:space="preserve">
+    <value>Не удалось проверить PresentMon. Подробности записаны в журнал.</value>
+  </data>
+  <data name="PresentMonInstallHint" xml:space="preserve">
+    <value>Запустите Install-PresentMon.ps1 (файл в релизе на GitHub или в папке scripts исходников): он скачает PresentMon с официального релиза на GitHub, проверит SHA256 и положит в %LOCALAPPDATA%\Booster\tools\PresentMon. Или укажите путь к уже скачанному PresentMon в разделе «Настройки».</value>
+  </data>
+  <data name="PresentMonFound" xml:space="preserve">
+    <value>PresentMon {0}: {1}</value>
+    <comment>{0} — версия или VersionUnknown, {1} — путь к exe.</comment>
+  </data>
+  <data name="VersionUnknown" xml:space="preserve">
+    <value>версия неизвестна</value>
+  </data>
+  <data name="CheckAgain" xml:space="preserve">
+    <value>Проверить снова</value>
+  </data>
+  <data name="TargetTitle" xml:space="preserve">
+    <value>Цель</value>
+  </data>
+  <data name="TargetWindow" xml:space="preserve">
+    <value>Запущенная программа с окном</value>
+  </data>
+  <data name="TargetExe" xml:space="preserve">
+    <value>Программа по имени exe-файла</value>
+  </data>
+  <data name="ExeExample" xml:space="preserve">
+    <value>например, game.exe — подходит, если игра ещё не запущена</value>
+  </data>
+  <data name="RefreshList" xml:space="preserve">
+    <value>Обновить список</value>
+  </data>
+  <data name="ProcessItemFormat" xml:space="preserve">
+    <value>{0} — {1} (PID {2})</value>
+    <comment>{0} — имя процесса, {1} — заголовок окна, {2} — идентификатор процесса.</comment>
+  </data>
+  <data name="MeasurementStatusOnly" xml:space="preserve">
+    <value>Серия: {0}. Результат появится, когда будут собраны данные о системе.</value>
+    <comment>{0} — статус замера. Результат показывается разделом отчёта, а отчёта нет без снимка системы.</comment>
+  </data>
+  <data name="MeasurementFailed" xml:space="preserve">
+    <value>Серия не удалась. Подробности записаны в журнал.</value>
+  </data>
+  <data name="ResultTitle" xml:space="preserve">
+    <value>Результат</value>
+  </data>
+  <data name="PresentMonPathLabel" xml:space="preserve">
+    <value>Путь к PresentMon:</value>
+  </data>
+  <data name="PresentMonPathHint" xml:space="preserve">
+    <value>Если поле пустое, Booster ищет PresentMon в %LOCALAPPDATA%\Booster\tools\PresentMon и рядом с Booster.exe.</value>
+  </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Выбрать…</value>
+  </data>
+  <data name="PickPresentMonTitle" xml:space="preserve">
+    <value>Выберите PresentMon</value>
+  </data>
+  <data name="ExecutableFilter" xml:space="preserve">
+    <value>Программы (*.exe)|*.exe</value>
+    <comment>Фильтр OpenFileDialog: подпись|маска.</comment>
+  </data>
+  <data name="DefaultDurationLabel" xml:space="preserve">
+    <value>Длительность прогона бенчмарка по умолчанию, с:</value>
+  </data>
+  <data name="DurationRule" xml:space="preserve">
+    <value>Целое число секунд от 10 до 600.</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="SettingsSaved" xml:space="preserve">
+    <value>Настройки сохранены.</value>
+  </data>
+  <data name="SettingsSaveFailed" xml:space="preserve">
+    <value>Не удалось сохранить настройки. Подробности записаны в журнал.</value>
+  </data>
+  <data name="FileNotFound" xml:space="preserve">
+    <value>Файл не найден: {0}</value>
+  </data>
+  <data name="SettingsFile" xml:space="preserve">
+    <value>Настройки хранятся в {0}</value>
+    <comment>{0} — путь к пользовательскому settings.json.</comment>
+  </data>
+  <data name="ConfigWarningsTitle" xml:space="preserve">
+    <value>Замечания к файлам конфигурации</value>
+  </data>
+  <data name="NoConfigWarnings" xml:space="preserve">
+    <value>Замечаний нет.</value>
+  </data>
+  <data name="ConfigWarningFormat" xml:space="preserve">
+    <value>{0}: {1} — {2}</value>
+    <comment>{0} — файл, {1} — вид замечания, {2} — подробности.</comment>
+  </data>
+  <data name="ProfileLabel" xml:space="preserve">
+    <value>Профиль</value>
+  </data>
+  <data name="GamesTitle" xml:space="preserve">
+    <value>Игры профиля</value>
+  </data>
+  <data name="GamesHint" xml:space="preserve">
+    <value>Профиль срабатывает для этих процессов. Имя — как у exe-файла игры, без пути.</value>
+  </data>
+  <data name="NoGames" xml:space="preserve">
+    <value>Игр пока нет.</value>
+  </data>
+  <data name="AddFromWindows" xml:space="preserve">
+    <value>Добавить из запущенных</value>
+  </data>
+  <data name="AddByName" xml:space="preserve">
+    <value>Добавить по имени</value>
+  </data>
+  <data name="GameNameLabel" xml:space="preserve">
+    <value>Имя exe</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="RemoveGameFormat" xml:space="preserve">
+    <value>Удалить {0}</value>
+    <comment>Имя для экранного диктора. {0} — имя процесса игры.</comment>
+  </data>
+  <data name="ActionsTitle" xml:space="preserve">
+    <value>Действия профиля</value>
+  </data>
+  <data name="ActionModeLevelFormat" xml:space="preserve">
+    <value>Режим: {0}. Уровень: {1}</value>
+    <comment>{0} — режим из профиля, {1} — уровень безопасности.</comment>
+  </data>
+  <data name="RiskFormat" xml:space="preserve">
+    <value>Риск: {0}</value>
+    <comment>{0} — риск действия.</comment>
+  </data>
+  <data name="UndoFormat" xml:space="preserve">
+    <value>Как отменить: {0}</value>
+    <comment>{0} — способ отмены.</comment>
+  </data>
+  <data name="EnableAction" xml:space="preserve">
+    <value>Включить</value>
+  </data>
+  <data name="PowerPlanDescription" xml:space="preserve">
+    <value>На время игры включает схему питания «Высокая производительность», если она есть в системе.</value>
+  </data>
+  <data name="PowerPlanRisk" xml:space="preserve">
+    <value>Выше потребление и нагрев на время игры; прирост FPS не гарантирован</value>
+  </data>
+  <data name="PowerPlanUndo" xml:space="preserve">
+    <value>Booster вернёт исходную схему после игры; вручную — Параметры → Система → Питание</value>
+  </data>
+  <data name="GamePriorityDescription" xml:space="preserve">
+    <value>Повышает приоритет процесса игры до значения из профиля.</value>
+  </data>
+  <data name="GamePriorityRisk" xml:space="preserve">
+    <value>Прирост FPS не гарантирован</value>
+  </data>
+  <data name="GamePriorityUndo" xml:space="preserve">
+    <value>Приоритет действует до выхода из игры; Booster вернёт исходный</value>
+  </data>
+  <data name="BackgroundAppsDescription" xml:space="preserve">
+    <value>При подготовке сессии, ещё до запуска игры, просит закрыться программы, которые вы отметили ниже. Во время игры ничего не закрывается.</value>
+  </data>
+  <data name="BackgroundAppsRisk" xml:space="preserve">
+    <value>Программа закроется; несохранённое она предложит сохранить</value>
+  </data>
+  <data name="BackgroundAppsUndo" xml:space="preserve">
+    <value>Необратимо: закрытые программы запустите сами</value>
+  </data>
+  <data name="RecommendationsTitle" xml:space="preserve">
+    <value>Только рекомендации</value>
+  </data>
+  <data name="RecommendationsHint" xml:space="preserve">
+    <value>Эти записи профиля Booster не выполняет: только диагностика и советы.</value>
+  </data>
+  <data name="RecommendRegistryTweaks" xml:space="preserve">
+    <value>Реестровые твики из FPS-скриптов Booster не применяет.</value>
+  </data>
+  <data name="RecommendDriverUpdates" xml:space="preserve">
+    <value>Драйверы обновляются вручную с официальных сайтов; состояние — на экране «Драйверы».</value>
+  </data>
+  <data name="RecommendPagefile" xml:space="preserve">
+    <value>Файл подкачки Booster не меняет.</value>
+  </data>
+  <data name="RecommendWindowsServices" xml:space="preserve">
+    <value>Службы Windows Booster не отключает.</value>
+  </data>
+  <data name="RecommendOther" xml:space="preserve">
+    <value>Booster это не выполняет.</value>
+  </data>
+  <data name="BackgroundAppsTitle" xml:space="preserve">
+    <value>Фоновые приложения</value>
+  </data>
+  <data name="BackgroundAppsCaption" xml:space="preserve">
+    <value>Booster отправит штатный запрос на закрытие. Программа может спросить о сохранении; принудительно Booster ничего не закрывает</value>
+  </data>
+  <data name="AllowClose" xml:space="preserve">
+    <value>Можно закрывать</value>
+  </data>
+  <data name="AllowCloseFormat" xml:space="preserve">
+    <value>Можно закрывать {0}</value>
+    <comment>Имя для экранного диктора. {0} — имя процесса.</comment>
+  </data>
+  <data name="NoBackgroundApps" xml:space="preserve">
+    <value>Нет запущенных программ с окном, которые можно предложить.</value>
+  </data>
+  <data name="AutoStartLabel" xml:space="preserve">
+    <value>Автозапуск при запуске игры</value>
+  </data>
+  <data name="AutoStartHint" xml:space="preserve">
+    <value>Без подтверждения выполняются только проверенные обратимые действия; действия с подтверждением пропускаются.</value>
+  </data>
+  <data name="ProfileSaved" xml:space="preserve">
+    <value>Профиль сохранён.</value>
+  </data>
+  <data name="ProfileSaveFailed" xml:space="preserve">
+    <value>Не удалось сохранить профиль. Подробности — в журнале приложения.</value>
+  </data>
+  <data name="ProfileFileRejectedFormat" xml:space="preserve">
+    <value>Профиль не сохранён: ваш файл настроек {0} при запуске не прочитан (повреждён или записан более новой версией Booster), и Booster его не перезаписывает. Исправьте или удалите файл и перезапустите Booster.</value>
+  </data>
+  <data name="ProfileFileNotAppliedFormat" xml:space="preserve">
+    <value>{0}: файл не принят, используется встроенный профиль ({1})</value>
+    <comment>{0} — файл профиля в папке пользователя, {1} — техническая причина.</comment>
+  </data>
+  <data name="ProfileLoadWarningsTitle" xml:space="preserve">
+    <value>Замечания к вашим файлам профилей</value>
+  </data>
+  <data name="SessionTitle" xml:space="preserve">
+    <value>Игровая сессия</value>
+  </data>
+  <data name="PrepareSession" xml:space="preserve">
+    <value>Подготовить сессию</value>
+  </data>
+  <data name="PrepareHint" xml:space="preserve">
+    <value>Подготовка берёт сохранённый профиль и нужна одна игра в нём. Сначала Booster покажет, что изменит.</value>
+  </data>
+  <data name="ConfirmTitle" xml:space="preserve">
+    <value>Нужно ваше подтверждение</value>
+  </data>
+  <data name="ConfirmFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+    <comment>{0} — действие, {1} — что изменится.</comment>
+  </data>
+  <data name="AutoTitle" xml:space="preserve">
+    <value>Выполнится без подтверждения</value>
+  </data>
+  <data name="SkippedTitle" xml:space="preserve">
+    <value>Не выполнится</value>
+  </data>
+  <data name="NoneInGroup" xml:space="preserve">
+    <value>Нет.</value>
+  </data>
+  <data name="NothingToApply" xml:space="preserve">
+    <value>Применять нечего: отметьте действие для подтверждения или включите его в профиле.</value>
+  </data>
+  <data name="WaitForGame" xml:space="preserve">
+    <value>Ждать запуска игры</value>
+  </data>
+  <data name="CancelPreparation" xml:space="preserve">
+    <value>Отменить подготовку</value>
+  </data>
+  <data name="ArmedFormat" xml:space="preserve">
+    <value>Профиль «{0}» подготовлен: изменения применятся при запуске игры.</value>
+    <comment>{0} — название профиля.</comment>
+  </data>
+  <data name="StopSession" xml:space="preserve">
+    <value>Завершить сессию</value>
+  </data>
+  <data name="SessionStateFormat" xml:space="preserve">
+    <value>Состояние: {0}</value>
+    <comment>{0} — состояние сессии.</comment>
+  </data>
+  <data name="SessionGameFormat" xml:space="preserve">
+    <value>Игра: {0}</value>
+    <comment>{0} — имя процесса игры.</comment>
+  </data>
+  <data name="SessionLoadFormat" xml:space="preserve">
+    <value>Загрузка ЦП: {0}; память: {1}</value>
+    <comment>{0}, {1} — PercentFormat или NoData.</comment>
+  </data>
+  <data name="NoData" xml:space="preserve">
+    <value>нет данных</value>
+  </data>
+  <data name="SessionChangesTitle" xml:space="preserve">
+    <value>Изменения</value>
+  </data>
+  <data name="FutureTelemetryNote" xml:space="preserve">
+    <value>Замер кадров во время сессии появится на следующем этапе</value>
+  </data>
+  <data name="SessionGpuFormat" xml:space="preserve">
+    <value>{0}: загрузка {1}, температура {2}, частота ядра {3}</value>
+    <comment>{0} — адаптер; {1}–{3} — значения или статус, как в отчёте.</comment>
+  </data>
+  <data name="SessionCpuFormat" xml:space="preserve">
+    <value>{0}: эффективная частота {1}, ограничение производительности {2}</value>
+    <comment>{0} — «Процессор»; {1}, {2} — значения или статус, как в отчёте.</comment>
+  </data>
+  <data name="SessionThrottleFormat" xml:space="preserve">
+    <value>Признаки ограничения производительности: {0}</value>
+  </data>
+  <data name="SessionNoThrottle" xml:space="preserve">
+    <value>Признаков ограничения производительности не найдено</value>
+  </data>
+  <data name="SessionCoolingHint" xml:space="preserve">
+    <value>Перегрев или снижение частот — проверьте охлаждение и питание</value>
+    <comment>Панель игровой сессии.</comment>
+  </data>
+  <data name="PreviewFailed" xml:space="preserve">
+    <value>Не удалось подготовить план сессии. Подробности — в журнале приложения.</value>
+  </data>
+  <data name="ArmFailed" xml:space="preserve">
+    <value>Подготовить сессию не удалось: в профиле нет игр, уже идёт сессия или подготовка.</value>
+  </data>
+  <data name="PreparationFailed" xml:space="preserve">
+    <value>Подготовка до игры прервалась с ошибкой, ожидание игры не включено. Подробности — в журнале изменений и в журнале приложения.</value>
+  </data>
+  <data name="PreparationRunning" xml:space="preserve">
+    <value>Подготовка: закрываются отмеченные программы…</value>
+  </data>
+  <data name="PreparationHeader" xml:space="preserve">
+    <value>До запуска игры:</value>
+  </data>
+  <data name="PreparationLineFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+    <comment>{0} — действие, {1} — что сделано или почему пропущено.</comment>
+  </data>
+  <data name="PreparationSkippedFormat" xml:space="preserve">
+    <value>Отмеченные программы не закрыты: игра уже запущена, а закрытие {0}.</value>
+    <comment>{0} — причина из отчёта: «выполняется только до запуска игры».</comment>
+  </data>
+  <data name="PreparationHint" xml:space="preserve">
+    <value>Отмеченные программы закроются сразу, ещё до запуска игры, и сами не перезапустятся. Если игра уже запущена, они не закроются.</value>
+  </data>
+  <data name="RecoveryBannerTitle" xml:space="preserve">
+    <value>Восстановление при запуске</value>
+  </data>
+  <data name="RecoveredTitle" xml:space="preserve">
+    <value>Восстановлено автоматически</value>
+  </data>
+  <data name="RecoveredSessionFormat" xml:space="preserve">
+    <value>{0}: {1}</value>
+    <comment>{0} — SessionTitleFormat, {1} — итог по статусам изменений.</comment>
+  </data>
+  <data name="PendingTitle" xml:space="preserve">
+    <value>Параметры, которые могли остаться изменёнными</value>
+  </data>
+  <data name="PendingItemFormat" xml:space="preserve">
+    <value>{0}: {1} — сейчас: {2}</value>
+    <comment>{0} — действие, {1} — что менялось, {2} — текущее состояние.</comment>
+  </data>
+  <data name="Recover" xml:space="preserve">
+    <value>Восстановить</value>
+  </data>
+  <data name="RecoveryDone" xml:space="preserve">
+    <value>Восстановление выполнено; итог — в списке сессий.</value>
+  </data>
+  <data name="RecoveryFailed" xml:space="preserve">
+    <value>Восстановить не удалось. Подробности — в журнале приложения.</value>
+  </data>
+  <data name="ProblemsTitle" xml:space="preserve">
+    <value>Проблемы журнала и восстановления</value>
+  </data>
+  <data name="JournalProblemFormat" xml:space="preserve">
+    <value>{0}: {1} — {2}</value>
+    <comment>{0} — файл, {1} — вид проблемы, {2} — подробности.</comment>
+  </data>
+  <data name="RecoveryFailedProblemFormat" xml:space="preserve">
+    <value>Восстановление при запуске не выполнено: {0}</value>
+    <comment>{0} — текст ошибки. Незавершённые сессии остаются в журнале до следующего запуска.</comment>
+  </data>
+  <data name="SessionsTitle" xml:space="preserve">
+    <value>Сессии</value>
+  </data>
+  <data name="SessionTitleFormat" xml:space="preserve">
+    <value>{0}, {1}, {2}</value>
+    <comment>{0} — дата начала, {1} — профиль, {2} — игра.</comment>
+  </data>
+  <data name="SessionRowFormat" xml:space="preserve">
+    <value>{0} · {1} · {2} · {3} — {4}</value>
+    <comment>{0} — дата, {1} — вид («Игра» или «Подготовка»), {2} — профиль, {3} — игра (у подготовки — игры профиля), {4} — итог.</comment>
+  </data>
+  <data name="SessionNotFinished" xml:space="preserve">
+    <value>не завершена</value>
+  </data>
+  <data name="JournalEmpty" xml:space="preserve">
+    <value>Сессий в журнале нет.</value>
+  </data>
+  <data name="JournalLoadFailed" xml:space="preserve">
+    <value>Не удалось прочитать журнал. Подробности — в журнале приложения.</value>
+  </data>
+  <data name="SelectedChangesTitle" xml:space="preserve">
+    <value>Изменения сессии</value>
+  </data>
+  <data name="ChangeStatusFormat" xml:space="preserve">
+    <value>Статус: {0}</value>
+    <comment>{0} — статус изменения.</comment>
+  </data>
+  <data name="Verified" xml:space="preserve">
+    <value>проверено</value>
+  </data>
+  <data name="NotVerified" xml:space="preserve">
+    <value>проверка не подтвердила восстановление</value>
+  </data>
+  <data name="SkippedActionsTitle" xml:space="preserve">
+    <value>Пропущенные действия</value>
+  </data>
+  <data name="LiveSensorsTitle" xml:space="preserve">
+    <value>Датчики сейчас</value>
+  </data>
+  <data name="LiveSensorsHint" xml:space="preserve">
+    <value>Обновляются, пока открыт этот экран. Значение, которое нельзя получить надёжно, показано статусом.</value>
+  </data>
+  <data name="LiveSensorsWaiting" xml:space="preserve">
+    <value>Ждём первый замер датчиков…</value>
+  </data>
+  <data name="ColumnDevice" xml:space="preserve">
+    <value>Устройство</value>
+  </data>
+  <data name="ColumnMetric" xml:space="preserve">
+    <value>Показатель</value>
+  </data>
+  <data name="ColumnValue" xml:space="preserve">
+    <value>Значение</value>
+  </data>
+  <data name="ColumnSource" xml:space="preserve">
+    <value>Источник</value>
+  </data>
+  <data name="CaptureTitle" xml:space="preserve">
+    <value>Захват кадров</value>
+  </data>
+  <data name="SeriesTitle" xml:space="preserve">
+    <value>Серия</value>
+  </data>
+  <data name="RunCountLabel" xml:space="preserve">
+    <value>Прогонов:</value>
+  </data>
+  <data name="RunSecondsLabel" xml:space="preserve">
+    <value>Длительность прогона, с:</value>
+  </data>
+  <data name="PauseSecondsLabel" xml:space="preserve">
+    <value>Пауза между прогонами, с:</value>
+  </data>
+  <data name="StartDelayLabel" xml:space="preserve">
+    <value>Задержка перед первым прогоном, с:</value>
+  </data>
+  <data name="SeriesLimitsFormat" xml:space="preserve">
+    <value>Прогонов — от {0} до {1}, прогон — от {2} до {3} с, пауза — от {4} до {5} с, задержка — от {6} до {7} с. Вывод о разнице между сериями делается, только если в каждой не меньше {8} годных прогонов.</value>
+    <comment>{0}–{1} — прогонов, {2}–{3} — длительность прогона, {4}–{5} — пауза, {6}–{7} — задержка (в секундах); {8} — минимум годных прогонов для вывода.</comment>
+  </data>
+  <data name="GraphicsProfileLabel" xml:space="preserve">
+    <value>Графический пресет:</value>
+  </data>
+  <data name="SceneLabel" xml:space="preserve">
+    <value>Сцена:</value>
+  </data>
+  <data name="WindowModeLabel" xml:space="preserve">
+    <value>Режим окна:</value>
+  </data>
+  <data name="ChangeNoteLabel" xml:space="preserve">
+    <value>Что изменили:</value>
+  </data>
+  <data name="NotesHint" xml:space="preserve">
+    <value>Заметки попадают в отчёт и в историю. Booster не читает настройки игры — их записываете вы. Повторяйте одну и ту же сцену во всех прогонах.</value>
+  </data>
+  <data name="SoundCuesLabel" xml:space="preserve">
+    <value>Звуковой сигнал в начале и в конце прогона</value>
+  </data>
+  <data name="StartSeries" xml:space="preserve">
+    <value>Начать серию</value>
+  </data>
+  <data name="CancelSeries" xml:space="preserve">
+    <value>Остановить серию</value>
+  </data>
+  <data name="ProgressTitle" xml:space="preserve">
+    <value>Ход</value>
+  </data>
+  <data name="ProgressHint" xml:space="preserve">
+    <value>Во время серии здесь идёт обратный отсчёт. Смотреть на Booster не нужно: начало и конец прогона отмечаются звуком.</value>
+  </data>
+  <data name="ProgressStartingCapture" xml:space="preserve">
+    <value>Запуск PresentMon…</value>
+  </data>
+  <data name="ProgressStartDelayFormat" xml:space="preserve">
+    <value>Переключитесь в игру: прогон {0} из {1} начнётся через {2} с</value>
+    <comment>{0} — номер прогона, {1} — всего прогонов, {2} — секунд до начала.</comment>
+  </data>
+  <data name="ProgressRunFormat" xml:space="preserve">
+    <value>Прогон {0} из {1}: осталось {2} с</value>
+    <comment>{0} — номер прогона, {1} — всего прогонов, {2} — секунд до конца прогона.</comment>
+  </data>
+  <data name="ProgressPauseFormat" xml:space="preserve">
+    <value>Пауза: прогон {0} через {1} с</value>
+    <comment>{0} — номер следующего прогона, {1} — секунд до его начала.</comment>
+  </data>
+  <data name="ProgressProcessing" xml:space="preserve">
+    <value>Обработка…</value>
+  </data>
+  <data name="ResultPending" xml:space="preserve">
+    <value>Результат появится, когда будут собраны данные о системе.</value>
+  </data>
+  <data name="HistoryTitle" xml:space="preserve">
+    <value>История и сравнение</value>
+  </data>
+  <data name="HistoryEmpty" xml:space="preserve">
+    <value>Сохранённых серий нет. Серия попадает в историю, если в ней есть хотя бы один годный прогон.</value>
+  </data>
+  <data name="HistoryColumnDate" xml:space="preserve">
+    <value>Дата</value>
+  </data>
+  <data name="HistoryColumnGame" xml:space="preserve">
+    <value>Игра</value>
+  </data>
+  <data name="HistoryColumnChange" xml:space="preserve">
+    <value>Изменение</value>
+  </data>
+  <data name="HistoryColumnAverageFps" xml:space="preserve">
+    <value>Средний FPS</value>
+  </data>
+  <data name="HistoryColumnOnePercentLow" xml:space="preserve">
+    <value>1% low</value>
+  </data>
+  <data name="RefreshHistory" xml:space="preserve">
+    <value>Обновить историю</value>
+  </data>
+  <data name="SetBaseline" xml:space="preserve">
+    <value>Сделать базой</value>
+  </data>
+  <data name="ClearBaseline" xml:space="preserve">
+    <value>Сбросить базу</value>
+  </data>
+  <data name="BaselineFormat" xml:space="preserve">
+    <value>База сравнения: {0}, {1} — {2}</value>
+    <comment>{0} — дата серии, {1} — игра, {2} — изменение.</comment>
+  </data>
+  <data name="BaselineAuto" xml:space="preserve">
+    <value>База сравнения: предыдущая серия той же игры.</value>
+  </data>
+  <data name="ComparisonTitle" xml:space="preserve">
+    <value>Сравнение с базой</value>
+  </data>
+  <data name="DeleteSeries" xml:space="preserve">
+    <value>Удалить серию…</value>
+  </data>
+  <data name="DeleteSeriesConfirm" xml:space="preserve">
+    <value>Удалить выбранную серию из истории? Файл серии будет удалён, вернуть его нельзя.</value>
+  </data>
+  <data name="DeleteSeriesConfirmButton" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="SeriesNotSavedFormat" xml:space="preserve">
+    <value>Серия: {0}. Годных прогонов нет — в историю она не сохранена.</value>
+    <comment>{0} — статус серии.</comment>
+  </data>
+  <data name="SeriesSaveFailed" xml:space="preserve">
+    <value>Серию не удалось сохранить в историю. Подробности записаны в журнал.</value>
+  </data>
+  <data name="HistoryLoadFailed" xml:space="preserve">
+    <value>Не удалось прочитать историю серий. Подробности записаны в журнал.</value>
+  </data>
+  <data name="DeleteFailed" xml:space="preserve">
+    <value>Не удалось удалить серию. Подробности записаны в журнал.</value>
+  </data>
+  <data name="NoValue" xml:space="preserve">
+    <value>—</value>
+  </data>
+  <data name="SessionFramesFormat" xml:space="preserve">
+    <value>Кадры за первые {0} сессии: средний FPS {1}, 1% low {2}, рывков в минуту — {3}.</value>
+    <comment>{0} — длительность замера («5 мин»), {1} — средний FPS, {2} — 1% low, {3} — рывков в минуту.</comment>
+  </data>
+  <data name="SessionFramesCapturingFormat" xml:space="preserve">
+    <value>Кадры: идёт замер первых {0} сессии.</value>
+    <comment>{0} — длительность замера («5 мин»).</comment>
+  </data>
+  <data name="SessionFramesTooFewFormat" xml:space="preserve">
+    <value>Кадров за время замера слишком мало для расчёта: {0}.</value>
+    <comment>{0} — число кадров.</comment>
+  </data>
+  <data name="SessionFramesNeedsElevation" xml:space="preserve">
+    <value>Кадры не замеряются: PresentMon нужны права администратора или группа Performance Log Users, а во время игры Booster запрос UAC не показывает.</value>
+  </data>
+  <data name="SessionFramesNotInstalled" xml:space="preserve">
+    <value>Кадры не замеряются: PresentMon не установлен. Как установить — на экране «Производительность».</value>
+  </data>
+  <data name="SessionFramesFailed" xml:space="preserve">
+    <value>Замер кадров не удался, подробности записаны в журнал. На сессию и восстановление это не влияет.</value>
+  </data>
+  <data name="SessionFramesMinutesFormat" xml:space="preserve">
+    <value>{0} мин</value>
+    <comment>{0} — минуты.</comment>
+  </data>
+  <data name="SessionFramesSecondsFormat" xml:space="preserve">
+    <value>{0} с</value>
+    <comment>{0} — секунды.</comment>
+  </data>
+  <data name="NavSystem" xml:space="preserve">
+    <value>Система</value>
+  </data>
+  <data name="SystemHint" xml:space="preserve">
+    <value>Память и файл подкачки, службы, стабильность и сеть — по последнему снимку. Booster здесь ничего не меняет: рекомендации выполняются вручную. Наведите курсор на значение, чтобы увидеть его источник.</value>
+  </data>
+  <data name="SystemActivityTitle" xml:space="preserve">
+    <value>Фоновая активность (пока экран открыт)</value>
+  </data>
+  <data name="SystemActivityHint" xml:space="preserve">
+    <value>Замер раз в несколько секунд и только пока открыт этот экран: что сейчас нагружает память и диск.</value>
+  </data>
+  <data name="SystemActivityWaiting" xml:space="preserve">
+    <value>Скорости появятся после второго замера…</value>
+    <comment>Первый замер после открытия экрана — точка отсчёта, скорости по нему не считаются.</comment>
+  </data>
+  <data name="SystemAvailableMemory" xml:space="preserve">
+    <value>Доступно памяти</value>
+  </data>
+  <data name="SystemCommitPercent" xml:space="preserve">
+    <value>Выделено от предела</value>
+    <comment>Выделенная память (commit) от предела: физическая память + файл подкачки.</comment>
+  </data>
+  <data name="SystemPageReads" xml:space="preserve">
+    <value>Чтения страниц с диска</value>
+  </data>
+  <data name="SystemDiskBusy" xml:space="preserve">
+    <value>Загрузка дисков</value>
+  </data>
+  <data name="SystemDiskLatency" xml:space="preserve">
+    <value>Задержка диска</value>
+  </data>
+  <data name="SystemDpcTime" xml:space="preserve">
+    <value>Время DPC (все CPU)</value>
+  </data>
+  <data name="SystemInterruptTime" xml:space="preserve">
+    <value>Время прерываний (все CPU)</value>
+  </data>
+  <data name="LatencyTitle" xml:space="preserve">
+    <value>Задержки драйверов: трасса WPR</value>
+  </data>
+  <data name="LatencyHint" xml:space="preserve">
+    <value>Время DPC и прерываний — в «Фоновой активности» выше. Если игра дёргается, а причина не видна, запишите трассу: Booster запустит wpr.exe из System32 от имени администратора, Windows спросит разрешение. Файл .etl открывается в Windows Performance Analyzer (WPA); Booster его не анализирует.</value>
+  </data>
+  <data name="LatencyStart" xml:space="preserve">
+    <value>Начать запись</value>
+  </data>
+  <data name="LatencyStop" xml:space="preserve">
+    <value>Остановить и сохранить</value>
+  </data>
+  <data name="LatencyCancel" xml:space="preserve">
+    <value>Отменить запись</value>
+  </data>
+  <data name="LatencyDismiss" xml:space="preserve">
+    <value>Убрать напоминание</value>
+  </data>
+  <data name="LatencyReveal" xml:space="preserve">
+    <value>Показать файл</value>
+  </data>
+  <data name="LatencyRecordingFormat" xml:space="preserve">
+    <value>Идёт запись трассы WPR (начата {0}). Остановите сразу после рывка: WPR хранит только последний отрезок.</value>
+    <comment>{0} — дата и время начала записи.</comment>
+  </data>
+  <data name="LatencyRecordingUnknown" xml:space="preserve">
+    <value>Идёт запись трассы WPR; время начала неизвестно — файл напоминания не прочитался. Остановите сразу после рывка: WPR хранит только последний отрезок.</value>
+  </data>
+  <data name="LatencyInterruptedFormat" xml:space="preserve">
+    <value>Запись трассы WPR, начатая {0}, прервана перезагрузкой: трасса из памяти не сохранилась. Уберите напоминание; запись можно начать заново.</value>
+    <comment>{0} — дата и время начала записи.</comment>
+  </data>
+  <data name="LatencyUnavailable" xml:space="preserve">
+    <value>wpr.exe не найден в System32: запись трассы недоступна.</value>
+  </data>
+  <data name="LatencyStarted" xml:space="preserve">
+    <value>Запись началась.</value>
+  </data>
+  <data name="LatencySavedFormat" xml:space="preserve">
+    <value>Трасса сохранена: {0}. Откройте её в Windows Performance Analyzer (WPA).</value>
+    <comment>{0} — путь к файлу .etl.</comment>
+  </data>
+  <data name="LatencyCancelled" xml:space="preserve">
+    <value>Запись отменена, файл не сохранён.</value>
+  </data>
+  <data name="LatencyDismissed" xml:space="preserve">
+    <value>Напоминание убрано.</value>
+  </data>
+  <data name="LatencyDeclined" xml:space="preserve">
+    <value>Разрешение администратора не получено — ничего не изменилось.</value>
+  </data>
+  <data name="LatencyFailedFormat" xml:space="preserve">
+    <value>wpr.exe завершился с ошибкой: {0}. Подробности — в логе.</value>
+    <comment>{0} — код выхода или причина.</comment>
+  </data>
+  <data name="LatencyExitCodeFormat" xml:space="preserve">
+    <value>код 0x{0}</value>
+    <comment>{0} — код выхода wpr.exe, шестнадцатеричный.</comment>
+  </data>
+  <data name="LatencyErrorFormat" xml:space="preserve">
+    <value>Ошибка: {0}</value>
+    <comment>{0} — текст ошибки.</comment>
+  </data>
+  <data name="LatencyRevealFailed" xml:space="preserve">
+    <value>Не удалось открыть папку с трассой.</value>
+  </data>
+  <data name="HagsTitle" xml:space="preserve">
+    <value>Планирование GPU (HAGS): A/B-тест</value>
+  </data>
+  <data name="HagsHint" xml:space="preserve">
+    <value>Аппаратное планирование GPU (HAGS) одной игре помогает, другой мешает — проверить можно только замером. Booster HAGS не переключает: значение меняете вы в «Параметрах», а Booster проверяет, что оно вступило в силу после перезагрузки, и сравнивает две серии бенчмарка одной игры — до и после.</value>
+  </data>
+  <data name="HagsCurrentFormat" xml:space="preserve">
+    <value>Сейчас в реестре: {0}.</value>
+    <comment>{0} — «включено», «выключено» или почему значение неизвестно.</comment>
+  </data>
+  <data name="HagsEnabled" xml:space="preserve">
+    <value>включено</value>
+  </data>
+  <data name="HagsDisabled" xml:space="preserve">
+    <value>выключено</value>
+  </data>
+  <data name="HagsStart" xml:space="preserve">
+    <value>Начать тест</value>
+  </data>
+  <data name="HagsOpenSettings" xml:space="preserve">
+    <value>Открыть настройки графики</value>
+  </data>
+  <data name="HagsCheck" xml:space="preserve">
+    <value>Проверить</value>
+  </data>
+  <data name="HagsTakeCandidate" xml:space="preserve">
+    <value>Взять серию</value>
+  </data>
+  <data name="HagsReset" xml:space="preserve">
+    <value>Сбросить</value>
+  </data>
+  <data name="HagsStep_NotStarted" xml:space="preserve">
+    <value>Шаг 1 из 3. Запишите серию бенчмарка игры на экране «Производительность» и нажмите «Начать тест»: эта серия станет базой. Booster HAGS не переключает — это сделаете вы в «Параметрах» на следующем шаге.</value>
+  </data>
+  <data name="HagsStep_Unreadable" xml:space="preserve">
+    <value>Файл теста повреждён или создан более новой версией Booster. Нажмите «Сбросить» и начните тест заново; серии бенчмарка останутся в истории. Booster HAGS не переключает.</value>
+  </data>
+  <data name="HagsStep_StateUnknown" xml:space="preserve">
+    <value>Значение HAGS, время его изменения или время загрузки Windows не прочиталось — вывода нет. Нажмите «Проверить» ещё раз позже. Booster HAGS не переключает.</value>
+  </data>
+  <data name="HagsStep_WaitingForSwitch" xml:space="preserve">
+    <value>Шаг 2 из 3. База записана, когда HAGS было {0}. Нажмите «Открыть настройки графики» и переключите «Планирование графического процессора с аппаратным ускорением» сами — Booster HAGS не переключает. Затем перезагрузите компьютер (Пуск → «Перезагрузка») и нажмите «Проверить».</value>
+    <comment>{0} — значение HAGS во время базовой серии: «включено» или «выключено».</comment>
+  </data>
+  <data name="HagsStep_NeedsRestart" xml:space="preserve">
+    <value>Значение в реестре уже другое, но ещё не действует: после переключения компьютер не перезагружался. Нужна именно перезагрузка: Пуск → «Перезагрузка». Выключение и включение при быстром запуске Windows новое значение не применяют. Затем нажмите «Проверить». Booster HAGS не переключает и компьютер не перезагружает.</value>
+  </data>
+  <data name="HagsStep_ReadyForCandidate" xml:space="preserve">
+    <value>Шаг 3 из 3. Новое значение действует с загрузки {1}: HAGS {0}. Запишите серию той же игры ({2}) в тех же условиях и нажмите «Взять серию»: Booster сравнит её с базой. Booster HAGS не переключает.</value>
+    <comment>{0} — новое значение HAGS: «включено» или «выключено»; {1} — дата и время загрузки; {2} — игра базовой серии.</comment>
+  </data>
+  <data name="HagsStep_SwitchedBack" xml:space="preserve">
+    <value>HAGS снова {0}, как во время базовой серии, а серии-кандидата ещё нет: сравнивать нечего. Переключите HAGS в «Параметрах» и перезагрузите компьютер или нажмите «Сбросить». Booster HAGS не переключает.</value>
+    <comment>{0} — значение HAGS базовой серии: «включено» или «выключено».</comment>
+  </data>
+  <data name="HagsStep_BaselineMissing" xml:space="preserve">
+    <value>Базовая серия удалена из истории (например, при очистке старых серий) — сравнивать не с чем. Нажмите «Сбросить» и начните тест заново. Booster HAGS не переключает.</value>
+  </data>
+  <data name="HagsStep_CandidateMissing" xml:space="preserve">
+    <value>Серия-кандидат удалена из истории — вердикта нет. Нажмите «Сбросить» и начните тест заново. Booster HAGS не переключает.</value>
+  </data>
+  <data name="HagsStep_Completed" xml:space="preserve">
+    <value>Тест завершён: базовая серия записана, когда HAGS было {0}, серия-кандидат — когда {1}. Booster HAGS не переключает: оставить значение или вернуть прежнее, решаете вы по вердикту ниже.</value>
+    <comment>{0} — значение HAGS базовой серии, {1} — серии-кандидата: «включено» или «выключено».</comment>
+  </data>
+  <data name="HagsVerdict_Keep" xml:space="preserve">
+    <value>По этим двум сериям игра идёт лучше, когда HAGS {0}: оставьте это значение. Вывод относится только к этим сериям и не обещает прироста в других играх и сценах.</value>
+    <comment>{0} — значение HAGS серии-кандидата: «включено» или «выключено».</comment>
+  </data>
+  <data name="HagsVerdict_Revert" xml:space="preserve">
+    <value>По этим двум сериям игре хуже, когда HAGS {0}: верните прежнее значение ({1}) вручную в «Параметрах» кнопкой «Открыть настройки графики» и перезагрузите компьютер. Booster HAGS не переключает.</value>
+    <comment>{0} — значение HAGS серии-кандидата, {1} — базовой серии: «включено» или «выключено».</comment>
+  </data>
+  <data name="HagsVerdict_NoDifference" xml:space="preserve">
+    <value>По этим двум сериям разница меньше порога: на эту игру значение HAGS заметно не влияет, можно оставить любое.</value>
+  </data>
+  <data name="HagsVerdict_Inconclusive" xml:space="preserve">
+    <value>По этим двум сериям вывода нет: разница не доказана или средний FPS и 1% low противоречат друг другу. Запишите серии с большим числом прогонов в одинаковых условиях и повторите тест.</value>
+  </data>
+  <data name="HagsChangeFormat" xml:space="preserve">
+    <value>Серия-кандидат против базы: средний FPS {0}, 1% low {1}.</value>
+    <comment>{0}, {1} — изменение в процентах со знаком.</comment>
+  </data>
+  <data name="HagsCaveatsHeading" xml:space="preserve">
+    <value>Оговорки сравнения:</value>
+  </data>
+  <data name="HagsCaveatFormat" xml:space="preserve">
+    <value>• {0}</value>
+    <comment>{0} — оговорка сравнения серий.</comment>
+  </data>
+  <data name="HagsStarted" xml:space="preserve">
+    <value>Тест начат: база записана.</value>
+  </data>
+  <data name="HagsCandidateTaken" xml:space="preserve">
+    <value>Серия-кандидат взята — вердикт ниже.</value>
+  </data>
+  <data name="HagsResetDone" xml:space="preserve">
+    <value>Тест сброшен; серии бенчмарка остались в истории.</value>
+  </data>
+  <data name="HagsErrorFormat" xml:space="preserve">
+    <value>Ошибка: {0}</value>
+    <comment>{0} — текст ошибки.</comment>
+  </data>
+  <data name="HagsStartRefusal_AlreadyStarted" xml:space="preserve">
+    <value>Тест уже идёт. Чтобы начать заново, нажмите «Сбросить».</value>
+  </data>
+  <data name="HagsStartRefusal_StateUnknown" xml:space="preserve">
+    <value>Значение HAGS, время его изменения или время загрузки Windows не прочиталось — начать тест нельзя.</value>
+  </data>
+  <data name="HagsStartRefusal_NeedsRestart" xml:space="preserve">
+    <value>После последней загрузки Windows менялись настройки графики (например, HAGS) — значение в реестре может ещё не действовать. Перезагрузите компьютер (Пуск → «Перезагрузка»), запишите серию игры и начните тест. Booster HAGS не переключает и компьютер не перезагружает.</value>
+  </data>
+  <data name="HagsStartRefusal_NoCompletedSeries" xml:space="preserve">
+    <value>Нет завершённой серии бенчмарка с годными прогонами. Запишите серию игры на экране «Производительность».</value>
+  </data>
+  <data name="HagsStartRefusal_SeriesBeforeBoot" xml:space="preserve">
+    <value>Последняя серия записана до перезагрузки компьютера — каким тогда было HAGS, неизвестно. Запишите серию после перезагрузки и начните тест.</value>
+  </data>
+  <data name="HagsCandidateRefusal_NotReady" xml:space="preserve">
+    <value>Новое значение HAGS ещё не действует — брать серию рано. Нажмите «Проверить».</value>
+  </data>
+  <data name="HagsCandidateRefusal_SwitchedBack" xml:space="preserve">
+    <value>HAGS вернули к значению базовой серии — серия не годится в кандидаты.</value>
+  </data>
+  <data name="HagsCandidateRefusal_NoCandidateSeries" xml:space="preserve">
+    <value>Нет завершённой серии игры {0}, записанной после перезагрузки с новым значением HAGS. Запишите её на экране «Производительность».</value>
+    <comment>{0} — игра базовой серии.</comment>
+  </data>
+  <data name="SystemPerSecondFormat" xml:space="preserve">
+    <value>{0}/с</value>
+    <comment>{0} — величина в секунду: байты, страницы, ошибки страниц.</comment>
+  </data>
+  <data name="SystemTopIoTitle" xml:space="preserve">
+    <value>Чтение и запись на диск</value>
+  </data>
+  <data name="SystemTopHardFaultsTitle" xml:space="preserve">
+    <value>Жёсткие ошибки страниц (чтение памяти с диска)</value>
+  </data>
+  <data name="SystemNoActivity" xml:space="preserve">
+    <value>Активности нет.</value>
+  </data>
+  <data name="ColumnProcess" xml:space="preserve">
+    <value>Процесс</value>
+  </data>
+  <data name="ColumnPid" xml:space="preserve">
+    <value>PID</value>
+  </data>
+  <data name="ColumnRead" xml:space="preserve">
+    <value>Чтение</value>
+  </data>
+  <data name="ColumnWrite" xml:space="preserve">
+    <value>Запись</value>
+  </data>
+  <data name="ColumnHardFaults" xml:space="preserve">
+    <value>Ошибки страниц</value>
+  </data>
+  <data name="SystemNetworkTitle" xml:space="preserve">
+    <value>Проверка сети</value>
+  </data>
+  <data name="SystemNetworkHint" xml:space="preserve">
+    <value>Задержка, джиттер и потери до шлюза и до узла из настроек. Тест идёт около полуминуты, только по кнопке, и ничего не меняет.</value>
+  </data>
+  <data name="SystemNetworkRun" xml:space="preserve">
+    <value>Проверить сеть</value>
+  </data>
+  <data name="SystemNetworkStarting" xml:space="preserve">
+    <value>Тест запускается…</value>
+  </data>
+  <data name="SystemNetworkRoundFormat" xml:space="preserve">
+    <value>Раунд {0} из {1}</value>
+    <comment>{0} — завершённый раунд эхо-запросов, {1} — всего раундов.</comment>
+  </data>
+  <data name="SystemNetworkDone" xml:space="preserve">
+    <value>Тест завершён: результаты — в разделе «Сеть» ниже и в отчёте.</value>
+  </data>
+  <data name="SystemNetworkCancelled" xml:space="preserve">
+    <value>Тест отменён.</value>
+  </data>
+  <data name="SystemNetworkFailed" xml:space="preserve">
+    <value>Ошибка: тест сети не выполнен. Подробности — в логе.</value>
+  </data>
+  <data name="SystemMaintenanceTitle" xml:space="preserve">
+    <value>Изменения с подтверждением</value>
+  </data>
+  <data name="SystemMaintenanceHint" xml:space="preserve">
+    <value>Booster меняет здесь только перечисленное и только после вашего подтверждения. Каждое изменение записывается в журнал и возвращается кнопкой «Вернуть» на экране «Журнал». Во время игровой сессии изменения не выполняются. Прирост FPS не гарантирован: эффект проверьте сравнением серий бенчмарка.</value>
+  </data>
+  <data name="SystemStartupActionsTitle" xml:space="preserve">
+    <value>Автозагрузка: можно отключить</value>
+  </data>
+  <data name="SystemStartupActionsHint" xml:space="preserve">
+    <value>Отключение действует со следующего входа в Windows: запущенная программа не закрывается, сам элемент автозагрузки не удаляется.</value>
+  </data>
+  <data name="SystemStartupActionsEmpty" xml:space="preserve">
+    <value>Нет элементов, которые Booster может отключить: тяжёлых программ в автозагрузке пользователя не найдено.</value>
+  </data>
+  <data name="SystemTweakActionsTitle" xml:space="preserve">
+    <value>Игровые настройки Windows</value>
+  </data>
+  <data name="SystemTweakActionsEmpty" xml:space="preserve">
+    <value>Предложений нет: снимок системы и последняя серия бенчмарка не дают для них оснований.</value>
+  </data>
+  <data name="DisableStartupItem" xml:space="preserve">
+    <value>Отключить…</value>
+  </data>
+  <data name="ApplyTweak" xml:space="preserve">
+    <value>Применить…</value>
+  </data>
+  <data name="MaintenanceConfirmButton" xml:space="preserve">
+    <value>Подтвердить</value>
+  </data>
+  <data name="SystemSettingsLinksTitle" xml:space="preserve">
+    <value>Изменить самому в «Параметрах» Windows:</value>
+  </data>
+  <data name="OpenGameModeSettings" xml:space="preserve">
+    <value>Игровой режим</value>
+  </data>
+  <data name="OpenGameDvrSettings" xml:space="preserve">
+    <value>Записи</value>
+  </data>
+  <data name="OpenGameBarSettings" xml:space="preserve">
+    <value>Xbox Game Bar</value>
+  </data>
+  <data name="OpenGraphicsSettings" xml:space="preserve">
+    <value>Графика</value>
+  </data>
+  <data name="SettingsOpenFailed" xml:space="preserve">
+    <value>Не удалось открыть «Параметры» Windows. Подробности — в логе.</value>
+  </data>
+  <data name="PickGameExecutableTitleFormat" xml:space="preserve">
+    <value>Выберите файл игры {0}</value>
+    <comment>{0} — имя файла, например cs2.exe.</comment>
+  </data>
+  <data name="MaintenanceGameUnknown" xml:space="preserve">
+    <value>Не удалось определить файл игры по серии бенчмарка. Ничего не изменено.</value>
+  </data>
+  <data name="MaintenanceWrongFileFormat" xml:space="preserve">
+    <value>Выбран другой файл: нужен {0}. Ничего не изменено.</value>
+    <comment>{0} — ожидаемое имя файла игры.</comment>
+  </data>
+  <data name="MaintenanceCheckFailedFormat" xml:space="preserve">
+    <value>Не удалось проверить текущее значение: {0}. Ничего не изменено.</value>
+    <comment>{0} — текст ошибки.</comment>
+  </data>
+  <data name="MaintenanceApplying" xml:space="preserve">
+    <value>Изменение применяется…</value>
+  </data>
+  <data name="MaintenanceApplied" xml:space="preserve">
+    <value>Готово: изменение применено и записано в журнал. Вернуть его можно кнопкой «Вернуть» на экране «Журнал».</value>
+  </data>
+  <data name="MaintenanceNotSupportedFormat" xml:space="preserve">
+    <value>Изменение не выполнено: {0}.</value>
+    <comment>{0} — причина: «автозапуск уже отключён» и т.п.</comment>
+  </data>
+  <data name="MaintenanceRefusedFormat" xml:space="preserve">
+    <value>Booster не выполнил изменение: {0}.</value>
+    <comment>{0} — решение политики безопасности.</comment>
+  </data>
+  <data name="MaintenanceNotAppliedFormat" xml:space="preserve">
+    <value>Изменение не применено: {0}. Попытка записана в журнал.</value>
+    <comment>{0} — причина.</comment>
+  </data>
+  <data name="MaintenanceFailedFormat" xml:space="preserve">
+    <value>Ошибка: изменение не применено ({0}). Если что-то успело измениться, исходное значение возвращено; подробности — на экране «Журнал».</value>
+    <comment>{0} — текст ошибки.</comment>
+  </data>
+  <data name="MaintenanceNoDetail" xml:space="preserve">
+    <value>причина неизвестна</value>
+  </data>
+  <data name="RevertMaintenance" xml:space="preserve">
+    <value>Вернуть</value>
+  </data>
+  <data name="MaintenanceReverted" xml:space="preserve">
+    <value>Возврат выполнен. Состояние каждого изменения — в списке ниже; изменённое после Booster вами не перезаписывается.</value>
+  </data>
+  <data name="MaintenanceRevertFailed" xml:space="preserve">
+    <value>Ошибка: возврат не выполнен. Подробности — в логе.</value>
+  </data>
+</root>

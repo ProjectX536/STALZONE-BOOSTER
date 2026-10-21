@@ -1,0 +1,61 @@
+<Window x:Class="Booster.App.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:res="clr-namespace:Booster.App.Resources"
+        xmlns:vm="clr-namespace:Booster.App.ViewModels"
+        xmlns:views="clr-namespace:Booster.App.Views"
+        Title="{x:Static res:Strings.AppTitle}" Width="1100" Height="720" MinWidth="800" MinHeight="500"
+        WindowStartupLocation="CenterScreen">
+  <Window.Resources>
+    <DataTemplate DataType="{x:Type vm:OverviewViewModel}">
+      <views:OverviewView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:HardwareViewModel}">
+      <views:HardwareView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:DriversViewModel}">
+      <views:DriversView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:SystemViewModel}">
+      <views:SystemView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:PerformanceViewModel}">
+      <views:PerformanceView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:ProfilesViewModel}">
+      <views:ProfilesView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:JournalViewModel}">
+      <views:JournalView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+      <views:SettingsView />
+    </DataTemplate>
+  </Window.Resources>
+  <DockPanel>
+    <StatusBar DockPanel.Dock="Bottom" Padding="8,2">
+      <StatusBarItem>
+        <TextBlock Text="{Binding StatusBar.PrivilegesText}" />
+      </StatusBarItem>
+      <Separator />
+      <StatusBarItem>
+        <TextBlock Text="{Binding StatusBar.UsageText}" />
+      </StatusBarItem>
+    </StatusBar>
+
+    <ListBox DockPanel.Dock="Left" Width="220" Padding="0,8" BorderThickness="0,0,1,0"
+             ItemsSource="{Binding Pages}" SelectedItem="{Binding SelectedPage}" DisplayMemberPath="Title"
+             AutomationProperties.Name="{x:Static res:Strings.NavigationLabel}">
+      <ListBox.ItemContainerStyle>
+        <Style TargetType="ListBoxItem">
+          <Setter Property="Padding" Value="16,8" />
+          <!-- Без этого экранный диктор читает ToString() записи NavigationItem. -->
+          <Setter Property="AutomationProperties.Name" Value="{Binding Title}" />
+        </Style>
+      </ListBox.ItemContainerStyle>
+    </ListBox>
+
+    <!-- Экран выбранного раздела: шаблон подбирается по типу его модели представления. -->
+    <ContentControl Content="{Binding SelectedPage.Content}" Focusable="False" IsTabStop="False" />
+  </DockPanel>
+</Window>

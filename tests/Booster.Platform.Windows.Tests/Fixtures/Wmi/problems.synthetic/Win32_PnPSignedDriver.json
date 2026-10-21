@@ -1,0 +1,46 @@
+[
+  {
+    "DeviceID": "HID\\VID_046D&PID_C52B&MI_02&COL01\\8&2A4F1C3B&0&0000",
+    "DeviceName": "HID-compliant consumer control device",
+    "DeviceClass": "HIDCLASS",
+    "DriverProviderName": "Microsoft",
+    "DriverVersion": "10.0.26100.1",
+    "DriverDate": "20060621000000.******+***",
+    "InfName": "hidserv.inf",
+    "IsSigned": true,
+    "Signer": "Microsoft Windows"
+  },
+  {
+    "DeviceID": "PCI\\VEN_10DE&DEV_1C82&SUBSYS_8C971462&REV_A1\\4&1A2B3C4D&0&0008",
+    "DeviceName": "NVIDIA GeForce GTX 1050 Ti",
+    "DeviceClass": "DISPLAY",
+    "DriverProviderName": "NVIDIA",
+    "DriverVersion": "31.0.15.3623",
+    "DriverDate": "20230612000000.******+***",
+    "InfName": "oem12.inf",
+    "IsSigned": true,
+    "Signer": "Microsoft Windows Hardware Compatibility Publisher"
+  },
+  {
+    "DeviceID": "USBSTOR\\DISK&VEN_SYNTH&PROD_FLASH&REV_1.00\\7&1F2E3D4C&0&1",
+    "DeviceName": "SYNTH Flash USB Device",
+    "DeviceClass": "DISKDRIVE",
+    "DriverProviderName": "Microsoft",
+    "DriverVersion": "10.0.26100.1",
+    "DriverDate": "20060621000000.******+***",
+    "InfName": "disk.inf",
+    "IsSigned": true,
+    "Signer": "Microsoft Windows"
+  },
+  {
+    "DeviceID": "Microsoft Print to PDF",
+    "DeviceName": null,
+    "DeviceClass": null,
+    "DriverProviderName": null,
+    "DriverVersion": null,
+    "DriverDate": null,
+    "InfName": null,
+    "IsSigned": null,
+    "Signer": null
+  }
+]

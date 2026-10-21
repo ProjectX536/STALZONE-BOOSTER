@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "profileId": "competitive",
+  "name": "Competitive Gaming",
+  // Имена exe игр, при запуске которых срабатывает профиль. Заполняет пользователь на экране профилей.
+  "games": [],
+  // Автоматическая сессия при запуске игры: применяются только действия, которые ActionPolicy разрешает без
+  // подтверждения (в этом профиле — приоритет игры, если пользователь его включил).
+  "autoStart": false,
+  // optional-действия, которые пользователь включил сам.
+  "enabledOptionalActions": [],
+  "monitoring": {
+    "enabled": true,
+    // проверка нагрузки каждые несколько секунд; docs/PRINCIPLES.md: мониторинг не чаще раза в 1–2 с.
+    "sampleIntervalMs": 2000,
+    // collectFrameMetrics: PresentMon замеряет кадры игры первые benchmark.sessionCaptureSeconds (5 мин) сессии —
+    // средний FPS, 1% low и рывки на панели сессии. Только если PresentMon запускается без запроса UAC (Booster от имени
+    // администратора или в группе Performance Log Users): во время игры запрос не показывается.
+    // collectGpuTelemetry: датчики GPU (и CPU, если collectCpuMetrics) читаются на каждом шаге наблюдения и дают
+    // признаки троттлинга на панели сессии.
+    "collectFrameMetrics": true,
+    "collectCpuMetrics": true,
+    "collectMemoryMetrics": true,
+    "collectGpuTelemetry": true
+  },
+  "actions": [
+    // «Высокая производительность» — встроенная схема Windows. «Максимальная производительность» (e9a42b02-…)
+    // не указана: она сильнее отключает энергосбережение и по умолчанию скрыта.
+    { "id": "power-plan", "mode": "ask-first", "reversible": true, "targetSchemes": ["8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"] },
+    // Допустимы AboveNormal и High. RealTime может отнять процессор у системных потоков ввода и звука.
+    { "id": "game-priority", "mode": "optional", "value": "AboveNormal", "reversible": true },
+    { "id": "user-selected-background-apps", "mode": "ask-first", "reversible": false },
+    { "id": "registry-tweaks", "mode": "recommend-only" },
+    { "id": "driver-updates", "mode": "recommend-only" },
+    { "id": "pagefile", "mode": "recommend-only" },
+    { "id": "windows-services", "mode": "recommend-only" }
+  ],
+  "backgroundApps": {
+    // Браузеру с десятками вкладок на штатное закрытие нужно несколько секунд. Если программа не закрылась
+    // за 10 с, она, скорее всего, спрашивает о сохранении: ждать дольше бессмысленно, принудительно Booster не закрывает.
+    "closeTimeoutMs": 10000,
+    // Имена exe приложений, которые пользователь разрешил закрывать.
+    "userSelected": []
+  },
+  "recovery": {
+    "snapshotBeforeChanges": true,
+    "restoreOnGameExit": true,
+    "recoverInterruptedSession": true,
+    "verifyAfterRestore": true
+  }
+}

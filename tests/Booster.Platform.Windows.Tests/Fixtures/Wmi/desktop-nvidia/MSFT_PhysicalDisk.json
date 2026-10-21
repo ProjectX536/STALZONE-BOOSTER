@@ -1,0 +1,22 @@
+[
+    {
+        "DeviceId":  "0",
+        "FriendlyName":  "SPCC Solid State Disk",
+        "MediaType":  4,
+        "BusType":  11,
+        "Size":  512110190592,
+        "HealthStatus":  0,
+        "FirmwareVersion":  "SVN18293",
+        "SpindleSpeed":  0
+    },
+    {
+        "DeviceId":  "1",
+        "FriendlyName":  "Patriot M.2 P300 512GB",
+        "MediaType":  4,
+        "BusType":  17,
+        "Size":  512110190592,
+        "HealthStatus":  0,
+        "FirmwareVersion":  "400fAA12",
+        "SpindleSpeed":  0
+    }
+]

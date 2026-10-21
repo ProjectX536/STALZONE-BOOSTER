@@ -1,0 +1,11 @@
+[
+    {
+        "Name":  "Intel(R) Core(TM) i5-14400F",
+        "Manufacturer":  "GenuineIntel",
+        "NumberOfCores":  10,
+        "NumberOfLogicalProcessors":  16,
+        "MaxClockSpeed":  2500,
+        "SocketDesignation":  "U3E1",
+        "Architecture":  9
+    }
+]

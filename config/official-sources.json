@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  // Ссылки на драйверы ведут только на эти домены и их поддомены, только по https.
+  // Ссылка из другого источника в отчёт и интерфейс не попадает.
+  "allowedHosts": [
+    "nvidia.com",
+    "amd.com",
+    "intel.com",
+    "msi.com",
+    "asus.com",
+    "gigabyte.com",
+    "asrock.com",
+    "microsoft.com"
+  ],
+  // Правило выбирается по PCI Vendor ID адаптера (VEN_xxxx в Hardware ID).
+  // Все URL проверены запросом 2026-10-17: HTTP 200, итоговый хост из allowedHosts.
+  "gpuVendors": [
+    { "match": "10DE", "title": "NVIDIA — драйверы", "url": "https://www.nvidia.com/en-us/drivers/" },
+    { "match": "1002", "title": "AMD — драйверы и ПО", "url": "https://www.amd.com/en/support/download/drivers.html" },
+    // Intel Driver & Support Assistant. Из части регионов (в том числе из России) intel.com
+    // перенаправляет на страницу о региональных ограничениях — URL при этом официальный.
+    { "match": "8086", "title": "Intel — Driver & Support Assistant", "url": "https://www.intel.com/content/www/us/en/support/detect.html" }
+  ],
+  // Правило выбирается по подстроке производителя системной платы (Win32_BaseBoard.Manufacturer), без учёта регистра.
+  // Все URL проверены запросом 2026-10-17: HTTP 200, итоговый хост из allowedHosts.
+  "boardVendors": [
+    { "match": "Micro-Star", "title": "MSI — поддержка и загрузки", "url": "https://www.msi.com/support" },
+    // Сайт перенаправляет на региональную версию (/ru/support/) того же домена.
+    { "match": "ASUSTeK", "title": "ASUS — поддержка и загрузки", "url": "https://www.asus.com/support/" },
+    { "match": "Gigabyte", "title": "GIGABYTE — поддержка и загрузки", "url": "https://www.gigabyte.com/Support" },
+    { "match": "ASRock", "title": "ASRock — поддержка и загрузки", "url": "https://www.asrock.com/support/index.asp" }
+  ],
+  // Встроенный в Windows способ обновить драйверы, у которых нет страницы производителя.
+  "windowsUpdateUri": "ms-settings:windowsupdate"
+}

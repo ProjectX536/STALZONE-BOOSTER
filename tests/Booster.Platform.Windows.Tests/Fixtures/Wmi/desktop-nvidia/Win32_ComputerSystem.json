@@ -1,0 +1,12 @@
+[
+    {
+        "Manufacturer":  "Micro-Star International Co., Ltd.",
+        "Model":  "MS-7D48",
+        "SystemFamily":  "Default string",
+        "PCSystemType":  1,
+        "TotalPhysicalMemory":  17013911552,
+        "NumberOfProcessors":  1,
+        "NumberOfLogicalProcessors":  16,
+        "HypervisorPresent":  true
+    }
+]

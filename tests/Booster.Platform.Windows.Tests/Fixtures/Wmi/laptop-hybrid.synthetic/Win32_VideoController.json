@@ -1,0 +1,22 @@
+[
+    {
+        "Name":  "Intel(R) UHD Graphics",
+        "PNPDeviceID":  "PCI\\VEN_8086&DEV_A7A8&SUBSYS_00011234&REV_04\\3&11583659&0&10",
+        "AdapterCompatibility":  "Intel Corporation",
+        "DriverVersion":  "31.0.101.5333",
+        "DriverDate":  "20240301000000.000000-000",
+        "AdapterRAM":  134217728,
+        "VideoProcessor":  "Intel(R) UHD Graphics Family",
+        "Status":  "OK"
+    },
+    {
+        "Name":  "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "PNPDeviceID":  "PCI\\VEN_10DE&DEV_28E0&SUBSYS_00021234&REV_A1\\4&2E4F1A7B&0&0008",
+        "AdapterCompatibility":  "NVIDIA",
+        "DriverVersion":  "32.0.15.6094",
+        "DriverDate":  "20240814000000.000000-000",
+        "AdapterRAM":  4293918720,
+        "VideoProcessor":  "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "Status":  "OK"
+    }
+]

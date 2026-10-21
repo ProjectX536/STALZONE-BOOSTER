@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  // Справочники политики безопасности. Booster читает только этот встроенный файл: пользовательский файл с тем же
+  // именем игнорируется с предупреждением, чтобы правка конфигурации не могла снять защиту.
+  "services": {
+    // Службы, без которых Windows не работает или теряет обновления, вход, звук и сеть (docs/PRINCIPLES.md: не трогать RPC,
+    // PnP, журналирование, Windows Update, управление устройствами, сетевые службы). Никогда не предлагаются к проверке.
+    "systemCritical": [
+      "RpcSs", "RpcEptMapper", "DcomLaunch", "PlugPlay", "Power", "EventLog", "EventSystem",
+      "wuauserv", "UsoSvc", "WaaSMedicSvc", "BITS", "CryptSvc", "TrustedInstaller",
+      "SamSs", "LSM", "ProfSvc", "Schedule", "Winmgmt", "gpsvc",
+      "BrokerInfrastructure", "SystemEventsBroker", "CoreMessagingRegistrar", "StateRepository", "UserManager", "Appinfo",
+      "AudioSrv", "AudioEndpointBuilder",
+      "Dhcp", "Dnscache", "nsi", "NlaSvc", "netprofm", "LanmanWorkstation", "WlanSvc", "Wcmsvc",
+      "DeviceInstall", "DsmSvc", "KeyIso", "VaultSvc"
+    ],
+    // Защита Windows: антивирус, брандмауэр, центр безопасности. Отключать и ставить на паузу запрещено.
+    "security": [
+      "WinDefend", "WdNisSvc", "Sense", "SecurityHealthService", "wscsvc", "mpssvc", "BFE", "SgrmBroker", "MDCoreSvc"
+    ],
+    // Сторонние антивирусы называют службы по-разному; их узнают по словам в имени, отображаемом имени или издателе.
+    "securityKeywords": [
+      "antivirus", "anti-virus", "defender", "firewall", "security", "kaspersky", "eset", "avast", "avg", "bitdefender",
+      "norton", "mcafee", "malwarebytes", "sophos", "trend micro", "dr.web", "comodo", "panda"
+    ],
+    // Античиты: остановка ломает запуск игры или ведёт к блокировке аккаунта.
+    "antiCheat": [
+      "EasyAntiCheat", "EasyAntiCheat_EOS", "BEService", "vgc", "FACEIT", "PnkBstrA", "PnkBstrB", "EAAntiCheatService", "npggsvc"
+    ],
+    "antiCheatKeywords": [
+      "anticheat", "anti-cheat", "battleye", "easyanticheat", "punkbuster", "vanguard", "faceit", "gameguard", "xigncode"
+    ],
+    // Службы драйверов и устройств: без них пропадают звук, сеть, Bluetooth, сенсорная панель, панель управления
+    // видеокартой. Показываются, но к проверке не предлагаются.
+    "deviceKeywords": [
+      "driver", "nvidia", "amd", "radeon", "intel", "realtek", "audio", "bluetooth", "wireless", "wi-fi", "ethernet",
+      "network", "vpn", "killer", "synaptics", "touchpad", "printer"
+    ]
+  },
+  // Программы, у которых есть внутриигровой оверлей. Процесс ищется по имени без «.exe». Запущенная программа — не
+  // доказательство, что её оверлей включён: Booster только сообщает и отсылает к настройкам программы.
+  "overlays": [
+    { "process": "RTSS", "name": "RivaTuner Statistics Server" },
+    { "process": "gameoverlayui", "name": "Оверлей Steam" },
+    { "process": "NVIDIA Overlay", "name": "Оверлей NVIDIA" },
+    { "process": "Overwolf", "name": "Overwolf" },
+    { "process": "Discord", "name": "Discord" }
+  ],
+  // Белый список реестра: только HKCU, применяется только с подтверждением и только при правиле-доказательстве.
+  // Ключи GameDVR и GameConfigStore сюда не входят. Ниже minBuild настройка только рекомендуется.
+  "registryTweaks": [
+    // Game Mode включён по умолчанию; значение 0 — его выключили. minBuild 19041 (Windows 10 2004) выбран с запасом:
+    // в ранних сборках Windows 10 поведение Game Mode менялось, на них Booster только советует.
+    { "id": "game-mode", "subKey": "Software\\Microsoft\\GameBar", "valueName": "AutoGameModeEnabled", "value": "1", "minBuild": 19041 },
+    // Выбор GPU для приложения («Высокая производительность») появился в Windows 10 1803 (сборка 17134). Имя значения —
+    // путь к exe игры; пара дописывается в строку, чужие пары сохраняются.
+    { "id": "gpu-high-performance", "subKey": "Software\\Microsoft\\DirectX\\UserGpuPreferences", "valueName": null, "value": "GpuPreference=2", "minBuild": 17134 },
+    // «Оптимизация для игр в оконном режиме» (перевод устаревшей модели показа на flip) — Windows 11 22H2 (сборка 22621).
+    { "id": "windowed-flip-model", "subKey": "Software\\Microsoft\\DirectX\\UserGpuPreferences", "valueName": null, "value": "SwapEffectUpgradeEnable=1", "minBuild": 22621 }
+  ]
+}

@@ -1,0 +1,44 @@
+using Booster.Core.Abstractions;
+
+namespace Booster.Core.Profiles;
+
+/// <param name="GameName">Имя запущенного процесса, как его видит система.</param>
+/// <param name="ProcessIds">Все процессы с этим именем, по возрастанию PID.</param>
+public sealed record GameMatch(GamingProfile Profile, string GameName, IReadOnlyList<int> ProcessIds);
+
+public static class ProfileMatcher
+{
+    /// <summary>
+    /// Первый профиль из <paramref name="candidates"/> (по порядку), у которого запущена игра из Games; внутри профиля —
+    /// первая игра по порядку Games. Имена сравниваются без учёта регистра и без «.exe».
+    /// </summary>
+    public static GameMatch? Match(IReadOnlyList<ProcessInfo> running, IReadOnlyList<GamingProfile> candidates) =>
+        MatchAll(running, candidates).FirstOrDefault();
+
+    /// <summary>Все запущенные игры в порядке <see cref="Match"/>: профили по порядку, внутри профиля — по порядку Games.</summary>
+    public static IReadOnlyList<GameMatch> MatchAll(IReadOnlyList<ProcessInfo> running, IReadOnlyList<GamingProfile> candidates)
+    {
+        ArgumentNullException.ThrowIfNull(running);
+        ArgumentNullException.ThrowIfNull(candidates);
+
+        var byName = running
+            .Select(p => (Name: ProcessNames.Normalize(p.Name), Process: p))
+            .Where(p => p.Name is not null)
+            .ToLookup(p => p.Name!, p => p.Process, StringComparer.OrdinalIgnoreCase);
+
+        var matches = new List<GameMatch>();
+        foreach (var profile in candidates)
+        {
+            foreach (var game in profile.Games)
+            {
+                if (ProcessNames.Normalize(game) is not { } name)
+                    continue;
+                var processes = byName[name].OrderBy(p => p.ProcessId).ToArray();
+                if (processes.Length > 0)
+                    matches.Add(new GameMatch(profile, processes[0].Name, processes.Select(p => p.ProcessId).ToArray()));
+            }
+        }
+
+        return matches;
+    }
+}
