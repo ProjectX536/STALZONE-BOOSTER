@@ -22,6 +22,8 @@ public class ConfigLoaderTests
           "journal": { "retainedSessionCount": 50 },
           "diagnostics": { "stabilityDays": 14, "maxStabilityEvents": 500, "topProcessCount": 10, "activityIntervalMs": 2000 },
           "network": { "pingCount": 30, "pingIntervalMs": 1000, "pingTimeoutMs": 1000, "host": null },
+          "gameNetwork": { "measureSeconds": 180, "serverDetectSeconds": 10, "traceMaxHops": 30, "traceProbesPerHop": 3,
+            "traceStopAfterSilentHops": 5, "loadIdleSeconds": 20, "loadSeconds": 30, "maxTrackedFlows": 4096 },
         }
         """;
 
@@ -44,6 +46,7 @@ public class ConfigLoaderTests
         Assert.Equal("BoosterCapture", result.Value.PresentMon.SessionName);
         Assert.Equal(90000, result.Value.Detectors.TimeoutsMs["drivers"]);
         Assert.Equal(14, result.Value.Logging.RetainedFileCount);
+        Assert.Equal(180, result.Value.GameNetwork.MeasureSeconds);
     }
 
     [Fact]

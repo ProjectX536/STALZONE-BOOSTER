@@ -86,8 +86,14 @@ public class ShippedConfigTests
     [Fact]
     public void Shipped_thresholds_match_fake_configuration()
     {
-        Assert.Equal(LoadShipped<Thresholds>("thresholds.json").Value, new FakeConfiguration().Current.Thresholds);
+        var shipped = LoadShipped<Thresholds>("thresholds.json").Value;
+        var fake = new FakeConfiguration().Current.Thresholds;
+
+        Assert.Equal(fake.GameNetwork.BufferbloatGradesMs, shipped.GameNetwork.BufferbloatGradesMs);
+        Assert.Equal(WithoutGrades(fake), WithoutGrades(shipped));
     }
+
+    private static Thresholds WithoutGrades(Thresholds t) => t with { GameNetwork = t.GameNetwork with { BufferbloatGradesMs = [] } };
 
     [Fact]
     public void Shipped_benchmark_settings_match_fake_configuration()
@@ -208,5 +214,39 @@ public class ShippedConfigTests
                      || url.Host.EndsWith("." + h, StringComparison.OrdinalIgnoreCase));
             Assert.False(string.IsNullOrWhiteSpace(rule.Title));
         }
+    }
+
+    [Fact]
+    public void Built_in_config_has_game_network_sections()
+    {
+        var settings = LoadShipped<BoosterSettings>("settings.json");
+        var thresholds = LoadShipped<Thresholds>("thresholds.json");
+        var catalog = LoadShipped<SystemCatalog>("system-catalog.json");
+
+        Assert.Empty(settings.Warnings);
+        Assert.Empty(SettingsNormalizer.Normalize(settings.Value).Warnings);
+        Assert.Empty(thresholds.Warnings);
+        Assert.Empty(ThresholdsNormalizer.Normalize(thresholds.Value).Warnings);
+        Assert.Empty(catalog.Warnings);
+        Assert.Equal(FakeConfiguration.DefaultGameNetwork, settings.Value.GameNetwork);
+        Assert.Equal(FakeConfiguration.DefaultGameNetworkThresholds.BufferbloatGradesMs, thresholds.Value.GameNetwork.BufferbloatGradesMs);
+        Assert.Equal(FakeConfiguration.DefaultGameNetworkThresholds with { BufferbloatGradesMs = [] },
+            thresholds.Value.GameNetwork with { BufferbloatGradesMs = [] });
+        Assert.Contains(catalog.Value.NetworkConsumers, c => c.Service == "DoSvc" && c.Kind == NetworkConsumerKind.DeliveryOptimization);
+        Assert.Contains(catalog.Value.NetworkConsumers, c => c.Service == "wuauserv" && c.Kind == NetworkConsumerKind.WindowsUpdate);
+        Assert.NotEmpty(catalog.Value.TunnelKeywords);
+    }
+
+    [Fact]
+    public void Network_consumers_identify_by_process_or_service()
+    {
+        var consumers = LoadShipped<SystemCatalog>("system-catalog.json").Value.NetworkConsumers;
+
+        Assert.All(consumers, c =>
+        {
+            Assert.True((c.Process is null) != (c.Service is null));
+            Assert.False(string.IsNullOrWhiteSpace(c.Name));
+        });
+        Assert.All(consumers.Where(c => c.Process is not null), c => Assert.EndsWith(".exe", c.Process, StringComparison.OrdinalIgnoreCase));
     }
 }

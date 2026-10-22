@@ -25,6 +25,7 @@ public sealed partial class DiagnosticsSession(SnapshotCollector collector, Hags
     private volatile BenchmarkReport? _benchmark;
     private volatile NetworkTestResult? _network;
     private volatile HagsExperimentView? _hags;
+    private volatile GameNetworkReportView? _gameNetwork;
 
     public event EventHandler? Changed;
 
@@ -35,6 +36,8 @@ public sealed partial class DiagnosticsSession(SnapshotCollector collector, Hags
     public NetworkTestResult? Network => _network;
 
     public HagsExperimentView? Hags => _hags;
+
+    public GameNetworkReportView? GameNetwork => _gameNetwork;
 
     public async Task RefreshAsync(CancellationToken ct)
     {
@@ -75,6 +78,13 @@ public sealed partial class DiagnosticsSession(SnapshotCollector collector, Hags
         Changed?.Invoke(this, EventArgs.Empty);
     }
 
+    public void SetGameNetwork(GameNetworkReportView view)
+    {
+        ArgumentNullException.ThrowIfNull(view);
+        _gameNetwork = view;
+        Changed?.Invoke(this, EventArgs.Empty);
+    }
+
     public SystemReport BuildReport()
     {
         var snapshot = _snapshot ?? throw new InvalidOperationException("No snapshot yet: call RefreshAsync first");
@@ -87,7 +97,7 @@ public sealed partial class DiagnosticsSession(SnapshotCollector collector, Hags
         var tweaks = TweakAdvisor.Propose(snapshot, series, games, current.Catalog.RegistryTweaks);
         var findings = FindingsBuilder.Build(snapshot, current.Thresholds, current.Warnings, benchmark, advice);
         var metadata = new ReportMetadata(ReportMetadata.CurrentSchemaVersion, AppVersion, time.GetUtcNow(), snapshot.Privileges);
-        return new SystemReport(metadata, snapshot, findings, benchmark, advice, network, tweaks, _hags);
+        return new SystemReport(metadata, snapshot, findings, benchmark, advice, network, tweaks, _hags, _gameNetwork);
     }
 
     private async Task<HagsExperimentView?> ReadHagsAsync(CancellationToken ct)

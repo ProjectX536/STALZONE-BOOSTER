@@ -80,13 +80,13 @@ public class SnapshotCollectorTests
         Func<CancellationToken, Task<HardwareInventory>>? hardware = null,
         Func<CancellationToken, Task<FrameCaptureAvailability>>? frameCapture = null,
         Survey? sensors = null,
-        IProfileRepository? profiles = null) => new(
+        IProfileRepository? profiles = null, FakeNetworkAdapters? network = null) => new(
         new FakeHardware(hardware ?? (_ => Task.FromResult(Inventory))),
         new FakeDrivers(drivers ?? (_ => Task.FromResult(new DriverInventoryResult([])))),
         new FakeFrameCapture(frameCapture ?? (_ => Task.FromResult(NotInstalled))),
         new FakeSensors(sensors ?? ((_, _, _) => Task.FromResult(EmptySurvey))),
         new SystemDiagnosticsCollector(new FakeMemoryStatusSource(), new FakePagefileSource(), new FakeProcessResourceSource(),
-            new FakeServiceInventorySource(), new FakeStabilityEventSource(), new FakeNetworkAdapters(), new FakeStartupSource(),
+            new FakeServiceInventorySource(), new FakeStabilityEventSource(), network ?? new FakeNetworkAdapters(), new FakeStartupSource(),
             new FakeGamingSettingsSource(), new FakeHagsSource(), new FakeProcessProvider(),
             new SectionRunner(_time, _logger),
             new FakeConfiguration(), _time),
@@ -138,6 +138,18 @@ public class SnapshotCollectorTests
         Assert.Equal(DataStatus.Available, snapshot.System.Services.Status);
         Assert.Equal(DataStatus.Available, snapshot.System.Stability.Status);
         Assert.Equal(DataStatus.Available, snapshot.System.NetworkAdapters.Status);
+    }
+
+    [Fact]
+    public async Task Snapshot_network_adapters_skip_tunnels()
+    {
+        var network = new FakeNetworkAdapters();
+        network.Adapters.Add(FakeNetworkAdapters.Adapter("vpn", NetworkMedium.Tunnel));
+        network.Adapters.Add(FakeNetworkAdapters.Adapter("eth0"));
+
+        var snapshot = await Collector(network: network).CollectAsync(Ct);
+
+        Assert.Equal(["eth0"], snapshot.System.NetworkAdapters.Value!.Select(a => a.Id));
     }
 
     [Fact]

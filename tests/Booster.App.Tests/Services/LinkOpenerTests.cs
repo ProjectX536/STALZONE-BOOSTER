@@ -10,13 +10,16 @@ public sealed class LinkOpenerTests
     [InlineData("gaming-gamedvr")]
     [InlineData("gaming-gamemode")]
     [InlineData("display-advancedgraphics")]
+    [InlineData("privacy-location")]
+    [InlineData("delivery-optimization")]
+    [InlineData("windowsupdate")]
     public void Known_settings_page_becomes_ms_settings_uri(string page)
     {
         Assert.Equal("ms-settings:" + page, LinkOpener.TryBuildSettingsUri(page));
     }
 
     [Theory]
-    [InlineData("windowsupdate")]
+    [InlineData("network-status")]
     [InlineData("gaming-gamemode ")]
     [InlineData("Gaming-GameMode")]
     [InlineData("ms-settings:gaming-gamemode")]

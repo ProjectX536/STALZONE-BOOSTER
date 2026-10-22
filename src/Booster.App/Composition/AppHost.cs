@@ -53,6 +53,7 @@ internal static class AppHost
         builder.Services.AddSingleton<LatencyViewModel>();
         builder.Services.AddSingleton<HagsViewModel>();
         builder.Services.AddSingleton<SystemViewModel>();
+        builder.Services.AddSingleton<NetworkViewModel>();
         builder.Services.AddSingleton<PerformanceViewModel>();
         builder.Services.AddSingleton<SessionViewModel>();
         builder.Services.AddSingleton<ProfilesViewModel>();

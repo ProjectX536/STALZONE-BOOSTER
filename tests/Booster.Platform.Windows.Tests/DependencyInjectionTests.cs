@@ -11,6 +11,7 @@ using Booster.Platform.Windows.Drivers;
 using Booster.Platform.Windows.Hardware;
 using Booster.Platform.Windows.Monitoring;
 using Booster.Platform.Windows.Providers;
+using Booster.Platform.Windows.Providers.GameNetwork;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -95,6 +96,17 @@ public sealed class DependencyInjectionTests : IDisposable
         Assert.IsType<StabilityEventSource>(provider.GetRequiredService<IStabilityEventSource>());
         Assert.IsType<NetworkAdapterSource>(provider.GetRequiredService<INetworkAdapterSource>());
         Assert.IsType<PingSource>(provider.GetRequiredService<IPingSource>());
+        Assert.IsType<EtwTrafficSource>(provider.GetRequiredService<ITrafficSource>());
+        Assert.IsType<TcpConnectionSource>(provider.GetRequiredService<ITcpConnectionSource>());
+        Assert.IsType<RouteSource>(provider.GetRequiredService<IRouteSource>());
+        Assert.IsType<TraceRouteSource>(provider.GetRequiredService<ITraceRouteSource>());
+        Assert.IsType<WifiSource>(provider.GetRequiredService<IWifiSource>());
+        using (var wlan = provider.GetRequiredService<Func<IWlanClient>>()())
+            Assert.IsType<WlanClient>(wlan);
+        Assert.IsType<GameNetworkFileStore>(provider.GetRequiredService<IGameNetworkStore>());
+        using (var cpu = Assert.IsType<SelfCpuSource>(provider.GetRequiredService<ISelfCpuSource>()))
+        using (var other = Assert.IsType<SelfCpuSource>(provider.GetRequiredService<ISelfCpuSource>()))
+            Assert.NotSame(cpu, other);
         Assert.NotNull(provider.GetRequiredService<SystemDiagnosticsCollector>());
         Assert.NotNull(provider.GetRequiredService<NetworkTester>());
     }

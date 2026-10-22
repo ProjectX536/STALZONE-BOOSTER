@@ -1,7 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Booster.Core.Abstractions;
+using Booster.Core.Benchmark;
 using Booster.Core.Configuration;
+using Booster.Core.GameNetwork;
 using Booster.Core.Hags;
 using Booster.Core.Inventory;
 using Booster.Core.Resources;
@@ -21,8 +23,8 @@ public static class SystemHealthReport
         var composer = new Composer(report, catalog, startup, culture);
         return
         [
-            composer.Memory(), composer.Services(), composer.Stability(), composer.Network(), composer.Startup(), composer.Tweaks(),
-            composer.Latency(), composer.Hags(),
+            composer.Memory(), composer.Services(), composer.Stability(), composer.Network(), composer.GameNetwork(), composer.Startup(),
+            composer.Tweaks(), composer.Latency(), composer.Hags(),
         ];
     }
 
@@ -252,6 +254,236 @@ public static class SystemHealthReport
                 ])));
         }
 
+        public ReportSection GameNetwork()
+        {
+            var writer = new ReportBlockWriter();
+            if (report.GameNetwork is not { } view)
+            {
+                writer.Paragraph(Text(ReportStrings.GameNetworkNotMeasured) with { Tone = CellTone.Note });
+                writer.Paragraph(Text(ReportStrings.GameNetworkCaveat) with { Tone = CellTone.Note });
+                return new ReportSection(ReportSectionIds.GameNetwork, EnumText.Format(AdviceModule.GameNetwork), null, writer.Blocks);
+            }
+
+            writer.Fields(
+            [
+                (ReportStrings.GameNetworkStartedAt, Text(Timestamp(view.StartedAt, culture))),
+                (ReportStrings.GameNetworkGame, view.Game is { } game
+                    ? Text(game)
+                    : Text(ReportStrings.GameNetworkGameUnknown) with { Tone = CellTone.Unavailable }),
+                (ReportStrings.GameNetworkServer, Text(view.Server)),
+                (ReportStrings.GameNetworkServerSource, Text(EnumText.Format(view.ServerSource))),
+                (ReportStrings.GameNetworkConnection, Connection(view)),
+                (ReportStrings.GameNetworkLinkSpeed, view.LinkSpeedBitsPerSecond is { } speed ? Text(Speed(speed)) : UnknownCell),
+                (ReportStrings.GameNetworkEnd, Text(EnumText.Format(view.End))
+                    with { Tone = view.End == MeasurementEnd.GameExited ? CellTone.Warning : CellTone.Normal }),
+                (ReportStrings.GameNetworkBoosterCpu, Value(view.BoosterCpuPercent, v => SensorFieldFormatter.Percent(v, culture))),
+            ]);
+            Breakdown(writer, view.Breakdown);
+            Targets(writer, view.Targets);
+            Spikes(writer, view.Spikes);
+            Route(writer, view);
+            Wifi(writer, view);
+            Consumers(writer, view.Consumers);
+            Load(writer, view.Load);
+            GameNetworkComparison(writer, view.Comparison);
+            Advice(writer, view.Advice, assessed: true);
+            writer.Paragraph(Text(ReportStrings.GameNetworkCaveat) with { Tone = CellTone.Note });
+            return Section(ReportSectionIds.GameNetwork, AdviceModule.GameNetwork, DataStatus.Available, writer);
+        }
+
+        private static ReportCell Connection(GameNetworkReportView view)
+        {
+            if (view.ViaTunnel)
+                return Text(ReportStrings.GameNetworkViaTunnel);
+            return view.Medium is { } medium ? Text(EnumText.Format(medium)) : UnknownCell;
+        }
+
+        private void Breakdown(ReportBlockWriter writer, LatencyBreakdown breakdown)
+        {
+            writer.Heading(ReportStrings.GameNetworkBreakdownHeading);
+            writer.Fields(
+            [
+                (ReportStrings.GameNetworkHome, Value(breakdown.HomeMs, NetworkMs)),
+                (ReportStrings.GameNetworkLine, Value(breakdown.LineMs, NetworkMs)),
+                (ReportStrings.GameNetworkRoute, Value(breakdown.RouteMs, NetworkMs)),
+                (ReportStrings.GameNetworkTotal, Value(breakdown.TotalMs, NetworkMs)),
+            ]);
+            if (breakdown.Clamped)
+                writer.Paragraph(Text(ReportStrings.GameNetworkClampedNote) with { Tone = CellTone.Note });
+            if (breakdown.EndKind == NetworkTargetKind.LastHop)
+                writer.Paragraph(Text(ReportStrings.GameNetworkLastHopNote) with { Tone = CellTone.Note });
+        }
+
+        private void Targets(ReportBlockWriter writer, IReadOnlyList<TargetView> targets)
+        {
+            writer.Heading(ReportStrings.GameNetworkTargetsHeading);
+            if (!NotEmpty(writer, targets))
+                return;
+
+            writer.Table([ReportStrings.ColumnTarget, ReportStrings.ColumnLatencyMedian, ReportStrings.GameNetworkColumnP95, ReportStrings.ColumnJitter,
+                    ReportStrings.ColumnLoss],
+                targets.Select(target => new ReportRow(
+                [
+                    Text(EnumText.Format(target.Kind)), Value(target.MedianMs, NetworkMs), Value(target.P95Ms, NetworkMs),
+                    Value(target.JitterMs, NetworkMs), Value(target.LossPercent, v => SensorFieldFormatter.Percent(v, culture)),
+                ])));
+        }
+
+        private void Spikes(ReportBlockWriter writer, SpikeReport spikes)
+        {
+            writer.Heading(ReportStrings.GameNetworkSpikesHeading);
+            var period = spikes.End.PeriodSeconds;
+            List<(string, ReportCell)> fields =
+            [
+                (ReportStrings.GameNetworkSpikeCount, Text(Number(spikes.End.Count, culture))),
+                (ReportStrings.GameNetworkSpikePeriod, period.IsAvailable
+                    ? Text(Format(culture, ReportStrings.GameNetworkSpikePeriodFormat, period.Value.ToString("0.#", culture)))
+                    : Text(ReportStrings.GameNetworkSpikeNotPeriodic)),
+            ];
+            if (spikes.Gateway is not null)
+            {
+                fields.Add((ReportStrings.GameNetworkSpikesAtHome, Text(Number(spikes.AtHome, culture))));
+                fields.Add((ReportStrings.GameNetworkSpikesBeyondGateway, Text(Number(spikes.BeyondGateway, culture))));
+            }
+            writer.Fields(fields);
+        }
+
+        private void Route(ReportBlockWriter writer, GameNetworkReportView view)
+        {
+            writer.Heading(ReportStrings.GameNetworkRouteHeading);
+            if (view.Route.Count == 0)
+            {
+                writer.Paragraph(Text(ReportStrings.GameNetworkNoRoute) with { Tone = CellTone.Unavailable });
+                return;
+            }
+
+            writer.Table([ReportStrings.GameNetworkColumnHop, ReportStrings.GameNetworkColumnAddressType, ReportStrings.ColumnLatencyMedian],
+                view.Route.Select(hop => new ReportRow(
+                [
+                    Text(Number(hop.Ttl, culture)),
+                    hop.Scope is { } scope
+                        ? Text(EnumText.Format(scope))
+                        : Text(ReportStrings.GameNetworkHopSilent) with { Tone = CellTone.Unavailable },
+                    Value(hop.MedianMs, NetworkMs),
+                ])));
+            if (view.Jump is { } jump)
+            {
+                writer.Paragraph(Text(Format(culture, ReportStrings.GameNetworkJumpFormat, jump.AfterTtl, jump.AtTtl,
+                    jump.IncreaseMs.ToString("0.#", culture))) with { Tone = CellTone.Warning });
+            }
+        }
+
+        private void Wifi(ReportBlockWriter writer, GameNetworkReportView view)
+        {
+            writer.Heading(ReportStrings.GameNetworkWifiHeading);
+            if (view.Wifi is { IsAvailable: true, Value: { } wifi })
+            {
+                writer.Fields(
+                [
+                    (ReportStrings.GameNetworkWifiSignal, Value(wifi.RssiDbm, v => Format(culture, ReportStrings.GameNetworkDbmFormat, v))),
+                    (ReportStrings.GameNetworkWifiChannel, Value(wifi.Channel, v => Number(v, culture))),
+                    (ReportStrings.GameNetworkWifiBand, Value(wifi.Band, b => EnumText.Format(b))),
+                    (ReportStrings.GameNetworkWifiScan, Value(wifi.BackgroundScanEnabled, Bool)),
+                    (ReportStrings.GameNetworkWifiStreaming, Value(wifi.StreamingMode, Bool)),
+                ]);
+            }
+            else if (view.Medium == NetworkMedium.Ethernet)
+                writer.Paragraph(Text(ReportStrings.GameNetworkCable));
+            else
+                writer.Paragraph(Value(view.Wifi, _ => string.Empty));
+        }
+
+        private void Consumers(ReportBlockWriter writer, Reading<IReadOnlyList<ConsumerView>> consumers)
+        {
+            writer.Heading(ReportStrings.GameNetworkConsumersHeading);
+            if (!Available(writer, consumers, out var list) || !NotEmpty(writer, list))
+                return;
+
+            writer.Table([ReportStrings.ColumnProcess, ReportStrings.ColumnCategory, ReportStrings.GameNetworkColumnRate],
+                list.Select(consumer => new ReportRow(
+                [
+                    Text(consumer.Name),
+                    Text(consumer.Kind is { } kind ? EnumText.Format(kind) : ReportStrings.GameNetworkConsumerUnclassified),
+                    Text(consumer.KBytesPerSecond.ToString("0.#", culture)),
+                ])));
+        }
+
+        private void Load(ReportBlockWriter writer, LoadTestResult? load)
+        {
+            writer.Heading(ReportStrings.GameNetworkLoadHeading);
+            if (load is null)
+            {
+                writer.Paragraph(Text(ReportStrings.GameNetworkLoadNotMeasured) with { Tone = CellTone.Unavailable });
+                return;
+            }
+
+            List<(string, ReportCell)> fields =
+            [
+                (ReportStrings.GameNetworkLoadTarget, Text(EnumText.Format(load.TargetKind))),
+                (ReportStrings.GameNetworkLoadIdle, Value(load.IdleMedianMs, NetworkMs)),
+                (ReportStrings.GameNetworkLoadLoaded, Value(load.LoadedMedianMs, NetworkMs)),
+                (ReportStrings.GameNetworkLoadThroughput, Value(load.ThroughputMbps,
+                    v => Format(culture, ReportStrings.UnitMbps, v.ToString("0.#", culture)))),
+                (ReportStrings.GameNetworkLoadOutcome, Text(EnumText.Format(load.Outcome))),
+            ];
+            if (load.Grade is { } grade)
+            {
+                fields.Add((ReportStrings.GameNetworkLoadGrade, Text(EnumText.Format(grade))
+                    with { Tone = grade >= BufferbloatGrade.C ? CellTone.Warning : CellTone.Normal }));
+            }
+            writer.Fields(fields);
+        }
+
+        private void GameNetworkComparison(ReportBlockWriter writer, GameNetworkComparison? comparison)
+        {
+            writer.Heading(ReportStrings.GameNetworkComparisonHeading);
+            if (comparison is null)
+            {
+                writer.Paragraph(Text(ReportStrings.GameNetworkComparisonNone) with { Tone = CellTone.Unavailable });
+                return;
+            }
+
+            writer.Fields(
+            [
+                (ReportStrings.GameNetworkComparisonRuns, Text(Format(culture, ReportStrings.GameNetworkComparisonRunsFormat,
+                    Number(comparison.BaselineRuns, culture), Number(comparison.CandidateRuns, culture)))),
+                (ReportStrings.GameNetworkComparisonVerdict, Text(EnumText.Format(comparison.Verdict))),
+            ]);
+            if (comparison.Metrics.Count > 0)
+            {
+                writer.Table([ReportStrings.ColumnMetric, ReportStrings.ColumnBaseline, ReportStrings.ColumnCandidate, ReportStrings.ColumnChange,
+                        ReportStrings.ColumnVerdict],
+                    comparison.Metrics.Select(metric => new ReportRow(
+                    [
+                        Text(EnumText.Format(metric.Metric)),
+                        Text(NetworkMetricValue(metric.Metric, metric.Baseline)),
+                        Text(NetworkMetricValue(metric.Metric, metric.Candidate)),
+                        Text(NetworkMetricChange(metric.Metric, metric.Change)),
+                        Text(EnumText.Format(metric.Verdict)) with { Tone = metric.Verdict == ChangeVerdict.Worsened ? CellTone.Warning : CellTone.Normal },
+                    ])));
+            }
+            foreach (var caveat in comparison.Caveats)
+                writer.Paragraph(Text(EnumText.Format(caveat)) with { Tone = CellTone.Note });
+        }
+
+        private string NetworkMetricValue(NetworkMetric metric, double value) => metric switch
+        {
+            NetworkMetric.LossPercent => SensorFieldFormatter.Percent(value, culture),
+            NetworkMetric.SpikesPerMinute => Format(culture, ReportStrings.GameNetworkPerMinuteFormat, value.ToString("0.#", culture)),
+            _ => NetworkMs(value),
+        };
+
+        private string NetworkMetricChange(NetworkMetric metric, double change)
+        {
+            var signed = change.ToString("+0.#;-0.#;0", culture);
+            return metric switch
+            {
+                NetworkMetric.LossPercent => Format(culture, ReportStrings.GameNetworkPointsFormat, signed),
+                NetworkMetric.SpikesPerMinute => Format(culture, ReportStrings.GameNetworkPerMinuteFormat, signed),
+                _ => Format(culture, ReportStrings.UnitMs, signed),
+            };
+        }
+
         public ReportSection Startup()
         {
             var writer = new ReportBlockWriter();
@@ -415,10 +647,12 @@ public static class SystemHealthReport
         private static ReportCell GamingValue(Reading<GamingSettings> gaming, Func<GamingSettings, Reading<bool>> select) =>
             gaming is { IsAvailable: true, Value: { } settings } ? Value(select(settings), Bool) : Value(gaming, _ => string.Empty);
 
-        private void Advice(ReportBlockWriter writer, AdviceModule module, bool assessed)
+        private void Advice(ReportBlockWriter writer, AdviceModule module, bool assessed) =>
+            Advice(writer, [.. report.Advice.Where(a => a.Module == module)], assessed);
+
+        private void Advice(ReportBlockWriter writer, IReadOnlyList<SystemAdvice> advice, bool assessed)
         {
             writer.Heading(ReportStrings.AdviceHeading);
-            var advice = report.Advice.Where(a => a.Module == module).ToList();
             if (advice.Count == 0)
             {
                 writer.Paragraph(assessed

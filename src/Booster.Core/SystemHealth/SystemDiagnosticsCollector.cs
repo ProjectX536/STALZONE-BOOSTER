@@ -29,7 +29,7 @@ public sealed class SystemDiagnosticsCollector(IMemoryStatusSource memory, IPage
         var servicesTask = runner.RunAsync(ServicesSectionId, services.ReadAsync, detectors.TimeoutFor(ServicesSectionId), ct);
         var stabilityTask = runner.RunAsync(StabilitySectionId, t => stability.ReadAsync(since, diagnostics.MaxStabilityEvents, t),
             detectors.TimeoutFor(StabilitySectionId), ct);
-        var networkTask = RunSync(NetworkSectionId, network.Read, detectors, ct);
+        var networkTask = RunSync(NetworkSectionId, ReadPhysicalAdapters, detectors, ct);
         var startupTask = RunSync(StartupSectionId, ReadStartup, detectors, ct);
         var gamingTask = RunSync(GamingSectionId, gaming.Read, detectors, ct);
         var overlaysTask = RunSync(OverlaysSectionId, ReadOverlays, detectors, ct);
@@ -48,6 +48,9 @@ public sealed class SystemDiagnosticsCollector(IMemoryStatusSource memory, IPage
 
     private Task<Reading<T>> RunSync<T>(string sectionId, Func<T> read, DetectorSettings detectors, CancellationToken ct) =>
         runner.RunAsync(sectionId, t => Task.Run(read, t), detectors.TimeoutFor(sectionId), ct);
+
+    private IReadOnlyList<NetworkAdapterInfo> ReadPhysicalAdapters() =>
+        network.Read().Where(a => a.Medium != NetworkMedium.Tunnel).ToArray();
 
     private IReadOnlyList<StartupItem> ReadStartup()
     {

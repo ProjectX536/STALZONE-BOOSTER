@@ -8,11 +8,14 @@ public class SettingsNormalizerTests
     private static readonly DiagnosticsSettings DefaultDiagnostics = new(14, 500, 10, 2000);
     private static readonly NetworkSettings DefaultNetwork = new(30, 1000, 1000, null);
 
+    private static readonly GameNetworkSettings DefaultGameNetwork = new(180, 10, 30, 3, 5, 20, 30, 4096);
+
     private static BoosterSettings Settings(
         int selfUsage = 2000, int gpuSample = 2000, int defaultTimeout = 15000, int driversTimeout = 90000,
         int retainedFiles = 14, int gameDetection = 2000, int retainedSessions = 50,
         int sensorInterval = 2000, int exitConfirmations = 2, BenchmarkSettings? benchmark = null,
-        DiagnosticsSettings? diagnostics = null, NetworkSettings? network = null) =>
+        DiagnosticsSettings? diagnostics = null, NetworkSettings? network = null,
+        GameNetworkSettings? gameNetwork = null) =>
         new(1,
             new MonitoringSettings(selfUsage, gpuSample, gameDetection, sensorInterval, exitConfirmations),
             new DetectorSettings(defaultTimeout, new Dictionary<string, int> { ["drivers"] = driversTimeout }),
@@ -21,7 +24,8 @@ public class SettingsNormalizerTests
             new LoggingSettings(retainedFiles),
             new JournalSettings(retainedSessions),
             diagnostics ?? DefaultDiagnostics,
-            network ?? DefaultNetwork);
+            network ?? DefaultNetwork,
+            gameNetwork ?? DefaultGameNetwork);
 
     [Fact]
     public void Self_usage_interval_below_one_second_is_raised_to_one_second()
@@ -232,5 +236,36 @@ public class SettingsNormalizerTests
 
         Assert.Equal(TimeSpan.FromMilliseconds(90000), detectors.TimeoutFor("drivers"));
         Assert.Equal(TimeSpan.FromMilliseconds(15000), detectors.TimeoutFor("cpu"));
+    }
+
+    [Theory]
+    [InlineData(5, 30)]
+    [InlineData(5000, 1800)]
+    public void Game_network_settings_are_clamped(int configured, int expected)
+    {
+        var result = SettingsNormalizer.Normalize(Settings(gameNetwork: DefaultGameNetwork with { MeasureSeconds = configured }));
+
+        Assert.Equal(expected, result.Value.GameNetwork.MeasureSeconds);
+        var warning = Assert.Single(result.Warnings);
+        Assert.Equal(ConfigWarningKind.ValueClamped, warning.Kind);
+        Assert.Contains("gameNetwork.measureSeconds", warning.Detail);
+    }
+
+    [Fact]
+    public void Server_detect_seconds_below_minimum_are_raised()
+    {
+        var result = SettingsNormalizer.Normalize(Settings(gameNetwork: DefaultGameNetwork with { ServerDetectSeconds = 1 }));
+
+        Assert.Equal(3, result.Value.GameNetwork.ServerDetectSeconds);
+        Assert.Contains("gameNetwork.serverDetectSeconds", Assert.Single(result.Warnings).Detail);
+    }
+
+    [Fact]
+    public void Default_game_network_settings_need_no_clamping()
+    {
+        var result = SettingsNormalizer.Normalize(Settings());
+
+        Assert.Empty(result.Warnings);
+        Assert.Equal(DefaultGameNetwork, result.Value.GameNetwork);
     }
 }

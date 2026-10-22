@@ -94,6 +94,8 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
         Update();
     }
 
+    public event EventHandler? OpenGameNetworkRequested;
+
     public LatencyViewModel Latency { get; }
 
     public HagsViewModel Hags { get; }
@@ -377,6 +379,9 @@ public sealed partial class SystemViewModel : ObservableObject, IPage
 
     [RelayCommand(CanExecute = nameof(HasPending))]
     private void CancelMaintenance() => ClearPending();
+
+    [RelayCommand]
+    private void OpenGameNetwork() => OpenGameNetworkRequested?.Invoke(this, EventArgs.Empty);
 
     [RelayCommand]
     private void OpenGamingSettings(string? page)

@@ -40,6 +40,10 @@ public static class ThresholdsNormalizer
 
     private const double MinimumRateThreshold = 1;
 
+    private const double MinimumGameEventsPerSecond = 1;
+
+    private const double MinimumBackgroundTrafficKBps = 1;
+
     private const double MinimumPercentileRatio = 1.1;
 
     private const double MinimumLatencyPercent = 0.1;
@@ -63,6 +67,25 @@ public static class ThresholdsNormalizer
     private const double MinimumStartupPrivateMemoryMb = 1;
 
     private const double MaximumStartupPrivateMemoryMb = 4096;
+
+    private const double MaximumSpikeMinDeltaMs = 1000;
+
+    private const double MinimumSpikeMadFactor = 1;
+    private const double MaximumSpikeMadFactor = 20;
+
+    private const int MinimumPeriodicSpikes = 3;
+
+    private const double MinimumPeriodicVariation = 0.01;
+    private const double MaximumPeriodicVariation = 1;
+
+    private const double MaximumRouteJumpMs = 1000;
+
+    private const int BufferbloatGradeCount = 5;
+
+    private const double MinimumLoadThroughputMbps = 0.1;
+
+    private const int MinimumWifiWeakSignalDbm = -90;
+    private const int MaximumWifiWeakSignalDbm = -30;
 
     public static ConfigLoadResult<Thresholds> Normalize(Thresholds t)
     {
@@ -147,12 +170,38 @@ public static class ThresholdsNormalizer
         var startup = new StartupThresholds(Clamp(t.Startup.MinPrivateMemoryMb, MinimumStartupPrivateMemoryMb,
             MaximumStartupPrivateMemoryMb, "startup.minPrivateMemoryMb"));
 
+        var g = t.GameNetwork;
+        var gameNetwork = new GameNetworkThresholds(
+            Clamp(g.MinGameEventsPerSecond, MinimumGameEventsPerSecond, double.MaxValue, "gameNetwork.minGameEventsPerSecond"),
+            Clamp(g.SpikeMinDeltaMs, MinimumNetworkMs, MaximumSpikeMinDeltaMs, "gameNetwork.spikeMinDeltaMs"),
+            Clamp(g.SpikeMadFactor, MinimumSpikeMadFactor, MaximumSpikeMadFactor, "gameNetwork.spikeMadFactor"),
+            Clamp(g.PeriodicMinSpikes, MinimumPeriodicSpikes, int.MaxValue, "gameNetwork.periodicMinSpikes"),
+            Clamp(g.PeriodicMaxVariation, MinimumPeriodicVariation, MaximumPeriodicVariation, "gameNetwork.periodicMaxVariation"),
+            Clamp(g.RouteJumpMs, MinimumNetworkMs, MaximumRouteJumpMs, "gameNetwork.routeJumpMs"),
+            BufferbloatGrades(g.BufferbloatGradesMs, warnings),
+            Clamp(g.LoadMinThroughputMbps, MinimumLoadThroughputMbps, double.MaxValue, "gameNetwork.loadMinThroughputMbps"),
+            Clamp(g.BackgroundTrafficKBps, MinimumBackgroundTrafficKBps, double.MaxValue, "gameNetwork.backgroundTrafficKBps"),
+            Clamp(g.WifiWeakSignalDbm, MinimumWifiWeakSignalDbm, MaximumWifiWeakSignalDbm, "gameNetwork.wifiWeakSignalDbm"),
+            Clamp(g.ComparisonMinimumRuns, MinimumComparisonRuns, MaximumComparisonRuns, "gameNetwork.comparisonMinimumRuns"),
+            Clamp(g.ComparisonMinimumChangeMs, 0, MaximumGatewayLatencyMs, "gameNetwork.comparisonMinimumChangeMs"),
+            Clamp(g.ComparisonMinimumChangePercent, 0, MaximumChangePercent, "gameNetwork.comparisonMinimumChangePercent"));
+
         return warnings.Count == 0
             ? new(t, [])
             : new(t with
             {
                 Throttle = throttle, Stutter = stutter, Bottleneck = bottleneck, Comparison = comparison, Recommendations = recommendations,
-                Memory = memory, Network = network, Startup = startup,
+                Memory = memory, Network = network, Startup = startup, GameNetwork = gameNetwork,
             }, warnings);
+    }
+
+    private static IReadOnlyList<double> BufferbloatGrades(IReadOnlyList<double>? grades, List<ConfigWarning> warnings)
+    {
+        if (grades is { Count: BufferbloatGradeCount } && grades[0] > 0
+            && Enumerable.Range(1, BufferbloatGradeCount - 1).All(i => grades[i] > grades[i - 1]))
+            return grades;
+        warnings.Add(new(ConfigWarningKind.InvalidValue, ConfigFiles.Thresholds,
+            "gameNetwork.bufferbloatGradesMs: expected five strictly ascending positive values; the grade is unavailable"));
+        return [];
     }
 }

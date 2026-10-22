@@ -4,6 +4,7 @@ public enum NetworkMedium
 {
     Ethernet,
     Wireless,
+    Tunnel,
     Other,
 }
 

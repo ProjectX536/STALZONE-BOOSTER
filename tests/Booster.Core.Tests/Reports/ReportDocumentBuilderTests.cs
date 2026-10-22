@@ -49,7 +49,7 @@ public class ReportDocumentBuilderTests
             [ReportSectionIds.Header, ReportSectionIds.Findings, ReportSectionIds.Cpu, ReportSectionIds.Gpu, ReportSectionIds.Memory,
                 ReportSectionIds.Board, ReportSectionIds.Os, ReportSectionIds.Storage, ReportSectionIds.Displays, ReportSectionIds.Drivers,
                 ReportSectionIds.SystemMemory, ReportSectionIds.Services, ReportSectionIds.Stability, ReportSectionIds.Network,
-                ReportSectionIds.Startup, ReportSectionIds.Tweaks, ReportSectionIds.Latency, ReportSectionIds.Hags, ReportSectionIds.Benchmark,
+                ReportSectionIds.GameNetwork, ReportSectionIds.Startup, ReportSectionIds.Tweaks, ReportSectionIds.Latency, ReportSectionIds.Hags, ReportSectionIds.Benchmark,
                 ReportSectionIds.Capabilities],
             ids);
     }
@@ -296,7 +296,4 @@ public class ReportDocumentBuilderTests
         Assert.Contains(section.Blocks.OfType<ReportParagraph>(), p => p.Content.Text == "Мало замеров (1 из нужных 2) — о частотах вывод не делается");
         Assert.DoesNotContain(section.Blocks.OfType<ReportParagraph>(), p => p.Content.Text == ReportStrings.ThrottleNoneFound);
     }
-
-    [Fact]
-    public void Schema_version_is_4() => Assert.Equal(4, ReportMetadata.CurrentSchemaVersion);
 }

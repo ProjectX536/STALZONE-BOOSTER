@@ -11,7 +11,8 @@ public sealed record Thresholds(
     RecommendationSettings Recommendations,
     MemoryThresholds Memory,
     NetworkThresholds Network,
-    StartupThresholds Startup)
+    StartupThresholds Startup,
+    GameNetworkThresholds GameNetwork)
 {
     public const int CurrentSchemaVersion = 1;
 }
@@ -57,3 +58,8 @@ public sealed record MemoryThresholds(double CommitPercent);
 public sealed record NetworkThresholds(double GatewayLatencyMs, double HostLatencyMs, double JitterMs, double LossPercent);
 
 public sealed record StartupThresholds(double MinPrivateMemoryMb);
+
+public sealed record GameNetworkThresholds(double MinGameEventsPerSecond, double SpikeMinDeltaMs, double SpikeMadFactor,
+    int PeriodicMinSpikes, double PeriodicMaxVariation, double RouteJumpMs, IReadOnlyList<double> BufferbloatGradesMs,
+    double LoadMinThroughputMbps, double BackgroundTrafficKBps, int WifiWeakSignalDbm,
+    int ComparisonMinimumRuns, double ComparisonMinimumChangeMs, double ComparisonMinimumChangePercent);

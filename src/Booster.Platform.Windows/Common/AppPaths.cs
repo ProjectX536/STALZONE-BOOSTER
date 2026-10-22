@@ -20,6 +20,8 @@ public interface IAppPaths
 
     string Traces { get; }
 
+    string NetworkMeasurements { get; }
+
     string State { get; }
 
     string BaseDirectory { get; }
@@ -68,6 +70,8 @@ public sealed class AppPaths : IAppPaths
     public string Benchmarks => Ensure("benchmarks");
 
     public string Traces => Ensure("traces");
+
+    public string NetworkMeasurements => Ensure("network");
 
     public string State => Ensure("state");
 

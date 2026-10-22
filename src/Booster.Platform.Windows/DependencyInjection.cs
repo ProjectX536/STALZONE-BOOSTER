@@ -6,6 +6,7 @@ using Booster.Platform.Windows.Drivers;
 using Booster.Platform.Windows.Hardware;
 using Booster.Platform.Windows.Monitoring;
 using Booster.Platform.Windows.Providers;
+using Booster.Platform.Windows.Providers.GameNetwork;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -83,6 +84,15 @@ public static class PlatformDependencyInjection
         services.TryAddSingleton<IStabilityEventSource, StabilityEventSource>();
         services.TryAddSingleton<INetworkAdapterSource, NetworkAdapterSource>();
         services.TryAddSingleton<IPingSource, PingSource>();
+        services.TryAddSingleton<ITrafficSource, EtwTrafficSource>();
+        services.TryAddSingleton<ITcpConnectionSource, TcpConnectionSource>();
+        services.TryAddSingleton<IRouteSource, RouteSource>();
+        services.TryAddSingleton<ITraceRouteSource, TraceRouteSource>();
+        services.TryAddSingleton<Func<IWlanClient>>(_ => () => new WlanClient());
+        services.TryAddSingleton<IWifiSource, WifiSource>();
+        // Транзиент: у каждого замера собственный отсчёт CPU Booster.
+        services.TryAddTransient<ISelfCpuSource, SelfCpuSource>();
+        services.TryAddSingleton<IGameNetworkStore, GameNetworkFileStore>();
         return services;
     }
 }

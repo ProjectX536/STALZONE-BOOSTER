@@ -56,6 +56,7 @@ public static class ReportSectionIds
     public const string Services = "services";
     public const string Stability = "stability";
     public const string Network = "network";
+    public const string GameNetwork = "gameNetwork";
     public const string Startup = "startup";
     public const string Tweaks = "tweaks";
     public const string Latency = "latency";

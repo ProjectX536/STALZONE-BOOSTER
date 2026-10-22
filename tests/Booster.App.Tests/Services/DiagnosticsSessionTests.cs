@@ -106,6 +106,26 @@ public class DiagnosticsSessionTests
     }
 
     [Fact]
+    public async Task Session_report_includes_game_network_after_set()
+    {
+        var session = Session(new FakeProfileRepository());
+        await session.RefreshAsync(Ct);
+        var changes = 0;
+        session.Changed += (_, _) => changes++;
+        var measurement = GameNetworkSamples.Measurement();
+        var view = GameNetworkReportView.From(measurement, GameNetworkSamples.Analysis(measurement), null, null);
+
+        var before = session.BuildReport();
+        session.SetGameNetwork(view);
+        var after = session.BuildReport();
+
+        Assert.Null(before.GameNetwork);
+        Assert.Same(view, session.GameNetwork);
+        Assert.Same(view, after.GameNetwork);
+        Assert.Equal(1, changes);
+    }
+
+    [Fact]
     public async Task Game_crashes_use_games_from_profiles()
     {
         var session = Session(new FakeProfileRepository(ProfileFactory.Profile(games: ["cs2.exe"])));

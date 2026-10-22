@@ -1,5 +1,6 @@
 using Booster.App.Resources;
 using Booster.App.Services;
+using Booster.Core.Abstractions;
 using Booster.Core.Latency;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
@@ -12,6 +13,7 @@ public enum AppPage
     Hardware,
     Drivers,
     System,
+    Network,
     Performance,
     Profiles,
     Journal,
@@ -34,20 +36,24 @@ public sealed partial class MainViewModel : ObservableObject
     private readonly OverviewViewModel _overview;
     private readonly GamingLifecycle _gaming;
     private readonly TraceRecorder _traces;
+    private readonly ITrafficSource _traffic;
     private readonly ILogger<MainViewModel> _logger;
 
     public MainViewModel(StatusBarViewModel statusBar, OverviewViewModel overview, HardwareViewModel hardware, DriversViewModel drivers,
-        SystemViewModel system, PerformanceViewModel performance, ProfilesViewModel profiles, JournalViewModel journal, SettingsViewModel settings,
-        GamingLifecycle gaming, TraceRecorder traces, ILogger<MainViewModel> logger)
+        SystemViewModel system, NetworkViewModel network, PerformanceViewModel performance, ProfilesViewModel profiles, JournalViewModel journal, SettingsViewModel settings,
+        GamingLifecycle gaming, TraceRecorder traces, ITrafficSource traffic, ILogger<MainViewModel> logger)
     {
         ArgumentNullException.ThrowIfNull(statusBar);
         ArgumentNullException.ThrowIfNull(overview);
+        ArgumentNullException.ThrowIfNull(system);
         ArgumentNullException.ThrowIfNull(gaming);
         ArgumentNullException.ThrowIfNull(traces);
+        ArgumentNullException.ThrowIfNull(traffic);
         StatusBar = statusBar;
         _overview = overview;
         _gaming = gaming;
         _traces = traces;
+        _traffic = traffic;
         _logger = logger;
         Pages =
         [
@@ -55,12 +61,14 @@ public sealed partial class MainViewModel : ObservableObject
             new(AppPage.Hardware, Strings.NavHardware, hardware),
             new(AppPage.Drivers, Strings.NavDrivers, drivers),
             new(AppPage.System, Strings.NavSystem, system),
+            new(AppPage.Network, Strings.NavNetwork, network),
             new(AppPage.Performance, Strings.NavPerformance, performance),
             new(AppPage.Profiles, Strings.NavProfiles, profiles),
             new(AppPage.Journal, Strings.NavJournal, journal),
             new(AppPage.Settings, Strings.NavSettings, settings),
         ];
         SelectedPage = Pages[0];
+        system.OpenGameNetworkRequested += (_, _) => Open(AppPage.Network);
     }
 
     public IReadOnlyList<NavigationItem> Pages { get; }
@@ -75,7 +83,21 @@ public sealed partial class MainViewModel : ObservableObject
         StatusBar.Start();
         if (_overview.RefreshCommand.CanExecute(null))
             _overview.RefreshCommand.Execute(null);
+        _ = StopStaleTrafficSessionAsync();
         _ = StartGamingAsync();
+    }
+
+    // Сессия ETW могла остаться от упавшего Booster; остановка идёт в пуле потоков, чтобы не задерживать окно.
+    internal async Task StopStaleTrafficSessionAsync()
+    {
+        try
+        {
+            await Task.Run(_traffic.StopStaleSession).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            LogStaleTrafficFailed(ex);
+        }
     }
 
     internal async Task StartGamingAsync()
@@ -120,4 +142,7 @@ public sealed partial class MainViewModel : ObservableObject
 
     [LoggerMessage(Level = LogLevel.Warning, Message = "WPR recording state could not be read at startup")]
     private partial void LogTraceStatusFailed(Exception exception);
+
+    [LoggerMessage(Level = LogLevel.Warning, Message = "Stale game network trace session could not be stopped at startup")]
+    private partial void LogStaleTrafficFailed(Exception exception);
 }

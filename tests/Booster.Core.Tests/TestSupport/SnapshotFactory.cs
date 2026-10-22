@@ -104,12 +104,12 @@ internal static class SnapshotFactory
 
     public static SystemReport Report(SystemSnapshot? snapshot = null, IReadOnlyList<Finding>? findings = null,
         BenchmarkReport? benchmark = null, IReadOnlyList<SystemAdvice>? advice = null, NetworkTestResult? network = null,
-        IReadOnlyList<TweakProposal>? tweaks = null, HagsExperimentView? hags = null)
+        IReadOnlyList<TweakProposal>? tweaks = null, HagsExperimentView? hags = null, GameNetworkReportView? gameNetwork = null)
     {
         snapshot ??= Healthy();
         return new SystemReport(
             new ReportMetadata(ReportMetadata.CurrentSchemaVersion, "1.0.0-test", TakenAt.AddMinutes(1), snapshot.Privileges),
-            snapshot, findings ?? [], benchmark, advice ?? [], network, tweaks ?? [], hags);
+            snapshot, findings ?? [], benchmark, advice ?? [], network, tweaks ?? [], hags, gameNetwork);
     }
 
     private static MemoryModule Module(string locator, string bankLabel) => new(Known(16 * GiB), Known("DDR4"), Known(3200), Known(3200),

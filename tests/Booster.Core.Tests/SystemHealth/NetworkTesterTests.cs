@@ -43,6 +43,18 @@ public class NetworkTesterTests
     }
 
     [Fact]
+    public async Task Tunnel_adapter_is_not_picked()
+    {
+        _adapters.Adapters.Add(Adapter("vpn", NetworkMedium.Tunnel, gateways: ["10.8.0.1"]));
+        _adapters.Adapters.Add(Adapter("eth0", gateways: [Gateway]));
+
+        var result = await DriveAsync(Tester().RunAsync(_progress, Ct));
+
+        Assert.Equal("eth0", result.Adapter!.Id);
+        Assert.DoesNotContain("10.8.0.1", _ping.Calls);
+    }
+
+    [Fact]
     public async Task Pings_gateway_and_configured_host_each_round()
     {
         _adapters.Adapters.Add(Adapter("wifi", NetworkMedium.Wireless, gateways: []));

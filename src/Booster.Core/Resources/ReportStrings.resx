@@ -2448,6 +2448,9 @@
   <data name="NetworkMedium_Wireless" xml:space="preserve">
     <value>Wi-Fi</value>
   </data>
+  <data name="NetworkMedium_Tunnel" xml:space="preserve">
+    <value>Туннель (VPN)</value>
+  </data>
   <data name="NetworkMedium_Other" xml:space="preserve">
     <value>Другое</value>
   </data>
@@ -2456,6 +2459,12 @@
   </data>
   <data name="NetworkTargetKind_Host" xml:space="preserve">
     <value>Внешний узел</value>
+  </data>
+  <data name="NetworkTargetKind_IspHop" xml:space="preserve">
+    <value>Первый узел провайдера</value>
+  </data>
+  <data name="NetworkTargetKind_LastHop" xml:space="preserve">
+    <value>Последний ответивший узел</value>
   </data>
   <data name="ColumnStartupItem" xml:space="preserve">
     <value>Элемент</value>
@@ -2693,5 +2702,446 @@
   </data>
   <data name="HagsVerdict_Inconclusive" xml:space="preserve">
     <value>По этим двум сериям вывода нет: разница не доказана или средний FPS и 1% low противоречат друг другу. Запишите серии с большим числом прогонов в одинаковых условиях и повторите тест.</value>
+  </data>
+  <data name="AdviceModule_GameNetwork" xml:space="preserve">
+    <value>Сеть в игре</value>
+  </data>
+  <data name="AdviceId_GameNetworkWifiScanSpikes" xml:space="preserve">
+    <value>Скачки пинга от фонового поиска сетей Wi-Fi</value>
+  </data>
+  <data name="AdviceText_GameNetworkWifiScanSpikes" xml:space="preserve">
+    <value>Скачки повторяются каждые {0} с и видны уже на роутере. Это похоже на фоновый поиск сетей Wi-Fi, который адаптер выполняет периодически.</value>
+  </data>
+  <data name="AdviceAction_GameNetworkWifiScanSpikes" xml:space="preserve">
+    <value>Подключите ПК к роутеру кабелем: у проводного подключения нет поиска сетей. Booster сам ничего не меняет.</value>
+  </data>
+  <data name="AdviceRisk_GameNetworkWifiScanSpikes" xml:space="preserve">
+    <value>Это только рекомендация. Причина определена по периодичности скачков и не доказана; проверьте повторным замером.</value>
+  </data>
+  <data name="AdviceId_GameNetworkLocalSpikes" xml:space="preserve">
+    <value>Скачки пинга начинаются дома</value>
+  </data>
+  <data name="AdviceText_GameNetworkLocalSpikes" xml:space="preserve">
+    <value>Скачки задержки уже видны на пути до роутера: {0} из {1} скачков. Скорее всего, причина в домашней сети.</value>
+  </data>
+  <data name="AdviceAction_GameNetworkLocalSpikes" xml:space="preserve">
+    <value>Проверьте, не качает ли что-то другое в вашей сети (другие устройства, загрузки). Если ПК на Wi-Fi, попробуйте кабель или место ближе к роутеру. Перезагрузка роутера иногда помогает.</value>
+  </data>
+  <data name="AdviceRisk_GameNetworkLocalSpikes" xml:space="preserve">
+    <value>Это только рекомендация. Booster ничего не меняет в сети сам.</value>
+  </data>
+  <data name="AdviceId_GameNetworkRemoteSpikes" xml:space="preserve">
+    <value>Скачки пинга за роутером</value>
+  </data>
+  <data name="AdviceText_GameNetworkRemoteSpikes" xml:space="preserve">
+    <value>Скачки задержки появляются за роутером: {0} из {1} скачков. На пути до роутера в эти моменты скачков в основном не было, поэтому причина, скорее всего, на линии провайдера или дальше по маршруту.</value>
+  </data>
+  <data name="AdviceAction_GameNetworkRemoteSpikes" xml:space="preserve">
+    <value>Обратитесь к провайдеру с этими цифрами из отчёта. Можно также попробовать сервис-ретранслятор игрового трафика на пробном периоде и сравнить замеры Booster до и после.</value>
+  </data>
+  <data name="AdviceRisk_GameNetworkRemoteSpikes" xml:space="preserve">
+    <value>Результат не гарантирован: ретранслятор может помочь, не изменить ничего или ухудшить маршрут. Это только рекомендация.</value>
+  </data>
+  <data name="AdviceId_GameNetworkRouteJump" xml:space="preserve">
+    <value>Задержка резко растёт на одном участке маршрута</value>
+  </data>
+  <data name="AdviceText_GameNetworkRouteJump" xml:space="preserve">
+    <value>На узле №{0} маршрута задержка растёт сразу на {1} мс и дальше остаётся высокой. Рост виден за роутером.</value>
+  </data>
+  <data name="AdviceAction_GameNetworkRouteJump" xml:space="preserve">
+    <value>Обратитесь к провайдеру с этими цифрами из отчёта. Можно также попробовать сервис-ретранслятор игрового трафика на пробном периоде и сравнить замеры Booster.</value>
+  </data>
+  <data name="AdviceRisk_GameNetworkRouteJump" xml:space="preserve">
+    <value>Результат не гарантирован. Рост задержки на узле может быть и особенностью самого узла, а не потерей на пути. Это только рекомендация.</value>
+  </data>
+  <data name="AdviceId_GameNetworkFarServer" xml:space="preserve">
+    <value>Сервер игры далеко</value>
+  </data>
+  <data name="AdviceText_GameNetworkFarServer" xml:space="preserve">
+    <value>Базовая задержка до сервера игры {0} мс. Это в основном расстояние до сервера.</value>
+  </data>
+  <data name="AdviceAction_GameNetworkFarServer" xml:space="preserve">
+    <value>Выберите в игре ближний сервер, если он есть. Базовую задержку до далёкого сервера программа на ПК не уменьшает.</value>
+  </data>
+  <data name="AdviceRisk_GameNetworkFarServer" xml:space="preserve">
+    <value>Это только рекомендация. На ближнем сервере могут быть другие игроки и другая нагрузка.</value>
+  </data>
+  <data name="AdviceId_GameNetworkBufferbloat" xml:space="preserve">
+    <value>Пинг растёт при загруженном канале</value>
+  </data>
+  <data name="AdviceText_GameNetworkBufferbloat" xml:space="preserve">
+    <value>Когда канал занят загрузкой, пинг вырос на {0} мс. Так бывает, когда роутер копит очередь пакетов.</value>
+  </data>
+  <data name="AdviceAction_GameNetworkBufferbloat" xml:space="preserve">
+    <value>Если роутер это умеет, включите в нём управление очередью (SQM) с алгоритмом fq_codel или CAKE. Не загружайте канал во время игры.</value>
+  </data>
+  <data name="AdviceRisk_GameNetworkBufferbloat" xml:space="preserve">
+    <value>Это только рекомендация. SQM ограничивает скорость канала, настройки роутера Booster не меняет. Результат проверяйте повторным замером.</value>
+  </data>
+  <data name="AdviceId_GameNetworkVpn" xml:space="preserve">
+    <value>Трафик игры идёт через VPN или туннель</value>
+  </data>
+  <data name="AdviceText_GameNetworkVpn" xml:space="preserve">
+    <value>Соединение с игрой идёт через VPN или другой туннель. Туннель добавляет к пути лишний участок и может добавлять скачки.</value>
+  </data>
+  <data name="AdviceAction_GameNetworkVpn" xml:space="preserve">
+    <value>Отключите VPN или туннель на время игры, если он не нужен.</value>
+  </data>
+  <data name="AdviceRisk_GameNetworkVpn" xml:space="preserve">
+    <value>Это только рекомендация. Без VPN ваш адрес виден игре и провайдеру напрямую; иногда VPN, наоборот, выбирает лучший маршрут.</value>
+  </data>
+  <data name="AdviceId_GameNetworkBackgroundTraffic" xml:space="preserve">
+    <value>Программа занимает канал во время замера</value>
+  </data>
+  <data name="AdviceText_GameNetworkBackgroundTraffic" xml:space="preserve">
+    <value>Во время замера программа {0} передавала около {1} КБ/с. Фоновый трафик занимает канал и может давать скачки пинга.</value>
+  </data>
+  <data name="AdviceAction_GameNetworkBackgroundTraffic" xml:space="preserve">
+    <value>Закройте программу перед игрой, если она не нужна, или отложите загрузки. Booster сам программы не закрывает.</value>
+  </data>
+  <data name="AdviceRisk_GameNetworkBackgroundTraffic" xml:space="preserve">
+    <value>Это только рекомендация. Закрытие программы может прервать загрузку или синхронизацию.</value>
+  </data>
+  <data name="AdviceId_GameNetworkDeliveryOptimization" xml:space="preserve">
+    <value>Оптимизация доставки Windows занимает канал</value>
+  </data>
+  <data name="AdviceText_GameNetworkDeliveryOptimization" xml:space="preserve">
+    <value>Во время замера оптимизация доставки Windows передавала около {0} КБ/с, в том числе, возможно, другим компьютерам.</value>
+  </data>
+  <data name="AdviceAction_GameNetworkDeliveryOptimization" xml:space="preserve">
+    <value>В Параметры → Оптимизация доставки (ms-settings:delivery-optimization) выберите «Устройства в локальной сети» (без отдачи компьютерам в интернете) или выключите переключатель.</value>
+  </data>
+  <data name="AdviceRisk_GameNetworkDeliveryOptimization" xml:space="preserve">
+    <value>Это только рекомендация. Настройка Windows не меняется автоматически.</value>
+  </data>
+  <data name="AdviceId_GameNetworkWindowsUpdate" xml:space="preserve">
+    <value>Центр обновления Windows занимает канал</value>
+  </data>
+  <data name="AdviceText_GameNetworkWindowsUpdate" xml:space="preserve">
+    <value>Во время замера Центр обновления Windows передавал около {0} КБ/с. Загрузка обновлений занимает канал и может давать скачки пинга.</value>
+  </data>
+  <data name="AdviceAction_GameNetworkWindowsUpdate" xml:space="preserve">
+    <value>Приостановите обновления на время игры: Параметры, Центр обновления Windows (ms-settings:windowsupdate), «Приостановить обновления».</value>
+  </data>
+  <data name="AdviceRisk_GameNetworkWindowsUpdate" xml:space="preserve">
+    <value>Это только рекомендация. Обновления безопасности важны: не откладывайте их надолго.</value>
+  </data>
+  <data name="AdviceId_GameNetworkWifi24GHz" xml:space="preserve">
+    <value>Wi-Fi в диапазоне 2,4 ГГц</value>
+  </data>
+  <data name="AdviceText_GameNetworkWifi24GHz" xml:space="preserve">
+    <value>ПК подключён к Wi-Fi на канале {0} в диапазоне 2,4 ГГц. Этот диапазон тесный: в нём работают соседние сети, и он чаще даёт скачки задержки.</value>
+  </data>
+  <data name="AdviceAction_GameNetworkWifi24GHz" xml:space="preserve">
+    <value>Подключитесь к диапазону 5 ГГц, если роутер его поддерживает, или используйте кабель.</value>
+  </data>
+  <data name="AdviceRisk_GameNetworkWifi24GHz" xml:space="preserve">
+    <value>Это только рекомендация. Диапазон 5 ГГц хуже проходит сквозь стены.</value>
+  </data>
+  <data name="AdviceId_GameNetworkWifiWeakSignal" xml:space="preserve">
+    <value>Слабый сигнал Wi-Fi</value>
+  </data>
+  <data name="AdviceText_GameNetworkWifiWeakSignal" xml:space="preserve">
+    <value>Уровень сигнала Wi-Fi {0} дБм, это слабый сигнал. При слабом сигнале растут потери и скачки задержки.</value>
+  </data>
+  <data name="AdviceAction_GameNetworkWifiWeakSignal" xml:space="preserve">
+    <value>Поставьте ПК ближе к роутеру или уберите преграды между ними. Лучше всего подключить ПК кабелем.</value>
+  </data>
+  <data name="AdviceRisk_GameNetworkWifiWeakSignal" xml:space="preserve">
+    <value>Это только рекомендация.</value>
+  </data>
+  <data name="AdviceId_GameNetworkWireless" xml:space="preserve">
+    <value>Подключение по Wi-Fi</value>
+  </data>
+  <data name="AdviceText_GameNetworkWireless" xml:space="preserve">
+    <value>ПК подключён по Wi-Fi. Беспроводная сеть чаще даёт скачки задержки и потери, чем кабель.</value>
+  </data>
+  <data name="AdviceAction_GameNetworkWireless" xml:space="preserve">
+    <value>Если возможно, подключите ПК к роутеру кабелем. Иначе поставьте ПК ближе к роутеру или используйте диапазон 5 ГГц.</value>
+  </data>
+  <data name="AdviceRisk_GameNetworkWireless" xml:space="preserve">
+    <value>Это только рекомендация.</value>
+  </data>
+  <data name="ServerSource_Etw" xml:space="preserve">
+    <value>По сетевому трафику игры</value>
+  </data>
+  <data name="ServerSource_TcpTable" xml:space="preserve">
+    <value>По таблице соединений TCP</value>
+  </data>
+  <data name="ServerSource_Manual" xml:space="preserve">
+    <value>Указан вручную</value>
+  </data>
+  <data name="WifiBand_Band24GHz" xml:space="preserve">
+    <value>2,4 ГГц</value>
+  </data>
+  <data name="WifiBand_Band5GHz" xml:space="preserve">
+    <value>5 ГГц</value>
+  </data>
+  <data name="WifiBand_Band6GHz" xml:space="preserve">
+    <value>6 ГГц</value>
+  </data>
+  <data name="AddressScope_Public" xml:space="preserve">
+    <value>Публичный</value>
+  </data>
+  <data name="AddressScope_Private" xml:space="preserve">
+    <value>Частный (домашняя сеть)</value>
+  </data>
+  <data name="AddressScope_Cgnat" xml:space="preserve">
+    <value>Сеть провайдера (CGNAT)</value>
+  </data>
+  <data name="AddressScope_Loopback" xml:space="preserve">
+    <value>Петлевой</value>
+  </data>
+  <data name="AddressScope_LinkLocal" xml:space="preserve">
+    <value>Канальный</value>
+  </data>
+  <data name="AddressScope_Multicast" xml:space="preserve">
+    <value>Многоадресный</value>
+  </data>
+  <data name="AddressScope_Unspecified" xml:space="preserve">
+    <value>Не задан</value>
+  </data>
+  <data name="AddressScope_Reserved" xml:space="preserve">
+    <value>Зарезервированный</value>
+  </data>
+  <data name="NetworkConsumerKind_Downloader" xml:space="preserve">
+    <value>Загрузчик</value>
+  </data>
+  <data name="NetworkConsumerKind_CloudSync" xml:space="preserve">
+    <value>Облачная синхронизация</value>
+  </data>
+  <data name="NetworkConsumerKind_DeliveryOptimization" xml:space="preserve">
+    <value>Оптимизация доставки Windows</value>
+  </data>
+  <data name="NetworkConsumerKind_WindowsUpdate" xml:space="preserve">
+    <value>Центр обновления Windows</value>
+  </data>
+  <data name="MeasurementEnd_Completed" xml:space="preserve">
+    <value>Замер завершён</value>
+  </data>
+  <data name="MeasurementEnd_GameExited" xml:space="preserve">
+    <value>Игра закрылась во время замера</value>
+  </data>
+  <data name="BufferbloatGrade_APlus" xml:space="preserve">
+    <value>A+</value>
+  </data>
+  <data name="BufferbloatGrade_A" xml:space="preserve">
+    <value>A</value>
+  </data>
+  <data name="BufferbloatGrade_B" xml:space="preserve">
+    <value>B</value>
+  </data>
+  <data name="BufferbloatGrade_C" xml:space="preserve">
+    <value>C</value>
+  </data>
+  <data name="BufferbloatGrade_D" xml:space="preserve">
+    <value>D</value>
+  </data>
+  <data name="BufferbloatGrade_F" xml:space="preserve">
+    <value>F</value>
+  </data>
+  <data name="LoadTestOutcome_Graded" xml:space="preserve">
+    <value>Оценка получена</value>
+  </data>
+  <data name="LoadTestOutcome_NoLoad" xml:space="preserve">
+    <value>Нагрузка не создана, оценка невозможна</value>
+  </data>
+  <data name="LoadTestOutcome_NoReplies" xml:space="preserve">
+    <value>Узел не отвечает на ICMP, оценка невозможна</value>
+  </data>
+  <data name="GameNetworkNotMeasured" xml:space="preserve">
+    <value>Замер сети в игре не выполнялся.</value>
+  </data>
+  <data name="GameNetworkCaveat" xml:space="preserve">
+    <value>Booster показывает, где задержка, и не обещает её снижения. Выводы — по повторным замерам.</value>
+  </data>
+  <data name="GameNetworkStartedAt" xml:space="preserve">
+    <value>Начало замера</value>
+  </data>
+  <data name="GameNetworkGame" xml:space="preserve">
+    <value>Игра</value>
+  </data>
+  <data name="GameNetworkGameUnknown" xml:space="preserve">
+    <value>Не определена</value>
+  </data>
+  <data name="GameNetworkServer" xml:space="preserve">
+    <value>Сервер</value>
+  </data>
+  <data name="GameNetworkServerSource" xml:space="preserve">
+    <value>Как найден сервер</value>
+  </data>
+  <data name="GameNetworkConnection" xml:space="preserve">
+    <value>Подключение</value>
+  </data>
+  <data name="GameNetworkViaTunnel" xml:space="preserve">
+    <value>Через VPN или туннель</value>
+  </data>
+  <data name="GameNetworkLinkSpeed" xml:space="preserve">
+    <value>Скорость соединения</value>
+  </data>
+  <data name="GameNetworkEnd" xml:space="preserve">
+    <value>Ход замера</value>
+  </data>
+  <data name="GameNetworkBoosterCpu" xml:space="preserve">
+    <value>Загрузка CPU программой Booster</value>
+  </data>
+  <data name="GameNetworkBreakdownHeading" xml:space="preserve">
+    <value>Где задержка</value>
+  </data>
+  <data name="GameNetworkHome" xml:space="preserve">
+    <value>Дома (до роутера)</value>
+  </data>
+  <data name="GameNetworkLine" xml:space="preserve">
+    <value>Линия провайдера</value>
+  </data>
+  <data name="GameNetworkRoute" xml:space="preserve">
+    <value>Маршрут до сервера</value>
+  </data>
+  <data name="GameNetworkTotal" xml:space="preserve">
+    <value>Всего</value>
+  </data>
+  <data name="GameNetworkClampedNote" xml:space="preserve">
+    <value>Часть отрезков получилась меньше нуля и показана как 0 мс: узлы маршрута отвечают на пинг с разной скоростью.</value>
+  </data>
+  <data name="GameNetworkLastHopNote" xml:space="preserve">
+    <value>Сервер не отвечает на ICMP: «всего» посчитано до последнего ответившего узла перед ним.</value>
+  </data>
+  <data name="GameNetworkTargetsHeading" xml:space="preserve">
+    <value>Цели пинга</value>
+  </data>
+  <data name="GameNetworkColumnP95" xml:space="preserve">
+    <value>95-й процентиль</value>
+  </data>
+  <data name="GameNetworkSpikesHeading" xml:space="preserve">
+    <value>Скачки задержки</value>
+  </data>
+  <data name="GameNetworkSpikeCount" xml:space="preserve">
+    <value>Скачков до сервера</value>
+  </data>
+  <data name="GameNetworkSpikePeriod" xml:space="preserve">
+    <value>Повторяются</value>
+  </data>
+  <data name="GameNetworkSpikePeriodFormat" xml:space="preserve">
+    <value>каждые {0} с</value>
+  </data>
+  <data name="GameNetworkSpikeNotPeriodic" xml:space="preserve">
+    <value>Без явного периода</value>
+  </data>
+  <data name="GameNetworkSpikesAtHome" xml:space="preserve">
+    <value>Видны уже на роутере</value>
+  </data>
+  <data name="GameNetworkSpikesBeyondGateway" xml:space="preserve">
+    <value>Только за роутером</value>
+  </data>
+  <data name="GameNetworkRouteHeading" xml:space="preserve">
+    <value>Маршрут</value>
+  </data>
+  <data name="GameNetworkColumnHop" xml:space="preserve">
+    <value>Узел №</value>
+  </data>
+  <data name="GameNetworkColumnAddressType" xml:space="preserve">
+    <value>Тип адреса</value>
+  </data>
+  <data name="GameNetworkHopSilent" xml:space="preserve">
+    <value>Не ответил</value>
+  </data>
+  <data name="GameNetworkNoRoute" xml:space="preserve">
+    <value>Трассировка маршрута не выполнялась.</value>
+  </data>
+  <data name="GameNetworkJumpFormat" xml:space="preserve">
+    <value>Задержка растёт на {2} мс между узлами №{0} и №{1}.</value>
+  </data>
+  <data name="GameNetworkWifiHeading" xml:space="preserve">
+    <value>Wi-Fi</value>
+  </data>
+  <data name="GameNetworkCable" xml:space="preserve">
+    <value>Подключение по кабелю.</value>
+  </data>
+  <data name="GameNetworkWifiSignal" xml:space="preserve">
+    <value>Сигнал</value>
+  </data>
+  <data name="GameNetworkDbmFormat" xml:space="preserve">
+    <value>{0} дБм</value>
+  </data>
+  <data name="GameNetworkWifiChannel" xml:space="preserve">
+    <value>Канал</value>
+  </data>
+  <data name="GameNetworkWifiBand" xml:space="preserve">
+    <value>Диапазон</value>
+  </data>
+  <data name="GameNetworkWifiScan" xml:space="preserve">
+    <value>Фоновый поиск сетей</value>
+  </data>
+  <data name="GameNetworkWifiStreaming" xml:space="preserve">
+    <value>Режим стриминга</value>
+  </data>
+  <data name="GameNetworkConsumersHeading" xml:space="preserve">
+    <value>Кто нагружает сеть</value>
+  </data>
+  <data name="GameNetworkColumnRate" xml:space="preserve">
+    <value>КБ/с</value>
+  </data>
+  <data name="GameNetworkConsumerUnclassified" xml:space="preserve">
+    <value>Не определён</value>
+  </data>
+  <data name="GameNetworkLoadHeading" xml:space="preserve">
+    <value>Пинг под нагрузкой</value>
+  </data>
+  <data name="GameNetworkLoadNotMeasured" xml:space="preserve">
+    <value>Пинг под нагрузкой не измерялся.</value>
+  </data>
+  <data name="GameNetworkLoadTarget" xml:space="preserve">
+    <value>Цель</value>
+  </data>
+  <data name="GameNetworkLoadIdle" xml:space="preserve">
+    <value>Медиана в простое</value>
+  </data>
+  <data name="GameNetworkLoadLoaded" xml:space="preserve">
+    <value>Медиана под нагрузкой</value>
+  </data>
+  <data name="GameNetworkLoadThroughput" xml:space="preserve">
+    <value>Скорость загрузки</value>
+  </data>
+  <data name="GameNetworkLoadOutcome" xml:space="preserve">
+    <value>Результат</value>
+  </data>
+  <data name="GameNetworkLoadGrade" xml:space="preserve">
+    <value>Оценка</value>
+  </data>
+  <data name="GameNetworkComparisonHeading" xml:space="preserve">
+    <value>Сравнение замеров</value>
+  </data>
+  <data name="GameNetworkComparisonNone" xml:space="preserve">
+    <value>Сравнение не выполнялось.</value>
+  </data>
+  <data name="GameNetworkComparisonRuns" xml:space="preserve">
+    <value>Замеров</value>
+  </data>
+  <data name="GameNetworkComparisonRunsFormat" xml:space="preserve">
+    <value>до — {0}, после — {1}</value>
+  </data>
+  <data name="GameNetworkComparisonVerdict" xml:space="preserve">
+    <value>Итог</value>
+  </data>
+  <data name="GameNetworkPointsFormat" xml:space="preserve">
+    <value>{0} п. п.</value>
+  </data>
+  <data name="GameNetworkPerMinuteFormat" xml:space="preserve">
+    <value>{0} в минуту</value>
+  </data>
+  <data name="NetworkMetric_MedianMs" xml:space="preserve">
+    <value>Медиана</value>
+  </data>
+  <data name="NetworkMetric_P95Ms" xml:space="preserve">
+    <value>95-й процентиль</value>
+  </data>
+  <data name="NetworkMetric_JitterMs" xml:space="preserve">
+    <value>Джиттер</value>
+  </data>
+  <data name="NetworkMetric_LossPercent" xml:space="preserve">
+    <value>Потери</value>
+  </data>
+  <data name="NetworkMetric_SpikesPerMinute" xml:space="preserve">
+    <value>Скачков в минуту</value>
   </data>
 </root>

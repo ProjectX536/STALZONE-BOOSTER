@@ -45,6 +45,27 @@ public static class SettingsNormalizer
     private const int MinimumPingTimeoutMs = 100;
     private const int MaximumPingTimeoutMs = 5000;
 
+    private const int MinimumMeasureSeconds = 30;
+    private const int MaximumMeasureSeconds = 1800;
+
+    private const int MinimumServerDetectSeconds = 3;
+    private const int MaximumServerDetectSeconds = 60;
+
+    private const int MinimumTraceMaxHops = 5;
+    private const int MaximumTraceMaxHops = 64;
+
+    private const int MinimumTraceProbesPerHop = 1;
+    private const int MaximumTraceProbesPerHop = 5;
+
+    private const int MinimumTraceSilentHops = 2;
+    private const int MaximumTraceSilentHops = 30;
+
+    private const int MinimumLoadSeconds = 10;
+    private const int MaximumLoadSeconds = 120;
+
+    private const int MinimumTrackedFlows = 256;
+    private const int MaximumTrackedFlows = 65536;
+
     public static ConfigLoadResult<BoosterSettings> Normalize(BoosterSettings s)
     {
         ArgumentNullException.ThrowIfNull(s);
@@ -110,12 +131,23 @@ public static class SettingsNormalizer
             Between(n.PingTimeoutMs, MinimumPingTimeoutMs, MaximumPingTimeoutMs, "network.pingTimeoutMs"),
             NetworkHost(n.Host, warnings));
 
+        var g = s.GameNetwork;
+        var gameNetwork = new GameNetworkSettings(
+            Between(g.MeasureSeconds, MinimumMeasureSeconds, MaximumMeasureSeconds, "gameNetwork.measureSeconds"),
+            Between(g.ServerDetectSeconds, MinimumServerDetectSeconds, MaximumServerDetectSeconds, "gameNetwork.serverDetectSeconds"),
+            Between(g.TraceMaxHops, MinimumTraceMaxHops, MaximumTraceMaxHops, "gameNetwork.traceMaxHops"),
+            Between(g.TraceProbesPerHop, MinimumTraceProbesPerHop, MaximumTraceProbesPerHop, "gameNetwork.traceProbesPerHop"),
+            Between(g.TraceStopAfterSilentHops, MinimumTraceSilentHops, MaximumTraceSilentHops, "gameNetwork.traceStopAfterSilentHops"),
+            Between(g.LoadIdleSeconds, MinimumLoadSeconds, MaximumLoadSeconds, "gameNetwork.loadIdleSeconds"),
+            Between(g.LoadSeconds, MinimumLoadSeconds, MaximumLoadSeconds, "gameNetwork.loadSeconds"),
+            Between(g.MaxTrackedFlows, MinimumTrackedFlows, MaximumTrackedFlows, "gameNetwork.maxTrackedFlows"));
+
         if (warnings.Count == 0 && network == n)
             return new(s, []);
         return new(s with
         {
             Monitoring = monitoring, Detectors = detectors, Benchmark = benchmark, Logging = logging, Journal = journal,
-            Diagnostics = diagnostics, Network = network,
+            Diagnostics = diagnostics, Network = network, GameNetwork = gameNetwork,
         }, warnings);
     }
 

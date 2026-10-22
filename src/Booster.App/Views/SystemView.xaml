@@ -89,6 +89,8 @@
                   Command="{Binding RunNetworkTestCommand}" />
           <Button Style="{StaticResource ToolbarButton}" Content="{x:Static res:Strings.Cancel}" Command="{Binding RunNetworkTestCancelCommand}"
                   Visibility="{Binding RunNetworkTestCommand.IsRunning, Converter={StaticResource BooleanToVisibility}}" />
+          <Button Style="{StaticResource ToolbarButton}" Content="{x:Static res:Strings.SystemOpenGameNetwork}"
+                  Command="{Binding OpenGameNetworkCommand}" />
         </WrapPanel>
         <TextBlock Style="{StaticResource StatusText}" Text="{Binding NetworkStatus}" Margin="0,0,0,16" />
 

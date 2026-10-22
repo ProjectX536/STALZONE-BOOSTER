@@ -22,6 +22,8 @@ public sealed class FakeAppPaths(string root = @"C:\Fake") : IAppPaths
 
     public string Traces => Path.Combine(DataRoot, "traces");
 
+    public string NetworkMeasurements => Path.Combine(DataRoot, "network");
+
     public string State => Path.Combine(DataRoot, "state");
 
     public string BaseDirectory { get; } = Path.Combine(root, "app");

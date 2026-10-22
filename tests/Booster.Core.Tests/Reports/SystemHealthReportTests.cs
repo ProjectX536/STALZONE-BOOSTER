@@ -3,6 +3,7 @@ using Booster.Core.Abstractions;
 using Booster.Core.Benchmark;
 using Booster.Core.Configuration;
 using Booster.Core.Drivers;
+using Booster.Core.GameNetwork;
 using Booster.Core.Hags;
 using Booster.Core.Inventory;
 using Booster.Core.Reports;
@@ -63,8 +64,8 @@ public class SystemHealthReportTests
         var ids = builder.Build(Report(), Russian).Sections.Select(s => s.Id).ToList();
 
         Assert.Equal([ReportSectionIds.SystemMemory, ReportSectionIds.Services, ReportSectionIds.Stability, ReportSectionIds.Network,
-            ReportSectionIds.Startup, ReportSectionIds.Tweaks, ReportSectionIds.Latency, ReportSectionIds.Hags],
-            ids.Skip(ids.IndexOf(ReportSectionIds.Drivers) + 1).Take(8));
+            ReportSectionIds.GameNetwork, ReportSectionIds.Startup, ReportSectionIds.Tweaks, ReportSectionIds.Latency, ReportSectionIds.Hags],
+            ids.Skip(ids.IndexOf(ReportSectionIds.Drivers) + 1).Take(9));
     }
 
     [Fact]
@@ -226,6 +227,91 @@ public class SystemHealthReportTests
         Assert.Contains(ReportStrings.AdviceNone, Paragraphs(section));
     }
 
+    private static ReportSection GameNetworkSection(GameNetworkMeasurement? measurement = null, LoadTestResult? load = null,
+        GameNetworkComparison? comparison = null)
+    {
+        measurement ??= GameNetworkSamples.Measurement();
+        var view = GameNetworkReportView.From(measurement, GameNetworkSamples.Analysis(measurement), load, comparison);
+        return Build(Report(gameNetwork: view), ReportSectionIds.GameNetwork);
+    }
+
+    private static string Ms(string value) => string.Format(Russian, ReportStrings.UnitMs, value);
+
+    [Fact]
+    public void Game_network_section_lists_breakdown_and_spikes()
+    {
+        var section = GameNetworkSection();
+
+        Assert.Equal(EnumText.Format(AdviceModule.GameNetwork), section.Title);
+        Assert.Equal(GameNetworkSamples.Server, Field(section, ReportStrings.GameNetworkServer).Text);
+        Assert.Equal(EnumText.Format(ServerSource.Etw), Field(section, ReportStrings.GameNetworkServerSource).Text);
+        Assert.Equal(EnumText.Format(NetworkMedium.Wireless), Field(section, ReportStrings.GameNetworkConnection).Text);
+        Assert.Equal(Ms("2"), Field(section, ReportStrings.GameNetworkHome).Text);
+        Assert.Equal(Ms("10"), Field(section, ReportStrings.GameNetworkLine).Text);
+        Assert.Equal(Ms("28"), Field(section, ReportStrings.GameNetworkRoute).Text);
+        Assert.Equal(Ms("40"), Field(section, ReportStrings.GameNetworkTotal).Text);
+        Assert.Equal("2", Field(section, ReportStrings.GameNetworkSpikeCount).Text);
+        Assert.Equal("0", Field(section, ReportStrings.GameNetworkSpikesAtHome).Text);
+        Assert.Equal("2", Field(section, ReportStrings.GameNetworkSpikesBeyondGateway).Text);
+        Assert.Equal([Ms("2"), Ms("12"), Ms("40")], Table(section, ReportStrings.ColumnTarget).Rows.Select(r => r.Cells[1].Text));
+        Assert.Contains(ReportStrings.GameNetworkCaveat, Paragraphs(section));
+    }
+
+    [Fact]
+    public void Game_network_section_shows_route_wifi_and_consumers()
+    {
+        var section = GameNetworkSection();
+
+        var route = Table(section, ReportStrings.GameNetworkColumnHop);
+        Assert.Equal(["1", "2", "3", "4"], route.Rows.Select(r => r.Cells[0].Text));
+        Assert.Equal(EnumText.Format(AddressScope.Cgnat), route.Rows[1].Cells[1].Text);
+        Assert.Contains(string.Format(Russian, ReportStrings.GameNetworkJumpFormat, 2, 3, "24"), Paragraphs(section));
+        Assert.Equal(string.Format(Russian, ReportStrings.GameNetworkDbmFormat, -61), Field(section, ReportStrings.GameNetworkWifiSignal).Text);
+        Assert.Equal(EnumText.Format(WifiBand.Band5GHz), Field(section, ReportStrings.GameNetworkWifiBand).Text);
+        Assert.Equal(ReportStrings.Yes, Field(section, ReportStrings.GameNetworkWifiScan).Text);
+        var consumer = Assert.Single(Table(section, ReportStrings.ColumnProcess).Rows);
+        Assert.Equal("steam", consumer.Cells[0].Text);
+        Assert.Equal(EnumText.Format(NetworkConsumerKind.Downloader), consumer.Cells[1].Text);
+    }
+
+    [Fact]
+    public void Cable_connection_has_no_wifi_fields()
+    {
+        var measurement = GameNetworkSamples.Measurement(adapter: FakeNetworkAdapters.Adapter("eth0", NetworkMedium.Ethernet, 1_000_000_000),
+            wifi: Reading<WifiStatus>.Unsupported("wlan", "not wifi"));
+
+        var section = GameNetworkSection(measurement);
+
+        Assert.Contains(ReportStrings.GameNetworkCable, Paragraphs(section));
+        Assert.DoesNotContain(section.Blocks.OfType<ReportFieldList>().SelectMany(l => l.Fields),
+            f => f.Label == ReportStrings.GameNetworkWifiSignal);
+    }
+
+    [Fact]
+    public void Game_network_section_shows_load_test_and_comparison()
+    {
+        var section = GameNetworkSection(load: GameNetworkSamples.Load(), comparison: GameNetworkSamples.Comparison());
+
+        Assert.Equal(Ms("120"), Field(section, ReportStrings.GameNetworkLoadLoaded).Text);
+        Assert.Equal(EnumText.Format(BufferbloatGrade.D), Field(section, ReportStrings.GameNetworkLoadGrade).Text);
+        var metric = Assert.Single(Table(section, ReportStrings.ColumnMetric).Rows);
+        Assert.Equal(EnumText.Format(NetworkMetric.MedianMs), metric.Cells[0].Text);
+        Assert.Equal(EnumText.Format(ChangeVerdict.NoChange), metric.Cells[4].Text);
+        Assert.Contains(EnumText.Format(ComparisonCaveat.HighRunVariation), Paragraphs(section));
+        Assert.Contains(AdviceTable(section).Rows, r => r.Cells[0].Text.StartsWith(EnumText.Format(AdviceId.GameNetworkBufferbloat),
+            StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void Section_without_measurement_says_not_measured()
+    {
+        var section = Build(Report(), ReportSectionIds.GameNetwork);
+
+        Assert.Contains(ReportStrings.GameNetworkNotMeasured, Paragraphs(section));
+        Assert.Contains(ReportStrings.GameNetworkCaveat, Paragraphs(section));
+        Assert.Empty(section.Blocks.OfType<ReportTable>());
+    }
+
     [Fact]
     public void Unknown_values_are_marked_unavailable()
     {
@@ -239,12 +325,13 @@ public class SystemHealthReportTests
     }
 
     [Fact]
-    public void Sections_follow_order_memory_services_stability_network_startup_tweaks_latency_hags()
+    public void Sections_follow_order_memory_services_stability_network_game_network_startup_tweaks_latency_hags()
     {
         var sections = SystemHealthReport.Build(Report(), Catalog, StartupThresholds, Russian);
 
         Assert.Equal([ReportSectionIds.SystemMemory, ReportSectionIds.Services, ReportSectionIds.Stability, ReportSectionIds.Network,
-            ReportSectionIds.Startup, ReportSectionIds.Tweaks, ReportSectionIds.Latency, ReportSectionIds.Hags], sections.Select(s => s.Id));
+            ReportSectionIds.GameNetwork, ReportSectionIds.Startup, ReportSectionIds.Tweaks, ReportSectionIds.Latency, ReportSectionIds.Hags],
+            sections.Select(s => s.Id));
         Assert.Equal([EnumText.Format(AdviceModule.Startup), EnumText.Format(AdviceModule.Tweaks), EnumText.Format(AdviceModule.Latency),
             ReportStrings.SectionHags], sections.TakeLast(4).Select(s => s.Title));
     }

@@ -92,6 +92,18 @@ public sealed class SystemViewModelTests : IAsyncDisposable
     private static string PerSecond(string value) => string.Format(Culture, Strings.SystemPerSecondFormat, value);
 
     [Fact]
+    public void Open_game_network_raises_request()
+    {
+        var system = System();
+        var raised = 0;
+        system.OpenGameNetworkRequested += (_, _) => raised++;
+
+        system.OpenGameNetworkCommand.Execute(null);
+
+        Assert.Equal(1, raised);
+    }
+
+    [Fact]
     public async Task Sections_appear_after_snapshot()
     {
         var system = System();

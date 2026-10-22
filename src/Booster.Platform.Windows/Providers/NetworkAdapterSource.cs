@@ -23,7 +23,7 @@ public sealed class NetworkAdapterSource : INetworkAdapterSource
 
         return interfaces
             .Where(n => n.OperationalStatus == OperationalStatus.Up
-                && n.NetworkInterfaceType is not (NetworkInterfaceType.Loopback or NetworkInterfaceType.Tunnel))
+                && n.NetworkInterfaceType != NetworkInterfaceType.Loopback)
             .Select(n => new NetworkAdapterInfo(n.Id, n.Name, n.Description, Medium(n.NetworkInterfaceType),
                 n.Speed > 0 ? n.Speed : null, Gateways(n)))
             .ToArray();
@@ -50,6 +50,7 @@ public sealed class NetworkAdapterSource : INetworkAdapterSource
     public static NetworkMedium Medium(NetworkInterfaceType type) => type switch
     {
         NetworkInterfaceType.Wireless80211 => NetworkMedium.Wireless,
+        NetworkInterfaceType.Tunnel => NetworkMedium.Tunnel,
         NetworkInterfaceType.Ethernet or NetworkInterfaceType.Ethernet3Megabit or NetworkInterfaceType.FastEthernetT
             or NetworkInterfaceType.FastEthernetFx or NetworkInterfaceType.GigabitEthernet => NetworkMedium.Ethernet,
         _ => NetworkMedium.Other,

@@ -1,7 +1,10 @@
+using System.Text.Json.Serialization;
+
 namespace Booster.Core.Configuration;
 
 public sealed record SystemCatalog(int SchemaVersion, ServiceCatalog Services, IReadOnlyList<OverlayDefinition> Overlays,
-    IReadOnlyList<RegistryTweakDefinition> RegistryTweaks)
+    IReadOnlyList<RegistryTweakDefinition> RegistryTweaks, IReadOnlyList<NetworkConsumerDefinition> NetworkConsumers,
+    IReadOnlyList<string> TunnelKeywords)
 {
     public const int CurrentSchemaVersion = 1;
 }
@@ -9,6 +12,11 @@ public sealed record SystemCatalog(int SchemaVersion, ServiceCatalog Services, I
 public sealed record OverlayDefinition(string Process, string Name);
 
 public sealed record RegistryTweakDefinition(string Id, string SubKey, string? ValueName, string Value, int MinBuild);
+
+[JsonConverter(typeof(JsonStringEnumConverter<NetworkConsumerKind>))]
+public enum NetworkConsumerKind { Downloader, CloudSync, DeliveryOptimization, WindowsUpdate }
+
+public sealed record NetworkConsumerDefinition(string? Process, string? Service, string Name, NetworkConsumerKind Kind);
 
 public static class RegistryTweakIds
 {

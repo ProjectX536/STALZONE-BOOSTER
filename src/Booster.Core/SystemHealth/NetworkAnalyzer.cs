@@ -9,6 +9,8 @@ public enum NetworkTargetKind
 {
     Gateway,
     Host,
+    IspHop,
+    LastHop,
 }
 
 public sealed record NetworkTargetResult(NetworkTargetKind Kind, string Address, int Sent, int Received,
@@ -39,7 +41,7 @@ public static class NetworkAnalyzer
             ? Reading<double>.Unknown(Source, "jitter needs two replies")
             : Reading<double>.Known(received.Zip(received.Skip(1), (a, b) => Math.Abs(b - a)).Average(), Source);
         var loss = (double)(replies.Count - received.Length) / replies.Count * 100;
-        return new NetworkTargetResult(kind, address, replies.Count, received.Length, Reading<double>.Known(Median(received), Source),
+        return new NetworkTargetResult(kind, address, replies.Count, received.Length, Reading<double>.Known(Statistics.Median(received), Source),
             jitter, Reading<double>.Known(loss, Source));
     }
 
@@ -63,13 +65,6 @@ public static class NetworkAnalyzer
         if (advice.Count > 0 && result.Adapter?.Medium == NetworkMedium.Wireless)
             advice.Add(new SystemAdvice(AdviceId.NetworkWireless, AdviceModule.Network, FindingSeverity.Info, SafetyLevel.L3ManualOnly, []));
         return advice;
-    }
-
-    private static double Median(double[] values)
-    {
-        var sorted = values.Order().ToArray();
-        var middle = sorted.Length / 2;
-        return sorted.Length % 2 == 1 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
     }
 
     private static string Whole(double value) =>

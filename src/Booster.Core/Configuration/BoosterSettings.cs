@@ -9,7 +9,8 @@ public sealed record BoosterSettings(
     LoggingSettings Logging,
     JournalSettings Journal,
     DiagnosticsSettings Diagnostics,
-    NetworkSettings Network)
+    NetworkSettings Network,
+    GameNetworkSettings GameNetwork)
 {
     public const int CurrentSchemaVersion = 1;
 }
@@ -35,3 +36,6 @@ public sealed record JournalSettings(int RetainedSessionCount);
 public sealed record DiagnosticsSettings(int StabilityDays, int MaxStabilityEvents, int TopProcessCount, int ActivityIntervalMs);
 
 public sealed record NetworkSettings(int PingCount, int PingIntervalMs, int PingTimeoutMs, string? Host);
+
+public sealed record GameNetworkSettings(int MeasureSeconds, int ServerDetectSeconds, int TraceMaxHops, int TraceProbesPerHop,
+    int TraceStopAfterSilentHops, int LoadIdleSeconds, int LoadSeconds, int MaxTrackedFlows);

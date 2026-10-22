@@ -2,6 +2,7 @@ using Booster.Core.Abstractions;
 using Booster.Core.Benchmark;
 using Booster.Core.Configuration;
 using Booster.Core.Engine;
+using Booster.Core.GameNetwork;
 using Booster.Core.Hags;
 using Booster.Core.Inventory;
 using Booster.Core.Metrics;
@@ -81,6 +82,14 @@ public class EnumTextTests
         AssertEveryValueHasText<NetworkTargetKind>();
         AssertEveryValueHasText<HagsCheck>();
         AssertEveryValueHasText<HagsVerdict>();
+        AssertEveryValueHasText<ServerSource>();
+        AssertEveryValueHasText<WifiBand>();
+        AssertEveryValueHasText<AddressScope>();
+        AssertEveryValueHasText<NetworkConsumerKind>();
+        AssertEveryValueHasText<MeasurementEnd>();
+        AssertEveryValueHasText<BufferbloatGrade>();
+        AssertEveryValueHasText<LoadTestOutcome>();
+        AssertEveryValueHasText<NetworkMetric>();
     }
 
     [Fact]

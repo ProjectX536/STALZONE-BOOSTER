@@ -13,6 +13,7 @@ public enum AdviceModule
     Tweaks,
 
     Latency,
+    GameNetwork,
 }
 
 public enum AdviceId
@@ -46,6 +47,19 @@ public enum AdviceId
     LegacyWindowedPresent,
     DpcTimeHigh,
     InterruptTimeHigh,
+    GameNetworkWifiScanSpikes,
+    GameNetworkLocalSpikes,
+    GameNetworkRemoteSpikes,
+    GameNetworkRouteJump,
+    GameNetworkFarServer,
+    GameNetworkBufferbloat,
+    GameNetworkVpn,
+    GameNetworkBackgroundTraffic,
+    GameNetworkDeliveryOptimization,
+    GameNetworkWindowsUpdate,
+    GameNetworkWifi24GHz,
+    GameNetworkWifiWeakSignal,
+    GameNetworkWireless,
 }
 
 public sealed record SystemAdvice(AdviceId Id, AdviceModule Module, FindingSeverity Severity, SafetyLevel Level,

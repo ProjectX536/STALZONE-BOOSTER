@@ -5,6 +5,7 @@ using Booster.Core.Drivers;
 using Booster.Core.Engine;
 using Booster.Core.Inventory;
 using Booster.Core.Hags;
+using Booster.Core.GameNetwork;
 using Booster.Core.Latency;
 using Booster.Core.Profiles;
 using Booster.Core.Recovery;
@@ -86,6 +87,13 @@ public class DependencyInjectionTests
             .AddSingleton<IUserRegistry>(new FakeUserRegistry())
             .AddSingleton<IMachineRegistry>(new FakeUserRegistry())
             .AddSingleton<IPingSource, FakePing>()
+            .AddSingleton<ITrafficSource, FakeTrafficSource>()
+            .AddSingleton<ITcpConnectionSource, FakeTcpConnections>()
+            .AddSingleton<ITraceRouteSource, FakeTraceRoute>()
+            .AddSingleton<IRouteSource, FakeRouteSource>()
+            .AddSingleton<IWifiSource, FakeWifiSource>()
+            .AddSingleton<ISelfCpuSource, FakeSelfCpu>()
+            .AddSingleton<IGameNetworkStore, InMemoryGameNetworkStore>()
             .AddSingleton<IWprRunner, FakeWprRunner>()
             .AddSingleton<IStateFileStore, InMemoryStateFileStore>()
             .AddSingleton<IBootTimeSource, FakeBootTimeSource>()
@@ -123,6 +131,9 @@ public class DependencyInjectionTests
         Assert.Same(provider.GetRequiredService<NetworkTester>(), provider.GetRequiredService<NetworkTester>());
         Assert.Same(provider.GetRequiredService<TraceRecorder>(), provider.GetRequiredService<TraceRecorder>());
         Assert.Same(provider.GetRequiredService<HagsExperimentService>(), provider.GetRequiredService<HagsExperimentService>());
+        Assert.Same(provider.GetRequiredService<GameNetworkMeasurer>(), provider.GetRequiredService<GameNetworkMeasurer>());
+        Assert.Same(provider.GetRequiredService<LoadTestRunner>(), provider.GetRequiredService<LoadTestRunner>());
+        Assert.IsType<ActiveSessionActions>(provider.GetRequiredService<IActiveSessionActions>());
     }
 
     [Fact]

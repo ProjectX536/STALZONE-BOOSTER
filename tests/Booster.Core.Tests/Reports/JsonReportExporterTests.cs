@@ -120,7 +120,7 @@ public class JsonReportExporterTests
     }
 
     [Fact]
-    public async Task Json_report_has_schema_4_and_benchmark_object()
+    public async Task Json_report_has_schema_5_and_benchmark_object()
     {
         var settings = FakeConfiguration.DefaultThresholds.Comparison;
         var series = SampleSeries.Full();
@@ -130,7 +130,7 @@ public class JsonReportExporterTests
 
         using var json = JsonDocument.Parse(await ExportAsync(Report(findings: [finding], benchmark: benchmark)));
 
-        Assert.Equal(4, At(json, "metadata", "schemaVersion").GetInt32());
+        Assert.Equal(5, At(json, "metadata", "schemaVersion").GetInt32());
         Assert.Equal("LowDiskSpace", At(json, "findings", "0", "kind").GetString());
         Assert.Equal("game.exe", At(json, "benchmark", "series", "conditions", "target").GetString());
         Assert.Equal("InsufficientData", At(json, "benchmark", "series", "runs", "1", "metrics", "status").GetString());
@@ -182,7 +182,7 @@ public class JsonReportExporterTests
         Assert.Equal("game-mode", At(json, "tweaks", "0", "definition", "id").GetString());
         Assert.Equal("Proposed", At(json, "tweaks", "0", "state").GetString());
         Assert.Equal("AutoGameModeEnabled", At(json, "tweaks", "0", "valueName").GetString());
-        Assert.Equal(4, At(json, "metadata", "schemaVersion").GetInt32());
+        Assert.Equal(5, At(json, "metadata", "schemaVersion").GetInt32());
     }
 
     [Fact]
@@ -202,7 +202,7 @@ public class JsonReportExporterTests
         Assert.True(At(json, "hags", "current", "value").GetBoolean());
         Assert.Equal(JsonValueKind.Null, At(json, "hags", "verdict").ValueKind);
         Assert.Equal(JsonValueKind.Null, At(without, "hags").ValueKind);
-        Assert.Equal(4, At(json, "metadata", "schemaVersion").GetInt32());
+        Assert.Equal(5, At(json, "metadata", "schemaVersion").GetInt32());
     }
 
     [Fact]
@@ -222,5 +222,30 @@ public class JsonReportExporterTests
         await new JsonReportExporter().ExportAsync(Report(), stream, TestContext.Current.CancellationToken);
 
         Assert.True(stream.CanWrite);
+    }
+
+    [Fact]
+    public void Report_schema_is_5()
+    {
+        Assert.Equal(5, ReportMetadata.CurrentSchemaVersion);
+    }
+
+    [Fact]
+    public async Task Json_report_contains_game_network_section()
+    {
+        var measurement = GameNetworkSamples.Measurement();
+        var view = GameNetworkReportView.From(measurement, GameNetworkSamples.Analysis(measurement), GameNetworkSamples.Load(), null);
+
+        using var json = JsonDocument.Parse(await ExportAsync(Report(gameNetwork: view)));
+        using var without = JsonDocument.Parse(await ExportAsync(Report()));
+
+        Assert.Equal(GameNetworkSamples.Server, At(json, "gameNetwork", "server").GetString());
+        Assert.Equal("Etw", At(json, "gameNetwork", "serverSource").GetString());
+        Assert.Equal(2, At(json, "gameNetwork", "breakdown", "homeMs", "value").GetDouble());
+        Assert.Equal(2, At(json, "gameNetwork", "spikes", "beyondGateway").GetInt32());
+        Assert.Equal("Cgnat", At(json, "gameNetwork", "route", "1", "scope").GetString());
+        Assert.Equal("D", At(json, "gameNetwork", "load", "grade").GetString());
+        Assert.Equal("steam", At(json, "gameNetwork", "consumers", "value", "0", "name").GetString());
+        Assert.Equal(JsonValueKind.Null, At(without, "gameNetwork").ValueKind);
     }
 }

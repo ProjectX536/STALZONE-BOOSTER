@@ -37,6 +37,19 @@ public class AdviceTextTests
         [AdviceId.LegacyWindowedPresent] = 2,
         [AdviceId.DpcTimeHigh] = 1,
         [AdviceId.InterruptTimeHigh] = 1,
+        [AdviceId.GameNetworkWifiScanSpikes] = 1,
+        [AdviceId.GameNetworkLocalSpikes] = 2,
+        [AdviceId.GameNetworkRemoteSpikes] = 2,
+        [AdviceId.GameNetworkRouteJump] = 2,
+        [AdviceId.GameNetworkFarServer] = 1,
+        [AdviceId.GameNetworkBufferbloat] = 1,
+        [AdviceId.GameNetworkVpn] = 0,
+        [AdviceId.GameNetworkBackgroundTraffic] = 2,
+        [AdviceId.GameNetworkDeliveryOptimization] = 1,
+        [AdviceId.GameNetworkWindowsUpdate] = 1,
+        [AdviceId.GameNetworkWifi24GHz] = 1,
+        [AdviceId.GameNetworkWifiWeakSignal] = 1,
+        [AdviceId.GameNetworkWireless] = 0,
     };
 
     private static string Text(string key)
@@ -86,5 +99,35 @@ public class AdviceTextTests
     {
         foreach (var id in new[] { AdviceId.NetworkHighLatency, AdviceId.NetworkJitter, AdviceId.NetworkLoss, AdviceId.NetworkWireless })
             Assert.Contains("FPS", Text($"AdviceText_{id}"), StringComparison.Ordinal);
+    }
+
+    private static IEnumerable<AdviceId> GameNetworkIds() =>
+        Enum.GetValues<AdviceId>().Where(id => id.ToString().StartsWith("GameNetwork", StringComparison.Ordinal));
+
+    [Fact]
+    public void Game_network_advice_has_texts()
+    {
+        Assert.Equal(13, GameNetworkIds().Count());
+        foreach (var id in GameNetworkIds())
+        {
+            Text($"AdviceText_{id}");
+            Text($"AdviceAction_{id}");
+            Text($"AdviceRisk_{id}");
+        }
+    }
+
+    [Fact]
+    public void Game_network_texts_do_not_promise_lower_ping()
+    {
+        string[] forbidden = ["снизит", "уменьшит пинг", "ускорит", "прирост"];
+        foreach (var id in GameNetworkIds())
+        {
+            foreach (var key in new[] { $"AdviceId_{id}", $"AdviceText_{id}", $"AdviceAction_{id}", $"AdviceRisk_{id}" })
+            {
+                var text = Text(key);
+                foreach (var phrase in forbidden)
+                    Assert.False(text.Contains(phrase, StringComparison.OrdinalIgnoreCase), $"{key} contains \"{phrase}\"");
+            }
+        }
     }
 }

@@ -1127,4 +1127,196 @@
   <data name="MaintenanceRevertFailed" xml:space="preserve">
     <value>Ошибка: возврат не выполнен. Подробности — в логе.</value>
   </data>
+  <data name="NavNetwork" xml:space="preserve">
+    <value>Сеть в игре</value>
+  </data>
+  <data name="NetworkTitle" xml:space="preserve">
+    <value>Сеть в игре</value>
+  </data>
+  <data name="NetworkCaption" xml:space="preserve">
+    <value>Показывает, где набирается задержка и откуда скачки. Базовый пинг до сервера программа на ПК не уменьшает</value>
+  </data>
+  <data name="NetworkMeasure" xml:space="preserve">
+    <value>Замерить</value>
+  </data>
+  <data name="NetworkCancel" xml:space="preserve">
+    <value>Отменить</value>
+  </data>
+  <data name="NetworkManualServer" xml:space="preserve">
+    <value>IP сервера, если программа не нашла его сама</value>
+  </data>
+  <data name="NetworkLabel" xml:space="preserve">
+    <value>Пометка: что поменяли перед замером</value>
+  </data>
+  <data name="NetworkMeasuring" xml:space="preserve">
+    <value>Замер идёт. Играйте как обычно</value>
+  </data>
+  <data name="NetworkMeasureDone" xml:space="preserve">
+    <value>Замер сохранён</value>
+  </data>
+  <data name="NetworkNoGame" xml:space="preserve">
+    <value>Игра не запущена. Запустите игру или введите IP сервера</value>
+  </data>
+  <data name="NetworkNoServer" xml:space="preserve">
+    <value>Сервер игры не найден: игра не держит соединений с внешними адресами. Введите IP сервера вручную</value>
+  </data>
+  <data name="NetworkInvalidServer" xml:space="preserve">
+    <value>Этот адрес не подходит: нужен публичный IP-адрес сервера, например 203.0.113.5</value>
+  </data>
+  <data name="NetworkMeasureCancelled" xml:space="preserve">
+    <value>Замер отменён</value>
+  </data>
+  <data name="NetworkMeasureFailed" xml:space="preserve">
+    <value>Замер не выполнен: ошибка. Подробности — в журнале программы</value>
+  </data>
+  <data name="NetworkGameExited" xml:space="preserve">
+    <value>Игра закрылась во время замера: замер короче обычного</value>
+  </data>
+  <data name="NetworkPhaseFindingGame" xml:space="preserve">
+    <value>Ищу игру</value>
+  </data>
+  <data name="NetworkPhaseDetectingServer" xml:space="preserve">
+    <value>Определяю сервер игры</value>
+  </data>
+  <data name="NetworkPhaseTracing" xml:space="preserve">
+    <value>Строю маршрут до сервера</value>
+  </data>
+  <data name="NetworkPhaseMeasuringFormat" xml:space="preserve">
+    <value>Пингую: {0} из {1}</value>
+  </data>
+  <data name="NetworkPhaseSaving" xml:space="preserve">
+    <value>Сохраняю замер</value>
+  </data>
+  <data name="NetworkServerHeading" xml:space="preserve">
+    <value>Сервер</value>
+  </data>
+  <data name="NetworkServerFormat" xml:space="preserve">
+    <value>{0} — {1}</value>
+  </data>
+  <data name="NetworkServerTcpTable" xml:space="preserve">
+    <value>Адрес взят из соединений TCP: возможно, это сервер входа, а не игровой. Точнее — с правами администратора</value>
+  </data>
+  <data name="NetworkServerLastHop" xml:space="preserve">
+    <value>Сервер не отвечает на ICMP — пингуется последний ответивший узел перед ним</value>
+  </data>
+  <data name="NetworkServerViaTunnel" xml:space="preserve">
+    <value>Соединение идёт через VPN или туннель: маршрут и задержка показаны до туннеля</value>
+  </data>
+  <data name="NetworkCandidatesHint" xml:space="preserve">
+    <value>Игра обменивалась данными и с другими адресами. Если сервер определён неверно, возьмите другой адрес и замерьте заново</value>
+  </data>
+  <data name="NetworkColumnEventsPerSecond" xml:space="preserve">
+    <value>Пакетов в секунду</value>
+  </data>
+  <data name="NetworkUseCandidate" xml:space="preserve">
+    <value>Взять адрес</value>
+  </data>
+  <data name="NetworkSpikesFormat" xml:space="preserve">
+    <value>Скачков: {0}. {1}</value>
+  </data>
+  <data name="NetworkSpikesPlaceFormat" xml:space="preserve">
+    <value>До роутера: {0}, за роутером: {1}</value>
+  </data>
+  <data name="NetworkLocationHint" xml:space="preserve">
+    <value>Windows не даёт читать сигнал и диапазон Wi-Fi без доступа к местоположению. Его можно разрешить для приложений в настройках конфиденциальности</value>
+  </data>
+  <data name="NetworkOpenLocationSettings" xml:space="preserve">
+    <value>Открыть настройки местоположения</value>
+  </data>
+  <data name="NetworkWifiUnavailableFormat" xml:space="preserve">
+    <value>Данные Wi-Fi недоступны: {0}</value>
+  </data>
+  <data name="NetworkLoadStart" xml:space="preserve">
+    <value>Замерить пинг под нагрузкой</value>
+  </data>
+  <data name="NetworkLoadContinue" xml:space="preserve">
+    <value>Продолжить</value>
+  </data>
+  <data name="NetworkLoadHint" xml:space="preserve">
+    <value>Запустите загрузку, например спидтест в браузере, и нажмите „Продолжить“</value>
+  </data>
+  <data name="NetworkLoadIdling" xml:space="preserve">
+    <value>Пингую без нагрузки</value>
+  </data>
+  <data name="NetworkLoadLoading" xml:space="preserve">
+    <value>Пингую под нагрузкой. Не останавливайте загрузку</value>
+  </data>
+  <data name="NetworkLoadDone" xml:space="preserve">
+    <value>Пинг под нагрузкой замерен</value>
+  </data>
+  <data name="NetworkLoadCancelled" xml:space="preserve">
+    <value>Пинг под нагрузкой отменён</value>
+  </data>
+  <data name="NetworkLoadFailed" xml:space="preserve">
+    <value>Пинг под нагрузкой не выполнен: ошибка. Подробности — в журнале программы</value>
+  </data>
+  <data name="NetworkLoadUnavailable" xml:space="preserve">
+    <value>Доступно после замера в этой сессии</value>
+  </data>
+  <data name="NetworkLoadNoTarget" xml:space="preserve">
+    <value>Нет цели для пинга: ни сервер, ни узлы до него не ответили</value>
+  </data>
+  <data name="NetworkLoadNoAdapter" xml:space="preserve">
+    <value>Не определён сетевой адаптер: нагрузку не измерить</value>
+  </data>
+  <data name="NetworkComparisonNone" xml:space="preserve">
+    <value>Для сравнения нужны две группы замеров с одним сервером: без изменений и с пометкой, что поменяли</value>
+  </data>
+  <data name="NetworkComparisonSame" xml:space="preserve">
+    <value>Выбрана одна и та же группа замеров</value>
+  </data>
+  <data name="NetworkBaseline" xml:space="preserve">
+    <value>Было</value>
+  </data>
+  <data name="NetworkCandidate" xml:space="preserve">
+    <value>Стало</value>
+  </data>
+  <data name="NetworkVerdictFormat" xml:space="preserve">
+    <value>Итог: {0}</value>
+  </data>
+  <data name="NetworkMetricFormat" xml:space="preserve">
+    <value>{0}: {1} → {2} ({3})</value>
+  </data>
+  <data name="NetworkComparisonCaveat" xml:space="preserve">
+    <value>Пинг зависит от сервера, времени суток и загрузки сети провайдера. Вывод верен только для этих прогонов и не обещает такой же пинг потом</value>
+  </data>
+  <data name="NetworkGroupFormat" xml:space="preserve">
+    <value>{0} — {1}, замеров: {2}</value>
+  </data>
+  <data name="NetworkGroupActionsFormat" xml:space="preserve">
+    <value>{0}; изменения Booster: {1}</value>
+  </data>
+  <data name="NetworkGroupNoLabel" xml:space="preserve">
+    <value>Без пометки</value>
+  </data>
+  <data name="NetworkAdviceHeading" xml:space="preserve">
+    <value>Что можно сделать</value>
+  </data>
+  <data name="NetworkAdviceOpenSettings" xml:space="preserve">
+    <value>Открыть настройки</value>
+  </data>
+  <data name="NetworkMeasurementsHeading" xml:space="preserve">
+    <value>Замеры</value>
+  </data>
+  <data name="NetworkColumnStartedAt" xml:space="preserve">
+    <value>Время</value>
+  </data>
+  <data name="NetworkColumnLabel" xml:space="preserve">
+    <value>Пометка</value>
+  </data>
+  <data name="NetworkColumnEnd" xml:space="preserve">
+    <value>Итог</value>
+  </data>
+  <data name="NetworkDelete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="NetworkDeleteFailed" xml:space="preserve">
+    <value>Не удалось удалить замер. Подробности — в журнале программы</value>
+  </data>
+  <data name="NetworkEmpty" xml:space="preserve">
+    <value>Замеров пока нет. Запустите игру и нажмите «Замерить»</value>
+  </data>
+  <data name="SystemOpenGameNetwork" xml:space="preserve">
+    <value>Сеть в игре: где задержка</value>
+  </data>
 </root>

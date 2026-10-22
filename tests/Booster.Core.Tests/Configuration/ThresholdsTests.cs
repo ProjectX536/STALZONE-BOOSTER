@@ -135,4 +135,59 @@ public sealed class ThresholdsTests
         Assert.Empty(loaded.Warnings);
         Assert.Equal(new ThrottleSettings(0, 100, 10, 10, 10), loaded.Value.Throttle);
     }
+
+    [Theory]
+    [InlineData("[5, 30, 30, 200, 400]")]
+    [InlineData("[5, 30, 60]")]
+    public void Bufferbloat_grades_must_be_five_ascending_values(string grades)
+    {
+        var loaded = Load($$"""{ "schemaVersion": 1, "gameNetwork": { "bufferbloatGradesMs": {{grades}} } }""");
+
+        Assert.Empty(loaded.Value.GameNetwork.BufferbloatGradesMs);
+        var warning = Assert.Single(loaded.Warnings);
+        Assert.Contains("gameNetwork.bufferbloatGradesMs", warning.Detail);
+    }
+
+    [Fact]
+    public void Valid_bufferbloat_grades_pass_unchanged()
+    {
+        var loaded = Load("""{ "schemaVersion": 1, "gameNetwork": { "bufferbloatGradesMs": [10, 40, 80, 250, 500] } }""");
+
+        Assert.Empty(loaded.Warnings);
+        Assert.Equal([10, 40, 80, 250, 500], loaded.Value.GameNetwork.BufferbloatGradesMs);
+    }
+
+    [Theory]
+    [InlineData(-20, -30)]
+    [InlineData(-120, -90)]
+    public void Wifi_weak_signal_is_clamped(int configured, int expected)
+    {
+        var loaded = Load($$"""{ "schemaVersion": 1, "gameNetwork": { "wifiWeakSignalDbm": {{configured}} } }""");
+
+        Assert.Equal(expected, loaded.Value.GameNetwork.WifiWeakSignalDbm);
+        Assert.Equal([$"gameNetwork.wifiWeakSignalDbm: {configured} -> {expected}"], loaded.Warnings.Select(w => w.Detail));
+    }
+
+    [Theory]
+    [InlineData("minGameEventsPerSecond", "0", "1")]
+    [InlineData("spikeMinDeltaMs", "5000", "1000")]
+    [InlineData("spikeMadFactor", "0.5", "1")]
+    [InlineData("spikeMadFactor", "50", "20")]
+    [InlineData("periodicMinSpikes", "1", "3")]
+    [InlineData("periodicMaxVariation", "0", "0.01")]
+    [InlineData("periodicMaxVariation", "5", "1")]
+    [InlineData("routeJumpMs", "0", "1")]
+    [InlineData("loadMinThroughputMbps", "0", "0.1")]
+    [InlineData("backgroundTrafficKBps", "0", "1")]
+    [InlineData("comparisonMinimumRuns", "0", "1")]
+    [InlineData("comparisonMinimumRuns", "50", "10")]
+    [InlineData("comparisonMinimumChangeMs", "-1", "0")]
+    [InlineData("comparisonMinimumChangeMs", "5000", "1000")]
+    [InlineData("comparisonMinimumChangePercent", "90", "50")]
+    public void Game_network_thresholds_are_clamped_with_warning(string name, string configured, string expected)
+    {
+        var loaded = Load($$"""{ "schemaVersion": 1, "gameNetwork": { "{{name}}": {{configured}} } }""");
+
+        Assert.Equal([$"gameNetwork.{name}: {configured} -> {expected}"], loaded.Warnings.Select(w => w.Detail));
+    }
 }

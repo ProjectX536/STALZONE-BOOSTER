@@ -32,7 +32,7 @@ public sealed record Finding(FindingKind Kind, FindingSeverity Severity, string 
 
 public sealed record ReportMetadata(int SchemaVersion, string AppVersion, DateTimeOffset GeneratedAt, PrivilegeState Privileges)
 {
-    public const int CurrentSchemaVersion = 4;
+    public const int CurrentSchemaVersion = 5;
 }
 
 public sealed record SystemReport(
@@ -43,4 +43,5 @@ public sealed record SystemReport(
     IReadOnlyList<SystemAdvice> Advice,
     NetworkTestResult? Network,
     IReadOnlyList<TweakProposal> Tweaks,
-    HagsExperimentView? Hags);
+    HagsExperimentView? Hags,
+    GameNetworkReportView? GameNetwork);

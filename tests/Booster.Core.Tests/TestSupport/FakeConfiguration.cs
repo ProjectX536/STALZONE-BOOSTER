@@ -12,8 +12,16 @@ public sealed class FakeConfiguration(
     BenchmarkSettings? benchmark = null,
     DiagnosticsSettings? diagnostics = null,
     NetworkSettings? network = null,
-    IReadOnlyDictionary<string, int>? timeoutsMs = null) : IBoosterConfiguration
+    GameNetworkSettings? gameNetwork = null,
+    GameNetworkThresholds? gameNetworkThresholds = null,
+    IReadOnlyDictionary<string, int>? timeoutsMs = null,
+    SystemCatalog? catalog = null) : IBoosterConfiguration
 {
+    public static readonly GameNetworkThresholds DefaultGameNetworkThresholds =
+        new(10, 30, 5, 3, 0.2, 20, [5, 30, 60, 200, 400], 5, 100, -67, 2, 3, 10);
+
+    public static readonly GameNetworkSettings DefaultGameNetwork = new(180, 10, 30, 3, 5, 20, 30, 4096);
+
     public static readonly Thresholds DefaultThresholds = new(1, 300, 10,
         new ThrottleSettings(2, 90, 10, 10, 30),
         new StutterSettings(2.0, 8, 30),
@@ -28,7 +36,8 @@ public sealed class FakeConfiguration(
         new RecommendationSettings(5),
         new MemoryThresholds(90),
         new NetworkThresholds(10, 100, 10, 1),
-        new StartupThresholds(50));
+        new StartupThresholds(50),
+        DefaultGameNetworkThresholds);
 
     public static readonly SystemCatalog DefaultCatalog = new(SystemCatalog.CurrentSchemaVersion, new ServiceCatalog(
         SystemCritical:
@@ -67,7 +76,14 @@ public sealed class FakeConfiguration(
             new(RegistryTweakIds.GameMode, @"Software\Microsoft\GameBar", "AutoGameModeEnabled", "1", 19041),
             new(RegistryTweakIds.GpuHighPerformance, @"Software\Microsoft\DirectX\UserGpuPreferences", null, "GpuPreference=2", 17134),
             new(RegistryTweakIds.WindowedFlipModel, @"Software\Microsoft\DirectX\UserGpuPreferences", null, "SwapEffectUpgradeEnable=1", 22621),
-        ]);
+        ],
+        NetworkConsumers:
+        [
+            new("steam.exe", null, "Steam", NetworkConsumerKind.Downloader),
+            new(null, "DoSvc", "Оптимизация доставки", NetworkConsumerKind.DeliveryOptimization),
+            new(null, "wuauserv", "Центр обновления Windows", NetworkConsumerKind.WindowsUpdate),
+        ],
+        TunnelKeywords: ["WireGuard", "OpenVPN"]);
 
     public static readonly DiagnosticsSettings DefaultDiagnostics = new(14, 500, 10, 2000);
 
@@ -84,10 +100,11 @@ public sealed class FakeConfiguration(
             new LoggingSettings(14),
             new JournalSettings(retainedSessionCount),
             diagnostics ?? DefaultDiagnostics,
-            network ?? DefaultNetwork),
-        DefaultThresholds,
+            network ?? DefaultNetwork,
+            gameNetwork ?? DefaultGameNetwork),
+        gameNetworkThresholds is null ? DefaultThresholds : DefaultThresholds with { GameNetwork = gameNetworkThresholds },
         sources ?? new OfficialSources(OfficialSources.CurrentSchemaVersion, [], [], [], "ms-settings:windowsupdate"),
-        DefaultCatalog,
+        catalog ?? DefaultCatalog,
         []);
 
     public Task SaveUserSettingsAsync(BoosterSettings settings, CancellationToken ct) => throw new NotSupportedException();

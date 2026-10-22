@@ -46,6 +46,32 @@
     { "process": "Overwolf", "name": "Overwolf" },
     { "process": "Discord", "name": "Discord" }
   ],
+  // Программы и службы, которые грузят канал и могут добавить задержку в сетевой игре. Процесс — имя exe, служба —
+  // короткое имя службы; в записи указывается что-то одно. Booster только сообщает и советует, ничего не закрывает.
+  "networkConsumers": [
+    { "process": "steam.exe", "service": null, "name": "Steam", "kind": "Downloader" },
+    { "process": "EpicGamesLauncher.exe", "service": null, "name": "Epic Games Launcher", "kind": "Downloader" },
+    { "process": "Battle.net.exe", "service": null, "name": "Battle.net", "kind": "Downloader" },
+    { "process": "EADesktop.exe", "service": null, "name": "EA app", "kind": "Downloader" },
+    { "process": "upc.exe", "service": null, "name": "Ubisoft Connect", "kind": "Downloader" },
+    { "process": "qbittorrent.exe", "service": null, "name": "qBittorrent", "kind": "Downloader" },
+    { "process": "uTorrent.exe", "service": null, "name": "uTorrent", "kind": "Downloader" },
+    { "process": "BitTorrent.exe", "service": null, "name": "BitTorrent", "kind": "Downloader" },
+    { "process": "OneDrive.exe", "service": null, "name": "OneDrive", "kind": "CloudSync" },
+    { "process": "GoogleDriveFS.exe", "service": null, "name": "Google Drive", "kind": "CloudSync" },
+    { "process": "Dropbox.exe", "service": null, "name": "Dropbox", "kind": "CloudSync" },
+    { "process": "YandexDisk2.exe", "service": null, "name": "Яндекс Диск", "kind": "CloudSync" },
+    { "process": null, "service": "DoSvc", "name": "Оптимизация доставки", "kind": "DeliveryOptimization" },
+    { "process": null, "service": "wuauserv", "name": "Центр обновления Windows", "kind": "WindowsUpdate" },
+    { "process": null, "service": "UsoSvc", "name": "Orchestrator обновлений", "kind": "WindowsUpdate" },
+    { "process": null, "service": "BITS", "name": "Фоновая интеллектуальная служба передачи", "kind": "Downloader" }
+  ],
+  // Подстроки в названии сетевого адаптера, по которым маршрут считается идущим через VPN или туннель: задержка
+  // до сервера в этом случае включает путь через туннель.
+  "tunnelKeywords": [
+    "WireGuard", "Wintun", "OpenVPN", "TAP-Windows", "NordLynx", "ProtonVPN", "AnyConnect", "Fortinet", "PANGP",
+    "ZeroTier", "Tailscale", "Radmin VPN", "Hamachi"
+  ],
   // Белый список реестра: только HKCU, применяется только с подтверждением и только при правиле-доказательстве.
   // Ключи GameDVR и GameConfigStore сюда не входят. Ниже minBuild настройка только рекомендуется.
   "registryTweaks": [

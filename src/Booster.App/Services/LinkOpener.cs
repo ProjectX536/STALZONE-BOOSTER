@@ -18,7 +18,8 @@ public sealed partial class LinkOpener(OfficialSourceResolver sources, IPrivileg
 {
     private const string SettingsScheme = "ms-settings:";
 
-    private static readonly string[] SettingsPages = ["gaming-gamebar", "gaming-gamedvr", "gaming-gamemode", "display-advancedgraphics"];
+    private static readonly string[] SettingsPages = ["gaming-gamebar", "gaming-gamedvr", "gaming-gamemode", "display-advancedgraphics",
+        "privacy-location", "delivery-optimization", "windowsupdate"];
     public bool TryOpen(Uri uri)
     {
         ArgumentNullException.ThrowIfNull(uri);

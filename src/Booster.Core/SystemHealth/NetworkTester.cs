@@ -21,7 +21,7 @@ public sealed class NetworkTester(IPingSource ping, INetworkAdapterSource adapte
         var startedAt = time.GetUtcNow();
         var started = time.GetTimestamp();
 
-        var adapter = adapters.Read().FirstOrDefault(a => a.Gateways.Count > 0);
+        var adapter = adapters.Read().FirstOrDefault(a => a.Medium != NetworkMedium.Tunnel && a.Gateways.Count > 0);
         var targets = new List<Target>();
         if (adapter is not null)
             targets.Add(new Target(NetworkTargetKind.Gateway, adapter.Gateways[0]));

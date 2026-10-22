@@ -1,6 +1,7 @@
 using Booster.App.Services;
 using Booster.App.Tests.TestSupport;
 using Booster.App.ViewModels;
+using Booster.Core.Abstractions;
 using Booster.Core.Latency;
 using Booster.Core.Tests.TestSupport;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -16,9 +17,31 @@ public sealed class MainViewModelTests
 
         var main = host.Resolve<MainViewModel>();
 
-        Assert.Equal([AppPage.Overview, AppPage.Hardware, AppPage.Drivers, AppPage.System, AppPage.Performance, AppPage.Profiles,
-            AppPage.Journal, AppPage.Settings], main.Pages.Select(p => p.Page));
+        Assert.Equal([AppPage.Overview, AppPage.Hardware, AppPage.Drivers, AppPage.System, AppPage.Network, AppPage.Performance,
+            AppPage.Profiles, AppPage.Journal, AppPage.Settings], main.Pages.Select(p => p.Page));
         Assert.IsType<SystemViewModel>(main.Pages[3].Content);
+    }
+
+    [Fact]
+    public void Network_page_follows_system()
+    {
+        using var host = new TempHost();
+
+        var main = host.Resolve<MainViewModel>();
+
+        Assert.Equal(AppPage.Network, main.Pages[4].Page);
+        Assert.IsType<NetworkViewModel>(main.Pages[4].Content);
+    }
+
+    [Fact]
+    public void System_link_opens_network_page()
+    {
+        using var host = new TempHost();
+        var main = host.Resolve<MainViewModel>();
+
+        host.Resolve<SystemViewModel>().OpenGameNetworkCommand.Execute(null);
+
+        Assert.Equal(AppPage.Network, Leave(main));
     }
 
     [Fact]
@@ -91,13 +114,27 @@ public sealed class MainViewModelTests
         Assert.Equal(AppPage.Overview, Leave(main));
     }
 
-    private static MainViewModel Create(TempHost host, FakeGaming gaming, InMemoryStateFileStore state) => new(
+    [Fact]
+    public async Task Start_stops_stale_traffic_session()
+    {
+        using var host = new TempHost();
+        await using var gaming = new FakeGaming();
+        var traffic = new FakeTrafficSource();
+        var main = Create(host, gaming, new InMemoryStateFileStore(), traffic);
+
+        await main.StopStaleTrafficSessionAsync();
+
+        Assert.Equal(1, traffic.StaleStops);
+    }
+
+    private static MainViewModel Create(TempHost host, FakeGaming gaming, InMemoryStateFileStore state, ITrafficSource? traffic = null) => new(
         host.Resolve<StatusBarViewModel>(), host.Resolve<OverviewViewModel>(), host.Resolve<HardwareViewModel>(),
-        host.Resolve<DriversViewModel>(), host.Resolve<SystemViewModel>(), host.Resolve<PerformanceViewModel>(),
+        host.Resolve<DriversViewModel>(), host.Resolve<SystemViewModel>(), host.Resolve<NetworkViewModel>(),
+        host.Resolve<PerformanceViewModel>(),
         host.Resolve<ProfilesViewModel>(), host.Resolve<JournalViewModel>(), host.Resolve<SettingsViewModel>(),
         new GamingLifecycle(gaming.Recovery, gaming.Coordinator, NullLogger<GamingLifecycle>.Instance),
         new TraceRecorder(new FakeWprRunner(), state, new FakeBootTimeSource(), gaming.Time, NullLogger<TraceRecorder>.Instance),
-        NullLogger<MainViewModel>.Instance);
+        traffic ?? new FakeTrafficSource(), NullLogger<MainViewModel>.Instance);
 
     private static AppPage Leave(MainViewModel main)
     {
